@@ -1,0 +1,75 @@
+{
+	"DmN_Vip_Claimed_Rewards": {
+		"create_query": "CREATE TABLE [dbo].[DmN_Vip_Claimed_Rewards]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+		"id": {
+			"type": "int",
+			"is_primary_key": 1,
+			"null": 0,
+			"identity": 1,
+			"default": ""
+		},
+		"reward_type": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "((0))"
+		},
+		"vip_type": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "((0))"
+		},
+		"memb___id": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"server": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"day": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"week": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"month": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"year": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"claim_date": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		}
+	}	
+}
