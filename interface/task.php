@@ -50,16 +50,6 @@
         private $config;
         private $scheduler_config;
         private $scheduler;
-        private $hard_coded_tasks = [
-			"PruneLogs" => [
-				"time" => "7 */12 * * *",
-				"status" => 1,
-			]	, 
-			"CheckUpdates" => [
-				"time" => "9 */3 * * *",
-				"status" => 1,
-			]
-		];
 
         public function __construct()
         {
@@ -83,13 +73,6 @@
                 writelog("Incorrect key", "scheduler");
                 exit;
             } else{
-                if(array_key_exists("CheckUpdates", $this->scheduler_config['tasks'])){
-                    unset($this->scheduler_config['tasks']['CheckUpdates']);
-                }
-                if(array_key_exists("PruneLogs", $this->scheduler_config['tasks'])){
-                    unset($this->scheduler_config['tasks']['PruneLogs']);
-                }
-                $this->scheduler_config['tasks'] = array_merge($this->scheduler_config['tasks'], $this->hard_coded_tasks);
                 foreach($this->scheduler_config['tasks'] AS $key => $time){
                     if(isset($time['status'])){
 						if($time['status'] == 1){

@@ -47,16 +47,6 @@
         private $scheduler;
         private $after_upgrade_key = 'a953feaec195bba04c142bc38ec2846c';
         private $after_install_key = 'a953feaec195bba04c142bc38ec283df';
-        private $hard_coded_tasks = [
-			"PruneLogs" => [
-				"time" => "1 */12 * * *",
-				"status" => 1,
-			]	, 
-			"CheckUpdates" => [
-				"time" => "9 */3 * * *",
-				"status" => 1,
-			]
-		];
 
         public function __construct()
         {
@@ -88,7 +78,7 @@
 					ignore_user_abort(true);
 					set_time_limit(120);
 					if($custom != ''){
-                        if(!array_key_exists($custom, $this->scheduler_config['tasks']) && !array_key_exists($custom, $this->hard_coded_tasks)){
+                        if(!array_key_exists($custom, $this->scheduler_config['tasks'])){
                             json(['error' => 'Scheduled task not found.']);
                         } else{
                             $this->scheduler->job($custom, function($task){
@@ -97,13 +87,6 @@
                             json(['success' => 'Scheduled task executed successfully.']);
                         }
                     } else{
-						if(array_key_exists("CheckUpdates", $this->scheduler_config['tasks'])){
-							unset($this->scheduler_config['tasks']['CheckUpdates']);
-						}
-						if(array_key_exists("PruneLogs", $this->scheduler_config['tasks'])){
-							unset($this->scheduler_config['tasks']['PruneLogs']);
-						}
-						$this->scheduler_config['tasks'] = array_merge($this->scheduler_config['tasks'], $this->hard_coded_tasks);
 						foreach($this->scheduler_config['tasks'] AS $key => $time){
 							if(isset($time['status'])){
 								if($time['status'] == 1){
@@ -125,13 +108,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function run_after_upgrade()
         {
-			ignore_user_abort(true);
-            set_time_limit(60);
-            foreach($this->hard_coded_tasks AS $key => $time){
-                $this->scheduler->job($key, function($task){
-                    return $task->now();
-                })->start();
-            }
+			
         }
     }
 

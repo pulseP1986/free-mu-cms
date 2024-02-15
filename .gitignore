@@ -14,3 +14,4 @@ application/data/serverlist.json
 application/logs/Tracy/email-sent
 constants.php
 setup/data/install.lock
+application/config/scheduler_config.json

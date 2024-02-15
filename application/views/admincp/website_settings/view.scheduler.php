@@ -54,7 +54,6 @@
                         </thead>
                         <tbody>
                         <?php
-                            $scheduler_config['tasks'] = array_merge($scheduler_config['tasks'], ["CheckUpdates" => ["time" => "9 */3 * * *", "status" => 1, "desc" => "Check for cms updates."]]);
                             foreach($scheduler_config['tasks'] AS $key => $value){
                                 $last_run = $this->Madmin->get_task_last_run($key);
                                 if($last_run != 'undefined'){
