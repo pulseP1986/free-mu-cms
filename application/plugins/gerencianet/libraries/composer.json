@@ -1,0 +1,15 @@
+{
+  "name": "gerencianet/libraries",
+  "description": "Gerencianet dependecies for dmn mucms payment plugin",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Salvis",
+      "email": "salvis1989@gmail.com"
+    }
+  ],
+  "require": {
+    "gerencianet/gerencianet-sdk-php": "5.1.0"
+  }
+}
