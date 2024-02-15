@@ -1,0 +1,75 @@
+{
+	"DmN_Currency_Market_Logs": {
+		"create_query": "CREATE TABLE [dbo].[DmN_Currency_Market_Logs]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+		"id": {
+			"type": "int",
+			"is_primary_key": 1,
+			"null": 0,
+			"identity": 1,
+			"default": ""
+		},
+		"price": {
+			"type": "bigint",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "((0))"
+		},
+		"price_type": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "((0))"
+		},
+		"reward": {
+			"type": "bigint",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "((0))"
+		},
+		"reward_type": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "((0))"
+		},
+		"seller": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"buyer": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"char": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"sold_date": {
+			"type": "datetime",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"server": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		}
+	}	
+}
