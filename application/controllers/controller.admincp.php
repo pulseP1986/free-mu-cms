@@ -45,10 +45,6 @@
                 $this->vars['login_attemts'] = $this->Madmin->load_last_admin_login_attemts();
                 $this->vars['tickets'] = $this->Madmin->check_unreplied_tickets();
                 $this->vars['cron'] = $this->Madmin->get_last_cron_run();
-				$this->vars['version'] = $this->Madmin->get_current_version();
-				$this->vars['lattest_version'] = $this->Madmin->get_cms_upgradable_version();
-                $this->website->check_cache('available_upgrades', 'available_upgrades', 3600 * 24, false);
-                $this->vars['available_upgrades'] = $this->website->cached ? $this->website->available_upgrades : false;
                 $this->load->view('admincp' . DS . 'view.index', $this->vars);
                 $this->load_footer();
             } else{
