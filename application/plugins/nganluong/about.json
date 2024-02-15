@@ -1,0 +1,11 @@
+{
+	"name": "NganLuong",
+	"version": "1.0.1",
+	"description": "https://www.nganluong.vn payment system",
+	"developed_by": "neo6",
+	"website": "http://dmncms.net",
+    "change_log":{
+		"1.0.0": "Initial Release",
+		"1.0.1": "Updated api version"
+    }
+}
