@@ -1,0 +1,230 @@
+
+.container-battlepass {
+	min-height: 250px;
+	width: 100%;
+	margin-bottom: 50px;
+	border-radius: 125px;
+	border: 15px solid rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 7px #141725, inset 0px 5px #141725, 0px 7px 12px #000, inset 0px 3px 5px #000;
+	background: rgba(0, 0, 0, 0.2);
+	padding: 30px 60px;
+}
+.container-bp-info {
+	height: 160px;
+	border-radius: 20px;
+	background-image: linear-gradient(#151827, #080b11);
+	text-align: left;
+	padding: 20px 20px 20px 30px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+.info-button {
+	width: 100px;
+	height: 25px;
+	background-color: rgba(0, 0, 0, 0.5);
+	font-size: 16px;
+	color: #db4535;
+	line-height: 25px;
+	border-radius: 30px;
+	text-align: center;
+	float: right;
+	margin: -10px 0px!important;
+	cursor: pointer;
+}
+.tbl-battlepass {
+	width: 100%;
+}
+.tbl-battlepass tr td {
+	text-align: left;
+	font-size: 18px;
+	color: #fff;
+	font-family: Arial;
+}
+.tbl-battlepass tr td span {
+	font-size: 18px;
+	color: #c99a41;
+	font-weight: bold;
+	margin-left: 15px;
+}
+.tbl-battlepass tr td.time {
+	font-size: 12px!important;
+	color: rgba(255, 255, 255, 0.1)!important;
+}
+.battlepass-button {
+	width: 305px!important;
+	margin-left: calc(50% - 145px);
+	height: 60px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	border: none;
+	position: relative;
+	z-index: 1;
+	color: #fff;
+	background: url(../images/JvqVkot.png) center no-repeat!important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 0em 8px 15px rgba(0, 0, 0, 0.3);
+	right: 14px;
+	text-shadow: 2px 2px black;
+	border-radius: 30px;
+	font-size: 16px;
+	box-shadow: 0px 3px rgba(0, 0, 0, 0.3), inset 0px 5px rgba(0, 0, 0, 0.4), 0px 3px 5px #000, inset 0px 1px 2px #000;
+}
+
+.battlepass-button:hover {
+	-webkit-filter: brightness(130%);
+	filter: brightness(130%);
+}
+
+
+.battlepass-button.disabled {
+	-webkit-filter: brightness(40%);
+	filter: brightness(40%);
+	cursor: default;
+}
+
+.battlepass-rewards {
+	min-height: 1000px; 
+	padding-left: 30px; 
+	padding-right: 30px;
+}
+.battlepass-ticket-top {
+	background: url(../images/TBjOjFE.png) no-repeat center top;
+	height: 190px;
+}
+.battlepass-ticket-mid {
+	background: url(../images/oYWClJt.png) repeat-y center top;
+	min-height: 500px;
+}
+.battlepass-ticket-bot {
+	background: url(../images/2dsY4IW.png) no-repeat center top;
+}
+.battlepass-ticket-reward {
+	margin-left: calc(50% - 117px);
+	width: 224px;
+	height: 100px;
+	border-radius: 15px;
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 5px 3px rgba(0, 0, 0, 0.1), inset 0px 3px 3px rgba(0, 0, 0, 0.1);
+}
+.battlepass-ticket-reward-top {
+	width: 80px;
+	height: 80px;
+	border-radius: 40px;
+	box-shadow: 0px 5px 3px rgba(0, 0, 0, 0.1), inset 0px 3px 3px rgba(0, 0, 0, 0.2);
+	background: rgba(255, 255, 255, 0.01);
+	margin: 9px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	float: left;
+}
+.battlepass-ticket-reward-bot {
+	float: left;
+	width: 110px;
+	padding-top: 18px;
+	font-size: 13px;
+	font-family: Tahoma;
+	text-align: center;
+	line-height: 120%;
+}
+.battlepass-claim {
+	font-size: 12px;
+	width: 80px;
+	margin-right: calc(50% - 40px);
+	margin-top: 10px;
+	cursor: pointer;
+	/*color: #6ed978;*/
+}
+.required {
+	color: #db4535;
+}
+
+.tooltipb {
+	position: relative;
+	display: inline-block;
+	opacity: 1;
+	text-align:center;
+}
+
+.tooltipb td {
+	padding: 0px;
+}
+
+.tooltipb i {
+	font-size: 9px;
+	line-height: 100%;
+	color: #fff;
+}
+
+.tooltipb .tooltiptext {
+	visibility: hidden;
+	width: 200px;
+	margin-left: -52px;
+	/* margin-top: 5px; */
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 10px 3px;
+	line-height: 130%;
+	color: #999;
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 999999 !important;
+	margin-top: 5px!important;
+}
+.tooltipb .tooltiptext b {
+	font-size: 12px;
+	text-transform: uppercase;
+	color: #fff;
+	line-height: 230%!important;
+}
+
+.tooltipb:hover .tooltiptext {
+	visibility: visible;
+}
+#progress-bar {
+	width: 100%;
+	line-height: 100%;
+	height: 8px;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.1);
+	font-size: 10px;
+}
+#progress-perc {
+	line-height: 100%;
+	height: 8px;
+	border-radius: 4px;
+	font-size: 10px;
+}
+#progress-count {
+	margin-top: -12px;
+	font-size: 7px;
+	text-shadow: 1px 1px #000;
+	color: #fff;
+}
+.progress-red {
+	background: rgba(255, 100, 100, 1);
+}
+.progress-green {
+	background: rgba(100, 180, 100, 1);
+}
+.progress-yellow {
+	background: rgba(255, 170, 100, 1);
+}
+.gold {
+	color: #c99a41;
+	font-size: 11px;
+}
+.blue {
+	color: #70c8f5;
+	font-size: 11px;
+}
+.battlepass-rewards table th, .battlepass-rewards table td{
+	text-align: center;
+	padding: 11px;
+}
+.battlepass-rewards table tr {
+	background-color: transparent !important;
+}

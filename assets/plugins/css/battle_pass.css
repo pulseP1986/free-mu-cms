@@ -1,0 +1,240 @@
+.bBox, .bTitleBox{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+.bTitleBox{
+	-ms-flex-wrap: wrap; 
+	flex-wrap: wrap;
+}
+.bRTitleBox{
+	display:flex;
+	justify-content: center;
+	-ms-flex-wrap: wrap; 
+	flex-wrap: wrap;
+}
+.bRewardData{
+	display:flex;
+}
+.get_reward{
+	color: #fff;
+	text-decoration:none !important;
+}
+.bUserData {
+	-webkit-box-flex: 0;
+	-ms-flex: 0 0 45%;
+	flex: 0 0 45%;
+	max-width: 45%;
+	background-color: #fff;
+	border: 1px solid #E7E9EC;
+	border-radius: 4px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	overflow: visible;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
+	align-items: flex-start;
+	padding: 1em;
+	color: #4D5C6d;
+	min-height: 60px;
+}
+.bTitleData, .bTitleDataMain {
+	background-color: #fff;
+	border: 1px solid #E7E9EC;
+	border-radius: 4px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	overflow: visible;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
+	align-items: flex-start;
+	padding: 1em;
+	color: #4D5C6d;
+	min-height: 60px;
+}
+
+.bTitleDataMain {
+	min-height: 80px;
+}
+.bTitleDataMain img{
+	max-inline-size: 100%;
+	block-size: auto;
+}
+.bPassType{
+	font-size: 16px;
+	text-align:center;
+	color: #122B46;
+}
+.bUpgradeButton{
+	text-align:center;
+}
+.bUpgradeButton a, .bUpgradeButton span{
+	font-family: inherit;
+	font-size: 15px;
+	background-color: #385DFF;
+	color: #fff;
+	border: 1px solid #385DFF;
+	border-radius: 100px;
+	padding: 10px 20px;
+	font-weight: 500;
+	font-style: normal;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 1.3;
+	border-width: 1px;
+	border-style: solid;
+	outline: 0;
+	vertical-align: middle;
+	-webkit-appearance: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-transition: all linear .2s;
+	transition: all linear .2s;
+}
+.bCountdown, .dayName{
+	font-family: inherit;
+	font-size: 15px;
+	background-color: #17ea1a;
+	color: #fff;
+	border: 1px solid #17ea1a;
+	border-radius: 100px;
+	padding: 10px 20px;
+	font-weight: 500;
+	font-style: normal;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 1.3;
+	border-width: 1px;
+	border-style: solid;
+	outline: 0;
+	vertical-align: middle;
+	-webkit-appearance: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-transition: all linear .2s;
+	transition: all linear .2s;
+}
+.bRewardImage, .bRewardImage img {
+	width: 40px;
+	height: 40px;
+}
+.bStatusButton {
+	width: 100px;
+	height: 25px;
+	background-color: #db4535;
+	color: #ffd378;
+	line-height: 25px;
+	border-radius: 30px;
+	text-align: center;
+	cursor: pointer;
+	color: #fff;
+}
+.bComplete{
+	background-color: #17ea1a;
+}
+.bAttached {
+	margin-top: 10px;
+	border-bottom: 1px dotted #E7E9EC;
+	font-size: 14px;
+	line-height: 24px;
+}
+.bAttached ul{	
+	line-height: 100%;
+	font-size: 13px;
+	list-style-type: none;
+	padding: 0;
+	text-align: center;
+}
+.bAttached ul li{
+	margin-bottom: 5px;
+}
+.bProgressBar {
+	width: 100%;
+	line-height: 100%;
+	height: 12px;
+	border-radius: 8px;
+	background: #ffcc00;
+	font-size: 12px;
+}
+.bProgressPerc {
+	line-height: 100%;
+	height: 12px;
+	border-radius: 8px;
+	font-size: 10px;
+}
+.bProgressRed {
+	background: #db4535;
+}
+.bProgressCount {
+	margin-top: -12px;
+	font-size: 10px;
+}
+.bOpenClose{
+	text-align:right;
+}
+.show-hide-open:after, .show-hide-close:after {
+	content: '';
+	display: inline-block;
+	background: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9Ijc2OCIgaGVpZ2h0PSI3NjgiIHZpZXdCb3g9IjAgMCA3NjggNzY4Ij4KPHBhdGggZD0iTTIzNyAyNTAuNWwxNDcgMTQ3IDE0Ny0xNDcgNDUgNDUtMTkyIDE5Mi0xOTItMTkyeiI+PC9wYXRoPgo8L3N2Zz4K) no-repeat;
+	background-size: 100%;
+	width: 22px;
+	height: 22px;
+	vertical-align: top;
+}
+.bOpenClose > a {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	text-align: left;
+	padding: 5px 0;
+	font-size: 12px;
+	text-transform: uppercase;
+	color: #A3A5A9;
+}
+
+.bOpenClose > a:after {
+	padding: 0;
+	margin-left: auto;	
+	border-radius: 100%;
+	font-family: bb-icons;
+	display: inline-block;
+	line-height: 1;
+	font-weight: 400;
+	font-style: normal;
+	speak: none;
+	text-decoration: inherit;
+	text-transform: none;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	width: 20px;
+	height: 20px;
+	font-size: 16px;
+	line-height: 20px;
+	vertical-align: top;
+	text-align: center;
+	-webkit-transition: color .1s ease-in 0;
+	transition: color .1s ease-in 0;
+	color: #A3A5A9;
+}
+.bRewardMain{
+	color: #c99a41;
+	font-size: 14px;
+	font-weight:bold;
+}
+.bRewardsSecond{
+	font-size: 12px;
+}
