@@ -1,0 +1,10 @@
+{
+  "name": "Item Exchange",
+  "version": "1.0.0",
+  "description": "Players can exchange their items for good rewards.",
+  "developed_by": "neo6",
+  "website": "http://dmncms.net",
+  "change_log":{
+	"1.0.0": "Initial Release"
+  }
+}
