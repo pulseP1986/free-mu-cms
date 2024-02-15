@@ -1,0 +1,54 @@
+{
+  "DmN_Merchant_Logs": {
+    "create_query": "CREATE TABLE [dbo].[DmN_Merchant_Logs]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+    "id": {
+      "type": "int",
+      "is_primary_key": 1,
+      "null": 0,
+      "identity": 1,
+      "default": ""
+    },
+	"merchant": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "amount": {
+      "type": "float",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "currency": {
+      "type": "varchar(10)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"account": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "server": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "date": {
+      "type": "int",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    }
+  }
+}
