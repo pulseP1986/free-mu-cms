@@ -1,0 +1,33 @@
+{
+	"DmN_Wheel_Of_Fortune_Spins": {
+		"create_query": "CREATE TABLE [dbo].[DmN_Wheel_Of_Fortune_Spins]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+		"id": {
+			"type": "int",
+			"is_primary_key": 1,
+			"null": 0,
+			"identity": 1,
+			"default": ""
+		},
+		"account": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"server": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"amount": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "(0)"
+		}
+	}		
+}

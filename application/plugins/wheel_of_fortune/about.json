@@ -1,0 +1,12 @@
+{
+	"name": "Wheel Of Fortune",
+	"version": "1.0.3",
+	"description": "Play wheel of fortune and get random rewards.",
+	"developed_by": "neo6",
+	"website": "http://dmncms.net",
+	"change_log":{
+		"1.0.0": "Initial Release",
+		"1.0.2": "Added support gift code generation as a reward requires gift code plugin. ",
+		"1.0.3": "Fix expirable items in inventory goes expired"
+	  }
+}

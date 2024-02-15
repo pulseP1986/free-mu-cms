@@ -1,0 +1,660 @@
+#navbar {
+    width: 1000px;
+    margin: 0 auto;
+    height: 50px;
+    font-size: 12px;
+    line-height: 4;
+    color: #F1AA6C;
+    font-weight: 400;
+    text-shadow: 0 0 3px #000000,0 0 15px #000000,0 0 30px rgba(255, 255, 255, 0.48);
+    font-family: Play,sans-serif;
+	text-align:right;
+}
+
+
+#left_side {
+    float: left;
+    height: 500px;
+    width: 369px;
+}
+
+#right_side {
+    float: right;
+    width: 598px;
+    padding-top: 27px;
+    padding-left: 20px;
+    margin-right: 1px;
+}
+
+* {
+	-webkit-box-sizing: content-box !important;
+	-moz-box-sizing: content-box !important;
+	box-sizing: content-box !important;
+}
+
+body
+{
+    font-family: arial;
+    margin: 0;
+    background: url(../images/wheel_of_fortune/background.jpg)top no-repeat;
+    padding: 0px;
+}
+
+td.the_wheel
+{
+    background-position: center;
+    background-repeat: none;
+}
+
+h1, p
+{
+    margin: 0;
+}
+
+div.power_controls
+{
+    margin-right:70px;
+}
+
+div.html5_logo
+{
+    margin-left:70px;
+}
+
+table.power
+{
+    background-color: #cccccc;
+    cursor: pointer;
+    border:1px solid #333333;
+}
+
+table.power th
+{
+    background-color: white;
+    cursor: default;
+}
+
+td.pw1
+{
+    background-color: #6fe8f0;
+}
+
+td.pw2
+{
+    background-color: #86ef6f;
+}
+
+td.pw3
+{
+    background-color: #ef6f6f;
+}
+
+.clickable
+{
+    cursor: pointer;
+}
+
+.margin_bottom
+{
+    margin-bottom: 5px;
+}
+
+#rewards {
+    width: 303px;
+    margin-left: 99px;
+    height: 438px;
+    margin-top: 150px;
+    background: url(../images/wheel_of_fortune/items.png);
+}
+
+#spin_button {
+	position: relative;
+	text-align: center;
+	top: 48%;
+}
+
+#item {
+    width: 256px;
+    margin: 0 auto;
+    padding: 5px;
+    height: 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.21);
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05);
+}
+
+#image {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+#count {
+    width: 25px;
+    height: 32px;
+    float: left;
+    font-size: 11px;
+    color: #fff;
+    font-weight: bold;
+    line-height: 2.8;
+    text-align: left;
+}
+
+#title {
+    float: left;
+    width: 180px;
+    color: #FFFFFF;
+    font-size: 11px;
+    padding-left: 10px;
+    line-height: 2.8;
+    font-weight: 400;
+    text-shadow: 0 0 3px #000000,0 0 15px #000000,0 0 30px rgba(255, 255, 255, 0.48);
+    font-family: Play,sans-serif;
+}
+
+#copyright{
+    clear: both;
+    text-align: center;
+    padding-top: 126px;
+    color: #fff;
+    padding-bottom: 20px;
+    font-size: 11px;
+    text-shadow: #000 0px 1px;
+}
+
+.selected {background: #215F1D;border-radius: 5px;border: none;box-shadow: 0px 1px 0px rgb(49, 125, 44) !important;}
+
+
+#tooltip {
+	position: absolute;
+	z-index: 11001;
+	border: 1px solid #111;
+	background-color: #221f28;
+	padding: 5px;
+	opacity: 0.90;
+	font: normal 10px Tahoma, Helvetica, sans-serif;
+	text-align: center;
+	color: #fff;
+}
+
+#tooltip h3, 
+#tooltip div {
+	margin: 0;
+}
+
+.item_size_12{
+	font-size: 12px;
+}
+
+.item_font_family{
+	font-family: tahoma;
+}
+
+.item_white{
+	color:#FFFFFF;
+}
+
+.item_light_green{
+	color:#00FF00;
+}
+
+.item_light_blue{
+	color:#80B2FF;
+}
+
+.item_light_blue_2{
+	color:#3366FF;
+}
+
+.item_blue{
+	color:#0066FF;
+}
+
+.item_pink{
+	color:#FF1493;
+}
+
+.item_yellow{
+	color:#FADE09;
+}
+
+.item_yellow_2{
+	color:#FFCC00;
+}
+
+.item_red{
+	color:#FF0000;
+}
+
+.item_dark_red{
+	color:#800000;
+}
+
+.item_dark_red_background{
+	background-color:#800000;
+}
+
+.item_purple{
+	color: #800080;
+}
+
+.item_socket{
+	color: #B266FF;
+}
+
+.item_grey{
+	color: #808080;
+}
+
+.item_yellow_title{
+	color: #FFCC19;
+}
+.item_luck{
+	color:#80B2FF;
+}
+.item_exe_title{
+	color: #008000;
+}
+
+.item_socket_title{
+	color: #B266FF;
+}
+
+.item_socket_exe_title{
+	color: #7401DF;
+}
+
+.item_ancient_title{
+	color: #01DF01;
+}
+
+.item_ancient_background{
+	background-color: #0000FF;
+}
+/*
+.luckyDraw {
+	position: relative;
+	box-sizing: border-box;
+	width: 690px;
+	height: 512px;
+	margin: auto;
+	margin-top: 50px;
+	background: url(../images/wheel_of_fortune/2/lucky_draw_bg.png) top center no-repeat;
+	background-size: cover;
+}*/
+.luckyDraw {
+	position: relative;
+	box-sizing: border-box;
+	width: 620px;
+	height: 512px;
+	/* margin: auto; */
+	/* margin-top: 50px; */
+	background: url(../images/wheel_of_fortune/2/lucky_draw_bg.png) top center no-repeat;
+	background-size: contain;
+}
+.record {
+	position: absolute;
+	/*width: 60px;*/
+	height: 23px;
+	top: 35px;
+	left: 80px;
+	text-align: left;
+	font-size: 13px;
+	color: #d89e23;
+}
+.record_money{
+	position: absolute;
+	height: 23px;
+	top: 35px;
+	left: 180px;
+	text-align: left;
+	font-size: 13px;
+	color: #d89e23;
+}
+.prize {
+	position: absolute;
+	width: 185px;
+	height: 24px;
+	line-height: 22px;
+	padding-left: 75px;
+	top: 31px;
+	left: 75px;
+	text-align: left;
+	font-size: 13px;
+	color: #e6e2d4;
+	background: url(../images/wheel_of_fortune/2/prize.png) top center no-repeat;
+	background-size: cover;
+}
+
+.money {
+	position: absolute;
+	width: 180px;
+	height: 24px;
+	line-height: 29px;
+	padding-left: 40px;
+	padding-right: 3px;
+	top: 31px;
+	left: 360px;
+	text-align: left;
+	font-size: 13px;
+	color: #d89e23;
+	background: url(../images/wheel_of_fortune/2/money.png) top center no-repeat;
+	background-size: cover;
+}
+
+.luck-val {
+	position: absolute;
+	width: 131px;
+	height: 23px;
+	line-height: 25px;
+	top: 155px;
+	left: 165px;
+	padding-left: 6px;
+	text-align: left;
+	font-size: 12px;
+	color: #d89e23;
+	background: url(../images/wheel_of_fortune/2/luck_val_bg.png) top center no-repeat;
+	background-size: cover;
+}
+
+#lottery {
+	position: absolute;
+	width: 100%;
+	margin-top: 55px;
+	margin-left: 45px;
+	padding: 0;
+	list-style: none;
+}
+
+#lottery li {
+	width: 110px;
+	height: 110px;
+	box-sizing: border-box;
+	text-align: center;
+	line-height: 110px;
+	position: absolute;
+	background: url(../images/wheel_of_fortune/2/lucky_draw_item_list.png) top center no-repeat;
+	background-size: contain;
+}
+#lottery li img{
+	padding-top:30px;
+}
+#lottery li:nth-of-type(1) {
+	left: 0;
+	top: 0;
+}
+
+#lottery li:nth-of-type(1) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #d89e23;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(2) {
+	left: 110px;
+	top: 0;
+}
+
+#lottery li:nth-of-type(2) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(3) {
+	left: 220px;
+	top: 0;
+}
+
+#lottery li:nth-of-type(3) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(4) {
+	left: 330px;
+	top: 0;
+}
+
+#lottery li:nth-of-type(4) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(5) {
+	left: 440px;
+	top: 0;
+}
+
+#lottery li:nth-of-type(5) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(6) {
+	left: 440px;
+	top: 90px;
+}
+
+#lottery li:nth-of-type(6) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(7) {
+	left: 440px;
+	top: 180px;
+}
+
+#lottery li:nth-of-type(7) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(8) {
+	left: 440px;
+	top: 270px;
+}
+
+#lottery li:nth-of-type(8) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(9) {
+	left: 330px;
+	top: 270px;
+}
+
+#lottery li:nth-of-type(9) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(10) {
+	left: 220px;
+	top: 270px;
+}
+
+#lottery li:nth-of-type(10) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(11) {
+	left: 110px;
+	top: 270px;
+}
+
+#lottery li:nth-of-type(11) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(12) {
+	left: 0;
+	top: 270px;
+}
+
+#lottery li:nth-of-type(12) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(13) {
+	left: 0;
+	top: 180px;
+}
+
+#lottery li:nth-of-type(13) span {
+	position: absolute;
+	width: 110px;
+	top: 0;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(14) {
+	left: 0;
+	top: 90px;
+}
+
+#lottery li:nth-of-type(14) span {
+	position: absolute;
+	width: 110px;
+	left: 0;
+	line-height: 25px;
+	color: #e6e2d4;
+	font-size: 12px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(15) {
+	left: 215px;
+	top: 160px;
+	width: 119px;
+	height: 39px;
+	cursor: pointer;
+	background: url(../images/wheel_of_fortune/2/newui_btn_empty_big.jpg) top center no-repeat;
+	background-size: cover;
+	text-align: center;
+	line-height: 39px;
+	color: #e6e2d4;
+	font-size: 13px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(15):hover {
+	background: url(../images/wheel_of_fortune/2/newui_btn_empty_big.jpg) no-repeat;
+	background-position:0 -39px;
+	background-size: cover;
+	color: #e6e2d4;
+}
+
+#lottery li:nth-of-type(15):active {
+	background: url(../images/wheel_of_fortune/2/newui_btn_empty_big.jpg) no-repeat;
+	background-position:0 -78px;
+	background-size: cover;
+	color: #e6e2d4;
+}
+
+#lottery li:nth-of-type(16) {
+	left: 320px;
+	top: 190px;
+	width: 119px;
+	height: 39px;
+	cursor: pointer;
+	background: url(../images/wheel_of_fortune/2/newui_btn_empty_big.jpg) top center no-repeat;
+	background-size: cover;
+	text-align: center;
+	line-height: 39px;
+	color: #e6e2d4;
+	font-size: 13px;
+	text-decoration: none !important;
+}
+
+#lottery li:nth-of-type(16):hover {
+	background: url(../images/wheel_of_fortune/2/newui_btn_empty_big.jpg) no-repeat;
+	background-position:0 -39px;
+	background-size: cover;
+	color: #e6e2d4;
+}
+
+#lottery li:nth-of-type(16):active {
+	background: url(../images/wheel_of_fortune/2/newui_btn_empty_big.jpg) no-repeat;
+	background-position:0 -78px;
+	background-size: cover;
+	color: #e6e2d4;
+}
+
+
+#lottery .active:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	content: "";
+	width: 105px;
+	height: 85px;
+	border: 2px solid #ff2c2c;
+	border-radius: 2px;
+}
