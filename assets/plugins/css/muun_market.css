@@ -1,0 +1,123 @@
+.character{
+	background-image: url("../images/character.jpg");
+	width: 612px;
+	height: 44px;
+	display: table;
+	margin: 0px auto;
+	margin-top: 3px;
+	color: #d4c37f;
+	text-shadow: rgba(0, 0, 0, 0.27) 2px -6px 3px, #1b1414 0px 1px 3px;    cursor: pointer;
+}
+.title-name {
+	margin-top: 16px;
+	text-align: left;
+	margin-bottom: 0px;
+	padding-left: 20px;
+	font-weight: bolder;
+}
+.title-name span {
+	font-style: italic;
+	font-weight: lighter;
+	font-size: 9px;
+	color: #92908d;
+	float: right;
+	padding-right: 20px;
+}
+.muunHead{
+	background-image: url('../images/muun/muun_inventory_top.png');
+	width:317px; 
+	height: 201px;
+	margin-left:3px;
+}
+.muunHead2{
+	background-image: url('../images/muun/muun_inventory_top2.png');
+	width:311px; 
+	height: 187px;
+	margin-left:0px;
+}
+.muunHead3{
+	background-image: url('../images/muun/muun_inventory_top3.png');
+	width:311px; 
+	height: 187px;
+	margin-left:0px;
+}
+.muunContent{
+	width:323px;
+}
+.muunLeft{
+	float:left;
+	background-image: url('../images/muun/muun_inventory_left.png');
+	width:26px; 
+	height: 355px;
+}
+.muunRight{
+	float:left;
+	background-image: url('../images/muun/muun_inventory_right.png');
+	width:30px; 
+	height: 355px;
+}
+.muunCenter{
+	float:left;
+	
+}
+.muunFooter{
+	background-image: url('../images/muun/muun_inventory_bottom.png');
+	width:323px; 
+	height: 61px;
+}
+.equipments .item-mapping{
+	position:relative;
+	float:left;
+}
+
+.equipments .pet_main_item{
+	left:76px
+}
+.equipments .pet_help_item,.equipments .pet_main_item{
+	width:65px;
+	height:65px;
+	line-height:65px;
+	top:95px;
+	text-align:center
+}
+.equipments .pet_help_item{
+	left:120px
+}
+.warehouse_block{
+	position: relative; 
+	width: 267px; 
+	height: 355px; 
+	background: rgba(0, 0, 0, 0) url('../images/muun/muun_inventory_block.png') repeat scroll 0% 0%;
+}
+.warehouse_block,.warehouse_item_block{
+	border:0;
+	text-align:center
+}
+.warehouse_item_block{
+	padding:0
+}
+
+.pagerButton {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 2px;
+}
+.pagerNumber {
+  width: 30px;
+  height: 20px;
+  text-align: center;
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 2px;
+  color: orange;
+}
+#previousP, #nextP {
+  background-color: #390900;
+  color: #f8f7f8;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
