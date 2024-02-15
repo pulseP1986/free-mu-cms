@@ -1,0 +1,7 @@
+Add this as custom query in your donation tool
+value dmncms in query can change depending on your website database name
+value DEFAULT set depending on your server key in website server list manager
+
+
+UPDATE T_InGameShop_Point SET Wcoin = Wcoin + {$money} WHERE AccountId = '{$username}';
+INSERT INTO dmncms.dbo.DmN_Total_Recharge (account, server, points, date) VALUES ('{$username}', 'DEFAULT', {$money}, GETDATE());
