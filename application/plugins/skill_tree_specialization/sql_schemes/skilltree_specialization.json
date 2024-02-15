@@ -1,0 +1,152 @@
+{
+	"DmN_Skill_Tree_Specialization": {
+		"create_query": "CREATE TABLE [dbo].[DmN_Skill_Tree_Specialization]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+		"id": {
+			"type": "int",
+			"is_primary_key": 1,
+			"null": 0,
+			"identity": 1,
+			"default": ""
+		},
+		"title": {
+			"type": "varchar(200)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"account": {
+			"type": "varchar(20)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"server": {
+			"type": "varchar(50)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"name": {
+			"type": "varchar(20)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"mu_id": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"level": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"mlevel": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"mlpoints": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"mlpoints2": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"mlexp": {
+			"type": "bigint",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"mlnextexp": {
+			"type": "bigint",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"skills": {
+			"type": "text",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"skills2": {
+			"type": "text",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"skills3": {
+			"type": "text",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"addstr": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "0"
+		},
+		"adddex": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "0"
+		},
+		"addene": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "0"
+		},
+		"addvit": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 0,
+			"identity": 0,
+			"default": "0"
+		},
+		"image": {
+			"type": "varchar(200)",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		},
+		"class": {
+			"type": "int",
+			"is_primary_key": 0,
+			"null": 1,
+			"identity": 0,
+			"default": ""
+		}
+	}	
+}
