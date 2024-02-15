@@ -1,0 +1,10 @@
+{
+  "name": "Currency To Other Currency Exchange",
+  "version": "1.0.0",
+  "description": "This plugin allows your players to exchange their web/game currency for other currency.",
+  "developed_by": "neo6",
+  "website": "http://dmncms.net",
+  "change_log":{
+	"1.0.0": "Initial Release"
+  }
+}
