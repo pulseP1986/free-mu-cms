@@ -373,15 +373,6 @@
                     } else{
                         $this->Maccount->set_activation(0);
                         if($this->Maccount->prepare_account(1, $this->vars['config']['req_secret'])){
-                            if($this->Maccount->count_accounts() % 100 == 0){
-                                if(ldmnkstb($this->license) != 'okdmnzrbtbfsgfd'){
-									json(['error' => $this->license->validation_error]);
-								} else{
-									if($this->license->check_local_license($this->license->response['key_data'])){
-										$this->website->set_cache('license_information', $this->license->get_local_license_data(), (3600 * 24) * 14);
-									}
-								}
-                            }
                             $this->Maccount->check_fb_user($email, $server);
                             $this->Maccount->clear_login_attemts();
                             header('Location: ' . $this->config->base_url . 'account-panel');

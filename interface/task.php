@@ -32,7 +32,6 @@
             }
             $this->config = load_class('config');
             $this->load = load_class('load');
-            $this->license = load_class('LicenseKey');
             $this->translator = new Translator();
             $this->translator->register();
         }

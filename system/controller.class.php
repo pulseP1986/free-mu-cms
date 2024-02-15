@@ -87,7 +87,6 @@
             }
             $this->config = $this->load_class('config');
             $this->load = $this->load_class('load');
-            $this->license = $this->load_class('LicenseKey');
             $this->translations = (new initialize($this->config))->translations();
             date_default_timezone_set($this->config->config_entry('main|timezone'));
         }
