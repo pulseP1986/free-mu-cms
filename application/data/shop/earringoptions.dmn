@@ -1,0 +1,58 @@
+{
+	"449": {
+		"153": "Skill Damage Increase +17",
+		"188": "ATK / HP +20",
+		"150": "Excellent Damage Power Increase +35",
+		"134": "Critical Damage Power Increase +35",
+		"88": "Maximum Life Increase +200"
+	},
+	"450": {
+		"153": "Skill Damage Increase +19",
+		"228": "Mastery attack power and wizardry increase +38",
+		"238": "Mastery Excellent Damage Increase +65",
+		"246": "Mastery Critical Damage Increase +65",
+		"88": "Maximum Life Increase +400"
+	},
+	"451": {
+		"153": "Skill Damage Increase +21",
+		"228": "Mastery attack power and wizardry increase +2",
+		"238": "Mastery Excellent Damage Increase +3",
+		"246": "Mastery Critical Damage Increase +3",
+		"88": "Maximum Life Increase +600"
+	},
+	"452": {
+		"153": "Skill Damage Increase +23",
+		"228": "Mastery attack power and wizardry increase +4",
+		"238": "Mastery Excellent Damage Increase +5",
+		"246": "Mastery Critical Damage Increase +5",
+		"88": "Maximum Life Increase +800"
+	},
+	"457": {
+		"77": "Attack Speed Increase +7",
+		"138": "Excellent Damage Probability Increase 4%",
+		"122": "Critical Damage Probability Increase 4%",
+		"115": "AG Automatic Recovery Increase +10",
+		"96": "Maximum Mana Increase +200"
+	},
+	"458": {
+		"77": "Attack Speed Increase +7",
+		"138": "Excellent Damage Probability Increase 5%",
+		"120": "Critical Damage Probability Increase 400%",
+		"115": "AG Automatic Recovery Increase +10",
+		"96": "Maximum Mana Increase +400"
+	},
+	"459": {
+		"77": "Attack Speed Increase +7",
+		"138": "Excellent Damage Probability Increase 6%",
+		"120": "Critical Damage Probability Increase 6%",
+		"115": "AG Automatic Recovery Increase +10",
+		"96": "Maximum Mana Increase +600"
+	},
+	"460": {
+		"77": "Attack Speed Increase +7",
+		"138": "Excellent Damage Probability Increase 7%",
+		"120": "Critical Damage Probability Increase 7%",
+		"115": "AG Automatic Recovery Increase +10",
+		"96": "Maximum Mana Increase +800"
+	}
+}

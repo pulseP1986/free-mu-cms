@@ -1,0 +1,1068 @@
+Idx	ID	Text	Unk
+0	0	One handed attack power: %d~%d	0
+1	1	Two handed attack power: %d~%d	0
+2	2	Number of items: %d	1
+3	3	Armor: %d	2
+4	4	Magic resistance: %d	3
+5	5	Defense rate: %d	15
+6	6	Attack speed: %d	101
+7	7	Movement speed: %d	102
+8	8	Durability: [%d/%d]	4
+9	9	Minimum level required: %d	5
+10	10	(Lacking %d levels)	201
+11	11	Strength available: %d	6
+12	12	(Lacking %d strength)	202
+13	13	Agility available: %d	7
+14	14	(Lacking: %d agility)	203
+15	15	Available HP: %d	8
+16	16	(Lacking %d HP)	204
+17	17	Available energy: %d	9
+18	18	(Lacking %d energy)	205
+19	19	Command available: %d	10
+20	20	(Lacking %d leadership)	206
+21	21	Increases pet attack power by %d%%	11
+22	22	Increases wizardry by %d%%	11
+23	23	Increases curse spell by %d%%	11
+24	24	Increases swimming speed	13
+25	25	Increases movement speed	13
+26	26	Increases damage by %d%%	207
+27	27	Increases damage by %d%%	208
+28	28	Increases damage by %d%%	209
+29	29	Increases damage by %d%%	210
+30	30	Absorbs %d%% of incoming DMG	208
+31	31	Absorbs %d%% of incoming DMG	209
+32	32	Absorbs %d%% of incoming DMG	210
+33	33	Absorbs %d%% of incoming DMG	211
+34	34	Absorbs %d%% of incoming DMG	212
+35	35	Absorbs %d%% of incoming DMG	213
+36	36	Absorbs %d%% of incoming DMG	214
+37	37	Combines %d %s	215
+38	38	Available after dismantling	-1
+39	39	It is used to combine chaos items	-1
+40	40	Throw it on the ground to make money and items appear.	-1
+41	41	Fire attribute	-1
+42	42	Water attribute	-1
+43	43	Ice attribute	-1
+44	44	Wind attribute	-1
+45	45	Lightning attribute	-1
+46	46	Earth attribute	-1
+47	47	Element: : %s	216
+48	48	Level: 1	-1
+49	49	Level: 2	-1
+50	50	Level: 3	-1
+51	51	Level: 4	-1
+52	52	Level: 5	-1
+53	53	Increases by %s	217
+54	54	Absorb 20%% of damage	-1
+55	55	Increases maximum HP by +50	-1
+56	56	HP: %d	1
+57	57	Increases attack power and wizardry by 30%%	-1
+58	58	Increases damage by 15%%	-1
+59	59	Absorb 10%% of damage	-1
+60	60	Unable to equip while wearing a different transformation ring	-1
+61	61	Durability: [%d]	1
+62	62	Used when creating a Cloak of Invisibility	-1
+63	63	Used when entering the Blood Castle.	-1
+64	64	Right click to see how much time is left.	-1
+65	65	A #Horn Fragment can be made by combining the Divine Protection of the Goddess and an Armor Fragment.	-1
+66	66	A #Broken Horn can be made by combining a Beastly Claw and a Horn Fragment.	-1
+67	67	Horn of Fenrir can be #made by combining items.	-1
+68	68	Cannot be repaired	-1
+69	69	Elite Centaur researcher's I.D.	-1
+70	70	You can enter the refinery tower.	-1
+71	71	%d number/20	1
+72	72	%d number/10	1
+73	73	Increases defense by 10%%	-1
+74	74	Increases HP by %d	218
+75	75	Enjoy the Halloween festivities.	-1
+76	76	Unable to equip while wearing a different transformation ring	-1
+77	77	Increases attack power by 20	-1
+78	78	Increases wizardry by 20	-1
+79	79	Merry Christmas.	-1
+80	80	Increases ice, poison, lighting, fire, earth, and fire skill attack power by 255	-1
+81	81	Increases Exp gain rate.	-1
+82	82	Increases Exp gain rate and item drop rate.	-1
+83	83	Prevents Exp from being gained.	-1
+84	84	This entrance to Devil Square can only be used a specified number of times.	-1
+85	85	You will be assigned to a stage according to your level.	-1
+86	86	Usable %dtimes	1
+87	87	This entrance to the Blood Castle can only be used a specified number of times.	-1
+88	88	This entrance to Kalima can only be used a specified number of times.	-1
+89	89	Assemble the Scroll of Blood with the contract from the Illusion Sorcery.	-1
+90	90	Combine the Scroll of Blood with the Old Scroll.	-1
+91	91	Evidence which makes the Illusion Sorcerer appear.	-1
+92	92	Required to enter the temple.	-1
+93	93	Ingredients for the 3rd wing assembly	-1
+94	94	Reset Points: %d	16
+95	95	Resets the status.	-1
+96	96	This can be used on unequipped items	-1
+97	97	You are free to move on.	-1
+98	98	Can be used by Darklord	-1
+99	99	This reduces your kill rate.	-1
+100	100	This entrance to the Illusion Temple can only be used a specified number of times.	-1
+101	101	Exp gain rate is increased by %d%%	219
+102	102	Automatic HP recovery rate increased by %d%%	220
+103	103	Increases your Exp gain rate and HP recovery rate.	-1
+104	104	Increases item drop rate by %d%%	219
+105	105	Increases automatic Mana recovery rate by %d%%	220
+106	106	Automatic Mana recovery 	-1
+107	107	Increases Damage, Wizardry and Curse by 40%%	-1
+108	108	Increases attack speed by 10	-1
+109	109	Reduces damage from monsters by 30%%	-1
+110	110	Increases maximum HP by 50	-1
+111	111	Right click to warp to Santa's Village.	-1
+112	112	Auto-collects zen around you.	-1
+113	113	Remember where you die.	-1
+114	114	Move by clicking the right mouse button.	224
+115	115	You can save your location.	-1
+116	116	Items/Skills/Luck/Options will be randomly generated.	-1
+117	117	Transforms you into a Panda.	-1
+118	118	Increases Zen by 50%% 	-1
+119	119	Attack/Wizardry/Curse +30	-1
+120	120	Increases Exp gain rate by 50%%	-1
+121	121	Increase Defensive Skill +50	-1
+122	122	Exp and items are preserved when a character dies.	-1
+123	123	There is no penalty for dying.	-1
+124	124	Right click to use.	-1
+125	125	Items will not lose durability points for a certain amount of time.	-1
+126	126	Maintains item durability	-1
+127	127	Applies only to equippable items, excluding pets.	-1
+128	128	Increases your chance of creating the wings you desire.	-1
+129	129	Increases your chance of creating Wings of Satan.	-1
+130	130	Increases your chance of creating Wings of Heaven.	-1
+131	131	Increases your chance of creating the wings you desire.	-1
+132	132	Increases your chance of creating Wing of Curse.	-1
+133	133	Increases your chance of creating the Emperor's Cape.	-1
+134	134	Increases your chance of creating Wings of Dragon.	-1
+135	135	Increases your chance of creating Wings of Soul.	-1
+136	136	Increases your chance of creating Wings of Spirits.	-1
+137	137	Increases your chance of creating Wind of Despair.	-1
+138	138	Increases your chance of creating Darkness Wings.	-1
+139	139	Increases Exp gain rate.	-1
+140	140	Warp map window available.	-1
+141	141	Increases Exp gain rate and item drop rate.	-1
+142	142	Increases attack rate and defense rate.	-1
+143	143	Increases Exp gain rate by up to 170%%, depending on the number of people in your party	-1
+144	144	Increases Maximum AG + level # Up to maximum of 1,000 AG increase	-1
+145	145	Increases Maximum SD + level x 10#Up to maximum of 1,000 SD increase	-1
+146	146	Increases automatic HP recovery rate by 3%%	-1
+147	147	Increases maximum Mana by 4%%	-1
+148	148	Increases maximum HP by 4%%	-1
+149	149	Increases the amount of Zen received for killing monsters by 30%%	-1
+150	150	Decreases damage received by 4%%	-1
+151	151	Increases your chance of doing Excellent damage by 10%%	-1
+152	152	Increases attack speed by 7	-1
+153	153	Increases Mana received from killing monsters by Mana/8	-1
+154	154	Increases item drop rate.	-1
+155	155	Temporarily maintains HP.	-1
+156	156	Duration: 6 hours	-1
+157	157	Duration: 24 hours	-1
+158	158	Duration: 7 days	-1
+159	159	Duration: 30 days	-1
+160	160	This entrance to the Chaos Castle can only be used a specified number of times.	-1
+161	161	Equip this to transform into a Skeleton Warrior.	-1
+162	162	Attack/Wizardry/Curse +40	-1
+163	163	Increases Exp gain rate by 50%% when equipped along with a pet skeleton.	-1
+164	164	Increases attack, wizardry and curse damage by 20%%	-1
+165	165	Increases Exp gain rate by 30%%	-1
+166	166	Increases Exp gain rate by 50%% when equipped along with a Transformation Ring.	-1
+167	167	You can enter to Paid Channel Channel.	-1
+168	168	Expires in 7 days	-1
+169	169	This entrance to Doppelganger can only be used a specified number of times.	-1
+170	170	This entrance to the Varka can only be used a specified number of times.	-1
+171	171	This map can be entered from Monday - Saturday.	-1
+172	172	This entrance to the Varka map 7 can only be used a specified number of times.	-1
+173	173	This map can be entered on Sunday.	-1
+174	174	(in use)	222
+175	175	Idol	-1
+176	176	Increases critical damage by +10%%	-1
+177	177	Right click on this item in your inventory to use it.	-1
+178	178	Charm	-1
+179	179	Increases maximum HP by 50	-1
+180	180	Increases maximum MP by 50	-1
+181	181	Increases maximum HP by 100	-1
+182	182	Increases maximum SD by 500	-1
+183	183	Increases maximum MP by 150	-1
+184	184	Increases maximum AG by 50	-1
+185	185	Relic	-1
+186	186	Increases item drop rate by 20%%	-1
+187	187	You can make special items by combining chaos cards.	-1
+188	188	You can register an item by giving it to an NPC.	-1
+189	189	It is used to increase your item level up to 6	-1
+190	190	This is used to increase your item level to 7,8,or 9	-1
+191	191	Increases item by 1 level	-1
+192	192	This is used to combine items to create a Devil Square Invitation	-1
+193	193	Right click to see how much time is left.	-1
+194	194	Use this to create fruits that increase your stats	-1
+195	195	Quest Item	-1
+196	196	Cannot be stored in a warehouse.	-1
+197	197	Cannot be traded	-1
+198	198	%d / 5	1
+199	199	Can create the lost map.	-1
+200	200	%d is needed to create the lost map.	223
+201	201	Create and improve siege items	-1
+202	202	Impure Jewel	-1
+203	203	Item Enhancement Jewel	-1
+204	204	Used for granting harmony bonus options, or used as a combination material for removing #harmonization options.	-1
+205	205	Drop this to receive a gift.	-1
+206	206	Attack Speed +%d	219
+207	207	Attack/Wizardry +%d	219
+208	208	Defense +%d	219
+209	209	Max HP +%d	219
+210	210	Max MP +%d	219
+211	211	Throw this on the ground to produce Fireworks.	-1
+212	212	The GM has given you this special gift.	-1
+213	213	Increases the combination rate, but only up to the maximum rate.	-1
+214	214	%d%% increase in combination success rate	1
+215	215	Throw this item on the ground to get money or a piece of armor.	-1
+216	216	Congratulations!!#Item exchange is only possible after contacting our CS team.	-1
+217	217	Movement speed reduced when acquired	-1
+218	218	Restores Stamina by 100%% immediately.	-1
+219	219	Immediately restores 100%% Mana.	-1
+220	220	Attack Speed +%d	219
+221	221	Defense +%d	219
+222	222	Attack +%d	219
+223	223	Wizardry +%d	219
+224	224	HP +%d	219
+225	225	MP +%d	219
+226	226	Strength +%d	219
+227	227	Agility +%d	219
+228	228	Health +%d	219
+229	229	Energy +%d	219
+230	230	Command +%d	219
+231	231	#Increases stats for a set time period.	-1
+232	232	Can be equipped by %s	221
+233	233	Max MP +700	-1
+234	234	Max HP +700	-1
+235	235	Attack/Wizardry +40	-1
+236	236	Collect and take them to the Cherry Blossom Spirit for compensation.	-1
+237	237	Reward for 10 pieces	-1
+238	238	Reward for 30 pieces	-1
+239	239	Reward for 50 pieces	-1
+240	240	Reward for 255 pieces	-1
+241	241	You can create a Summoner.	-1
+242	242	Produce Normal or High Level Items	-1
+243	243	Produce Event Items	-1
+244	244	Immediately restores Stamina by 65%%.	-1
+245	245	Produce Beginner Items	-1
+246	246	Upgrading items above level +9 # prevents items from disappearing.	-1
+247	247	Use this after putting it into the combination window	-1
+248	248	Critical DMG +20%%	-1
+249	249	Excellent DMG +20%%	-1
+250	250	You may continue to use the strengthener.	-1
+251	251	It can be exchanged for items through Devias NPC Delgado.	-1
+252	252	Old paper notes that are no longer available can be sold at stores.	-1
+253	253	This is the plan to destroy the Gaion Empire and the Command of Empire Guardians.	-1
+254	254	Cannot be used anymore.#Can be sold to shops	-1
+255	255	It's part of a Complete Secromicon.	-1
+256	256	Indestructible Metal Secromicon	-1
+257	257	Contains information about Grand Wizard Etramu Lenos's research.	-1
+258	258	This is a sign infused with dimensional traces.	-1
+259	259	Collecting 5 of these automatically produces a Dimensional Mirror.	-1
+260	260	You need %d more to create a Dimensional Mirror.	223
+261	261	This is a key that can only be used to teleport to Doppelganger through NPC Lugard.	-1
+262	262	Combining a Goblin # with a sealed Silver Box creates a Silver Box.	-1
+263	263	Combining a Goblin # with a sealed Gold Box creates a Golden Box.	-1
+264	264	You can acquire Goblin Points by using storage from MU's in-game item shop.	-1
+265	265	Combining a Goblin # with a Golden Key creates a Golden Box.	-1
+266	266	Combining a Goblin # with a Silver Key creates a Silver Box.	-1
+267	267	This item has a fixed probability of turning into a rare item when dropped.	-1
+268	268	Immediately restores SD by 65%%.	-1
+269	269	This box contains various items.	-1
+270	270	Max HP +100	-1
+271	271	Click this item to see information about the quest.	-1
+272	272	Lv. 350 - 400	-1
+273	273	Bring this to Tercia to refund your deposit.	-1
+274	274	You can obtain the powder from Queen Rainier.	-1
+275	275	A rare jewel possessed by the Bloody Witch Queen.	-1
+276	276	A suit of armor once worn by Tantalos.	-1
+277	277	A mace once wielded by the Burnt Murderer.	-1
+278	278	Throw this item on the ground to receive money or a weapon.	-1
+279	279	Throw this item on the ground to receive money or a piece of armor.	-1
+280	280	Throw this item on the ground to receive money, a jewel, or a ticket.	-1
+281	281	This Jewel is used to repair Lucky Items	-1
+282	282	Item Enhancement Jewel	-1
+283	283	This item expands your inventory.	-1
+284	284	After use, it will become active the next time you connect.	-1
+285	285	Wizardry damage: %d - %d	12
+286	286	Cannot be sold.	-1
+287	287	When you drop it on the ground, 	-1
+288	288	[Sign of lord/Zen/Jewel/Item]	-1
+289	289	and you will receive one of the above items.	-1
+290	290	Free entrance to Kalima	-1
+291	291	Increases HP	-1
+292	292	Moves to the corresponding area in 3 seconds	-1
+293	293	Increases 1~3 energy stat points	-1
+294	294	Increases 1~3 HP stat points	-1
+295	295	Increases 1~3 agility stat points	-1
+296	296	Increases 1~3 strength stat points	-1
+297	297	Increases 1~3 command stat points	-1
+298	298	Can decrease energy by 1~9 points	-1
+299	299	Can decrease HP by 1~9 points	-1
+300	300	Can decrease agility by 1~9 points	-1
+301	301	Can decrease strength by 1~9 points	-1
+302	302	Can decrease command by 1~9 points	-1
+303	303	Used to upgrade wings	-1
+304	304	Can be used when combining Cloak of Lord, Cloak of Fighter, Cloak of Limit or Cloak of Innocence	-1
+305	305	Used in online events.	-1
+306	306	Used in My Friend events.	-1
+307	307	Used for siege registration.	-1
+308	308	You can throw if you are at least level 40	-1
+309	309	Requires level 80 to throw.	-1
+310	310	Attack +20%%	-1
+311	311	Duration: 120 seconds	-1
+312	312	Only applicable to the castle gate and statue	-1
+313	313	Increases AG recovery speed by 8	-1
+314	314	Increases resistance to Lightning and Ice	-1
+315	315	Scroll of guardian	-1
+316	316	Place Life Stone	-1
+317	317	Used in Dark Horse resurrection.	-1
+318	318	Used in Dark Spirit resurrection.	-1
+319	319	[Blue Crystal/Red Crystal/Black Crystal]	-1
+320	320	If this is used on an event combination or thrown on the floor, it will explode and disappear.	-1
+321	321	Throw this to receive money or items.	-1
+322	322	Click to return to your save location.	-1
+323	323	Right click to save your location.	-1
+324	324	Increases damage by 3%%	-1
+325	325	Increases damage by 5%%	-1
+326	326	Increases damage by 7%%	-1
+327	327	Increases attack power by 1	-1
+328	328	Storage area: %s/location: (%d,%d)	224
+329	329	Plasma Storm (Mana:50)	-1
+330	330	When equipped, you can summon Fenryl.	-1
+331	331	Skills improve through upgrades.	-1
+332	332	Increases final damage by 10%%	-1
+333	333	With this equipped, you can summons Fenrir.	-1
+334	334	%d HP increase#%d Mana increase	225
+335	335	%d attack power increase# %d wizardry increase	226
+336	336	This is specially designed for heroes who have triumphed in the Illusion Temple.	-1
+337	337	Ice resistance: %d	14
+338	338	Poison resistance: %d	14
+339	339	Lightning resistance: %d	14
+340	340	Fire resistance: %d	14
+341	341	Earth resistance: %d	14
+342	342	Wind resistance: %d	14
+343	343	Water resistance: %d	14
+344	344	Receive a reward for returning this to the Archangel.	-1
+345	345	Increases excellent damage by +10%%	-1
+346	346	Archer	-1
+347	347	Spearman	-1
+348	348	Increases attack speed by 20	-1
+349	349	Rena	-1
+350	350	Absorbs 10%% of final damage	-1
+351	351	Once you have 5 Mithril Fragments of the same element, they turn into a Mithril Fragment Bunch.	-1
+352	352	Elemental Jewel Combination Item	-1
+353	353	Once you have 5, they turn into an Elixir Fragment Bunch.	-1
+354	354	Elemental Jewel Combination Item	-1
+355	355	Elemental Jewel Level Enhancement Combination Item	-1
+356	356	Elemental Jewel Additional Option Combination Item	-1
+357	357	Elemental attack damage :  %d ~ %d	0
+358	358	Elemental defense :  %d 	2
+359	359	Trade Limit: %d	1
+360	360	Mountable Slots : %d 	227
+361	361	Acheron entry item.#5 can be combined to make a Spirit Map.	-1
+362	362	Acheron entry item.#Acheron may be entered by talking to Captain Slope.	-1
+363	363	Arca War Reward Item. You can trade with Sir Lesnar.	-1
+364	364	Use level :  Master Level 1 or above.	-1
+365	365	It's used as an ingredient for Scroll of Green Oblivion.	-1
+366	366	It's used as an ingredient for Scroll of Blue Oblivion.	-1
+367	367	It's used as an ingredient for Scroll of Red Oblivion.	-1
+368	368	It's used as an ingredient for Scroll of Oblivion.	-1
+369	369	It resets the first tree of the Master skill tree.	-1
+370	370	It resets the second tree of the Master skill tree.	-1
+371	371	It resets the third tree of the Master skill tree.	-1
+372	372	It resets the entire Master skill tree.	-1
+373	373	Right-click to use it. You can reconnect when you're using this.	-1
+374	374	(Protection, Peace, Blessing, Guardian, Solidity, Determination, Willpower, Divinity, Vengeance, Punishment, Ritual, Light, Treasure, Blood Tree)	-1
+375	375	(Bravery, Wisdom, Salvation, Chaos, Earth, Justice, Will, Retaliation, Severity, Harsh, Bloodshed, Decree, Solidarity, Doom Tree)	-1
+376	376	(Anger, Overcome, Storm, Honor, Ultimatum, Conquer, Destruction, Obsession, Cols Blood, Heartless, Despair, Twilight, Liberation, Speculation Tree)	-1
+377	377	Use Backpack #1 for a certain period of time.	-1
+378	378	Use Backpack #2 for a certain period of time.	-1
+379	379	Use Backpack #3 for a certain period of time.	-1
+380	380	Use Backpack #4 for a certain period of time.	-1
+381	381	Shows the Attribute Window when you Alt+Right-click	-1
+382	382	When you upgrade a Pentagram item or Errtel, your chance for a successful upgrade increases by 10%%.	-1
+383	383	A Combination talisman that prevents items from disappearing when upgrading Pentagram or Errtel items.	-1
+384	384	Use level : Master Level 1 or above.	-1
+385	385	Increases your chance of creating Warrior's Cloak.	-1
+386	386	Combining this note with 2 Ice Walker's Mane#and 1 Dark Iron Knight's Sword#will create Sonic Blade.	-1
+387	387	Combining this note with 2 Mammoth Bundles of Fur#and 1 Dark Mammoth's Horn#will create a Cyclone Sword. 	-1
+388	388	They are used for general combinations for#Chaos Goblins in Noria.	-1
+389	389	If you have +15 Death King's Bone & Clock of Death, send a ticket through CS	-1
+390	390	If you have +15 Hell Maine's Leather & Wing of Chaos, send a ticket through CS	-1
+391	391	If you have +15 Dark Phoenix Feather & Wing of Magic, send a ticket through CS	-1
+392	392	If you have +15 Death Beam Knight Soul & Wing of Life, send a ticket through CS	-1
+393	393	Your wings will be upgraded to +15 grade wings. (2 Excellent options)	-1
+394	394	Combining this note with 2 Giant's Pieces of Ice#and 1 Dark Iron Knight's Sword# will create Blast Break.	-1
+395	395	Possible combination items %d / 5.	1
+396	396	%d / 5, Once you have 5, they automatically transform into Spirit Map.	1
+397	397	Combining this note with 2 Coolutin's Poison#and 1 Dark Mammoth's Horn#will create Magmus Peer.	-1
+398	398	Combining this note with 2 Giant's Pieces of Ice#and 1 Dark Giant's Axe#will create Horn of Steal.	-1
+399	399	Combining this note with 2 Ice Walker's Mane#and 1 Dark Mammoth's Horn#will create Angelic Bow.	-1
+400	400	Combining this note with 2 Iron Knight's Hearts#and 1 Dark Coolutin's Blood#will create Devil Crossbow.	-1
+401	401	Combining this note with 2 Giant's Pieces of Ice#and 1 Dark Mammoth's Horn#will create Miracle Staff.	-1
+402	402	Combining this note with 2 Iron Knight's Hearts#and 1 Dark Giant's Axe#will create Spite Staff.	-1
+403	403	Combining this note with 2 Iron Knight's Hearts#and 1 Dark Iron Knight's Sword#will create Asura.	-1
+404	404	Combining this note with 2 Mammoth Bundles of Fur#and 1 Dark Coolutin's Blood#will create Thunderbolt.	-1
+405	405	Combining this note with 2 Iron Knight's Hearts#and 1 Dark Mammoth's Horn#will create Soul Blinger.	-1
+406	406	Combining this note with 2 Giant's Pieces of Ice#and 1 Dark Coolutin's Blood#will create Prickle Gloves.	-1
+407	407	Item created from stacking 5 Mithril Fragments. Used when combining Mithril.	-1
+408	408	Item created from stacking 5 Elixir Fragments. Used when combining Elixir.	-1
+409	409	Increases damage %d%%	228
+410	410	Increases damage %d%%	229
+411	411	Increases damage %d%%	230
+412	412	Absorbs %d%% of incoming DMG	231
+413	413	Absorbs %d%% of incoming DMG	232
+414	414	Absorbs %d%% of incoming DMG	233
+415	415	Players with an Outlaw status cannot take effect	-1
+416	416	Lost Tower/Tarkan/Aida/Swamp of Peace/#An area is created at the safe zone in La Cleon,#and you can left-click to start mining.	-1
+417	417	Mining areas are divided into blue/purple/gold#and require more durability in that order.#You can obtain more jewels if you mine successfully.	-1
+418	418	You will receive the obtained jewels#when you move to another place.#Only Jewels of Bless can be repaired with durability.	-1
+419	419	Increases the trade limit for Pentragram items. Drag it to the item for which you want to extend the limit.	-1
+420	420	Equip this to transform into a Robot Knight.	-1
+421	421	Use Pet Skeletons and Pet Pandas at the same time to aquire additional#EXP50%%.	-1
+422	422	Increases Defense by +10	-1
+423	423	Equip this to transform into a Mini Robot.	-1
+424	424	Equip this to transform into a Great Heavenly Mage.	-1
+425	425	Increase Damage by %d%%	234
+426	426	Absorbs %d%% of incoming DMG	234
+427	427	Increase EXP by 20%%	-1
+428	428	When throwing a scroll on the floor, the New Year monster is summoned. #Hunt the New Year monster to acquire a special item.	-1
+429	429	Upgrade the summon scroll through chaos combination to acquire more special item.	-1
+430	430	When equipped, New Year Decoration effect is added.	-1
+431	434	Chance of Ignoring Defense Resistance: %d%%	17
+432	435	Chance of Ignoring SD Resistance: %d%%	17
+433	436	Double Chance Resistance: %d%%	17
+434	437	Stun Chance Resistance: %d%%	17
+435	438	Excellent Chance Resistance: %d%%	17
+436	439	Critical Chance Resistance: %d%%	17
+437	440	%d / 24	1
+438	441	This item can start a mini game.	-1
+439	442	This item will be used as soon as the mini game starts.	-1
+440	443	Increases attack power and wizardry by 10%%	-1
+441	444	Increases attack power and wizardry by 15%%	-1
+442	445	Increase Damage by %d%%	235
+443	446	Absorbs %d%% of incoming DMG	235
+444	447	When 24 pieces are obtained, they will change automatically to a card deck.	-1
+445	448	Summons Golden Titan.	-1
+446	449	Golden Titan disappears 30 minutes after being summoned.	-1
+447	450	Summons Golden Tantalose.	-1
+448	451	Golden Tantalose disappears 30 minutes after being summoned.	-1
+449	452	Summons Golden Erohim.	-1
+450	453	Golden Erohim disappears 30 minutes after being summoned.	-1
+451	454	Summons Golden Hell Maine.	-1
+452	455	Golden Hell Maine disappears 30 minutes after being summoned.	-1
+453	456	Summons Golden Illusion of Kundun and his minions.	-1
+454	457	GoldenIllusion of Kundun disappears 30 minutes after being summoned.	-1
+455	458	Earning additional 50%% EXP	-1
+456	459	Earning additional 100%% EXP	-1
+457	460	Earning additional 200%% EXP	-1
+458	461	Once you use this item you will gain an additional 200%% EXP for a limited amount of time.	-1
+459	462	Once you throw the egg on the ground, you will receive the chance to unlock a random reward, including a MUUN.	-1
+460	463	You can recover your Pet's life.	-1
+461	464	This item can be used to evolve max-level Muun.#Drag it to Muun indicated in the parentheses.	-1
+462	465	(%s)	103
+463	466	Level%d / Level%d	104
+464	467	Normal Type	-1
+465	468	Mount Type	-1
+466	469	Transformation Type	-1
+467	470	Accessory Type	-1
+468	471	If %s, %s	105
+469	472	By %dYear %dMonth %dDay, Ability will increase by %d time(s)	106
+470	473	By %dYear %dMonth %dDay, Ability will increase +%d 	106
+471	474	Increases Muun skill casting speed by %d times until %d, %d, %d (D, M, Y).	106
+472	475	Level Max	-1
+473	476	Use this item to summon and kill the Event Monster and capture the egg it has been incubating.	-1
+474	477	Life: %d# #	1
+475	478	If you unleash both Skeleton and Panda pets, you will earn an additional 65%% EXP	-1
+476	479	Event Reward Pot	-1
+477	480	It is an event item for exclusive use of the combination	-1
+478	481	Chinese Moon Cake 1	-1
+479	482	Chinese Moon Cake 2	-1
+480	483	Chinese Moon Cake 3	-1
+481	484	Reward given for every 20 collected.	-1
+482	485	Event Item	-1
+483	486	Increases combination # success rate of Seed Sphere (Tetra) by 60%%.	-1
+484	487	Increases combination #success rate of Seed Sphere (Tetra) by 45%%.	-1
+485	488	Increases combination #success rate of Seed Sphere (Tetra) by 30%%.	-1
+486	489	MUUN Energy level %d / 120# #	1
+487	490	Drag in MUUN or Evolution Stone to fill up the MUUN energy.#The item changes into Wizardry Stone when filled up 120.# #	-1
+488	491	Items belong to MUUN Inventory.	-1
+489	492	A stone made by MUUN energy which got transformed by magic	-1
+490	493	Exchange it with a special item from NPC Monica.	-1
+491	494	Until %d(yr) %d(m) %d(d), the damage of attack skill is increased by %d(x)	106
+492	495	Mount	-1
+493	496	Increases Damage by %d%%	236
+494	497	Absorbs %d%% of incoming DMG	236
+495	498	Increases Damage by %d%%	237
+496	499	Absorbs %d%% of incoming DMG	237
+497	500	Equip this to transform into Devil Lilith.	-1
+498	501	Attack Power/Magical Damage/Curse +70	-1
+499	502	Combination material for making Wings of the Conquerer	-1
+500	503	Combination material for making Darkness Transformation Ring	-1
+501	504	Item(s) obtained from Battle Core Server Survival of the Fittest	-1
+502	505	Chaos Castle Survival of the Fittest Basic Reward	-1
+503	506	Tormented Square Survival of the Fittest Basic Reward	-1
+504	507	Reward Item obtained from Chaos Castle (Battle)	-1
+505	508	Chaos Castle (Battle) Winner Item	-1
+506	509	Empty Slot (Can add here)	-1
+507	510	Use item to acquire 50%% of your basic EXP additionally in a short time.	-1
+508	511	Use item to acquire 100%% of your basic EXP additionally in a short time.	-1
+509	512	Attack Power/Magical Damage/Curse: %d	238
+510	513	It contains Chaos Goblin's precious treasure.	-1
+511	514	Right click to use EXP. contained in the item.	-1
+512	515	This item enables you to play Mu Roomy special game.	-1
+513	516	Use Special Card to get higher score.	-1
+514	517	Until %d(yr) %d(m) %d(d)  %02d:%02d, stats are increased by %d(x)	107
+515	518	Until %d(yr) %d(m) %d(d)  %02d:%02d, stats are increased by +%d	107
+516	519	Until %d(yr) %d(m) %d(d)  %02d:%02d, the speed of using MUUN skills is increased by %d(x)	107
+517	520	Until %d(yr) %d(m) %d(d) %02d:%02d, the damage of attack skills is increased by %d(x)	107
+518	521	%d/100	1
+519	522	Contains 3,000,000 EXP.	-1
+520	523	Contains 5,000,000 EXP.	-1
+521	524	Contains 8,000,000 EXP.	-1
+522	525	Contains 10,000,000 EXP.	-1
+523	526	Contains 10,000,000 EXP.	-1
+524	527	Contains 20,000,000 EXP.	-1
+525	528	Contains 30,000,000 EXP.	-1
+526	529	Contains 40,000,000 EXP.	-1
+527	530	Contains 50,000,000 EXP.	-1
+528	531	Contains 100,000,000 EXP.	-1
+529	532	If you've %s, %s	105
+530	533	%d/25	1
+531	534	Automatically changes to Evomon Scroll after you combine 25	-1
+532	535	Summons Evomon when thrown on the ground.#You are set as the owner of Evomon.	-1
+533	536	Item for normal levels	-1
+534	537	Item for master levels	-1
+535	538	This is the Bloodangel of Sealed Fury Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+536	539	This is the Bloodangel of Sealed Transcendence Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+537	540	This is the Bloodangel of Sealed Flurry Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+538	541	This is the Bloodangel of Sealed Extremity Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+539	542	This is the Bloodangel of Sealed Conquest Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+540	543	This is the Bloodangel of Sealed Honor Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+541	544	This is the Bloodangel of Sealed Destruction Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+542	545	This is the Bloodangel of Sealed Tenacity Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+543	546	##Mastery Set Item Combination Material	-1
+544	547	Soul which contains the will of the Ancient Heroes of MU continent	-1
+545	548	##You can infuse will of the Ancient Hero into Sealed Bloodangel sets #to remove the seals.	-1
+546	549	You can use the item#If you right-click on it	-1
+547	550	##You can request entry for #Devil Square in Event Map Square.	-1
+548	551	##You can request entry for #Blood Castle in Event Map Square.	-1
+549	552	##You can request entry for #Illusion Temple in Event Map Square.	-1
+550	553	##You can request entry for #Fortress of Empire Guardians in Event Map Square.	-1
+551	554	##You can request entry for #Doppelganger in Event Map Square.	-1
+552	555	When leveling up Muun, its duration is maintained.	-1
+553	556	Throw this on the ground to obtain a 'Pentagram'.	-1
+554	557	Strength Specialized Armor Set	-1
+555	558	Agility Specialized Armor Set	-1
+556	559	Stamina Specialized Armor Set	-1
+557	560	Energy Specialized Armor Set	-1
+558	561	Command Specialized Armor Set	-1
+559	562	Blade Master only	-1
+560	563	Grand Master only	-1
+561	564	High Elf only	-1
+562	565	Lord Emperor only	-1
+563	566	Dual Master only	-1
+564	567	Dimension Master only	-1
+565	568	Fist Master only	-1
+566	569	Mirage Lancer only	-1
+567	570	This is the Bloodangel of Sealed Vengeance. Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+568	571	This is the Bloodangel of Sealed Wisdom Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+569	572	This is the Bloodangel of Sealed Redemption Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+570	573	This is the Bloodangel of Sealed Extremity Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+571	574	This is the Bloodangel of Sealed Justice Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+572	575	This is the Bloodangel of Sealed Chaos Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+573	576	This is the Bloodangel of Sealed Will Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+574	577	This is the Bloodangel of Sealed Retribution Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in 'Regular Combination' of Chaos Combination to # remove the seal.	-1
+575	578	You have a chance to acquire #Ruud from mastery boxes. ##You can use Ruud to purchase items #from Priest James.##	-1
+576	579	Used when entering the Devil Square.	-1
+577	580	Ruud will be given as a reward. ## You can use Ruud to purchase items#from James. # #	-1
+578	581	Event items cannot be upgraded or traded.	-1
+579	582	Item is for internet cafe. Only useable at internet cafe.	-1
+580	583	Ticket for one additional entry into event map. #Automatically used upon event map entry attempt.	-1
+581	584	Gift box for internet cafe that has many items.	-1
+582	585	Until %d(yr) %d(m) %d(d) %02d:%02d: Increases +%d	107
+583	586	%d / 50	1
+584	587	It is a material that can make a Elemental Capsule (Normal)	-1
+585	588	Throw the box to acquire item.	-1
+586	589	Combine 4 different fragments into one to create 'Slot of Blessing Expander'.	-1
+587	590	Combine 4 different fragments into one to create 'Slot of Integrity Expander'.	-1
+588	591	Combine 4 different fragments into one to create 'Slot of Divinity Expander'.	-1
+589	592	Combine 4 different fragments into one to create 'Slot of Radiance Expander'.	-1
+590	593	Can expand Slot of Blessing.	-1
+591	594	Can expand Slot of Integrity.	-1
+592	595	Can expand Slot of Divinity.	-1
+593	596	Can expand Slot of Radiance.	-1
+594	597	Can change the Element of Errtel.	-1
+595	598	Ignores the chance of item deletion when you unequip Errtel from Pentagram.	-1
+596	599	Choose to use it or not when unequipping.	-1
+597	600	Elemental item# obtained by using a #Capsule is endowed with fire attribute.	-1
+598	601	Elemental item #obtained by using a #Capsule is endowed with earth attribute.	-1
+599	602	Elemental item #obtained by using a #Capsule is endowed with water attribute.	-1
+600	603	Elemental item #obtained by using a #Capsule is endowed with wind attribute.	-1
+601	604	Elemental item #obtained by using a #Capsule is endowed with darkness attribute.	-1
+602	605	You cannot use this item. # Sell it to shop NPCs.	-1
+603	606	You can get Absolute Archangel Weapon according to your class.#Use this by throwing it on the ground.	-1
+604	607	[Warning] Cannot be used by Rage Fighter or Grow Lancer.	-1
+605	608	# #	-1
+606	609	--------------------------------------------	-1
+607	610	Item effect when unsealed	-1
+608	611	Fury's Bloodangel Knight Armor	-1
+609	612	Fury's Bloodangel Knight Helm	-1
+610	613	Fury's Bloodangel Knight Pants	-1
+611	614	Fury's Bloodangel Knight Boots	-1
+612	615	Transcendence's Bloodangel Wizard Armor	-1
+613	616	Transcendence's Bloodangel Wizard Helm	-1
+614	617	Transcendence's Bloodangel Wizard Pants	-1
+615	618	Transcendence's Bloodangel Wizard Gloves	-1
+616	619	Flurry's Bloodangel Elf Armor	-1
+617	620	Flurry's Bloodangel Elf Helm	-1
+618	621	Flurry's Bloodangel Elf Pants	-1
+619	622	Flurry's Bloodangel Elf Gloves	-1
+620	623	Extremity's Bloodangel Magic Armor	-1
+621	624	Extremity's Bloodangel Magic Boots	-1
+622	625	Extremity's Bloodangel Magic Pants	-1
+623	626	Extremity's Bloodangel Magic Gloves	-1
+624	627	Conquest's Bloodangel Lord Armor	-1
+625	628	Conquest's Bloodangel Lord Lord Helm	-1
+626	629	Conquest's Bloodangel Lord Pants	-1
+627	630	Conquest's Bloodangel Lord Gloves	-1
+628	631	Honor's Bloodangel Summoner Armor	-1
+629	632	Honor's Bloodangel Summoner Helm	-1
+630	633	Honor's Bloodangel Summoner Pants	-1
+631	634	Honor's Bloodangel Summoner Gloves	-1
+632	635	Destruction's Bloodangel Fighter Armor	-1
+633	636	Destruction's Bloodangel Fighter Helm	-1
+634	637	Destruction's Bloodangel Fighter Pants	-1
+635	638	Destruction's Bloodangel Fighter Boots	-1
+636	639	Tenacity's Bloodangel Lancer Armor	-1
+637	640	Tenacity's Bloodangel Lancer Helm	-1
+638	641	Tenacity's Bloodangel Lancer Pants	-1
+639	642	Tenacity's Bloodangel Lancer Gloves	-1
+640	643	Increases all stats (7 or 15)	-1
+641	644	Full Set Option	-1
+642	645	Excellent Option is set when item is purchased and item will be sent to inventory.	-1
+643	646	Excellent Option	-1
+644	647	Increases Excellent DMG Rate by 10%	-1
+645	648	+	-1
+646	649	1~2 Excellent option added	-1
+647	650	# #Excellent DMG +10% is a basic option.	-1
+648	651	Cyclone Skill	-1
+649	652	Power Slash Skill	-1
+650	653	Force Wave Skill	-1
+651	654	Lunge Skill	-1
+652	655	Triple Shot Skill	-1
+653	656	Phoenix Shot Skill	-1
+654	657	Random Luck Option	-1
+655	658	This is shard of seal stone that has been used to seal away Dark God Sekneum. #It still has weak power of Darkness on it.	-1
+656	659	A combination material to change Bloodangel set into Darkangel set item.	-1
+657	660	This is steel of heaven that is material for refining Divine Weapon of Archangel. #If you collect 10 steel of heaven, you can make Archangel's Hammer.	-1
+658	661	Archangel's Hammer is required to upgrade Divine weapon of Archangel.	-1
+659	662	Divine Weapon of Archangel can be upgraded #using combining item.	-1
+660	663	Divine Weapon of Archangel can be upgrade by combination from Chaos Goblin at Noria	-1
+661	664	%sSkill required	401
+662	665	%s %d points required 	402
+663	666	(You lack %d points)	403
+664	667	Damage target and surrounding enemy 3 times. #Chance to cause one more Additional damage.	-1
+665	668	Damage target and surrounding enemy 3 times by dropping strong meteor. #Chance to cause one more Additional damage.	-1
+666	669	With yourself as the center, deal damage to nearby enemies by dropping meteor.	-1
+667	670	Damage target and surrounding by sending evil spirit. #Chance to cause one more Additional damage.	-1
+668	671	Damage target by firing arrow quickly 4 times. #Chance to cause one more Additional damage.	-1
+669	672	With yourself as the center, deal damage to nearby enemies by firing fire arrow.	-1
+670	673	Damage target and surrounding enemy 3 times #by summoning fire summoned creature. #Chance to cause one more Additional damage.	-1
+671	674	Damage target and surrounding enemy 3 times #by summoning water summoned creature. #Chance to cause one more Additional damage.	-1
+672	675	Does Ice damage to multiple enemy in a direction, #has chance to cause one more additional damage. #Attacked enemy has change for movement speed reduction.	-1
+673	676	Does Fire damage to multiple enemy in a direction, #has chance to cause one more additional damage. #Attacked enemy has change for continuous fire damage.	-1
+674	677	Damage target and surrounding #by firing dark blast. #Chance to cause one more Additional damage.	-1
+675	678	Damage target and surrounding enemy 3 times by #dropping strong meteor. #Chance to cause one more Additional damage.	-1
+676	679	Damage target and enemy in line #3 times. #Chance to cause one more Additional damage.	-1
+677	680	Does Ice damage to multiple enemy in a direction, #has chance to cause one more additional damage.	-1
+678	681	Damage target and surrounding #by sending Evil Wind Spirit. #Chance to cause one more Additional damage.	-1
+679	682	Damage target and surrounding enemy #by causing an earthquake. #Chance to cause one more Additional damage.	-1
+680	683	Damage target and some surrounding enemy #by sending dark force. #Chance to cause one more Additional damage.	-1
+681	684	A stone with mysterious power. You can use it on a mastery item, changes the option.	-1
+682	685	[Warning] You can get lower option than what you have.	-1
+683	686	A symbol representing element.	-1
+684	687	Collect each fire/water/earth/dark/wind symbol and take them to Lahap at Elbeland	-1
+685	688	Tradable Item.	-1
+686	689	If you collect 200/400/1200, you can exchange it with other items.#Request exchange via General Information on customer service change by 1st of December 2015.	-1
+687	690	Present box.#Throw it on floor to use.	-1
+688	691	Disappears at character's death, channel or server change.	-1
+689	692	%d / 12	-1
+690	693	When you have 12 pieces, they will automatically change to Juny Box.	-1
+691	694	Throw this on the ground to get a special reward.	-1
+692	695	Required combination material for upgrading 380 socket item to 400 socket item.	-1
+693	696	[Warning] Cannot be used at event map, Arca or Battle Core.	-1
+694	697	You can get one of the following: Mastery Set Item according to your class / Bless of Light / Pentagram.#Use this by throwing it on the ground.	-1
+695	698	[Warning] There is no set item for Magic Knight.	-1
+696	699	[Warning] There is no set item for Dark Knight, Rage Fighter and Gun Crusher.	-1
+697	700	[Warning] There is no set item for Dark Wizard, Elf, Summoner, Dark Lord, Grow Lancer, Rune Wizard, Slayer, White Wizard, Lumeria Mage or Illusion Knight	-1
+698	701	Right mouse click to get an item that can be equipped starting from Lv. 1.	-1
+699	702	Right mouse click to get an item that can be equipped starting from Lv. 150.	-1
+700	703	Required combination material when upgrading to Seed Sphere.	-1
+701	704	Card Piece or Card Deck can be obtained with a certain chance. #When this item is used by right mouse click, item is obtained in event inventory.	-1
+702	705	Card Piece or Card Deck can be obtained with a certain chance, and 1 Special Card will be obtained in additionally.#When this item is used by right mouse click, item is obtained in event inventory.	-1
+703	706	Card Piece or Card Deck can be obtained with a certain chance, and 3 Special Cards will be obtained additionally.#When this item is used by right mouse click, item is obtained in event inventory.	-1
+704	707	Element: Undefined#Option: Undefined	-1
+705	708	# #Seed element and option#will be decided upon combination success.	-1
+706	709	You can combine this with Seed item and make Seed Sphere item to be equipped on socket item.	-1
+707	710	This item cannot be used.	-1
+708	711	#You can get fire element Seed Sphere (Level 1), Sphere Upgrade Rune, 380 Socket Item Lv. +9 Luck Skill (maximum socket slots).	-1
+709	712	#You can get water element Seed Sphere (Level 1), Sphere Upgrade Rune, 380 Socket Item Lv. +9 Luck Skill (maximum socket slots).	-1
+710	713	#You can get ice element Seed Sphere (Level 1), Sphere Upgrade Rune, 380 Socket Item Lv. +9 Luck Skill (maximum socket slots).	-1
+711	714	#You can get wind element Seed Sphere (Level 1), Sphere Upgrade Rune, 380 Socket Item Lv. +9 Luck Skill (maximum socket slots).	-1
+712	715	#You can get lightening element Seed Sphere (Level 1), Sphere Upgrade Rune, 380 Socket Item Lv. +9 Luck Skill (maximum socket slots).	-1
+713	716	#You can get earth element Seed Sphere (Level 1), Sphere Upgrade Rune, 380 Socket Item Lv. +9 Luck Skill (maximum socket slots).	-1
+714	717	#1-3 Sphere Upgrade Rune can be obtained#by using this item.	-1
+715	718	Darkangel Anvil created by James, one of the 12 Apostles of Light.	-1
+716	719	Combination material to upgrade a Bloodangel weapon into a Darkangel weapon.	-1
+717	720	A crystal of Sekneum's dark powers, leaked from the Sealed Stone.	-1
+718	721	Combination material to upgrade a Bloodangel weapon into a Darkangel weapon.	-1
+719	722	A fragment of Sekneum's dark powers, leaked from the Sealed Stone.	-1
+720	723	By collecting 10 Sekneum's Darkness items, you can create Sekneum's Abyss and upgrade Bloodangel weapons.	-1
+721	724	A barrier stone that has blessings from the sacred god Lugard. This can purify Sekneum's dark powers.	-1
+722	725	Combination material to upgrade a Darkangel set armor item into a Holyangel set armor item.	-1
+723	726	You can get one of the following: Mysterious Stone / Ruud.	-1
+724	727	Used when entering boss Nix's Haven.	-1
+725	728	Click Spirit Nixie at Nixies Lake while the item is in the inventory to go to Nix's Haven.	-1
+726	729	To be able to use the item, you need a 4x4 space.	-1
+727	730	Combination material to transform a supporter type Elf mastery armor into an attacker type Elf mastery armor.	-1
+728	731	Combination material to transform an attacker type Elf mastery armor into a supporter type Elf mastery armor.	-1
+729	732	Combination material to transform a mage type Magic Knight mastery armor into a gladiator type Magic Knight mastery armor.	-1
+730	733	Combination material to transform a gladiator type Magic Knight mastery armor into a mage type Magic Knight mastery armor.	-1
+731	734	Right click on the egg to crack it and get items.#At times, you might have a chance to get a Muun?	-1
+732	735	You cannot equip more than one premium muun if multiple effect period is still remaining.	-1
+733	736	You can unseal a sealed Bloodangel set item.	-1
+734	737	Bloodangel set item material	-1
+735	738	You can upgrade #a Bloodangel set item into a Darkangel set item.	-1
+736	739	Darkangel set item material	-1
+737	740	You can upgrade #a Darkangel set item into a Holyangel set item.	-1
+738	741	Holyangel set item material	-1
+739	742	You can unseal a sealed Bloodangel set item. #Once the seal is broken, you can get a +11 set item.	-1
+740	743	+11 Bloodangel set item material	-1
+741	744	This is the Bloodangel of Sealed Redemption Set.#You need a Bloodangel Soul #to remove the seal.	-1
+742	745	This is the Bloodangel of Sealed Captivation Set.#You need a Bloodangel Soul #to remove the seal.	-1
+743	746	# #All of the party members must have Spirit Nixie's Shard.	-1
+744	747	Bloodangel Elf Armor of Redemption	-1
+745	748	Bloodangel Elf Helm of Redemption	-1
+746	749	Bloodangel Elf Pants of Redemption	-1
+747	750	Bloodangel Elf Gloves of Redemption	-1
+748	751	Bloodangel Magic Armor of Captivation	-1
+749	752	Bloodangel Magic Boots of Captivation	-1
+750	753	Bloodangel Magic Pants of Captivation	-1
+751	754	Bloodangel Magic Gloves of Captivation	-1
+752	755	To be able to use the item, you need to have 4x4 normal inventory space and 1x1 event inventory space.	-1
+753	756	You can only use this item from the event inventory.	-1
+754	757	Basic stats will be increased by 20 times for 30 days after acquiring this.	-1
+755	758	You can get a class-specific mastery weapon that has a time limit.#Drop on the floor to use.	-1
+756	759	[Warning] You need to have 4x4 space in your inventory.	-1
+757	900	Upgrades an Item to Level 6 Instantly	0
+758	901	Upgrades an Item to Level 9 Instantly	0
+759	902	Upgrades Item option to +28	0
+760	903	Adds random excellent options to normal Item	0
+761	904	Adds Luck to item	0
+762	905	Adds Skill to Weapons	0
+763	906	Upgrades an Item to Level 15 Instantly	0
+764	907	Makes Item Full Excellent	0
+765	908	Adds extra Socket slot to Socket item	0
+766	909	Strength Increase +50	0
+767	910	Agility Increase +50	0
+768	911	Vitality Increase +50	0
+769	912	Energy Increase +50	0
+770	913	Command Increase +50	0
+771	915	Upgrades item using Jewel Upgrade System	-1
+772	999	RUUDSHOPVIEWINFO Link Script set option. Enter index at where set option will appear.	301
+773	1000	[Flash Event] You can get class-specific +15 speed server reward equipment.#Drop on the floor to use.	-1
+774	1001	[Caution] Multiple items will drop so ensure enough space to loot.	-1
+775	1002	Make a Goblin Combination using this item and Speed Server [Bound] +11/ 13/ 15 set armor to convert them to [Bloodangel Soul].	-1
+776	1003	All 4th Class Skill Enhancement Tree will be reset.	-1
+777	1004	You can get a class-specific mastery armor set that has a time limit.#Drop on the floor to use.	-1
+778	1005	[Caution] Make sure to have enough space in your inventory before using.	-1
+779	1006	Currency for the Miracle Shop.#Seek the Miracle Merchant Moss in Elbeland.	-1
+780	1007	[Caution] Does not stack. Make sure to have enough space in your inventory.	-1
+781	1008	This is the Max Level Achievement Reward Box.	-1
+782	1009	Used as a combination material.	-1
+783	1010	The Magic Solution is %.1f%% filled.	404
+784	1011	Can be used as a wing combination material at 100%%.	-1
+785	1012	Magic Solution can be filled with Magic Bubble of the same name.	-1
+786	1013	Can be used as a wing combination material.	-1
+787	1014	Only one Magic Solution can be held in the inventory regardless of the type.	-1
+788	1015	Can be used as a 2nd [Bound] wings material.	-1
+789	1016	Can be used as a 3rd [Bound] wings material.	-1
+790	1017	Can be used as a 4th [Bound] wings material.	-1
+791	1018	You can upgrade #a Holyangel Set item into an Awakening Soul Set item.	-1
+792	1019	Awakening Soul Set item material	-1
+793	1020	Holyangel Anvil created by James, one of the 12 Apostles of Light.	-1
+794	1021	Combination material to upgrade a Darkangel weapon into a Holyangel weapon.	-1
+795	1022	Increases DMG by %d%%	239
+796	1023	Absorbs %d%% of incoming DMG	240
+797	1024	Throws two-handed hooks at the target to inflict DMG to#it and other enemies nearby.	-1
+798	1025	Increases Mana Full Recovery Rate by %d%%	-1
+799	1026	Increases HP Full Recovery Rate by %d%%	-1
+800	1027	Increases Enemy DMG Return rate by %d%%	-1
+801	1028	Increases Enemy DEF Ignore Rate by %d%%	-1
+802	1029	Increases Attack (Magic) Speed by %d	-1
+803	1030	Increases Excellent DMG Rate by %d%%	-1
+804	1031	Increases Double DMG Rate by %d%%	-1
+805	1032	Increases Strength by %d	-1
+806	1033	Increases Health by %d	-1
+807	1034	Increases Energy by %d	-1
+808	1035	Increases Agility by %d	-1
+809	1036	Add to Magic Solution of the same name to fill the Solution.	-1
+810	1037	4th wings combination material	-1
+811	1038	You can get a 2nd bound wings according to your class.#Use this by throwing it on the ground.	-1
+812	1039	You can get a 3rd bound wings according to your class.#Use this by throwing it on the ground.	-1
+813	1040	Hero	-1
+814	1041	Absorbs %d%% of incoming DMG	241
+815	1042	DMG: %d	242
+816	1043	Magical Damage: %d	243
+817	1044	DMG / Magical Damage: %d	244
+818	1045	Magical Damage / Curse: %d	245
+819	1046	DEF: %d	246
+820	1047	DMG: %d-%d	247
+821	1048	Increases Strength by %d	248
+822	1049	Increases Agility by %d	248
+823	1050	Increases Energy by %d	248
+824	1051	Increases Health by %d	248
+825	1052	Increases Command by %d	248
+826	1053	Increases Minimum DMG by %d	248
+827	1054	Increases Maximum DMG by %d	248
+828	1055	Increases Magic by %d%%	248
+829	1056	Increases DMG by %d%%	248
+830	1057	Increases Maximum HP by %d	248
+831	1058	Increases Maximum Mana by %d	248
+832	1059	Increases Maximum AG by %d	248
+833	1060	AG Recovery Rate +%d	248
+834	1061	Increases Critical DMG Rate by %d%%	248
+835	1062	Increases Critical DMG by %d	248
+836	1063	Increases Excellent DMG Rate by %d%%	248
+837	1064	Increases Excellent DMG by %d	248
+838	1065	Increases Skill DMG by %d	248
+839	1066	Increases Double DMG Rate by %d%%	248
+840	1067	Increases Enemy DEF Ignore by %d%%	248
+841	1068	Increases DEF by %d%% when a shield is equipped	248
+842	1069	Increases All Stats by %d	248
+843	1070	Attack/Wizardry/Curse : %d~%d	247
+844	1071	This letter was handwritten by Elena, who created the Maze of Dimensions. # It asks brave hearts of the MU realm to explore the Maze of Dimensions.	-1
+845	1072	# #You can move from#Event Map Square to Maze of Dimensions.	-1
+846	1073	Maximum 10 items can be held in the inventory.	-1
+847	1074	You can't use multiple Boosting Buff items.	-1
+848	1075	You can't use multiple Reinforcing Buff items.	-1
+849	1076	Critical DMG +%d	219
+850	1077	Excellent DMG +%d	219
+851	1078	Right-click or register the buff items on Helper to use.	-1
+852	1079	You will randomly obtain one of Mastery Accessory, Lapidary Stone, or other boons.	-1
+853	1080	You will obtain an Earring of Wrath (Left) Lv. 300 with random option.	-1
+854	1081	You will obtain an Earring of Wrath (Right) Lv. 700 with random option.	-1
+855	1082	Additional DEF +20	-1
+856	1083	%d /100	1
+857	1084	When reaching 100, it will automatically change to a 'Chicken Box.'	-1
+858	1085	Increases Rune Magery by %d%%	11
+859	1086	You will obtain a Pandora Pick with random Durability.	-1
+860	1087	You will randomly obtain one of Gold Key, Elite Potion, [Bound] Bless of Light, Jewel items, Jewel of Extension, Tradeable Seal, or normal Talisman items.	-1
+861	1088	You will randomly obtain one of Gold Key, Silver Key, Elite Potion, [Bound] Bless of Light, Cherry Blossom Buff items, Jewel items, Elemental Talisman of Luck, or Talisman of Luck.	-1
+862	1089	Obtain the Premium Muun from this month's Egg of Monsters Event.	-1
+863	1090	Exclusive for Rune Mage	-1
+864	1091	Bloodangel Rune Mage Armor of Vengeance	-1
+865	1092	Bloodangel Rune Mage Helm of Vengeance	-1
+866	1093	Bloodangel Rune Mage Pants of Vengeance	-1
+867	1094	Bloodangel Rune Mage Gloves of Vengeance	-1
+868	1095	Blow Rune Energy to the target and attack nearby enemies twice. #Attack increases by 1 with a certain chance.	-1
+869	1096	You will randomly obtain one of Gold Key, Elite Potion, [Bound] Bless of Light, Jewel items, Jewel of Extension, Tradeable Seal, or Elemental Talisman items.	-1
+870	1097	You will obtain +11 Earring of Wrath (Left) (14 Days).	-1
+871	1098	Enables Switch Mode.	-1
+872	1099	You will obtain an item randomly.	-1
+873	1100	You can upgrade #a Soul Set item into a Frosty Blue Eye Set item.	-1
+874	1101	Material for Frosty Blue Eye Set	-1
+875	1102	Soul Anvil that James, one of the 12 light priests, has created.	-1
+876	1103	Combination material to upgrade Holyangel Weapon to Soul Weapon.	-1
+877	1104	Increases Attack by 500.	-1
+878	1105	Increases Defense by 500.	-1
+879	1106	Recover HP by 30%.	-1
+880	1107	Recover MP by 30%.	-1
+881	1108	Item used to upgrade weapons.	-1
+882	1109	Item used to upgrade armors.	-1
+883	1110	Item used to upgrade wings.	-1
+884	1111	Item used to combine eqiupment.	-1
+885	1112	It is a necessary item to make the earring of the ancestors.	-1
+886	1113	Rage Earring (Left or Right) It is a combination material needed when upgrading an item to an ancestor's earring (Left or Right) item.	-1
+887	1114	It is a box containing 50 jewels of blessing. # (You can right-click to open the box.)	-1
+888	1115	This is a ticket that can be exchanged with Morse's treasure chest. # At the end of the event will be exchanged for Morse's treasure chest.	-1
+889	1116	Summons the Death Side. Deathside wields a sickle and damages nearby enemies. # Probably adds 1 additional damage.	-1
+890	1117	Guardian Item	-1
+891	1118	Elite Resistance Option	-1
+892	1119	Available via right click. You can acquire guardian making and reinforcement material items.	-1
+893	1120	It is a common material for making Guardian items. To create a Guardian item, you need ten pieces of the Resurrection.	-1
+894	1121	Guardian item is required to strengthen to +10 level 'Guardian Enhanced Stone' is.	-1
+895	1122	Guardian items +11 + level required to strengthen the 'elite guardian gangseok' is.	-1
+896	1123	Change Guardian Elite Options You can create Guardian Elite Option Seats that can change your Guardian's elite options with 50 pieces.	-1
+897	1124	This is a combination material needed to change the elite options of the Guardian.	-1
+898	1125	You can create 50 'Sealed Bloodangel Armor' with sealed armor pieces.	-1
+899	1126	You can create a Bloodangel helmet item with an unknown class. It will disappear when production fails.	-1
+900	1127	You can create a Bloodangel armor item with an unknown class. It will disappear when production fails.	-1
+901	1128	You can create a Blloodangel trousers item with an unknown class. It will disappear when production fails.	-1
+902	1129	You can create Bloodangel glove items with unknown classes. It will disappear when production fails.	-1
+903	1130	You can create a Bloodangel boots item with an unknown class. It will disappear when production fails.	-1
+904	1131	It is the exclusive material that is necessary for the production of the guardian item ghost village. It can be made using 10 pieces of seal and resurrection of ghost horses.	-1
+905	1132	You can use it by right-clicking. Guardian items can be obtained.	-1
+906	1133	Increases Wizardry / Curse damage by %d.	219
+907	1134	Increases attack, wizardry and curse damage by %d.	219
+908	1135	This is the Bloodangel of Sealed Hearthless Set.#You need an Ancient Hero's Soul #to remove the seals. ##Use Ancient Hero's Soul in Regular Combination of Chaos Combination to # remove the seal.	-1
+909	1136	Slayer only	-1
+910	1137	You can get a fixed-term wing that matches your level and class.#Throw it on the floor.	-1
+911	1138	#Throw it on the floor.	-1
+912	1139	Heartless Bloodangel Slayer Helm	-1
+913	1140	Heartless Bloodangel Slayer Pants	-1
+914	1141	Heartless Bloodangel Slayer Gloves	-1
+915	1142	Quickly approaches and deals damage to multiple nearby enemies.#Chance of additional damage to targets that are dealing continuous damage from Bat flock.	-1
+916	1143	A special Muun is asleep inside the egg.#A right-click to break the Egg and wake up the Muun.	-1
+917	1144	Blue Eye Set Item can be upgraded to Squadron's Silver Heart Set Item.	-1
+918	1145	Fleet Silver Heart Set Item Material	-1
+919	1146	This item is made by James, one of the 12 priests of light.	-1
+920	1147	A combination material required to upgrade Soul Weapon Items to Blue Eye Weapon Items.	-1
+921	1148	Temporarily consumes 3% of skill's attack power (%) and gives the enemy and party members the effect of reducing the enemy's defense when attacking.	-1
+922	1149	ATK/Magic/Curse: 300	-1
+923	1150	DEF: 700	-1
+924	1151	Damage Increased: 65%%	-1
+925	1152	Damage Absorption: 65%%	-1
+926	1153	Melee Attack Power Increase: %d	108
+927	1154	Ranged Attack Damage Increase: %d	109
+928	1155	Magic Attack Power Increase: %d	110
+929	1156	Melee Defense Increase: %d	111
+930	1157	Ranged Defense Increase: %d	112
+931	1158	Magic Defense Increase: %d	113
+932	1161	A craftwork item required for making Earrings of Honor.	-1
+933	1162	It is a necessary combination material when upgrading the ancestral earring (left or right) item to the earrings of honor (left or right) item.	-1
+934	1163	It is a special material needed to upgrade the Guardian Ghost Horse To Ice.	-1
+935	1164	You can upgrade by using 11~15 enhanced ghost horses, seals for ice dragons, and gem materials.	-1
+936	1165	Shield Defense * Reduces damage taken instead of %0.1f	114
+937	1166	This is a set of sealed defense Blood Angel.	-1
+938	1167	Transformed into a mastery armor of defensive knights and a mastery armor of knights.	-1
+939	1168	It is a necessary combination material when converting an attacking knight's mastery armor into a defensive knight's mastery armor.	-1
+940	1169	Base defense increased by 1.5 per 20 levels	-1
+941	1170	Available Stats# Power: %d or Energy: %d	18
+942	1171	(Power: %d or energy: %d not enough)	250
+943	1172	This is a set of sealed defense Blood Angel.	-1
+944	1173	Defense Blood Angel Knight Armor	-1
+945	1174	Defense Bloodangel Knight Helm	-1
+946	1175	Defense Bloodangel Knight Pants	-1
+947	1176	Defense Bloodangel Knight Boots	-1
+948	1177	Shield Defense * 0.2 Reduces damage taken instead	-1
+949	1178	When 5 are combined, they are automatically changed to the corresponding'Mastery Chaos Combination Amulet.	-1
+950	1179	'Blood Angel' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+951	1180	'Dark Angel' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+952	1181	'Holy Angel' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+953	1182	'Soul' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+954	1183	'Blue Eye' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+955	1184	'Silver Heart' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+956	1185	'Manticore' is exclusively for weapons/armor #+9 level or higher item upgrade # prevents the item from disappearing #However, the combination success rate decreases by 5%%	-1
+957	1186	It is a set of sealed ritual blood angels. #In order to release the seal, #Blood Angel's Spirit is required.	-1
+958	1187	Master Gun Crusher only	-1
+959	1188	Ritual Bloodangel Guncrusher Helm	-1
+960	1189	Ritual Bloodangel Guncrusher Armor	-1
+961	1190	Ritual Bloodangel Guncrusher Pants	-1
+962	1191	Ritual Bloodangel Guncrusher Boots	-1
+963	1192	Fires an ice blast around you, dealing damage to nearby enemies. #Probability of dealing 1 additional damage.	-1
+964	1193	It makes a strong attack on enemy targets near and far away. #Probability of dealing 1 additional damage.	-1
+965	1194	 	-1
+966	1195	%s Target Elemental attack power increase +%d	251
+967	1196	%s Target Elemental defense increase +%d	252
+968	1197	Elemental Option Slot	-1
+969	1198	%s Target Elemental attack power increase +%d (%d level)	-1
+970	1199	%s Target Elemental defense increase +%d (%d level)	-1
+971	1200	This is a combination material item required when upgrading Pentagram.	-1
+972	1201	This is a combination material item required when upgrading Errtel.	-1
+973	1202	Silver Heart Set Item to Roar Manticore Set Item# You can upgrade.	-1
+974	1203	Roaring Manticore Set Item Material	-1
+975	1204	It is a Silver Heart Anvil item made by James, one of the 12 priests of light.	-1
+976	1205	This is a combination material required when upgrading a Blue Eye weapon item to a Silver Heart weapon item.	-1
+977	1206	Used to grant harmony bonus options.	-1
+978	1207	# # (The Harmony Bonus option can be granted only to items with the #+9 enhancement level or higher, and #3 Harmony option values \u200b\u200bof Advanced or higher)	-1
+979	1208	Elemental Option Slot (%d)	-1
+980	1209	When you collect it and take it to the Spirit of the Maple, you will receive an item.	-1
+981	1210	Obtain 1 Fire Element Mastery Errtel# (Option is random)	-1
+982	1211	Obtain 1 Water Element Mastery Errtel # (Option is random)	-1
+983	1212	Obtain 1 Earth Element Mastery Errtel #(Option is random)	-1
+984	1213	Obtain 1 Wind Element Mastery Errtel #(Option is random)	-1
+985	1214	Obtain 1 Darkness Element Mastery Errtel #(Option is random)	-1
+986	1215	Pentagram Upgrade Crafting Materials	-1
+987	1216	Errtel Upgrade Crafting Materials	-1
+988	1217	Sealed Twilight Blood Angel Set. #To unlock the #Seal, you need the #Blood Angel soul.	-1
+989	1218	Shine Wizard only	-1
+990	1219	Blood Angel White Mage Armor of Twilight 	-1
+991	1220	Blood Angel White Mage Helmr of Twilight 	-1
+992	1221	Bloodangel White Wizard Pantsr of Twilight 	-1
+993	1222	Bloodangel White Mage Glovesr of Twilight 	-1
+994	1223	Fires a spear of light in a wide area, dealing damage to multiple targets.	-1
+995	1224	Sealed Liberation Blood Angel Set. #To unlock the #Seal, you need the #BloodAngel soul.	-1
+996	1225	Archmage only	-1
+997	1226	Blood Angel Mage Armor of Liberation	-1
+998	1227	Blood Angel Mage Helmetr of Liberation	-1
+999	1228	Blood Angel Mage Pantsr of Liberation	-1
+1000	1229	Blood Angel Mage Glovesr of Liberation	-1
+1001	1230	Creates a magic circle and shoots small energies into the magic circle, dealing damage to multiple targets within range.	-1
+1002	1231	Power: %d ~ %d	19
+1003	1232	This is a tooling item required for making Blood Earrings.	-1
+1004	1233	This is a combination material required to upgrade Earring of Honor (Left or Right) to an Blood Earring (Left or Right).	-1
+1005	1234	This is an exclusive material required to upgrade Guardian Ice Dragon to Pierce Lion.	-1
+1006	1235	It can be upgraded using the 11-15 reinforced Ice Dragon, Pierce Lion's seal, and jewel materials.	-1
+1007	1236	Helps create a Pure White Cloak.	-1
+1008	1237	Helps create a Cloak of Innocence.	-1
+1009	1238	Inflicts Shadow damage to a large number of enemies in a wide range in front, #probably deals 1 additional damage.	-1
+1010	1239	Summons a magic spear from the ground, dealing damage to many nearby enemies.	-1
+1011	1240	Defense: %d	256
+1012	1241	You can upgrade Manticore set items to Heavenly Brilliant Set items.	-1
+1013	1242	Heavenly Brilliant Set Item Crafting Materials	-1
+1014	1243	This is a Manticore Anvil item made by James, one of the 12 Priests of Light.	-1
+1015	1244	This is a combination material required to upgrade a Silver Heart weapon item to a Manticore weapon item.	-1
+1016	1245	You can use the Lumi Reward Box item by right-clicking the mouse.# #(requires 4 x 2 space in inventory)	-1
+1017	1246	For 'Brilliant' weapons/armor only, #blocks item destruction when upgrading items of level +9 or higher.#However, the combination success rate is reduced by 5%.	-1
+1018	1247	Max HP +100	-1
+1019	1248	Max MP Increase +100	-1
+1020	1249	Max AG Increase +50	-1
+1021	1250	You can acquire period wings that match your level.	-1
+1022	1251	You can obtain the Earring of Rage (left) item.	-1
+1023	1252	You can obtain the Earring of Fury (Right) item.	-1
+1024	1253	You can get ghost horse items.	-1
+1025	1254	You can acquire the Blood Angel Helmet set item.	-1
+1026	1255	You can acquire the Blood Angel Armor set item.	-1
+1027	1256	You can acquire the Blood Angel Pants set item.	-1
+1028	1257	You can acquire Blood Angel Boots or Gloves set items.	-1
+1029	1258	You can acquire Blood Angel weapon items.	-1
+1030	1259	# #You can use the item by right-clicking the mouse.	-1
+1031	1260	Temporary wing items drop on the floor.	-1
+1032	1261	This is a tooling item required for making Daze Earrings.	-1
+1033	1262	This is a combination material required to upgrade the Blood Earring (Left or Right) to the Daze Earring (Left or Right).	-1
+1034	1263	This is an exclusive material needed to upgrade Guardian Pierce Lion to Shining Tail.	-1
+1035	1264	It can be upgraded using the 11-15 reinforced Pierce Lion's and Shinning Tail's  seal, and jewel materials.	-1
+1036	1265	+11 Level 700 Earrings of Rage (Right) Obtain 14-day items.	-1
+1037	1266	Elemental Defense Enhancement	-1
+1038	1267	Shoots multiple arrows into the air, causing them to fall like rain, dealing damage to multiple targets. # Chance to deal 1 additional damage.	-1
+1039	1268	Greatly increases your movement speed, attack speed, and attack success rate for a certain period of time.	-1
+1040	1269	Gathers holy energy and sends it forward, dealing damage to the target.	-1
+1041	1270	Increases the target's elemental attack power for a certain period of time.	-1
+1042	1271	Increases the target's elemental defense for a certain period of time.	-1
+1043	1272	Elemental Defense: %d 	20
+1044	1273	Brilliant set items can be upgraded to # Crismon Flame Apocalypse Set items.	-1
+1045	1274	Crismon Flame Apocalypse Set Item Crafting Materials	-1
+1046	1275	This is a Brilliant Anvil item made by James, one of the 12 priests of light.	-1
+1047	1276	This is a combination material required to upgrade a Manticore weapon item to a Brilliant weapon item.	-1
+1048	1277	For 'Brilliant' weapons/armor only, #blocks item destruction when upgrading items of level +9 or higher.#However, the combination success rate is reduced by 5%.	-1
+1049	1278	For 'Apocalypse' weapons/armor only.#When upgrading items of level +9 or higher,#protects items from disappearing.#However, the combination success rate is reduced by 5%.	-1
+1050	1279	A set of sealed blood angels of longing. #To unlock the #Seal, you need the #BloodAngel soul.	-1
+1051	1280	Illusion Master only	-1
+1052	1281	Longing Blood Angel Illusion Knight Armor	-1
+1053	1282	Longing Blood Angel Illusion Knight Helmet	-1
+1054	1283	Longing Blood Angel Illusion Knight Pants	-1
+1055	1284	Longing Blood Angel Illusion Knight Gloves	-1
+1056	1285	Sharp phantom blades create a storm, dealing damage to multiple enemies.	-1
+1057	1286	This is an essential combination #material used when enhancing an artifact.	-1
+1058	1287	You can create #Artifacts through #combination of Gems of Creation and Artifact Pieces.	-1
+1059	1288	You can use it by right-clicking.# You can acquire Artifact and Artifact Enchantment Stone items.	-1
+1060	1289	Together, you can acquire Boss Battle reward items.	-1
+1061	1290	You can use it by right-clicking.# You can acquire type 6 or type 7 artifact items.	-1
+1062	1291	You can use it by right-clicking.#You can obtain an Artifact Enchantment Stone.	-1
+1063	1292	This is an entry ticket item required to enter the Boss Battle event.	-1
+1064	1293	Items are used upon entry.	-1
+1065	1296	You can check the probability of mining Pandora's gems at [Homepage-Probability Information].	-1
+1066	1297	You can check the probability of the Mystery Stone option at [Homepage-Probability Information].	-1

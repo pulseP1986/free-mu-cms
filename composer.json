@@ -1,0 +1,30 @@
+{
+  "name": "dmncms.net/dmnmucms",
+  "description": "A professional content management system for MuOnline private servers",
+  "version": "1.2.1",
+  "homepage": "https://dmncms.net",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Salvis Ragozins",
+      "email": "salvis1989@gmail.com"
+    }
+  ],
+  "support": {
+    "email": "info@dmncms.net",
+    "issues": "https://dmncms.net/bugtracker/"
+  },
+  "require": {
+    "gettext/gettext": "v4.4.3",
+    "swiftmailer/swiftmailer": "5.x-dev",
+    "f500/swiftmailer-sparkpost": "v1.3.5",
+    "geoip/geoip": "v1.17",
+    "stripe/stripe-php": "v7.27.3",
+    "tracy/tracy": "^2.7",
+    "coinbase/coinbase-commerce": "1.0.11",
+    "phpviet/omnipay-momo": "1.0.3",
+    "xendit/xendit-php": "2.17.1",
+    "robthree/twofactorauth": "1.8.2"
+  }
+}

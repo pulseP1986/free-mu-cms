@@ -1,0 +1,14 @@
+{
+    "DmN_Market_Slots": {
+        "query": "CREATE TABLE [dbo].[DmN_Market_Slots]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+        "db": "web"
+    },
+	"DmN_Character_Reset_Log": {
+        "query": "CREATE TABLE [dbo].[DmN_Character_Reset_Log]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+        "db": "web"
+    },
+    "DmN_Character_GReset_Log": {
+        "query": "CREATE TABLE [dbo].[DmN_Character_GReset_Log]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+        "db": "web"
+    }
+}

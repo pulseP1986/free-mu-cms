@@ -1,0 +1,12 @@
+<Files ~ "^.*\.(php|cgi|pl|php3|php4|php5|php6|phtml|shtml|([a-z0-9]{32}))$">
+	<IfModule !authz_core_module>
+		Order Deny,Allow
+		Deny from all
+	</IfModule>
+	<IfModule authz_core_module>
+		Require all denied
+	</IfModule>
+</Files>
+<ifModule mod_headers.c>
+	Header set Content-Disposition attachment
+</ifModule>

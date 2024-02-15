@@ -1,0 +1,37 @@
+{
+	"DEFAULT":{
+		"teleports": {
+			"0": {
+				"map_id": 0,
+				"cords" :[125, 125],
+				"req_lvl": 10,
+				"req_money": 0
+			},	
+			"1": {
+				"map_id": 1,
+				"cords" :[232, 126],
+				"req_lvl": 10,
+				"req_money": 0
+			},	
+			"2": {
+				"map_id": 1,
+				"add_text": " 2",
+				"cords" :[252, 126],
+				"req_lvl": 20,
+				"req_money": 0
+			},
+			"3": {
+				"map_id": 2,
+				"cords" :[211, 40],
+				"req_lvl": 10,
+				"req_money": 0
+			},	
+			"4": {
+				"map_id": 3,
+				"cords" :[175, 112],
+				"req_lvl": 10,
+				"req_money": 0
+			}
+		}
+	}
+}

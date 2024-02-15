@@ -1,0 +1,3842 @@
+{
+    "domain": null,
+    "plural-forms": "nplurals=2; plural=(n != 1);",
+    "messages": {
+        "": {
+            "Please logout from game.": [
+                ""
+            ],
+            "Invalid Character": [
+                ""
+            ],
+            "Character not found.": [
+                ""
+            ],
+            "Please select option for exchange.": [
+                ""
+            ],
+            "Invalid exchange option selected.": [
+                ""
+            ],
+            "You have insufficient amount of coins.": [
+                ""
+            ],
+            "Coins successfully exchanged To %s.": [
+                ""
+            ],
+            "Unable to remove lucky coins from inventory.": [
+                ""
+            ],
+            "Please open your warehouse in game first.": [
+                ""
+            ],
+            "Configuration element not found.": [
+                ""
+            ],
+            "Reset configuration for this server not found.": [
+                ""
+            ],
+            "Reset function is disabled for this server": [
+                ""
+            ],
+            "Grand Reset configuration for this server not found.": [
+                ""
+            ],
+            "Grand Reset function is disabled for this server": [
+                ""
+            ],
+            "Only positive values allowed in": [
+                ""
+            ],
+            "Strength": [
+                ""
+            ],
+            "Agility": [
+                ""
+            ],
+            "Energy": [
+                ""
+            ],
+            "Vitality": [
+                ""
+            ],
+            "Command": [
+                ""
+            ],
+            "Level Up Points": [
+                ""
+            ],
+            "Stats Have Been Successfully Added.": [
+                ""
+            ],
+            "Invalid location selected.": [
+                ""
+            ],
+            "Character successfully teleported.": [
+                ""
+            ],
+            "Your lvl, or grand resets are too low.": [
+                ""
+            ],
+            "Your master level and master class have been restored.": [
+                ""
+            ],
+            "You don't have master level points": [
+                ""
+            ],
+            "You are not allowed to recover master level.": [
+                ""
+            ],
+            "Your master key has been send to your email.": [
+                ""
+            ],
+            "Unable to recover master key.": [
+                ""
+            ],
+            "Invalid email confirmation code": [
+                ""
+            ],
+            "Email address successfully updated.": [
+                ""
+            ],
+            "Confirmation code does not exist in database.": [
+                ""
+            ],
+            "You didn't select from where you want to send zen": [
+                ""
+            ],
+            "You didn't select to where you want to send zen": [
+                ""
+            ],
+            "Amount of zen you insert is invalid.": [
+                ""
+            ],
+            "You can't send zen from %s to %s": [
+                ""
+            ],
+            "Amount of zen in your web wallet is too low.": [
+                ""
+            ],
+            "Amount of zen in your warehouse is too low.": [
+                ""
+            ],
+            "Amount of zen on %s is too low.": [
+                ""
+            ],
+            "Max zen than can be send to warehouse is %s": [
+                ""
+            ],
+            "Your warehouse zen limit exceeded. Try to transfer lower amount.": [
+                ""
+            ],
+            "Max zen than can be send to character is %s": [
+                ""
+            ],
+            "Your character zen limit exceeded. Try to transfer lower amount.": [
+                ""
+            ],
+            "Zen was successfully transferred.": [
+                ""
+            ],
+            "You don't have online time on this server": [
+                ""
+            ],
+            "Unable to exchange online time": [
+                ""
+            ],
+            "You have reached max failed login attemts, please come back after 5 minutes.": [
+                ""
+            ],
+            "You haven't entered a username.": [
+                ""
+            ],
+            "You haven't entered a password.": [
+                ""
+            ],
+            "The username you entered is invalid.": [
+                ""
+            ],
+            "The password you entered is invalid.": [
+                ""
+            ],
+            "Please select proper server.": [
+                ""
+            ],
+            "Your account is blocked until %s": [
+                ""
+            ],
+            "Your account is blocked permanently": [
+                ""
+            ],
+            "You have logged in successfully.": [
+                ""
+            ],
+            "Wrong username and\/or password.": [
+                ""
+            ],
+            "Registration settings has not yet been configured.": [
+                ""
+            ],
+            "You haven't entered your current password.": [
+                ""
+            ],
+            "The current password you entered is wrong.": [
+                ""
+            ],
+            "You haven't entered your new password.": [
+                ""
+            ],
+            "The new password you entered is invalid.": [
+                ""
+            ],
+            "You haven't entered new password-repetition.": [
+                ""
+            ],
+            "The two passwords you entered do not match.": [
+                ""
+            ],
+            "New password cannot be same as old!": [
+                ""
+            ],
+            "Your password was successfully changed.": [
+                ""
+            ],
+            "You've been logged out for security reasons!": [
+                ""
+            ],
+            "Password could not be updated.": [
+                ""
+            ],
+            "Please login into website.": [
+                ""
+            ],
+            "You haven't entered your current email.": [
+                ""
+            ],
+            "You have entered an invalid email-address.": [
+                ""
+            ],
+            "Email-address is wrong for this account.": [
+                ""
+            ],
+            "Please check your current mail-box for confirmation link.": [
+                ""
+            ],
+            "Unable to write confirmation code into database.": [
+                ""
+            ],
+            "You haven't entered your new email-address.": [
+                ""
+            ],
+            "This email-address is already used.": [
+                ""
+            ],
+            "Please check your new mail-box for confirmation link.": [
+                ""
+            ],
+            "Invalid payment method.": [
+                ""
+            ],
+            "Invalid amount of %s": [
+                ""
+            ],
+            "You have insufficient amount of %s": [
+                ""
+            ],
+            "Voting link not found.": [
+                ""
+            ],
+            "Thank You, we will review your vote and reward you.": [
+                ""
+            ],
+            "Already voted. Next vote after %s": [
+                ""
+            ],
+            "Vote was successful. You have received %d %s": [
+                ""
+            ],
+            "Unable to log vote. Please try again latter": [
+                ""
+            ],
+            "Unable to validate vote. Please try again after few minutes.": [
+                ""
+            ],
+            "Invalid voting link.": [
+                ""
+            ],
+            "Module disabled.": [
+                ""
+            ],
+            "You will be able to reset at %s": [
+                ""
+            ],
+            "Your have insufficient amount of zen. Need: %s": [
+                ""
+            ],
+            "Your lvl is too low. You need %d lvl.": [
+                ""
+            ],
+            "Your character has been successfully reseted.": [
+                ""
+            ],
+            "Unable to reset character.": [
+                ""
+            ],
+            "Reset Disabled": [
+                ""
+            ],
+            "Invalid level reward id.": [
+                ""
+            ],
+            "Referral reward not found.": [
+                ""
+            ],
+            "Character lvl is too low required %d lvl": [
+                ""
+            ],
+            "Character master lvl is too low required %d lvl": [
+                ""
+            ],
+            "Reward was already claimed with this character.": [
+                ""
+            ],
+            "Referral reward was claimed successfully.": [
+                ""
+            ],
+            "Invalid referral reward id.": [
+                ""
+            ],
+            "Character reset is too low required %d reset": [
+                ""
+            ],
+            "Character grand reset is too low required %d grand reset": [
+                ""
+            ],
+            "Reward can be claimed only once. It was already claimed by different character.": [
+                ""
+            ],
+            "You can not claim rewards for own accounts.": [
+                ""
+            ],
+            "Your resets is too low. You need %d resets.": [
+                ""
+            ],
+            "You are not a murder.": [
+                ""
+            ],
+            "Your murders have been successfully reseted.": [
+                ""
+            ],
+            "Stats successfully reseted.": [
+                ""
+            ],
+            "Reset Stats Disabled": [
+                ""
+            ],
+            "Your class is not allowed to reset skilltree.": [
+                ""
+            ],
+            "SkillTree successfully reseted.": [
+                ""
+            ],
+            "Unable to reset skilltree.": [
+                ""
+            ],
+            "Please select one of options.": [
+                ""
+            ],
+            "Character inventory successfully cleared.": [
+                ""
+            ],
+            "Please select level.": [
+                ""
+            ],
+            "Invalid level selected.": [
+                ""
+            ],
+            "You will exceed max level allowed: %d, please try to buy lower level.": [
+                ""
+            ],
+            "Character level updated.": [
+                ""
+            ],
+            "Unable to update character level.": [
+                ""
+            ],
+            "Please enter amount of points.": [
+                ""
+            ],
+            "Minimal points value: %d points.": [
+                ""
+            ],
+            "Character statpoints updated.": [
+                ""
+            ],
+            "Unable to update character statpoints.": [
+                ""
+            ],
+            "Your character already is GameMaster.": [
+                ""
+            ],
+            "Character successfully promoted to GameMaster.": [
+                ""
+            ],
+            "Unable to update character gm status.": [
+                ""
+            ],
+            "This character is not allowed to change class.": [
+                ""
+            ],
+            "Invalid class selected": [
+                ""
+            ],
+            "You already have this class.": [
+                ""
+            ],
+            "Character class successfully changed.": [
+                ""
+            ],
+            "You are not allowed to use this class.": [
+                ""
+            ],
+            "Before changing class please remove your equipped items.": [
+                ""
+            ],
+            "Old name can not be empty.": [
+                ""
+            ],
+            "New name can not be empty.": [
+                ""
+            ],
+            "New name can not be same as old.": [
+                ""
+            ],
+            "Old character not found on your account.": [
+                ""
+            ],
+            "You are not owner of this character.": [
+                ""
+            ],
+            "Character with this name already exists.": [
+                ""
+            ],
+            "You are not allowed to change name while you are in guild.": [
+                ""
+            ],
+            "You are using forbidden chars in your new name.": [
+                ""
+            ],
+            "Character Name can be 4-%d chars long!": [
+                ""
+            ],
+            "Found forbidden word in new character name please fix it.": [
+                ""
+            ],
+            "Character Name Successfully Changed.": [
+                ""
+            ],
+            "Minimal exchange rate is %d %s": [
+                ""
+            ],
+            "WCoins": [
+                ""
+            ],
+            "WCoins successfully exchanged.": [
+                ""
+            ],
+            "Unable to exchange Wcoins": [
+                ""
+            ],
+            "This module has been disabled.": [
+                ""
+            ],
+            "Unable to checkout please try again.": [
+                ""
+            ],
+            "Paypal package not found.": [
+                ""
+            ],
+            "Paycall package not found.": [
+                ""
+            ],
+            "Server Changed.": [
+                ""
+            ],
+            "You have not created account on this server. Please logout and create.": [
+                ""
+            ],
+            "Invalid server selected.": [
+                ""
+            ],
+            "You have successfully hidden your chars": [
+                ""
+            ],
+            "You char hide time has been extended": [
+                ""
+            ],
+            "Invalid character.": [
+                ""
+            ],
+            "Character not found or auction ended.": [
+                ""
+            ],
+            "Please enter bet.": [
+                ""
+            ],
+            "You have entered invalid bet.": [
+                ""
+            ],
+            "Auction not found.": [
+                ""
+            ],
+            "Purchase %d virtual game currency": [
+                ""
+            ],
+            "CuentaDigital Package Not Found.": [
+                ""
+            ],
+            "2Checkout Package Not Found.": [
+                ""
+            ],
+            "PagSeguro Package Not Found.": [
+                ""
+            ],
+            "Purchase %d %s for %s %s": [
+                ""
+            ],
+            "Interkassa package not found.": [
+                ""
+            ],
+            "Please select valid bank.": [
+                ""
+            ],
+            "Please enter refference number.": [
+                ""
+            ],
+            "Thank You, your request was successfull.": [
+                ""
+            ],
+            "Your request is still being reviewed.": [
+                ""
+            ],
+            "Refference number was already registered.": [
+                ""
+            ],
+            "Your request will be reviewed and approved manually.": [
+                ""
+            ],
+            "News article not found.": [
+                ""
+            ],
+            "Invalid Guild": [
+                ""
+            ],
+            "Please enter username.": [
+                ""
+            ],
+            "The username you entered doesn't exists.": [
+                ""
+            ],
+            "Invalid captcha, Please check slider position.": [
+                ""
+            ],
+            "Incorrect security image response.": [
+                ""
+            ],
+            "Please select valid secret question.": [
+                ""
+            ],
+            "You haven't entered an secret answer.": [
+                ""
+            ],
+            "The 'Lost Password'-function was already used for this account less than 10 minutes ago.": [
+                ""
+            ],
+            "Wrong secret question and\/or answer.": [
+                ""
+            ],
+            "Unable To Load User Info.": [
+                ""
+            ],
+            "An eMail was sent to your eMail-adress containing information on how to retrieve a new password.": [
+                ""
+            ],
+            "Invalid lost password reminder code.": [
+                ""
+            ],
+            "You haven't entered the password-repetition.": [
+                ""
+            ],
+            "Your password was changed to: <b>%s<\/b>": [
+                ""
+            ],
+            "Lost Password reminder code does not exist in database.": [
+                ""
+            ],
+            "Invalid item.": [
+                ""
+            ],
+            "You can not purchase own item.": [
+                ""
+            ],
+            "Want to remove it?": [
+                ""
+            ],
+            "You have insufficient amount of %d in your WebWallet.": [
+                ""
+            ],
+            "Item not found in our database.": [
+                ""
+            ],
+            "You have bought new item successfully.": [
+                ""
+            ],
+            "This item is already sold.": [
+                ""
+            ],
+            "This item is already removed.": [
+                ""
+            ],
+            "This item doesn't belong to you.": [
+                ""
+            ],
+            "You will be allowed to remove this item after it will expire.": [
+                ""
+            ],
+            "Item has been successfully removed from market.": [
+                ""
+            ],
+            "No images found": [
+                ""
+            ],
+            "Invalid BanList Selected": [
+                ""
+            ],
+            "Unable to load ranking data.": [
+                ""
+            ],
+            "Invalid ranking selected.": [
+                ""
+            ],
+            "Invalid server.": [
+                ""
+            ],
+            "Invalid server": [
+                ""
+            ],
+            "Please enter search string": [
+                ""
+            ],
+            "Search string should be atleast 2 characters long": [
+                ""
+            ],
+            "The username you entered is already taken.": [
+                ""
+            ],
+            "You haven't entered an email-address.": [
+                ""
+            ],
+            "The email-address you entered is already in use.": [
+                ""
+            ],
+            "You haven't selected secret question.": [
+                ""
+            ],
+            "You haven't accepted rules.": [
+                ""
+            ],
+            "The referrer username you entered is invalid.": [
+                ""
+            ],
+            "The referrer you entered doesn't exists.": [
+                ""
+            ],
+            "Your account has been successfully created.": [
+                ""
+            ],
+            "Please check your email for account activation.": [
+                ""
+            ],
+            "There was an error creating your account. Please try again later.": [
+                ""
+            ],
+            "Invalid account activation code.": [
+                ""
+            ],
+            "Activation code doesn't exist in our database.": [
+                ""
+            ],
+            "This account is already activated.": [
+                ""
+            ],
+            "Account succesfully activated. You can now login.": [
+                ""
+            ],
+            "Unable to activate account.": [
+                ""
+            ],
+            "Account validation not required": [
+                ""
+            ],
+            "The email-address you entered is already activated.": [
+                ""
+            ],
+            "The email-address you entered not found in our database.": [
+                ""
+            ],
+            "Account activation email was successfully sent.": [
+                ""
+            ],
+            "Invalid Category": [
+                ""
+            ],
+            "This item is disabled on this server.": [
+                ""
+            ],
+            "This item doen't exist in our database.": [
+                ""
+            ],
+            "Invalid Items.": [
+                ""
+            ],
+            "Please select element type": [
+                ""
+            ],
+            "Wrong Element Level": [
+                ""
+            ],
+            "Please select atleast one pentagram slot": [
+                ""
+            ],
+            "Please select socket": [
+                ""
+            ],
+            "You are not allowed to use this payment method.": [
+                ""
+            ],
+            "Invalid harmony value selected.": [
+                ""
+            ],
+            "Max item level allowed %s": [
+                ""
+            ],
+            "Max item option allowed %s": [
+                ""
+            ],
+            "Max exellent options allowed %s": [
+                ""
+            ],
+            "Please select different socket options.": [
+                ""
+            ],
+            "Wrong socket option.": [
+                ""
+            ],
+            "Please select different socket seeds.": [
+                ""
+            ],
+            "Sorry you can't select more than %d sockets": [
+                ""
+            ],
+            "Please choose only ancient or only excelent options.": [
+                ""
+            ],
+            "Please choose only socket or only excelent options.": [
+                ""
+            ],
+            "Please choose only ancient or only harmony options.": [
+                ""
+            ],
+            "Thank You, for your purchase.": [
+                ""
+            ],
+            "Your item was moved into warehouse.": [
+                ""
+            ],
+            "Your item was added to cart.": [
+                ""
+            ],
+            "Error wrong  sending type.": [
+                ""
+            ],
+            "Module Disabled.": [
+                ""
+            ],
+            "Item successfully removed from cart.": [
+                ""
+            ],
+            "Item not found.": [
+                ""
+            ],
+            "Please free up space in your warehouse.": [
+                ""
+            ],
+            "%d was added to warehouse.": [
+                ""
+            ],
+            "Your items was moved into warehouse.": [
+                ""
+            ],
+            "Please select atleast one item.": [
+                ""
+            ],
+            "Invalid Harmony Option": [
+                ""
+            ],
+            "Invalid Harmony Value": [
+                ""
+            ],
+            "Invalid Socket Option": [
+                ""
+            ],
+            "You have successfully purchased vip package.": [
+                ""
+            ],
+            "Other vip plan is still active, please wait until it will expire.": [
+                ""
+            ],
+            "Invalid vip package selected.": [
+                ""
+            ],
+            "Please enter ticket subject.": [
+                ""
+            ],
+            "Please select ticket department.": [
+                ""
+            ],
+            "This department requires payment of %d %s": [
+                ""
+            ],
+            "Please select ticket priority.": [
+                ""
+            ],
+            "Please enter ticket text.": [
+                ""
+            ],
+            "Please select character": [
+                ""
+            ],
+            "Max 3 files allowed": [
+                ""
+            ],
+            "No upload file specified.": [
+                ""
+            ],
+            "Invalid file mime type allowed: gif, jpeg, jpg, jpe, png, txt, pdf": [
+                ""
+            ],
+            "One of files was too big allowed: %s": [
+                ""
+            ],
+            "Upload failed.": [
+                ""
+            ],
+            "File upload disabled.": [
+                ""
+            ],
+            "You are not allowed to create more than one ticket per 30 minutes.": [
+                ""
+            ],
+            "Ticket was successfully submited.": [
+                ""
+            ],
+            "Ticket not found.": [
+                ""
+            ],
+            "Please enter reply text.": [
+                ""
+            ],
+            "You are not allowed reply more than once per 5 minutes.": [
+                ""
+            ],
+            "You have successfully replied your ticket.": [
+                ""
+            ],
+            "This ticket is already resolved.": [
+                ""
+            ],
+            "Ticket resolved successfully.": [
+                ""
+            ],
+            "You have %d new ticket replies. <a href=\"%s\">Click To View<\/a>": [
+                ""
+            ],
+            "Please enter price.": [
+                ""
+            ],
+            "Please select payment method.": [
+                ""
+            ],
+            "Invalid payment type.": [
+                ""
+            ],
+            "Max price can be %d %s": [
+                ""
+            ],
+            "Your not allowed to use this payment type": [
+                ""
+            ],
+            "Jewel Of Chaos": [
+                ""
+            ],
+            "Jewel Of Bless": [
+                ""
+            ],
+            "Jewel Of Soul": [
+                ""
+            ],
+            "Jewel Of Life": [
+                ""
+            ],
+            "Jewel Of Creation": [
+                ""
+            ],
+            "Jewel Of Harmony": [
+                ""
+            ],
+            "Please select time.": [
+                ""
+            ],
+            "Please select valid character.": [
+                ""
+            ],
+            "You can't sell more than %d items in one day.": [
+                ""
+            ],
+            "For highlighting item you need %d %s": [
+                ""
+            ],
+            "You are not allowed to sell items without serial. Item Serial: %s": [
+                ""
+            ],
+            "You are not allowed to sell items purchased in webshop.": [
+                ""
+            ],
+            "You are only allowed to sell items with max %d exe options.": [
+                ""
+            ],
+            "Item successfully sold.": [
+                ""
+            ],
+            "Unable to sell item.": [
+                ""
+            ],
+            "Item successfully transfered to game warehouse.": [
+                ""
+            ],
+            "Item successfully transfered to web warehouse.": [
+                ""
+            ],
+            "Transfer of items to web warehouse not allowed.": [
+                ""
+            ],
+            "Item successfully removed from warehouse.": [
+                ""
+            ],
+            "Item deletion disabled.": [
+                ""
+            ],
+            "Offline": [
+                ""
+            ],
+            "Online": [
+                ""
+            ],
+            "Module Disabled": [
+                ""
+            ],
+            "Select Server:": [
+                ""
+            ],
+            "Click To Select": [
+                ""
+            ],
+            "Next Cache Time %s": [
+                ""
+            ],
+            "Cached Moment Ago": [
+                ""
+            ],
+            "Unknown Class": [
+                ""
+            ],
+            "Member": [
+                ""
+            ],
+            "BattleMaster": [
+                ""
+            ],
+            "Assistant Guild Master": [
+                ""
+            ],
+            "Guild Master": [
+                ""
+            ],
+            "Duprian": [
+                ""
+            ],
+            "Vanert": [
+                ""
+            ],
+            "Unknown": [
+                ""
+            ],
+            "Day": [
+                ""
+            ],
+            "Days": [
+                ""
+            ],
+            "What is your mother`s maiden name?": [
+                ""
+            ],
+            "What was the name of your first school?": [
+                ""
+            ],
+            "Who is your favorite super hero?": [
+                ""
+            ],
+            "What is the name of your first pet?": [
+                ""
+            ],
+            "What was your favorite place to visit as a child?": [
+                ""
+            ],
+            "Who is your favorite cartoon character?": [
+                ""
+            ],
+            "What was the first game you played?": [
+                ""
+            ],
+            "What was the name of your first teacher?": [
+                ""
+            ],
+            "What was your favorite TV show as a child?": [
+                ""
+            ],
+            "What city was your mother born in?": [
+                ""
+            ],
+            "Facebook": [
+                ""
+            ],
+            "Attack": [
+                ""
+            ],
+            "Defense": [
+                ""
+            ],
+            "Fenrir +Damage": [
+                ""
+            ],
+            "Fenrir +Defense": [
+                ""
+            ],
+            "Fenrir +Illusion": [
+                ""
+            ],
+            "Socket": [
+                ""
+            ],
+            "No item application": [
+                ""
+            ],
+            "Fire": [
+                ""
+            ],
+            "Water": [
+                ""
+            ],
+            "Ice": [
+                ""
+            ],
+            "Wind": [
+                ""
+            ],
+            "Lightning": [
+                ""
+            ],
+            "Earth": [
+                ""
+            ],
+            "Additional Defense Rate": [
+                ""
+            ],
+            "Automatic Hp Recovery": [
+                ""
+            ],
+            "Additional Damage": [
+                ""
+            ],
+            "Additional Defense": [
+                ""
+            ],
+            "(Luck(success rate of Jewel of Soul +25%)": [
+                ""
+            ],
+            "Luck(critical damage rate +5%)": [
+                ""
+            ],
+            "skill": [
+                ""
+            ],
+            "Mana": [
+                ""
+            ],
+            "Fire Element": [
+                ""
+            ],
+            "Water Element": [
+                ""
+            ],
+            "Earth Element": [
+                ""
+            ],
+            "Wind Element": [
+                ""
+            ],
+            "Darkness Element": [
+                ""
+            ],
+            "Invalid Elements": [
+                ""
+            ],
+            "Slot of Anger": [
+                ""
+            ],
+            "None": [
+                ""
+            ],
+            "Errtel of Anger": [
+                ""
+            ],
+            "Slot of Blessing": [
+                ""
+            ],
+            "Errtel of Blessing": [
+                ""
+            ],
+            "Slot of Integrity": [
+                ""
+            ],
+            "Errtel of Integrity": [
+                ""
+            ],
+            "Slot of Divinity": [
+                ""
+            ],
+            "Errtel of Divinity": [
+                ""
+            ],
+            "Slot of Gale": [
+                ""
+            ],
+            "Errtel of Gale": [
+                ""
+            ],
+            "Rank Option": [
+                ""
+            ],
+            "Increase Strength": [
+                ""
+            ],
+            "Increase Stamina": [
+                ""
+            ],
+            "Previous": [
+                ""
+            ],
+            "Next": [
+                ""
+            ],
+            "The password you entered is too short. Minimum length %d": [
+                ""
+            ],
+            "The password you entered is too long. Maximum length %d": [
+                ""
+            ],
+            "Password should contain atleast one lowercase letter.": [
+                ""
+            ],
+            "Password should contain atleast one uppercase letter.": [
+                ""
+            ],
+            "Password should contain atleast one number.": [
+                ""
+            ],
+            "Password should contain atleast one symbol.": [
+                ""
+            ],
+            "Low": [
+                ""
+            ],
+            "Medium": [
+                ""
+            ],
+            "High": [
+                ""
+            ],
+            "Urgent": [
+                ""
+            ],
+            "Open": [
+                ""
+            ],
+            "Closed": [
+                ""
+            ],
+            "Hold": [
+                ""
+            ],
+            "Resolved": [
+                ""
+            ],
+            "Spam": [
+                ""
+            ],
+            "Working": [
+                ""
+            ],
+            "Can be equipped by ": [
+                ""
+            ],
+            "Can be used by all classes": [
+                ""
+            ],
+            "Undefined": [
+                ""
+            ],
+            "Found unknown item in warehouse please remove it first. Slot: ": [
+                ""
+            ],
+            "Not Protected": [
+                ""
+            ],
+            "Protected": [
+                ""
+            ],
+            "Siege Period Is Overs": [
+                ""
+            ],
+            "Guild Registration": [
+                ""
+            ],
+            "Idle": [
+                ""
+            ],
+            "Mark Registration": [
+                ""
+            ],
+            "Announcement": [
+                ""
+            ],
+            "Castle Preparation": [
+                ""
+            ],
+            "Siege Warfare": [
+                ""
+            ],
+            "Truce Period": [
+                ""
+            ],
+            "Unknown Item": [
+                ""
+            ],
+            "Plugin configuration not found.": [
+                ""
+            ],
+            "Please select merchant character.": [
+                ""
+            ],
+            "Merchant character not found.": [
+                ""
+            ],
+            "Please select sale character.": [
+                ""
+            ],
+            "Sale character not found.": [
+                ""
+            ],
+            "Please select different merchant and sale characters.": [
+                ""
+            ],
+            "Please select valid payment method.": [
+                ""
+            ],
+            "You can not sell banned character.": [
+                ""
+            ],
+            "You can not sell gm character.": [
+                ""
+            ],
+            "Min price can be %d %s": [
+                ""
+            ],
+            "You are not allowed to sell character with gens.": [
+                ""
+            ],
+            "You are not allowed to sell character while sale character is in guild.": [
+                ""
+            ],
+            "Character successfully sold.": [
+                ""
+            ],
+            "This character has been sold already.": [
+                ""
+            ],
+            "This character has been removed.": [
+                ""
+            ],
+            "This sale has expire.": [
+                ""
+            ],
+            "You can not purchase own character.": [
+                ""
+            ],
+            "All character slots are used. Please remove some character.": [
+                ""
+            ],
+            "This character is not yours.": [
+                ""
+            ],
+            "Your not allowed to remove this character while it is not expired.": [
+                ""
+            ],
+            "Character successfully restored.": [
+                ""
+            ],
+            "You have bought new character successfully.": [
+                ""
+            ],
+            "Sell Character": [
+                ""
+            ],
+            "Sale History": [
+                ""
+            ],
+            "Information": [
+                "Menu"
+            ],
+            "Class": [
+                ""
+            ],
+            "Level": [
+                ""
+            ],
+            "Master Level": [
+                ""
+            ],
+            "Resets": [
+                ""
+            ],
+            "Grand Resets": [
+                ""
+            ],
+            "PK Level": [
+                ""
+            ],
+            "Location": [
+                ""
+            ],
+            "Commands": [
+                ""
+            ],
+            "Guild": [
+                ""
+            ],
+            "Gens Family": [
+                ""
+            ],
+            "Price": [
+                ""
+            ],
+            "Expires On": [
+                ""
+            ],
+            "Buy Now": [
+                ""
+            ],
+            "Inventory": [
+                ""
+            ],
+            "Expanded Inventory %d": [
+                ""
+            ],
+            "Personal Store": [
+                ""
+            ],
+            "Character": [
+                ""
+            ],
+            "Merchant": [
+                ""
+            ],
+            "Price + Tax": [
+                ""
+            ],
+            "No Characters Found.": [
+                ""
+            ],
+            "Character Market": [
+                ""
+            ],
+            "Status": [
+                ""
+            ],
+            "Merchant Char": [
+                ""
+            ],
+            "Character For Sale": [
+                ""
+            ],
+            "Selling Period": [
+                ""
+            ],
+            "Payment Type": [
+                ""
+            ],
+            "No characters found.": [
+                ""
+            ],
+            "Character %s": [
+                ""
+            ],
+            "Character History": [
+                ""
+            ],
+            "Please enter specialization title": [
+                ""
+            ],
+            "Your character level is too low. Required: %d level.": [
+                ""
+            ],
+            "You have reached max specializations: %d, please remove some specialization before proceeding.": [
+                ""
+            ],
+            "Specialization with this name already exists.": [
+                ""
+            ],
+            "Specialization successfully saved.": [
+                ""
+            ],
+            "Specialization successfully removed.": [
+                ""
+            ],
+            "Stats specialization not found.": [
+                ""
+            ],
+            "Specialization successfully loaded.": [
+                ""
+            ],
+            "Invalid character": [
+                ""
+            ],
+            "My Specializations": [
+                ""
+            ],
+            "Specialization Title": [
+                ""
+            ],
+            "Submit": [
+                ""
+            ],
+            "Save Current Stats": [
+                ""
+            ],
+            "Saved Specializations": [
+                ""
+            ],
+            "No specializations found.": [
+                ""
+            ],
+            "Load Specialization": [
+                ""
+            ],
+            "Remove": [
+                ""
+            ],
+            "Invalid WalletOne package.": [
+                ""
+            ],
+            "Buy Virtual Currency": [
+                ""
+            ],
+            "No WaletOne Packages Found.": [
+                ""
+            ],
+            "About Server": [
+                ""
+            ],
+            "Statistics": [
+                ""
+            ],
+            "Server Statistics": [
+                ""
+            ],
+            "Total Accounts": [
+                ""
+            ],
+            "Total Characters": [
+                ""
+            ],
+            "Total Guilds": [
+                ""
+            ],
+            "Total Gms": [
+                ""
+            ],
+            "Total Online": [
+                ""
+            ],
+            "Active In 24 Hours": [
+                ""
+            ],
+            "Server Market Statistics": [
+                ""
+            ],
+            "Total Items": [
+                ""
+            ],
+            "Active Items": [
+                ""
+            ],
+            "Expired Items": [
+                ""
+            ],
+            "Total Sold": [
+                ""
+            ],
+            "Total Sales For": [
+                ""
+            ],
+            "CryWolf Info": [
+                ""
+            ],
+            "Status Of The Fortress": [
+                ""
+            ],
+            "Castle Siege Info": [
+                ""
+            ],
+            "Owner Guild": [
+                ""
+            ],
+            "State": [
+                ""
+            ],
+            "Time": [
+                ""
+            ],
+            "Money": [
+                ""
+            ],
+            "Zen": [
+                ""
+            ],
+            "tax_chaos": [
+                ""
+            ],
+            "Tax Store": [
+                ""
+            ],
+            "Tax Hunt Zone": [
+                ""
+            ],
+            "Castle Siege Not Active.": [
+                ""
+            ],
+            "Master": [
+                ""
+            ],
+            "Reg Marks": [
+                ""
+            ],
+            "No Registered Guilds": [
+                ""
+            ],
+            "Add Stats": [
+                ""
+            ],
+            "Add level up points. Str. Agi. Vit. etc": [
+                ""
+            ],
+            "Manage": [
+                ""
+            ],
+            "Clear Inventory": [
+                ""
+            ],
+            "Clear character inventory, equipment etc..": [
+                ""
+            ],
+            "character": [
+                ""
+            ],
+            "Select Option(s) To Clear": [
+                ""
+            ],
+            "Expanded Inventory": [
+                ""
+            ],
+            "Equipment": [
+                ""
+            ],
+            "Clear SkillTree": [
+                ""
+            ],
+            "Reset character skilltree.": [
+                ""
+            ],
+            "Trade Online Time": [
+                ""
+            ],
+            "More online more can exchange and receive nice rewards": [
+                ""
+            ],
+            "Details": [
+                ""
+            ],
+            "Online Hours": [
+                ""
+            ],
+            "Reward": [
+                ""
+            ],
+            "Trade Now": [
+                ""
+            ],
+            "Exchange Wcoins": [
+                ""
+            ],
+            "Exchange": [
+                ""
+            ],
+            "To Wcoins": [
+                ""
+            ],
+            "Exchange rate forumula": [
+                ""
+            ],
+            "Exchange Type": [
+                ""
+            ],
+            "To": [
+                ""
+            ],
+            "Amount of": [
+                ""
+            ],
+            "Will Receive": [
+                ""
+            ],
+            "Exchange Lucky Coins": [
+                ""
+            ],
+            "Exchange your lucky coins to items.": [
+                ""
+            ],
+            "Select Option To Exchange": [
+                ""
+            ],
+            "Exchange Coins": [
+                ""
+            ],
+            "Facebook Login": [
+                ""
+            ],
+            "Facebook Account Login": [
+                ""
+            ],
+            "Server": [
+                ""
+            ],
+            "Facebook Account Register": [
+                ""
+            ],
+            "Username": [
+                ""
+            ],
+            "Password": [
+                ""
+            ],
+            "Repeat Password": [
+                ""
+            ],
+            "Grand Reset": [
+                ""
+            ],
+            "GrandReset your character": [
+                ""
+            ],
+            "Res \/ Req": [
+                ""
+            ],
+            "LvL \/ Req": [
+                ""
+            ],
+            "Zen \/ Req": [
+                ""
+            ],
+            "Bonus": [
+                ""
+            ],
+            "Stats Bonus": [
+                ""
+            ],
+            "Bonus Stats For Resets": [
+                ""
+            ],
+            "View Reward": [
+                ""
+            ],
+            "GrandReset Disabled": [
+                ""
+            ],
+            "Hide Info": [
+                ""
+            ],
+            "Hide inventory \/ location from others": [
+                ""
+            ],
+            "Hide Till": [
+                ""
+            ],
+            "Everyone can't see location or inventory items on all chars": [
+                ""
+            ],
+            "Hide Price": [
+                ""
+            ],
+            "days": [
+                ""
+            ],
+            "Hide Now": [
+                ""
+            ],
+            "View account and character options": [
+                ""
+            ],
+            "Account": [
+                ""
+            ],
+            "Email": [
+                ""
+            ],
+            "Rank": [
+                ""
+            ],
+            "User": [
+                ""
+            ],
+            "Vip": [
+                ""
+            ],
+            "Extend Now": [
+                ""
+            ],
+            "Member Since": [
+                ""
+            ],
+            "Last Login": [
+                ""
+            ],
+            "Today": [
+                ""
+            ],
+            "Last Login Ip": [
+                ""
+            ],
+            "Current Ip": [
+                ""
+            ],
+            "Vip Expires": [
+                ""
+            ],
+            "Expired": [
+                ""
+            ],
+            "Character Options": [
+                ""
+            ],
+            "Reset": [
+                ""
+            ],
+            "Reset your character level": [
+                ""
+            ],
+            "Grand Reset your character": [
+                ""
+            ],
+            "Exchange credits to Wcoins": [
+                ""
+            ],
+            "Warp Character": [
+                ""
+            ],
+            "Move to another location.<br \/>Use to unstuck character!": [
+                ""
+            ],
+            "PK Clear": [
+                ""
+            ],
+            "Clear player kills.<br \/>Receive normal status": [
+                ""
+            ],
+            "Referral System": [
+                ""
+            ],
+            "Invite friends and get rewards.": [
+                ""
+            ],
+            "Change Name": [
+                ""
+            ],
+            "Change character name.": [
+                ""
+            ],
+            "Change Class": [
+                ""
+            ],
+            "Change character class.": [
+                ""
+            ],
+            "Buy Stats": [
+                ""
+            ],
+            "Buy StatPoints for your character": [
+                ""
+            ],
+            "Buy GM": [
+                ""
+            ],
+            "Buy GameMaster status for your character": [
+                ""
+            ],
+            "Buy vip": [
+                ""
+            ],
+            "Buy vip status.": [
+                ""
+            ],
+            "Login": [
+                ""
+            ],
+            "Account Login": [
+                ""
+            ],
+            "Logs": [
+                ""
+            ],
+            "Account Credits History": [
+                ""
+            ],
+            "Info": [
+                ""
+            ],
+            "Amount": [
+                ""
+            ],
+            "Date": [
+                ""
+            ],
+            "Ip Address": [
+                ""
+            ],
+            "Refferal Link": [
+                ""
+            ],
+            "View your referred players": [
+                ""
+            ],
+            "Referral": [
+                ""
+            ],
+            "Date Invited": [
+                ""
+            ],
+            "Characters.": [
+                ""
+            ],
+            "GResets": [
+                ""
+            ],
+            "Achievable rewards": [
+                ""
+            ],
+            "Req LvL": [
+                ""
+            ],
+            "Req Res": [
+                ""
+            ],
+            "Req GRes": [
+                ""
+            ],
+            "Already Claimed": [
+                ""
+            ],
+            "No referred players.": [
+                ""
+            ],
+            "Clear player kills.": [
+                ""
+            ],
+            "Kills": [
+                ""
+            ],
+            "Res": [
+                ""
+            ],
+            "Reset Stats": [
+                ""
+            ],
+            "Reassign your stats": [
+                ""
+            ],
+            "New LevelUp Points": [
+                ""
+            ],
+            "Account Settings": [
+                ""
+            ],
+            "Set New Email": [
+                ""
+            ],
+            "New Email": [
+                ""
+            ],
+            "Change Password": [
+                ""
+            ],
+            "Old Password": [
+                ""
+            ],
+            "New Password": [
+                ""
+            ],
+            "Repeat New Password": [
+                ""
+            ],
+            "Change Email": [
+                ""
+            ],
+            "Current Email": [
+                ""
+            ],
+            "Recover Master Key": [
+                ""
+            ],
+            "Recover your master key if you have forgotten it.": [
+                ""
+            ],
+            "Vote": [
+                ""
+            ],
+            "Vote and get reward": [
+                ""
+            ],
+            "VoteReward require character.": [
+                ""
+            ],
+            "Your character total level sum need to be atleast": [
+                ""
+            ],
+            "Your character total resets sum need to be atleast": [
+                ""
+            ],
+            "Reward SMS Vote": [
+                ""
+            ],
+            "Vote Now!": [
+                ""
+            ],
+            "No Voting Links Currently To Display": [
+                ""
+            ],
+            "Teleport your character to another location": [
+                ""
+            ],
+            "Warp": [
+                ""
+            ],
+            "Zen Wallet": [
+                ""
+            ],
+            "Transfer zen between characters and other places.": [
+                ""
+            ],
+            "Transfer From": [
+                ""
+            ],
+            "Warehouse": [
+                ""
+            ],
+            "Transfer To": [
+                ""
+            ],
+            "Enter Amount": [
+                ""
+            ],
+            "Donate": [
+                ""
+            ],
+            "With 2 CheckOut": [
+                ""
+            ],
+            "No 2Checkout Packages Found.": [
+                ""
+            ],
+            "Bank Payment": [
+                ""
+            ],
+            "--SELECT--": [
+                ""
+            ],
+            "Allowed only from Venezuela": [
+                ""
+            ],
+            "With Fortumo": [
+                ""
+            ],
+            "Choose Donation Method": [
+                ""
+            ],
+            "PayPal": [
+                ""
+            ],
+            "PaymentWall": [
+                ""
+            ],
+            "Fortumo": [
+                ""
+            ],
+            "PayGol": [
+                ""
+            ],
+            "2CheckOut": [
+                ""
+            ],
+            "PagSeguro": [
+                ""
+            ],
+            "SuperRewars": [
+                ""
+            ],
+            "Paycall": [
+                ""
+            ],
+            "No Donation Methods Found.": [
+                ""
+            ],
+            "Donation modules not configured for this server.": [
+                ""
+            ],
+            "With Method 1": [
+                ""
+            ],
+            "With Method 2": [
+                ""
+            ],
+            "With Method 3": [
+                ""
+            ],
+            "With Method 4": [
+                ""
+            ],
+            "With PagSeguro": [
+                ""
+            ],
+            "No PagSeguro Packages Found.": [
+                ""
+            ],
+            "With PayCall": [
+                ""
+            ],
+            "No PayCall Packages Found.": [
+                ""
+            ],
+            "With PayGol": [
+                ""
+            ],
+            "With PayPal": [
+                ""
+            ],
+            "No Paypal Packages Found.": [
+                ""
+            ],
+            "With PaymentWall": [
+                ""
+            ],
+            "With SuperRewards": [
+                ""
+            ],
+            "Downloads": [
+                ""
+            ],
+            "Currently no download links.": [
+                ""
+            ],
+            "#1 Link": [
+                ""
+            ],
+            "Mu Online Season 6 OBT Client [~ 474 MB]": [
+                ""
+            ],
+            "#2 Link": [
+                ""
+            ],
+            "Description": [
+                ""
+            ],
+            "Size": [
+                ""
+            ],
+            "Type": [
+                ""
+            ],
+            "Download": [
+                ""
+            ],
+            "Page Under Maintenance": [
+                ""
+            ],
+            "Something went Wrong!": [
+                ""
+            ],
+            "We will be back shortly": [
+                ""
+            ],
+            "Guides": [
+                ""
+            ],
+            "No Guides Articles": [
+                ""
+            ],
+            "Posted": [
+                ""
+            ],
+            "No News Articles": [
+                ""
+            ],
+            "Author": [
+                ""
+            ],
+            "More": [
+                ""
+            ],
+            "Character %s Info": [
+                ""
+            ],
+            "MasterLevel": [
+                ""
+            ],
+            "GrandResets": [
+                ""
+            ],
+            "Hidden": [
+                ""
+            ],
+            "Account Information": [
+                ""
+            ],
+            "Characters": [
+                ""
+            ],
+            "No Characters": [
+                ""
+            ],
+            "Last Logout": [
+                ""
+            ],
+            "Guild Info": [
+                ""
+            ],
+            "Members": [
+                ""
+            ],
+            "Equipment Hidden": [
+                ""
+            ],
+            "guilds_info": [
+                ""
+            ],
+            "Score": [
+                ""
+            ],
+            "Member Count": [
+                ""
+            ],
+            "Alliance": [
+                ""
+            ],
+            "Name": [
+                ""
+            ],
+            "GR": [
+                ""
+            ],
+            "LvL": [
+                ""
+            ],
+            "Position": [
+                ""
+            ],
+            "No Members": [
+                ""
+            ],
+            "Lost Password.": [
+                ""
+            ],
+            "Find out your password in case you have lost it.": [
+                ""
+            ],
+            "Select Server": [
+                ""
+            ],
+            "Security": [
+                ""
+            ],
+            "Set new password": [
+                ""
+            ],
+            "Enter New Password": [
+                ""
+            ],
+            "Market": [
+                ""
+            ],
+            "Sell And Buy Items": [
+                ""
+            ],
+            "Start Time": [
+                ""
+            ],
+            "End Time": [
+                ""
+            ],
+            "History": [
+                ""
+            ],
+            "Market History": [
+                ""
+            ],
+            "Web Warehouse": [
+                ""
+            ],
+            "Item": [
+                ""
+            ],
+            "Sold": [
+                ""
+            ],
+            "Removed": [
+                ""
+            ],
+            "No Items Found.": [
+                ""
+            ],
+            "Show Filter": [
+                ""
+            ],
+            "Items Filter": [
+                ""
+            ],
+            "Search Item": [
+                ""
+            ],
+            "Search": [
+                ""
+            ],
+            "Items Level": [
+                ""
+            ],
+            "Items Options": [
+                ""
+            ],
+            "Item Luck": [
+                ""
+            ],
+            "Item Skill": [
+                ""
+            ],
+            "Item Ancient": [
+                ""
+            ],
+            "Items Excellent": [
+                ""
+            ],
+            "Excellent": [
+                ""
+            ],
+            "Items Category": [
+                ""
+            ],
+            "Items For Class": [
+                ""
+            ],
+            "Filter Items": [
+                ""
+            ],
+            "Reset Filter": [
+                ""
+            ],
+            "Media": [
+                ""
+            ],
+            "Screen Shots": [
+                ""
+            ],
+            "Wallpapers": [
+                ""
+            ],
+            "Ban List": [
+                ""
+            ],
+            "List Banned Players & Accounts": [
+                ""
+            ],
+            "Banned Chars": [
+                ""
+            ],
+            "Banned Accounts": [
+                ""
+            ],
+            "Ban Time": [
+                ""
+            ],
+            "Ban Reason": [
+                ""
+            ],
+            "No Bans Found": [
+                ""
+            ],
+            "Gm List": [
+                ""
+            ],
+            "List GameMasters": [
+                ""
+            ],
+            "Contact": [
+                ""
+            ],
+            "No GMs Found": [
+                ""
+            ],
+            "Rankings": [
+                ""
+            ],
+            "List top players, guilds and others": [
+                ""
+            ],
+            "Top Players": [
+                ""
+            ],
+            "Top Guilds": [
+                ""
+            ],
+            "Top Killers": [
+                ""
+            ],
+            "Top Voters": [
+                ""
+            ],
+            "Top Online": [
+                ""
+            ],
+            "Top Gens": [
+                ""
+            ],
+            "Online Players": [
+                ""
+            ],
+            "Top BC": [
+                ""
+            ],
+            "Top DS": [
+                ""
+            ],
+            "Top CC": [
+                ""
+            ],
+            "Top Duels": [
+                ""
+            ],
+            "List online players": [
+                ""
+            ],
+            "Connect Time": [
+                ""
+            ],
+            "Connected Since": [
+                ""
+            ],
+            "Hours": [
+                ""
+            ],
+            "Minutes": [
+                ""
+            ],
+            "No Players Found": [
+                ""
+            ],
+            "Search Characters & Guilds": [
+                ""
+            ],
+            "Find any character, guild": [
+                ""
+            ],
+            "Guilds": [
+                ""
+            ],
+            "Search result did not return any data": [
+                ""
+            ],
+            "Registration": [
+                ""
+            ],
+            "Create your account in just few clicks": [
+                ""
+            ],
+            "Referrer": [
+                ""
+            ],
+            "Server Rules": [
+                ""
+            ],
+            "Please check your email for account activation link.": [
+                ""
+            ],
+            "You can now login.": [
+                ""
+            ],
+            "Buy Level": [
+                ""
+            ],
+            "Buy level for your character.": [
+                ""
+            ],
+            "No levels to select": [
+                ""
+            ],
+            "Buy level configuration not found for this server. Or disabled for this server.": [
+                ""
+            ],
+            "INFO": [
+                ""
+            ],
+            "point(s) price ": [
+                ""
+            ],
+            "Amount Of Points": [
+                ""
+            ],
+            "All vip packages are disabled.": [
+                ""
+            ],
+            "Vip Package Details": [
+                ""
+            ],
+            "Reset Zen Discount": [
+                ""
+            ],
+            "Reset Level Decrease": [
+                ""
+            ],
+            "GrandReset Bonus Credits": [
+                ""
+            ],
+            "Hide Character Info Discount": [
+                ""
+            ],
+            "PK Clear Discount": [
+                ""
+            ],
+            "Clear SkillTree Discount": [
+                ""
+            ],
+            "Online Hours Exchange Bonus Credits": [
+                ""
+            ],
+            "Change Character Name Discount": [
+                ""
+            ],
+            "Bonus Credits For Donation": [
+                ""
+            ],
+            "Shop Discount": [
+                ""
+            ],
+            "Server Bonus Info": [
+                ""
+            ],
+            "Buy Vip": [
+                ""
+            ],
+            "Shop Cart": [
+                ""
+            ],
+            "My Shop Cart Items": [
+                ""
+            ],
+            "Total Price": [
+                ""
+            ],
+            "Buy Selected": [
+                ""
+            ],
+            "No items for %s in cart.": [
+                ""
+            ],
+            "Change Name History": [
+                ""
+            ],
+            "Character Name Change Cost <span style=\"color:red;\">%d<\/span> %s": [
+                ""
+            ],
+            "Character Name can contain the following chars: %s": [
+                ""
+            ],
+            "Character cannot be a part from a guild at this moment in order successfully to change name.": [
+                ""
+            ],
+            "Old Name": [
+                ""
+            ],
+            "New Name": [
+                ""
+            ],
+            "You have not changed any character name": [
+                ""
+            ],
+            "PROMO": [
+                ""
+            ],
+            "Shop": [
+                ""
+            ],
+            "View Items": [
+                ""
+            ],
+            "Currently No Items In Webshop": [
+                ""
+            ],
+            "Buy": [
+                ""
+            ],
+            "Shop Login": [
+                ""
+            ],
+            "Support": [
+                ""
+            ],
+            "Currently no active support departments.": [
+                ""
+            ],
+            "Send support ticket": [
+                ""
+            ],
+            "View My Tickets": [
+                ""
+            ],
+            "Subject": [
+                ""
+            ],
+            "Department": [
+                ""
+            ],
+            "Select Department": [
+                ""
+            ],
+            "Priority": [
+                ""
+            ],
+            "Select Priority": [
+                ""
+            ],
+            "Select Character": [
+                ""
+            ],
+            "My Support Requests": [
+                ""
+            ],
+            "New Request": [
+                ""
+            ],
+            "Title": [
+                ""
+            ],
+            "Last Reply": [
+                ""
+            ],
+            "New Reply": [
+                ""
+            ],
+            "You have no support requests.": [
+                ""
+            ],
+            "Request Id": [
+                ""
+            ],
+            "Time Elapsed": [
+                ""
+            ],
+            "Mark As Resolved": [
+                ""
+            ],
+            "Attached Files": [
+                ""
+            ],
+            "Vote for server": [
+                ""
+            ],
+            "Account Panel": [
+                ""
+            ],
+            "Welcome": [
+                ""
+            ],
+            "Current Server": [
+                ""
+            ],
+            "My": [
+                ""
+            ],
+            "Buy Credits": [
+                ""
+            ],
+            "My Cart": [
+                ""
+            ],
+            "Account Logs": [
+                ""
+            ],
+            "Settings": [
+                ""
+            ],
+            "Logout": [
+                ""
+            ],
+            "News": [
+                ""
+            ],
+            "Files": [
+                ""
+            ],
+            "Forum": [
+                ""
+            ],
+            "Module Error": [
+                ""
+            ],
+            "Language": [
+                ""
+            ],
+            "Server Status": [
+                ""
+            ],
+            "Recent Forum Topics": [
+                ""
+            ],
+            "No Data": [
+                ""
+            ],
+            "View or sell your items": [
+                ""
+            ],
+            "Sell_item": [
+                ""
+            ],
+            "Move To Web": [
+                ""
+            ],
+            "Seller": [
+                ""
+            ],
+            "You Item Will Be Highlighted In Market. Price %d %s.": [
+                ""
+            ],
+            "Highlight Item": [
+                ""
+            ],
+            "Sell Items": [
+                ""
+            ],
+            "Right mouse click if you want to delete item.": [
+                ""
+            ],
+            "View & Move your items": [
+                ""
+            ],
+            "Here are stored items moved from game and items earned in market.": [
+                ""
+            ],
+            "Items which expire will be deleted permanently": [
+                ""
+            ],
+            "Action": [
+                ""
+            ],
+            "Move To Warehouse": [
+                ""
+            ],
+            "Information About": [
+                ""
+            ],
+            "MU Online was created in December 2001 by the Korean gaming company Webzen.. Like in most MMORPGs, players have to create a character among seven different classes and to set their foot on the MU Continent. In order to gain experience and thus to level up, a players needs to fight monsters (mobs). MU is populated by a large variety of monsters, from simple ones like goblins and golems, to frightening ones such as the Gorgon, Kundun or Selupan. Each monster-type is unique, has different spawn points, and drops different items.": [
+                ""
+            ],
+            "Grand Reset Disabled": [
+                ""
+            ],
+            "Remove items from inventory": [
+                ""
+            ],
+            "Recover MasterLevel": [
+                ""
+            ],
+            "Recover your character master level and class": [
+                ""
+            ],
+            "Recover": [
+                ""
+            ],
+            "With Cuenta Digital": [
+                ""
+            ],
+            "No Cuenta Digital Packages Found.": [
+                ""
+            ],
+            "With Interkassa": [
+                ""
+            ],
+            "Your payment failed. Please try again or contact support.": [
+                ""
+            ],
+            "Thank you for payment. We will review it shortly": [
+                ""
+            ],
+            "Interkassa": [
+                ""
+            ],
+            "Cuenta Digital": [
+                ""
+            ],
+            "Discuss On Forum": [
+                ""
+            ],
+            "By": [
+                ""
+            ],
+            "Guild %s Info": [
+                ""
+            ],
+            "Lost Password": [
+                ""
+            ],
+            "I have read and agree to the <a href=\"\" id=\"rules_dialog\"><b>game rules.<\/b><\/a>": [
+                ""
+            ],
+            "Rules": [
+                ""
+            ],
+            "Grand Reset Bonus Credits": [
+                ""
+            ],
+            "No items for %d in cart.": [
+                ""
+            ],
+            "Character Name Change Cost": [
+                ""
+            ],
+            "<span style=\"color:red;\">%d<\/span> %s": [
+                ""
+            ],
+            "Currently this is only one server.": [
+                ""
+            ],
+            "Copyright": [
+                ""
+            ],
+            "All Rights Reserved.": [
+                ""
+            ],
+            "Powered By": [
+                ""
+            ],
+            "Loading...": [
+                ""
+            ],
+            "Seconds": [
+                ""
+            ],
+            "In Game": [
+                ""
+            ],
+            "Top Player": [
+                ""
+            ],
+            "Top Guild": [
+                ""
+            ],
+            "Server Time": [
+                ""
+            ],
+            "GM List": [
+                ""
+            ],
+            "Contact Us": [
+                ""
+            ],
+            "Top Duelers": [
+                ""
+            ],
+            "Events": [
+                ""
+            ],
+            "View Reward List": [
+                ""
+            ],
+            "Req Resets": [
+                ""
+            ],
+            "Req GResets": [
+                ""
+            ],
+            "No rewards achievable": [
+                ""
+            ],
+            "Secret Questions": [
+                ""
+            ],
+            "Secret Answer": [
+                ""
+            ],
+            "Resend activation code": [
+                ""
+            ],
+            "Select plan": [
+                ""
+            ],
+            "Change Character Class Discount": [
+                ""
+            ],
+            "Game Servers": [
+                ""
+            ],
+            "More rankings": [
+                ""
+            ],
+            "Sell Item": [
+                ""
+            ],
+            "Resend activation code.": [
+                ""
+            ],
+            "About": [
+                ""
+            ],
+            "InterittusGMO is the newest MU Online Community,The Name of the MU Server was invented by the personal owner himself. InterittusGMO was created in the middle of August 2015 and this is a East Coast Mu Online. MU Online was created in December 2001 by the Korean gaming company Webzen.": [
+                ""
+            ],
+            "GR \/ Limit": [
+                ""
+            ],
+            "GReset": [
+                ""
+            ],
+            "Transfer From:": [
+                ""
+            ],
+            "WebWallet": [
+                ""
+            ],
+            "Transfer To:": [
+                ""
+            ],
+            "Enter Amount:": [
+                ""
+            ],
+            "Transfer Zen": [
+                ""
+            ],
+            "Please Login First!": [
+                ""
+            ],
+            "Pk Level": [
+                ""
+            ],
+            "Clear Kills": [
+                ""
+            ],
+            "Res \/ Limit": [
+                ""
+            ],
+            "Zen \/ Reg": [
+                ""
+            ],
+            "Name:": [
+                ""
+            ],
+            "Master:": [
+                ""
+            ],
+            "Members:": [
+                ""
+            ],
+            "Server Select": [
+                ""
+            ],
+            "Currently this is only one server. ": [
+                ""
+            ],
+            "All Rights Reserved": [
+                ""
+            ],
+            "Right mouse click if you want to delete item": [
+                ""
+            ],
+            "user": [
+                ""
+            ],
+            "Paypal": [
+                ""
+            ],
+            "No donation methods found.": [
+                ""
+            ],
+            "Exchange Tax": [
+                ""
+            ],
+            "Once \/  %d RR get rewarded": [
+                ""
+            ],
+            "My Refferals": [
+                ""
+            ],
+            "View your reffered players": [
+                ""
+            ],
+            "Refferal": [
+                ""
+            ],
+            "Date Reffered": [
+                ""
+            ],
+            "Reward Archieved": [
+                ""
+            ],
+            "No reffered players.": [
+                ""
+            ],
+            "SunCore": [
+                ""
+            ],
+            "With Suncore": [
+                ""
+            ],
+            "Top MasterLevel": [
+                ""
+            ],
+            "Refferer": [
+                ""
+            ],
+            "Vip Details": [
+                ""
+            ],
+            "Vip Till": [
+                ""
+            ],
+            "Vip Info": [
+                ""
+            ],
+            "Experience 2 times more. 50% Cheaper reset. Can sell items in shop for 33% more zen. VIP status on all servers. 10% Higher excellent item drop! %s.": [
+                ""
+            ],
+            "Vip Price": [
+                ""
+            ],
+            "%d %s for %d days": [
+                ""
+            ],
+            "Vip Package": [
+                ""
+            ],
+            "Select": [
+                ""
+            ],
+            "No Players Found.": [
+                ""
+            ],
+            "Res[GR]": [
+                ""
+            ],
+            "No Interkassa Packages Found.": [
+                ""
+            ],
+            "Next Battle In": [
+                ""
+            ],
+            "Players": [
+                ""
+            ],
+            "Gallery": [
+                ""
+            ],
+            "Donations Received": [
+                ""
+            ],
+            "Read More...": [
+                ""
+            ],
+            "Account Options": [
+                ""
+            ],
+            "Vote Reward": [
+                ""
+            ],
+            "Auction": [
+                ""
+            ],
+            "Add Character To Auction": [
+                ""
+            ],
+            "Lot Character Info": [
+                ""
+            ],
+            "Character %d ": [
+                ""
+            ],
+            "Make Bet": [
+                ""
+            ],
+            "Bet": [
+                ""
+            ],
+            "Last Bid": [
+                ""
+            ],
+            "Sell & Buy Characters": [
+                ""
+            ],
+            "Currently no auctions on this server.": [
+                ""
+            ],
+            "Buy Wcoins": [
+                ""
+            ],
+            "PvP Rankings": [
+                ""
+            ],
+            "Character %s ": [
+                ""
+            ],
+            "Reset Discount": [
+                ""
+            ],
+            "Reset Level": [
+                ""
+            ],
+            "Reset Bonus Level UpPoint": [
+                ""
+            ],
+            "GrandReset Req Resets": [
+                ""
+            ],
+            "Hide Char Info": [
+                ""
+            ],
+            "Version": [
+                ""
+            ],
+            "Exp": [
+                ""
+            ],
+            "Drop": [
+                ""
+            ],
+            "Today Active": [
+                ""
+            ],
+            "Accounts": [
+                ""
+            ],
+            "Level Reward": [
+                ""
+            ],
+            "Receive reward for reaching some level": [
+                ""
+            ],
+            "Req Level": [
+                ""
+            ],
+            "Req Master Level": [
+                ""
+            ],
+            "Exchange Zen": [
+                ""
+            ],
+            "To W Coins": [
+                ""
+            ],
+            "Wcoins": [
+                ""
+            ],
+            "Character Info": [
+                ""
+            ],
+            "Master Points": [
+                ""
+            ],
+            "Sell And Buy Characters": [
+                ""
+            ],
+            "Contacts": [
+                ""
+            ],
+            "Library": [
+                ""
+            ],
+            "Bonus Event": [
+                ""
+            ],
+            "Game Information": [
+                ""
+            ],
+            "Minimap": [
+                ""
+            ],
+            "OffExp": [
+                ""
+            ],
+            "How Make Reset": [
+                ""
+            ],
+            "Faq": [
+                ""
+            ],
+            "Premium Account": [
+                ""
+            ],
+            "Menu": [
+                ""
+            ],
+            "Screenshots": [
+                ""
+            ],
+            "GameMasters": [
+                ""
+            ],
+            "Black List": [
+                ""
+            ],
+            "Shopping Card": [
+                ""
+            ],
+            "Clear": [
+                ""
+            ],
+            "Read More": [
+                ""
+            ],
+            "VoteReward": [
+                ""
+            ],
+            "Total Sales For Zen": [
+                ""
+            ],
+            "Tax Chaos": [
+                ""
+            ],
+            "No registered guilds.": [
+                ""
+            ],
+            "LevelUp Points": [
+                ""
+            ],
+            "Expanded Inventory 1": [
+                ""
+            ],
+            "Expanded Inventory 2": [
+                ""
+            ],
+            "GrandReset": [
+                ""
+            ],
+            "Western Union": [
+                ""
+            ],
+            "BCP Peru & Banco Do Brasil": [
+                ""
+            ],
+            "Banco do Brasil": [
+                ""
+            ],
+            "Visitor Counter": [
+                ""
+            ],
+            "Your stats are already reseted.": [
+                ""
+            ],
+            "This Function Will Transfer All Yout Stats To Free Points. Are you sure?\"": [
+                ""
+            ],
+            "This Function Will Reset Your SkillTree. Are you sure?": [
+                ""
+            ],
+            "Unable to load data.": [
+                ""
+            ],
+            "The page could not be loaded with javascript.": [
+                ""
+            ],
+            "Minimum 3 and maximum 10 symbols username length.": [
+                ""
+            ],
+            "Please enter password.": [
+                ""
+            ],
+            "Minimum 3 and maximum 20 symbols password length.": [
+                ""
+            ],
+            "You account has been successfully created.": [
+                ""
+            ],
+            "You have already voted for this link.": [
+                ""
+            ],
+            "Move arrow to unlock form": [
+                ""
+            ],
+            "Form can be submitted": [
+                ""
+            ],
+            "Requested page not found. [404]": [
+                ""
+            ],
+            "Internal Server Error [500]": [
+                ""
+            ],
+            "Time out error.": [
+                ""
+            ],
+            "Ajax request aborted.": [
+                ""
+            ],
+            "Please use IE Version 8 AND Above": [
+                ""
+            ],
+            "Are you sure you want to delete this item?": [
+                ""
+            ],
+            "All items from card were removed.": [
+                ""
+            ],
+            "Click for close this message": [
+                ""
+            ],
+            "Please select Rank %d option first!": [
+                ""
+            ],
+            "Win": [
+                ""
+            ],
+            "Lose": [
+                ""
+            ],
+            "Ratio": [
+                ""
+            ],
+            "Online Time": [
+                ""
+            ],
+            "H": [
+                ""
+            ],
+            "Min": [
+                ""
+            ],
+            "PK Count": [
+                ""
+            ],
+            "PK Time": [
+                ""
+            ],
+            "Total Votes": [
+                ""
+            ],
+            "No Guilds Found": [
+                ""
+            ],
+            "Contribution": [
+                ""
+            ],
+            "Guild Mark": [
+                ""
+            ],
+            "ML": [
+                ""
+            ],
+            "All": [
+                ""
+            ],
+            "Last Time Voted": [
+                ""
+            ],
+            "Bought": [
+                ""
+            ],
+            "Element Type": [
+                ""
+            ],
+            "Darkness": [
+                ""
+            ],
+            "Points": [
+                ""
+            ],
+            "Rank %d": [
+                ""
+            ],
+            "Item Level": [
+                ""
+            ],
+            "This item has no options to select.": [
+                ""
+            ],
+            "Automatic HP Recovery": [
+                ""
+            ],
+            "Max Mana Increase": [
+                ""
+            ],
+            "Refinery Option": [
+                ""
+            ],
+            "Harmony Option": [
+                ""
+            ],
+            "Harmony Value": [
+                ""
+            ],
+            "Select Harmony Option": [
+                ""
+            ],
+            "Harmony Price": [
+                ""
+            ],
+            "Ancient Set": [
+                ""
+            ],
+            "Exe Price": [
+                ""
+            ],
+            "Socket Price": [
+                ""
+            ],
+            "Add To Card": [
+                ""
+            ],
+            "Select Payment Method": [
+                ""
+            ],
+            "Invalid Item": [
+                ""
+            ],
+            "Error": [
+                ""
+            ],
+            "Success": [
+                ""
+            ],
+            "Validating": [
+                ""
+            ],
+            "Battle Now": [
+                ""
+            ],
+            "No harmony data found": [
+                ""
+            ],
+            "Unable to get harmony price": [
+                ""
+            ],
+            "You can have only %d excellent options per item.": [
+                ""
+            ],
+            "Are you sure you want to buy this item?": [
+                ""
+            ],
+            "* This field is required": [
+                ""
+            ],
+            "* Please select an option": [
+                ""
+            ],
+            "* This checkbox is required": [
+                ""
+            ],
+            "* Minimum ": [
+                ""
+            ],
+            " characters": [
+                ""
+            ],
+            "* Minimum value is ": [
+                ""
+            ],
+            "* Maximum value is ": [
+                ""
+            ],
+            "* Date prior to ": [
+                ""
+            ],
+            "* Date past ": [
+                ""
+            ],
+            "* Maximum ": [
+                ""
+            ],
+            " options allowed": [
+                ""
+            ],
+            "* Please select ": [
+                ""
+            ],
+            " options": [
+                ""
+            ],
+            "* Fields do not match": [
+                ""
+            ],
+            "* Invalid phone number": [
+                ""
+            ],
+            "* Invalid email address": [
+                ""
+            ],
+            "* Not a valid integer": [
+                ""
+            ],
+            "* Invalid floating decimal number": [
+                ""
+            ],
+            "* Invalid date, must be in YYYY-MM-DD format": [
+                ""
+            ],
+            "* Invalid IP address": [
+                ""
+            ],
+            "* Invalid URL": [
+                ""
+            ],
+            "* Numbers only": [
+                ""
+            ],
+            "* Letters only": [
+                ""
+            ],
+            "* No special characters allowed": [
+                ""
+            ],
+            "* Validating, please wait": [
+                ""
+            ],
+            "Times": [
+                ""
+            ],
+            " - Select - ": [
+                ""
+            ],
+            "Search Character": [
+                ""
+            ],
+            "Search Guild": [
+                ""
+            ],
+            "Player KillCount": [
+                ""
+            ],
+            "Monster KillCount": [
+                ""
+            ],
+            "Community": [
+                ""
+            ],
+            "Exc. ": [
+                ""
+            ],
+            "Set Item Option Info": [
+                ""
+            ],
+            "2Set Effect": [
+                ""
+            ],
+            "3Set Effect": [
+                ""
+            ],
+            "4Set Effect": [
+                ""
+            ],
+            "Mastery Bonus Options": [
+                ""
+            ],
+            "Damage Decrease": [
+                ""
+            ],
+            "Increase all stats +": [
+                ""
+            ],
+            "Serial": [
+                ""
+            ],
+            "*Hero*": [
+                ""
+            ],
+            "Hero lvl 2": [
+                ""
+            ],
+            "Hero lvl 1": [
+                ""
+            ],
+            "PK lvl 1": [
+                ""
+            ],
+            "Murder": [
+                ""
+            ],
+            "*Phonoman*": [
+                ""
+            ],
+            "Level Max": [
+                ""
+            ],
+            "Life: ": [
+                ""
+            ],
+            "Additional Wizardy Dmg": [
+                ""
+            ],
+            "Increase Wizardy Dmg +2%": [
+                ""
+            ],
+            "Increases final damage by 10%": [
+                ""
+            ],
+            "Absorbs 10% of final damage": [
+                ""
+            ],
+            "Elemental DEF": [
+                ""
+            ],
+            "Lv": [
+                ""
+            ],
+            "Elemental Damage Increase": [
+                ""
+            ],
+            "Elemental Attack Success Rate Increase": [
+                ""
+            ],
+            "Elemental Defense Success Rate Increase": [
+                ""
+            ],
+            "Elemental Damage (II) Increase": [
+                ""
+            ],
+            "Elemental Defense (II) Increase": [
+                ""
+            ],
+            "Elemental Attack Success Rate (II) Increase": [
+                ""
+            ],
+            "Elemental Defense Success Rate (II) Increase": [
+                ""
+            ],
+            "Ancient": [
+                ""
+            ],
+            "Expiration Day": [
+                ""
+            ],
+            "Expirable Item": [
+                ""
+            ],
+            "Rank Errtel.": [
+                ""
+            ],
+            "Increase by": [
+                ""
+            ],
+            "Achievements": [
+                ""
+            ],
+            "Character List": [
+                ""
+            ],
+            "Quests for players": [
+                ""
+            ],
+            "Achievements Completed": [
+                ""
+            ],
+            "Win credits easy": [
+                ""
+            ],
+            "SkillTree Specialization": [
+                ""
+            ],
+            "Save Current SkillTree": [
+                ""
+            ],
+            "Here you can save and load your skilltree builds for using in different situations": [
+                ""
+            ],
+            "Slots": [
+                ""
+            ],
+            "WorkShop": [
+                ""
+            ],
+            "Item WorkShop": [
+                ""
+            ],
+            "This item cannot be upgraded.": [
+                "This item cannot be upgraded."
+            ],
+            "Invalid item or item can not be upgraded.": [
+                "Invalid item or item can not be upgraded."
+            ],
+            "This item cannot be upgraded. Category blacklisted.": [
+                "This item cannot be upgraded. Category blacklisted."
+            ],
+            "Unable to load character data": [
+                "Unable to load character data"
+            ],
+            "Your item option is too low for upgrade, minimum: %d option": [
+                "Your item option is too low for upgrade, minimum: %d option"
+            ],
+            "Your item option is too high for upgrade, maximum: %d option": [
+                "Your item option is too high for upgrade, maximum: %d option"
+            ],
+            "Wrong socket option. Socket: ": [
+                "Wrong socket option. Socket: "
+            ],
+            "Plugin configuration successfully saved": [
+                "Plugin configuration successfully saved"
+            ],
+            "Swords": [
+                "Swords"
+            ],
+            "Axes": [
+                "Axes"
+            ],
+            "Maces &amp; Scepters": [
+                "Maces &amp; Scepters"
+            ],
+            "Spears": [
+                "Spears"
+            ],
+            "Staffs": [
+                "Staffs"
+            ],
+            "Shields": [
+                "Shields"
+            ],
+            "Helms": [
+                "Helms"
+            ],
+            "Armors": [
+                "Armors"
+            ],
+            "Pants": [
+                "Pants"
+            ],
+            "Gloves": [
+                "Gloves"
+            ],
+            "Boots": [
+                "Boots"
+            ],
+            "Accessories": [
+                "Accessories"
+            ],
+            "Miscellaneous Items": [
+                "Miscellaneous Items"
+            ],
+            "Miscellaneous Items II": [
+                "Miscellaneous Items II"
+            ],
+            "Scrolls": [
+                "Scrolls"
+            ],
+            "Muuns": [
+                "Muuns"
+            ],
+            "(19) Uncategorized": [
+                "(19) Uncategorized"
+            ],
+            "(20) Uncategorized": [
+                "(20) Uncategorized"
+            ],
+            "Party_Matching": [
+                ""
+            ],
+            "Sell & Buy Muuns": [
+                ""
+            ],
+            "Muun Market": [
+                ""
+            ],
+            "Dark Wizard": [
+                ""
+            ],
+            "Soul Master": [
+                ""
+            ],
+            "Grand Master": [
+                ""
+            ],
+            "Soul Wizard": [
+                ""
+            ],
+            "Dark Knight": [
+                ""
+            ],
+            "Blade Knight": [
+                ""
+            ],
+            "Blade Master": [
+                ""
+            ],
+            "Dragon Knight": [
+                ""
+            ],
+            "Fairy Elf": [
+                ""
+            ],
+            "Muse Elf": [
+                ""
+            ],
+            "High Elf": [
+                ""
+            ],
+            "Noble Elves": [
+                ""
+            ],
+            "Magic Gladiator": [
+                ""
+            ],
+            "Duel Master": [
+                ""
+            ],
+            "Magic Knight": [
+                ""
+            ],
+            "Dark Lord": [
+                ""
+            ],
+            "Lord Emperor": [
+                ""
+            ],
+            "Empire Road": [
+                ""
+            ],
+            "Summoner": [
+                ""
+            ],
+            "Bloody Summoner": [
+                ""
+            ],
+            "Dimension Master": [
+                ""
+            ],
+            "Dimension Summoner": [
+                ""
+            ],
+            "Rage Fighter": [
+                ""
+            ],
+            "Fist Master": [
+                ""
+            ],
+            "Fist Blazer": [
+                ""
+            ],
+            "Grow Lancer": [
+                ""
+            ],
+            "Miracle Lancer": [
+                ""
+            ],
+            "Shining Lancer": [
+                ""
+            ],
+            "Rune Wizard": [
+                ""
+            ],
+            "Rune Spell Master": [
+                ""
+            ],
+            "Grand Rune Master": [
+                ""
+            ],
+            "Majestic Rune Wizard": [
+                ""
+            ],
+            "Slayer": [
+                ""
+            ],
+            "Royal Slayer": [
+                ""
+            ],
+            "Master Slayer": [
+                ""
+            ],
+            "Slaughterer": [
+                ""
+            ],
+            "Gun Crusher": [
+                ""
+            ],
+            "Gun Breaker": [
+                ""
+            ],
+            "Master Gun Breaker": [
+                ""
+            ],
+            "Heist Gun Crusher": [
+                ""
+            ],
+            "If": [
+                ""
+            ],
+            "Until": [
+                ""
+            ],
+            "Ability will increase by": [
+                ""
+            ],
+            "Ability will increase": [
+                ""
+            ],
+            "Skill delay will be reduced by": [
+                ""
+            ],
+            "time(s)": [
+                ""
+            ],
+            "stats are increased by": [
+                ""
+            ],
+            "the speed of using MUUN skills is increased by": [
+                ""
+            ],
+            "the damage of attack skills is increased by": [
+                ""
+            ],
+            "(x)": [
+                ""
+            ]
+        }
+    }
+}
