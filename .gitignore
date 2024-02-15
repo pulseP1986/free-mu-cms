@@ -1,2 +1,17 @@
 
 application/data/sessions
+application/config/cms_config.json
+application/config/cms_config.json
+application/config/event_config.json
+application/config/locale_config.json
+application/config/meta_config.json
+application/config/plugin_config.json
+application/config/rankings_config.json
+application/config/security_config.json
+application/config/social_config.json
+application/config/table_config.json
+application/data/cache/servers_status\#en.dmn
+application/data/serverlist.json
+application/logs/Tracy/email-sent
+constants.php
+setup/data/install.lock
