@@ -1,0 +1,16 @@
+{
+	"name": "Gift Code",
+	"version": "1.0.6",
+	"description": "Generate gift codes for players with random prizes.",
+	"developed_by": "neo6",
+	"website": "http://dmncms.net",
+	"change_log":{
+		"1.0.0": "Initial Release",
+		"1.0.1": "Added character requirements",
+		"1.0.2": "Added version 1.2.3 support",
+		"1.0.3": "Added muun support in giftcodes",
+		"1.0.4": "Fix expirable items in inventory goes expired",
+		"1.0.5": "Added char class selection",
+		"1.0.6": "Added buff support"
+	  }
+}
