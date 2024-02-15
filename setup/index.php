@@ -13,7 +13,7 @@
 
 	use Tracy\Debugger;
 	
-	Debugger::enable(Debugger::PRODUCTION, BASEDIR . 'application' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'Tracy', /*'salvis1989@gmail.com'*/);
+	Debugger::enable(Debugger::PRODUCTION, BASEDIR . 'application' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'Tracy');
 	
 	set_exception_handler(function($e){
         print_exception($e);
