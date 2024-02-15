@@ -1,0 +1,14 @@
+{
+  "name": "MercadoPago",
+  "version": "1.0.5",
+  "description": "https://www.mercadopago.com.br payment system",
+  "developed_by": "neo6",
+  "website": "http://dmncms.net",
+  "change_log":{
+	"1.0.0": "Initial Release",
+	"1.0.2": "Added version 1.1.9 support",
+	"1.0.3": "Added version 1.2.0 support",
+	"1.0.4": "Fix price overflow",
+	"1.0.5": "Added version 1.2.3 support"
+  }
+}
