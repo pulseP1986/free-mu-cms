@@ -1,0 +1,26 @@
+.character{
+	background-image: url("../images/character.jpg");
+	width: 612px;
+	height: 44px;
+	display: table;
+	margin: 0px auto;
+	margin-top: 3px;
+	color: #d4c37f;
+	text-shadow: rgba(0, 0, 0, 0.27) 2px -6px 3px, #1b1414 0px 1px 3px;    cursor: pointer;
+}
+.title-name {
+	margin-top: 16px;
+	text-align: left;
+	margin-bottom: 0px;
+	padding-left: 20px;
+	font-weight: bolder;
+}
+.title-name span {
+	font-style: italic;
+	font-weight: lighter;
+	font-size: 9px;
+	color: #92908d;
+	float: right;
+	padding-right: 20px;
+}
+

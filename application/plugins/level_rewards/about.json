@@ -1,0 +1,10 @@
+{
+  "name": "Level Rewards",
+  "version": "1.0.0",
+  "description": "Gift your players with good rewards, based on level, master level, resets, grand resets.",
+  "developed_by": "neo6",
+  "website": "http://dmncms.net",
+  "change_log":{
+	"1.0.0": "Initial Release"
+  }
+}
