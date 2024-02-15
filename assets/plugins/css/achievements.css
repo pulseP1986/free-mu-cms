@@ -1,0 +1,216 @@
+.achievement {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  display:inline-block;
+  width: 282px;
+  margin: 2px;
+ vertical-align:top;
+}
+.achievement table { 
+  width:95%;
+  margin:8px
+}
+.ach-icon { 
+  text-align:center;
+  vertical-align:top;
+  width:50px;
+  padding:4px 2px;
+}
+/*.ach-icon img {
+  width:50px;
+  height:50px;
+}*/
+.ach-text { 
+  vertical-align:top;
+  width:170px;
+  height:50px;
+  padding:2px;
+}
+
+.progressbar {
+  background-color: #170908;
+  border-radius: 10px;
+  height: 15px;
+  overflow: hidden;
+  margin: 6px 0;
+  position: relative
+}
+.progressbar .stage {
+  height: 100%;
+  width: 0%;
+  float: left;
+}
+.stage.green {
+  background:#00b30f;
+  background: linear-gradient(to right, #c3e769,#00b30f);
+}
+.stage.orange {
+  background:#bb641b;
+  background: linear-gradient(to right, #d58139, #bb641b);
+}
+.stage.blue {
+  background:#00b5e6;
+  background: linear-gradient(to right, #0096bc,#00b5e6);
+}
+.stage.yellow {
+  background:#b3b523;
+  background: linear-gradient(to right, #c6c84d,#b3b523);
+}
+.ach-get span, .ach-job {
+  text-transform: uppercase;
+}
+.ach-job {
+  font-size:10px;
+  cursor:help;
+  color: #FF7900;
+}
+.ach-help-text {
+  display: none;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #230605;
+  color: #fdf3e5;
+  z-index: 1;
+  height: 48px;
+  font-size: 12px;
+  box-shadow: 0 1px 1px 0 #230605;
+}
+.ach-help-text p { padding: 0 4px; }
+#ach-popup { width:484px; }
+
+.ach-item-frame {
+  display: inline-block;
+  text-align:center;
+}
+.ach-item-control {
+  position:absolute;
+  bottom: 0;
+  right: 2px;
+  left:0;
+  z-index:2;
+  text-align:left;
+}
+.ach-item-control > .ach-give {
+  float: right;
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+  background: #5c5450;
+  border-radius: 4px 0;
+  color:#fff;
+  margin-right: -2px;
+  width: 22px;
+  height: 18px;
+  line-height: 18px;
+  transition-duration: 0.3s;
+  text-align:center;
+}
+.ach-item-control > .ach-give:hover { background-color: #a2260a; }
+.ach-item-control > .ach-item-num {
+    float: left;
+    background: #D8D8D8;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #5c5450;
+    height: 18px;
+    text-align: center;
+    line-height: 18px;
+    border-radius: 0 4px;
+}
+.ach-item-img, .ach-jewels-img {
+  display: block;
+  margin: 2px;
+  padding:12px 12px 16px 12px;
+  background-color:#211312;
+  border: 1px solid #5c5450;
+  box-shadow: inset 0 0 4px #524444;
+  border-radius: 4px;
+  transition-duration: 0.3s;
+  min-width: 60px;
+}
+.ach-item-img:hover, .ach-jewels-img:hover {
+  border: 1px solid #a2260a;
+}
+
+.inv-frame { 
+  border: 1px #211c19 solid;
+  border-radius: 4px;
+  margin: 2px 16px;
+  padding: 4px;
+}
+    
+.achievement  .progressbar { 
+  border: 1px solid #412c28;
+  margin: 0;
+  margin-top:6px;
+}
+.achievement .progressbar i {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: block;
+	font-size: 11px;
+	text-align: center;
+	text-transform: uppercase;
+	line-height: 15px;
+	color: #fff;
+}
+
+#ach-user-info {
+  text-align:center;
+}
+#ach-user-info > li {
+  display: inline-block;
+  font-size: 22px;
+  min-width: 120px;
+  vertical-align: top;
+  padding: 0 12px;
+}
+#ach-user-info > li > div {
+  background-color: #301f17;
+  border-radius: 6px;
+  padding:8px 4px;
+  margin-top: 30px;
+}
+#ach-user-info > li > div > span {
+  display: block;
+  text-transform: uppercase;
+  font-size: 10px;
+  border-top: 1px solid #250202;
+  color: #fdf3e5;
+  padding-top: 6px;
+  margin-top: 6px;
+}
+#ach-user-info > li > div .star-rating {
+  display:inline-block;
+  margin-bottom:8px;
+}
+#ach-user-info > li.user-image {
+  background-color:transparent;
+} 
+#ach-user-info > li.user-image img {
+  border-radius: 50%;
+  border: 3px solid #3d1610;
+  display:block;
+  margin-bottom:4px;
+}
+.present-box {
+  margin-bottom:6px;
+  line-height: 16px;
+}
+div.spacer2 {
+  clear: both;
+  font-size:0 !important;
+  line-height:0 !important;
+  overflow: hidden;
+}
+
+div.spacer2 { height: 12px; }
+
+
