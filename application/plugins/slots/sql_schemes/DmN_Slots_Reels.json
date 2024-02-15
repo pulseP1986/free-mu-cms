@@ -1,0 +1,47 @@
+{
+  "DmN_Slots_Reels": {
+    "create_query": "CREATE TABLE [dbo].[DmN_Slots_Reels]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+    "id": {
+      "type": "int",
+      "is_primary_key": 1,
+      "null": 0,
+      "identity": 1,
+      "default": ""
+    },
+    "server": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "reel": {
+      "type": "int",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "outcome": {
+      "type": "decimal(3, 1)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"probability": {
+      "type": "float",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"status": {
+      "type": "int",
+      "is_primary_key": 0,
+      "null": 0,
+      "identity": 0,
+      "default": "1"
+    }
+  }
+}

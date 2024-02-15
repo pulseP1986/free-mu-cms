@@ -1,0 +1,103 @@
+{
+  "DmN_Slots_Spins": {
+    "create_query": "CREATE TABLE [dbo].[DmN_Slots_Spins]([id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL) ON [PRIMARY]",
+    "id": {
+      "type": "int",
+      "is_primary_key": 1,
+      "null": 0,
+      "identity": 1,
+      "default": ""
+    },
+	"date": {
+      "type": "datetime",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"user_id": {
+      "type": "int",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"memb___id": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "server": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"window_id": {
+      "type": "varchar(50)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"action": {
+      "type": "varchar(20)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+    "bet": {
+      "type": "decimal(20, 2)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"reel1": {
+      "type": "decimal(3, 1)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"reel2": {
+      "type": "decimal(3, 1)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"reel3": {
+      "type": "decimal(3, 1)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"prize_id": {
+      "type": "int",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"payout_credits": {
+      "type": "decimal(10, 2)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    },
+	"payout_winnings": {
+      "type": "decimal(10, 2)",
+      "is_primary_key": 0,
+      "null": 1,
+      "identity": 0,
+      "default": ""
+    }
+  }
+}
