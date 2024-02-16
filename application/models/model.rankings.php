@@ -109,7 +109,6 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function check_cache($name, $identifier, $server, $time = 360)
         {
-
             $this->cache_name = ($this->class_filter == true) ? $name . '#' . $server . '#' . $this->c_class . '#' . $this->top : $name . '#' . $server . '#' . $this->top;
             $this->website->check_cache($this->cache_name, $identifier, $time);
         }
@@ -1077,7 +1076,7 @@
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function join_memb_stat($status, $bound = 'c.AccountId', $columns = ', m.IP,  m.ConnectStat', $server, $joinType = 'FULL JOIN')
+        private function join_memb_stat($status, $bound = 'c.AccountId', $columns = ', m.IP,  m.ConnectStat', $server = '', $joinType = 'FULL JOIN')
         {
             $sql = ['', ''];
             if($status == 1){
@@ -1222,54 +1221,31 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_mark($hex, $size = 16)
-        {
-            $pixelSize = $size / 8;
-            for($y = 0; $y < 8; $y++){
-                for($x = 0; $x < 8; $x++){
-                    $offset = ($y * 8) + $x;
-                    $Cuadrilla8x8[$y][$x] = substr($hex, $offset, 1);
-                }
-            }
-            $SuperCuadrilla = [];
-            for($y = 1; $y <= 8; $y++){
-                for($x = 1; $x <= 8; $x++){
-                    $bit = $Cuadrilla8x8[$y - 1][$x - 1];
-                    for($repiteY = 0; $repiteY < $pixelSize; $repiteY++){
-                        for($repite = 0; $repite < $pixelSize; $repite++){
-                            $translatedY = ((($y - 1) * $pixelSize) + $repiteY);
-                            $translatedX = ((($x - 1) * $pixelSize) + $repite);
-                            $SuperCuadrilla[$translatedY][$translatedX] = $bit;
-                        }
-                    }
-                }
-            }
-            $img = imagecreate($size, $size);
-            for($y = 0; $y < $size; $y++){
-                for($x = 0; $x < $size; $x++){
-                    $bit = $SuperCuadrilla[$y][$x];
-                    $color = substr($this->mark_color($bit), 1);
-                    $r = substr($color, 0, 2);
-                    $g = substr($color, 2, 2);
-                    $b = substr($color, 4, 2);
-                    $superPixel = imagecreate(1, 1);
-                    $cl = imagecolorallocatealpha($superPixel, hexdec($r), hexdec($g), hexdec($b), 0);
-                    imagefilledrectangle($superPixel, 0, 0, 1, 1, $cl);
-                    imagecopy($img, $superPixel, $x, $y, 0, 0, 1, 1);
-                }
-            }
-            header('Content-Type: image/png');
-            imagepng($img);
-            imagedestroy($img);
-        }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function mark_color($mark)
-        {
-            $colors = [0 => '#ffffff', 1 => '#000000', 2 => '#8c8a8d', 3 => '#ffffff', 4 => '#fe0000', 5 => '#ff8a00', 6 => '#ffff00', 7 => '#8cff01', 8 => '#00ff00', 9 => '#01ff8d', 'A' => '#00ffff', 'B' => '#008aff', 'C' => '#0000fe', 'D' => '#8c00ff', 'E' => '#8c00ff', 'F' => '#ff008c'];
-            if(array_key_exists(strtoupper($mark), $colors))
-                return $colors[strtoupper($mark)];
-            return $mark;
-        }
+		public function load_mark($hex, $size = 16){
+			$pixelSize = abs((int)$size) / 8;
+			$img = imagecreatetruecolor(8 * $pixelSize, 8 * $pixelSize);
+			$colors = ['ffffff','000000','8c8a8d','ffffff','fe0000','ff8a00','ffff00','8cff01','00ff00','01ff8d','00ffff','008aff','0000fe','8c00ff','ff00fe','ff008c'];
+			$transparent = imagecolorallocate($img, 204, 204, 204);
+			
+			imagecolortransparent($img, $transparent);
+			
+			for($y = 0; $y < 8; $y++){
+				for($x = 0; $x < 8; $x++){
+					$color_id = hexdec(substr($hex, ($y * 8) + $x, 1));
+					$r = '0x' . substr($colors[$color_id], 0, 2);
+					$g = '0x' . substr($colors[$color_id], 2, 2);
+					$b = '0x' . substr($colors[$color_id], 4, 2);
+					$row[$x] = $x * $pixelSize;
+					$row[$y] = $y * $pixelSize;
+					$row2[$x] = $row[$x] + $pixelSize;
+					$row2[$y] = $row[$y] + $pixelSize;
+					$color[$y][$x] = imagecolorallocate($img, hexdec($r), hexdec($g), hexdec($b));
+					imagefilledrectangle($img, (int)$row[$x], (int)$row[$y], (int)$row2[$x], (int)$row2[$y], $color[$y][$x]);
+				}
+			}
+
+			header('Content-type: image/webp');
+			imagewebp($img);
+			imagedestroy($img);
+		}
     }

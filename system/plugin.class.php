@@ -17,8 +17,7 @@
         private $scheme;
         private $table_name;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
+		public function __construct()
         {
             $this->registry = controller::get_instance();
             $this->config = load_class('config');
@@ -66,8 +65,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_plugin($data = [])
+		public function add_plugin($data = [])
         {
             try{
                 if(is_array($data)){
@@ -152,8 +150,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_sql_scheme($scheme_file)
+		public function add_sql_scheme($scheme_file)
         {
             $file = APP_PATH . DS . 'plugins' . DS . $this->plugin_class . DS . 'sql_schemes' . DS . $scheme_file . '.json';
             if(file_exists($file)){

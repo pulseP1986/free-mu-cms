@@ -2330,15 +2330,13 @@
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_item_info($id = '', $server)
+        public function get_item_info($id = '', $server = '')
         {
             if($id == '')
                 return false;
             $item = $this->website->db('web')->query('SELECT item_id, item_cat, exetype, name, luck, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, original_item_cat, total_bought, stick_level FROM DmN_Shopp WHERE id = ' . $this->website->db('web')->sanitize_var($id))->fetch();
             if($item){
-				
                 $this->iteminfo->setItemData($item['item_id'], $item['original_item_cat'], (int)$this->website->get_value_from_server($server, 'item_size'));
-				
                 $item['data'] = $this->iteminfo->item_data;
                 return $item;
             }
@@ -2541,7 +2539,7 @@
             return $this->accounts;
         }
 
-        public function load_char_list($page = 1, $per_page = 25, $server)
+        public function load_char_list($page, $per_page, $server)
         {
 																			 
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
@@ -2744,7 +2742,7 @@
             return $stmt->fetch_all();
         }
 
-        public function get_char_list($account, $id = -1, $server)
+        public function get_char_list($account, $id = -1, $server = null)
         {
             $sql = ($id != -1) ? [' AND '.$this->website->get_char_id_col($server).' != :id', [':account' => $account, ':id' => $id]] : ['', [':account' => $account]];
             $stmt = $this->game_db->prepare('SELECT '.$this->website->get_char_id_col($server).' AS id, Name FROM Character WHERE AccountId = :account' . $sql[0] . '');

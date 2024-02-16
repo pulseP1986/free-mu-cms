@@ -12,8 +12,7 @@
         private $method;
         private $args;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function route($request)
+		public function route($request)
         {
             $this->ctrl = $request->get_controller();
             $this->method = $request->get_method();
@@ -122,8 +121,7 @@
             throw new Exception('Controller ' . $this->ctrl . ' not found.');
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function check_plugin($plugin, $method, $args)
+		private function check_plugin($plugin, $method, $args)
         {
             $this->plugin_file = APP_PATH . DS . 'plugins' . DS . $plugin . DS . 'plugin.php';
             if(file_exists($this->plugin_file)){

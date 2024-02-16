@@ -157,7 +157,7 @@
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function socket_list($use_sockets = 1, $check_part = 1, $exe_type = 1, $cat)
+        public function socket_list($use_sockets, $check_part, $exe_type, $cat)
         {
             $exe_type = ($cat <= 5) ? 1 : 0;
             if($use_sockets == 1){
@@ -546,7 +546,7 @@
             }
         }
 
-        private function check_server_vip($query, $user = false, $server)
+        private function check_server_vip($query, $user, $server)
         {
             $stmt = $this->website->db('account', $server)->prepare($query);
             $stmt->execute([':account' => $user]);
@@ -554,7 +554,7 @@
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function update_server_vip($viptime, $paycode, $query, $user = false, $server)
+        private function update_server_vip($viptime, $paycode, $query, $user, $server)
         {
             $stmt = $this->website->db('account', $server)->prepare($query);
             $data = [':until_date' => ($paycode != -1) ? date('Y-m-d H:i:s', $viptime) : $viptime];
@@ -566,7 +566,7 @@
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function insert_server_vip($viptime, $paycode, $query, $user = false, $server)
+        private function insert_server_vip($viptime, $paycode, $query, $user, $server)
         {
             $stmt = $this->website->db('account', $server)->prepare($query);
             $data = [':account' => $user, ':until_date' => ($paycode != -1) ? date('Y-m-d H:i:s', $viptime) : $viptime];

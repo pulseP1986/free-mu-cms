@@ -38,7 +38,7 @@
                 } else{
                     @fclose($check);
                     $server_load = $this->db($db)->cached_query('online_count_s_' . $cache_name, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 ' . $this->server_code($gs_list) . '', [], $cache_time);
-                    $percentage = floor(100 * $server_load[0]['count'] / (int)$servers['max_players']);
+                    $percentage = floor(100 * $server_load[0]['count'] / 1000);
                     $this->server = [
 						'server' => $name, 
 						'status' => __('Online') . ': ', 
@@ -61,6 +61,7 @@
 			$this->check_cache('servers_status#'.$this->config->language(), 'servers', $cache_time);
 			
             if(!$this->cached){
+				$this->servers = [];
 				foreach($serverlist as $key => $servers){
 					if($servers['visible'] == 1){
 						$check = @fsockopen($servers['gs_ip'], $servers['gs_port'], $errno, $errmsg, 1.5);
@@ -636,7 +637,6 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function server_list($sv = '', $check_multi_db_acc = false)
         {
-            use_funcs("DmN", "cms", "DmN");
             return server_list($sv, $check_multi_db_acc);
         }
 

@@ -2,9 +2,9 @@
 
     ob_start();
 	// ===================================================================================================
-	// Package      : DmN MuCMS
-	// Version      : 1.2.3
-	// Author       : neo6 <Salvis87@inbox.lv>
+	// Package      : https://github.com/pulseP1986/free-mu-cms
+	// Version      : 1.2.4
+	// Author       : https://github.com/pulseP1986
 	// ===================================================================================================
     $host = isset($_SERVER['HTTP_HOST']) ? htmlspecialchars($_SERVER['HTTP_HOST']) : htmlspecialchars(getenv('HTTP_HOST'));
     $self = isset($_SERVER['PHP_SELF']) ? htmlspecialchars($_SERVER['PHP_SELF']) : htmlspecialchars(getenv('PHP_SELF'));

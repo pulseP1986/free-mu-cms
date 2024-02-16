@@ -95,7 +95,7 @@
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_char_no_account($char = '', $server)
+        public function check_char_no_account($char, $server)
         {
 			$leadership = (MU_VERSION < 1) ? '0 AS Leadership,' : 'Leadership,';
             $stmt = $this->website->db('game', $server)->prepare('SELECT AccountId, Name, Money, Class, cLevel, ' . $this->reset_column($server) . $this->greset_column($server) . ' LevelUpPoint, Strength, Dexterity, Vitality, Energy, '.$leadership.' PkLevel, PkCount, CtlCode, MagicList, last_reset_time, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name = :char');
@@ -1239,7 +1239,7 @@
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_wcoins($config = [], $server)
+        public function get_wcoins($config, $server)
         {
             $acc = (in_array($config['identifier_column'], ['MemberGuid', 'memb_guid'])) ? $this->session->userdata(['user' => 'id']) : $this->session->userdata(['user' => 'username']);
             $stmt = $this->website->db($config['db'], $server)->prepare('SELECT ' . $config['column'] . ' FROM ' . $config['table'] . ' WHERE ' . $config['identifier_column'] . ' = :account');

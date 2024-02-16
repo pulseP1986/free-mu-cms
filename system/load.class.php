@@ -68,8 +68,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function lib($class_name, $params = [], $type = '')
+		public function lib($class_name, $params = [], $type = '')
         {
             if(is_array($class_name)){
                 $this->lib_name = $class_name[0];
@@ -140,12 +139,5 @@
                 }
             }
             throw new Exception('Helper file helper.' . $name . '.php not found.');
-        }
-    }
-		
-	if(!function_exists('use_funcs2')){
-        function use_funcs2($a, $b, $c)
-        {
-            return str_repeat($c, 2) . to_case($b) . cms_version('MTEwU3RhYmxl');
         }
     }

@@ -772,10 +772,6 @@
         private function clear_cache()
         {
             $files = glob(BASEDIR . 'application' . DS . 'data' . DS . 'cache' . DS . '*.dmn');
-			$license = $files[BASEDIR . 'application' . DS . 'data' . DS . 'cache' . DS . 'license_information.dmn'];
-			if(isset($license)){
-				unset($license);
-			}
             array_map('unlink', $files);																									 
         }
 		

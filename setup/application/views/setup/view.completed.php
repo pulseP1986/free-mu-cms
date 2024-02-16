@@ -52,7 +52,7 @@
                             <h3 class="panel-title">DmN MuCMS <?php echo $this->Msetup->get_cms_version() ?></h3>
                         </div>
                         <div class="panel-body">
-                            Congratulations, your <a href="http://dmncms.net" target="_blank">DmN
+                            Congratulations, your <a href="https://github.com/pulseP1986/free-mu-cms" target="_blank">DmN
                                 MuCMS <?php echo $this->Msetup->get_cms_version() ?></a> is now installed and ready to
                             use. Below are some links you may find useful.<br/><br/>
                             <ul class="list-group">
@@ -61,9 +61,6 @@
                                 <li class="list-group-item"><a
                                             href="<?php echo $this->config->base_url . '../'; ?>admincp">Website
                                         AdminCP</a></li>
-                                <li class="list-group-item"><a
-                                            href="http://dmncms.net/clients/purchases/">Client
-                                        Area</a></li>
                             </ul>
                         </div>
                     </div>

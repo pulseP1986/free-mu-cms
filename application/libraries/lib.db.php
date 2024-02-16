@@ -152,7 +152,6 @@
             return $this;
         }
 
-		// @ioncube.dk use_funcs2("DmN ","cms", "DmN") -> "DmNDmNCMS110Stable" RANDOM
         public function execute($params = [])
         {
             if(defined('LOG_SQL')){

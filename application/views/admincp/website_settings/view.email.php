@@ -48,10 +48,6 @@
                                         echo 'selected="selected"';
                                     } ?>>SendMail
                                     </option>
-                                    <option value="3" <?php if(isset($email_config['mail_mode']) && $email_config['mail_mode'] == 3){
-                                        echo 'selected="selected"';
-                                    } ?>>SparkPost
-                                    </option>
                                 </select>
                             </div>
                         </div>

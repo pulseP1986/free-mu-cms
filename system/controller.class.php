@@ -10,8 +10,7 @@
         private $translator;
         private $translations;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct(config $config)
+		public function __construct(config $config)
         {
             static $translation_data = null;
             date_default_timezone_set($config->config_entry('main|timezone'));
@@ -43,8 +42,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function setLocalization($config)
+		private function setLocalization($config)
         {
             if(!isset($_COOKIE['dmn_language'])){
 				if(defined('SWITCH_LANG_ON_LOCATION') && SWITCH_LANG_ON_LOCATION == true){
@@ -78,8 +76,7 @@
         private static $_instance;
         public $translations;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
+		public function __construct()
         {
             self::$_instance = $this;
             foreach($this->is_loaded() as $key => $class){
@@ -99,14 +96,12 @@
             return self::$_instance;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function load_class($class)
+		protected function load_class($class)
         {
             return load_class($class);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function is_loaded()
+		protected function is_loaded()
         {
             return is_loaded();
         }

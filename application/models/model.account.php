@@ -274,7 +274,7 @@
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function resend_activation_email($email, $user, $pwd, $server = '', $code)
+        public function resend_activation_email($email, $user, $pwd, $server, $code)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'reg_email_pattern_resend_activation.html');
             $body = str_replace('###USERNAME###', $user, $body);
@@ -803,12 +803,13 @@
                             throw new Exception('SMTP Server is not set.');
                         if(!isset($this->vars['email_config']['smtp_port']) || $this->vars['email_config']['smtp_port'] == '' || !is_numeric($this->vars['email_config']['smtp_port']))
                             throw new Exception('SMTP Port is not set.');
-                        $transport = Swift_SmtpTransport::newInstance($this->vars['email_config']['smtp_server'], (int)$this->vars['email_config']['smtp_port']);
+                        $transport = new \Swift_SmtpTransport($this->vars['email_config']['smtp_server'], (int)$this->vars['email_config']['smtp_port']);
                         if($this->vars['email_config']['smtp_use_ssl'] == 1){
                             $transport->setEncryption('ssl');
                         }
                         if($this->vars['email_config']['smtp_use_ssl'] == 2){
                             $transport->setEncryption('tls');
+                            $transport->setStreamOptions(['ssl' => ['allow_self_signed' => true, 'verify_peer_name' => false, 'verify_peer' => false, 'tlsv1.2' => true]]);
                         }
                         if($this->vars['email_config']['smtp_username'] != ''){
                             $transport->setUsername($this->vars['email_config']['smtp_username']);
@@ -816,77 +817,59 @@
                         if($this->vars['email_config']['smtp_password'] != ''){
                             $transport->setPassword($this->vars['email_config']['smtp_password']);
                         }
-                        $mailer = Swift_Mailer::newInstance($transport);
-                        $message = Swift_Message::newInstance()->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
+                        $mailer = new \Swift_Mailer($transport);
+                        $message = (new \Swift_Message)->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
                         if(!$mailer->send($message, $failures)){
                             $this->error = 'Failed sending email to ' . print_r($failures, 1);
                             return false;
                         }
                         return true;
-                    } catch(Exception $e){
+                    } catch(\Exception $e){
                         $this->error = $e->getMessage();
-                    } catch(Swift_ConnectionException $e){
+                    } catch(\Swift_ConnectionException $e){
                         $this->error = 'There was a problem communicating with the SMTP-Server. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_Message_MimeException $e){
+                    } catch(\Swift_Message_MimeException $e){
                         $this->error = 'There was an unexpected problem building the email. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_TransportException $e){
+                    } catch(\Swift_TransportException $e){
                         $this->error = $e->getMessage();
                     }
-                    break;
+                break;
                 case 1:
                     try{
-                        $transport = Swift_MailTransport::newInstance();
-                        $mailer = Swift_Mailer::newInstance($transport);
-                        $message = Swift_Message::newInstance()->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
+                        $transport = \Swift_MailTransport::newInstance();
+                        $mailer = new \Swift_Mailer($transport);
+                        $message = (new \Swift_Message)->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
                         if(!$mailer->send($message, $failures)){
                             $this->error = 'Failed sending email to ' . print_r($failures, 1);
                             return false;
                         }
                         return true;
-                    } catch(Swift_ConnectionException $e){
+                    } catch(\Swift_ConnectionException $e){
                         $this->error = 'There was a problem communicating with the SMTP-Server. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_Message_MimeException $e){
+                    } catch(\Swift_Message_MimeException $e){
                         $this->error = 'There was an unexpected problem building the email. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_TransportException $e){
+                    } catch(\Swift_TransportException $e){
                         $this->error = $e->getMessage();
                     }
-                    break;
+                break;
                 case 2:
                     try{
-                        $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
-                        $mailer = Swift_Mailer::newInstance($transport);
-                        $message = Swift_Message::newInstance()->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
+                        $transport = new \Swift_SendmailTransport('/usr/sbin/sendmail -bs');
+                        $mailer = new \Swift_Mailer($transport);
+                        $message = (new \Swift_Message)->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
                         if(!$mailer->send($message, $failures)){
                             $this->error = 'Failed sending email to ' . print_r($failures, 1);
                             return false;
                         }
                         return true;
-                    } catch(Swift_ConnectionException $e){
+                    } catch(\Swift_ConnectionException $e){
                         $this->error = 'There was a problem communicating with the SMTP-Server. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_Message_MimeException $e){
+                    } catch(\Swift_Message_MimeException $e){
                         $this->error = 'There was an unexpected problem building the email. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_TransportException $e){
+                    } catch(\Swift_TransportException $e){
                         $this->error = $e->getMessage();
                     }
-                    break;
-                case 3:
-                    try{
-                        $transport = SwiftSparkPost\Transport::newInstance($this->vars['email_config']['smtp_password']);
-                        $mailer = Swift_Mailer::newInstance($transport);
-                        $message = Swift_Message::newInstance()->setSubject($subject)->setFrom([$this->vars['email_config']['server_email'] => $this->config->config_entry('main|servername')])->setTo([$recipients])->setBody($message)->setContentType('text/html');
-                        if(!$mailer->send($message, $failures)){
-                            $this->error = 'Failed sending email to ' . print_r($failures, 1);
-                            return false;
-                        }
-                        return true;
-                    } catch(Swift_ConnectionException $e){
-                        $this->error = 'There was a problem communicating with the SMTP-Server. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_Message_MimeException $e){
-                        $this->error = 'There was an unexpected problem building the email. Error-Text: ' . $e->getMessage();
-                    } catch(Swift_TransportException $e){
-                        $this->error = $e->getMessage();
-                    }
-                    break;
+                break;
             }
         }
 
@@ -895,7 +878,7 @@
             return ($this->session->userdata(['user' => 'pass']) == sha1($this->vars['old_password']));
         }
 
-        public function get_amount_of_credits($name, $payment_method = 1, $server, $id = false)
+        public function get_amount_of_credits($name, $payment_method, $server, $id = false)
         {
             $status = $this->website->get_user_credits_balance($name, $server, $payment_method, $id);
             return $status['credits'];
@@ -1192,7 +1175,7 @@
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_mmotop_voters($rewards = [0, 0], $type, $server)
+        public function check_mmotop_voters($rewards, $type, $server)
         {
             $query = $this->website->db('web')->query('SELECT unid, character, vote_type FROM DmN_Mmotop_Stats WHERE status = 0 AND server = \'' . $this->website->db('web')->sanitize_var($this->website->c($server)) . '\'')->fetch_all();
             foreach($query as $value){

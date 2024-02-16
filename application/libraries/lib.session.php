@@ -282,7 +282,7 @@
             $this->sidRegexp = $config['sidRegexp'];
         }
 
-        public function open($savePath, $name)
+        public function open($savePath, $name): bool
         {
             if(!is_dir($savePath)){
                 if(!mkdir($savePath, 0700, true)){
@@ -296,7 +296,7 @@
             return $this->success;
         }
 
-        public function read($sessionID)
+        public function read($sessionID): string|false
         {
             if($this->fileHandle === null){
                 $this->fileNew = !file_exists($this->filePath . $sessionID);
@@ -332,7 +332,7 @@
             return $session_data;
         }
 
-        public function write($sessionID, $sessionData)
+        public function write($sessionID, $sessionData): bool
         {
             if($sessionID !== $this->sessionID && ($this->close() === $this->failure || $this->read($sessionID) === $this->failure)){
                 return $this->failure;
@@ -362,7 +362,7 @@
             return $this->success;
         }
 
-        public function close()
+        public function close(): bool
         {
             if(is_resource($this->fileHandle)){
                 flock($this->fileHandle, LOCK_UN);
@@ -372,7 +372,7 @@
             return $this->success;
         }
 
-        public function destroy($session_id)
+        public function destroy($session_id): bool
         {
             if($this->close() === $this->success){
                 if(file_exists($this->filePath . $session_id)){
@@ -391,7 +391,7 @@
             return $this->failure;
         }
 
-        public function gc($maxlifetime)
+        public function gc($maxlifetime): int|false
         {
             if(!is_dir($this->savePath) || ($directory = opendir($this->savePath)) === false){
                 writelog("Session: Garbage collector couldn't list files under directory '" . $this->savePath . "'.", "session_error");

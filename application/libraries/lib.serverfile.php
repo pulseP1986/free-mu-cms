@@ -181,7 +181,6 @@
             return $this;
         }
 
-		// @ioncube.dk use_funcs2("DmN ","cms", "DmN") -> "DmNDmNCMS110Stable" RANDOM
         public function exe_common()
         {
 			$file = 'exe_common#' . $this->lang . '.dmn';
@@ -326,7 +325,6 @@
             return $this;
         }
 		
-		// @ioncube.dk use_funcs2("DmN ","cms", "DmN") -> "DmNDmNCMS110Stable" RANDOM
 		public function earring_option_name()
         {
 			$file = 'earringoptionname#' . $this->lang . '.dmn';

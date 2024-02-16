@@ -3,7 +3,7 @@
     session_save_path(realpath(dirname(__FILE__) . '/..') . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'sessions');
     session_start();
     error_reporting(E_ALL);
-    define('PHP_VER_MIN', '7.1.0');
+    define('PHP_VER_MIN', '8.1.0');
     define('INSTALL_DIR', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
     if(file_exists(realpath(dirname(__FILE__) . '/..') . DIRECTORY_SEPARATOR . 'constants.php')){
         require_once(realpath(dirname(__FILE__) . '/..') . DIRECTORY_SEPARATOR . 'constants.php');
