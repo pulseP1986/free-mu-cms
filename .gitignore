@@ -1,4 +1,4 @@
-
+.idea
 application/data/sessions
 application/config/cms_config.json
 application/config/event_config.json
@@ -10,8 +10,10 @@ application/config/security_config.json
 application/config/social_config.json
 application/config/table_config.json
 application/data/cache
+application/data/shop
 application/data/serverlist.json
-application/logs/Tracy/email-sent
+application/logs/*
+!application/logs/Tracy
 constants.php
 setup/data/install.lock
 application/config/scheduler_config.json
