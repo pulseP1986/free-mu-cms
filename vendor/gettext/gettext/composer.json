@@ -22,11 +22,11 @@
         "gettext/languages": "^2.3"
     },
     "require-dev": {
-        "illuminate/view": "*",
+        "illuminate/view": "^5.0.x-dev",
         "twig/twig": "^1.31|^2.0",
         "twig/extensions": "*",
         "symfony/yaml": "~2",
-        "phpunit/phpunit": "^4.8|^5.7",
+        "phpunit/phpunit": "^4.8|^5.7|^6.5",
         "squizlabs/php_codesniffer": "^3.0"
     },
     "suggest": {
@@ -50,5 +50,10 @@
             "phpunit",
             "phpcs"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": false
+        }
     }
 }

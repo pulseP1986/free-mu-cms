@@ -1,8 +1,8 @@
 {
-  "name": "dmncms.net/dmnmucms",
+  "name": "pulsep1986/free-mu-cms",
   "description": "A professional content management system for MuOnline private servers",
-  "version": "1.2.1",
-  "homepage": "https://dmncms.net",
+  "version": "1.2.4",
+  "homepage": "https://github.com/pulseP1986/free-mu-cms",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
@@ -12,18 +12,17 @@
     }
   ],
   "support": {
-    "email": "info@dmncms.net",
-    "issues": "https://dmncms.net/bugtracker/"
+    "issues": "https://github.com/pulseP1986/free-mu-cms/issues"
   },
   "require": {
-    "gettext/gettext": "v4.4.3",
-    "swiftmailer/swiftmailer": "5.x-dev",
-    "f500/swiftmailer-sparkpost": "v1.3.5",
-    "geoip/geoip": "v1.17",
+    "php": ">=8.1.0",
+    "ext-mbstring": "*",
+    "gettext/gettext": "v4.8.11",
+    "swiftmailer/swiftmailer": "v6.3",
+    "geoip2/geoip2": "v2.13.0",
     "stripe/stripe-php": "v7.27.3",
-    "tracy/tracy": "^2.7",
+    "tracy/tracy": "v2.9.8",
     "coinbase/coinbase-commerce": "1.0.11",
-    "phpviet/omnipay-momo": "1.0.3",
     "xendit/xendit-php": "2.17.1",
     "robthree/twofactorauth": "1.8.2"
   }

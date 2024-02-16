@@ -7,6 +7,7 @@ namespace Gettext;
  */
 class Translation
 {
+    protected $id;
     protected $context;
     protected $original;
     protected $translation = '';
@@ -16,6 +17,7 @@ class Translation
     protected $comments = [];
     protected $extractedComments = [];
     protected $flags = [];
+    protected $disabled = false;
 
     /**
      * Generates the id of a translation (context + glue + original).
@@ -28,6 +30,21 @@ class Translation
     public static function generateId($context, $original)
     {
         return "{$context}\004{$original}";
+    }
+
+    /**
+     * Create a new instance of a Translation object.
+     *
+     * This is a factory method that will work even when Translation is extended.
+     *
+     * @param string $context  The context of the translation
+     * @param string $original The original string
+     * @param string $plural   The original plural string
+     * @return static New Translation instance
+     */
+    public static function create($context, $original, $plural = '')
+    {
+        return new static($context, $original, $plural);
     }
 
     /**
@@ -69,13 +86,29 @@ class Translation
     }
 
     /**
+     * Sets the id of this translation.
+     * @warning The use of this function to set a custom ID will prevent
+     *  Translations::find from matching this translation.
+     *
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+
+    /**
      * Returns the id of this translation.
      *
      * @return string
      */
     public function getId()
     {
-        return static::generateId($this->context, $this->original);
+        if ($this->id === null) {
+            return static::generateId($this->context, $this->original);
+        }
+        return $this->id;
     }
 
     /**
@@ -89,6 +122,30 @@ class Translation
     public function is($context, $original = '')
     {
         return (($this->context === $context) && ($this->original === $original)) ? true : false;
+    }
+
+    /**
+     * Enable or disable the translation
+     *
+     * @param bool $disabled
+     *
+     * @return self
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = (bool) $disabled;
+
+        return $this;
+    }
+
+    /**
+     * Returns whether the translation is disabled
+     *
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
     }
 
     /**

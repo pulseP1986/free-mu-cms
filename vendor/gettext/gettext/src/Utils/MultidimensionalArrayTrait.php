@@ -22,7 +22,7 @@ trait MultidimensionalArrayTrait
      *
      * @return array
      */
-    private static function toArray(Translations $translations, $includeHeaders, $forceArray = false)
+    protected static function toArray(Translations $translations, $includeHeaders, $forceArray = false)
     {
         $pluralForm = $translations->getPluralForms();
         $pluralSize = is_array($pluralForm) ? ($pluralForm[0] - 1) : null;
@@ -30,11 +30,15 @@ trait MultidimensionalArrayTrait
 
         if ($includeHeaders) {
             $messages[''] = [
-                '' => [self::generateHeaders($translations)],
+                '' => [static::generateHeaders($translations)],
             ];
         }
 
         foreach ($translations as $translation) {
+            if ($translation->isDisabled()) {
+                continue;
+            }
+
             $context = $translation->getContext();
             $original = $translation->getOriginal();
 
@@ -65,7 +69,7 @@ trait MultidimensionalArrayTrait
      * @param array        $messages
      * @param Translations $translations
      */
-    private static function fromArray(array $messages, Translations $translations)
+    protected static function fromArray(array $messages, Translations $translations)
     {
         if (!empty($messages['domain'])) {
             $translations->setDomain($messages['domain']);
@@ -78,7 +82,7 @@ trait MultidimensionalArrayTrait
         foreach ($messages['messages'] as $context => $contextTranslations) {
             foreach ($contextTranslations as $original => $value) {
                 if ($context === '' && $original === '') {
-                    self::extractHeaders(is_array($value) ? array_shift($value) : $value, $translations);
+                    static::extractHeaders(is_array($value) ? array_shift($value) : $value, $translations);
                     continue;
                 }
 

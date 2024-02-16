@@ -13,9 +13,9 @@ abstract class Extractor implements ExtractorInterface
      */
     public static function fromFile($file, Translations $translations, array $options = [])
     {
-        foreach (self::getFiles($file) as $file) {
+        foreach (static::getFiles($file) as $file) {
             $options['file'] = $file;
-            static::fromString(self::readFile($file), $translations, $options);
+            static::fromString(static::readFile($file), $translations, $options);
         }
     }
 
@@ -48,13 +48,13 @@ abstract class Extractor implements ExtractorInterface
             $files = [];
 
             foreach ($file as $f) {
-                $files = array_merge($files, self::getFiles($f));
+                $files = array_merge($files, static::getFiles($f));
             }
 
             return $files;
         }
 
-        throw new InvalidArgumentException('The first argumet must be string or array');
+        throw new InvalidArgumentException('The first argument must be string or array');
     }
 
     /**

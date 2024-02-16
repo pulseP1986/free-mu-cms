@@ -3,7 +3,6 @@ Gettext
 
 [![Build Status](https://travis-ci.org/oscarotero/Gettext.png?branch=master)](https://travis-ci.org/oscarotero/Gettext)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/oscarotero/Gettext/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/oscarotero/Gettext/?branch=master)
-[![Reference Status](https://www.versioneye.com/php/gettext:gettext/reference_badge.svg?style=flat)](https://www.versioneye.com/php/gettext:gettext/references)
 [![Latest Stable Version](https://poser.pugx.org/gettext/gettext/v/stable.svg)](https://packagist.org/packages/gettext/gettext)
 [![Total Downloads](https://poser.pugx.org/gettext/gettext/downloads.svg)](https://packagist.org/packages/gettext/gettext)
 [![Monthly Downloads](https://poser.pugx.org/gettext/gettext/d/monthly.png)](https://packagist.org/packages/gettext/gettext)
@@ -115,7 +114,7 @@ The benefits of using the functions provided by this library (`__()` instead `_(
 
 * You are using the same functions, no matter whether the translations are provided by gettext extension or any other method.
 * You can use variables easier because `sprintf` functionality is included. For example: `__('Hello %s', 'world')` instead `sprintf(_('Hello %s'), 'world')`.
-* You can also use named placeholders if the second argument is an array. For example: `__('Hello %name%', ['%name' => 'world'])` instead of `strtr(_('Hello %name%'), ['%name%' => 'world'])`.
+* You can also use named placeholders if the second argument is an array. For example: `__('Hello %name%', ['%name%' => 'world'])` instead of `strtr(_('Hello %name%'), ['%name%' => 'world'])`.
 
 ## Translation
 
@@ -149,10 +148,10 @@ $translations = new Gettext\Translations();
 $translations[] = new Gettext\Translation('comments', 'One comment', '%s comments');
 
 //Or using the "insert" method
-$insertedTranslation = $translations->insert('comments', 'One comments', '%s comments');
+$insertedTranslation = $translations->insert('comments', 'One comment', '%s comments');
 
 //Find a specific translation
-$translation = $translations->find('comments', 'One comments');
+$translation = $translations->find('comments', 'One comment');
 
 //Edit headers, domain, etc
 $translations->setHeader('Last-Translator', 'Oscar Otero');
@@ -203,6 +202,7 @@ Name | Description | Example
 **Xliff**          | Gets the messages from [xliff (2.0)](http://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html). | [example](https://github.com/oscarotero/Gettext/blob/master/tests/assets/po/Xliff.xlf)
 **Yaml**           | Gets the messages from yaml. | [example](https://github.com/oscarotero/Gettext/blob/master/tests/assets/po/Yaml.yml)
 **YamlDictionary** | Gets the messages from a yaml (without plurals and context). | [example](https://github.com/oscarotero/Gettext/blob/master/tests/assets/po/YamlDictionary.yml)
+**VueJs**          | Gets the messages from a VueJs template. | [example](https://github.com/oscarotero/Gettext/blob/master/tests/assets/vuejs/input.vue)
 
 ## Generators
 
@@ -227,7 +227,7 @@ $translations = Gettext\Translations::fromPhpCodeFile('templates/index.php');
 $translations->toPoFile('locales/en.po');
 
 //Export to a po string
-$content = $translatons->toPoString();
+$content = $translations->toPoString();
 file_put_contents('locales/en.po', $content);
 ```
 
