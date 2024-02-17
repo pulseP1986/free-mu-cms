@@ -5,7 +5,7 @@
     <p class="pull-left">&copy; <a href="<?php echo $this->config->base_url; ?>"
                                    target="_blank"><?php echo $this->config->config_entry('main|servername'); ?></a> <?php echo date('Y', time()); ?>
     </p>
-    <p class="pull-right">powered by: <a href="http://dmncms.net">DmN MuCMS</a></p>
+    <p class="pull-right">powered by: <a href="https://github.com/pulseP1986/free-mu-cms">Free MuCMS (originally DmN MuCMS)</a></p>
 </footer>
 <style>@import url('https://fonts.googleapis.com/css?family=Droid+Sans:400,700');</style>
 <style>@import url(https://fonts.googleapis.com/css?family=Shojumaru);</style>

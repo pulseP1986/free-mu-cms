@@ -100,9 +100,6 @@
             <li class="nav-header hidden-tablet">Guides Manager</li>
             <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/list-guides"><i class="icon-pencil"></i><span class="hidden-tablet"> List Guides</span></a></li>
             <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/add-guide"><i  class="icon-pencil"></i><span class="hidden-tablet"> Add Guide</span></a></li>
-			 <li class="nav-header hidden-tablet">Drop Manager</li>
-            <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/list-drops"><i class="icon-pencil"></i><span class="hidden-tablet"> List Drops</span></a></li>
-            <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/add-drop"><i class="icon-pencil"></i><span class="hidden-tablet"> Add Drop</span></a></li>				
         </ul>
     </div>
 </div>
