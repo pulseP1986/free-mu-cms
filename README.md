@@ -6,3 +6,5 @@ For php 7 use v1.2.3.9
 Discord channel: https://discord.gg/rgqy7AjM
 
 My discord: pulse1986 if you have any issues.
+
+I have enought knowledge to try to maintain this and even add new stuff for free as much as my time allows me.
