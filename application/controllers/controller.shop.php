@@ -62,8 +62,7 @@
             $this->load->helper('meta');
             $this->load->helper('webshop');
             if($this->session->userdata(['user' => 'server'])){
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-				$this->load->lib("createitem", [MU_VERSION, SOCKET_LIBRARY, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size')]);
+                $this->load->lib("createitem", [MU_VERSION, SOCKET_LIBRARY, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size')]);
             }
             $this->load->lib("pagination");
             $this->load->lib("itemimage");
@@ -587,7 +586,7 @@
                                         } else{
                                             $this->calculate_price();
                                             $this->generate_item();
-                                            if($vault = $this->Mshop->get_vault_content()){
+                                            if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                                 $space = $this->Mshop->check_space($vault['Items'], $this->item_info['data']['x'], $this->item_info['data']['y'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_hor_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_ver_size'));
                                                 if($space === null){
                                                     json(['error' => $this->Mshop->errors[0]]);
@@ -613,7 +612,7 @@
                                                     charge:
                                                     $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->price, $this->payment_method);
                                                     $this->Maccount->add_account_log('Bought Shop Item For ' . $this->website->translate_credits($this->payment_method, $this->session->userdata(['user' => 'server'])) . '', -$this->price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                    $this->Mshop->update_warehouse();
+                                                    $this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     $this->Mshop->set_total_bought(hexdec(substr($this->item_hex, 0, 2)), hexdec(substr($this->item_hex, 18, 1)));
                                                     $this->Mshop->log_purchase($this->item_hex, $this->price, $this->payment_method);
                                                     json(['success' => __('Thank You, for your purchase.') . ' ' . __('Your item was moved into warehouse.'), 'price' => $this->price, 'payment_method' => $this->payment_method]);
@@ -719,7 +718,7 @@
                                         break;
                                 }
                                 check_space:
-                                if($vault = $this->Mshop->get_vault_content()){
+                                if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                     $space = [];
                                     $new_items = false;
                                     $not_added_items = [];
@@ -748,12 +747,12 @@
                                                     $left_items[] = $items[2];
                                                 }
                                             }
-                                            $this->Mshop->update_warehouse();
+                                            $this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $total_price, $price_type);
                                             $this->Maccount->add_account_log('Bought Shop Items For ' . $this->website->translate_credits($price_type, $this->session->userdata(['user' => 'server'])) . '', -$total_price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             json(['success' => __('Thank You, for your purchase.') . ' ' . sprintf(__('%d was not added to warehouse.'), $total_not_added_items), 'price' => $total_price, 'payment_method' => $price_type, 'left_items' => $left_items]);
                                         } else{
-                                            $this->Mshop->update_warehouse();
+                                            $this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $total_price, $price_type);
                                             $this->Maccount->add_account_log('Bought Shop Items For ' . $this->website->translate_credits($price_type, $this->session->userdata(['user' => 'server'])) . '', -$total_price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             json(['success' => __('Thank You, for your purchase.') . ' ' . __('Your items was moved into warehouse.'), 'price' => $total_price, 'payment_method' => $price_type, 'left_items' => []]);
@@ -954,7 +953,7 @@
                 $this->createitem->cat($this->item_info['original_item_cat']);
                 $this->createitem->refinery($this->ref);
                 $this->createitem->harmony($this->harmony);
-                $this->createitem->serial(array_values($this->Mshop->generate_serial())[0]);
+                $this->createitem->serial(array_values($this->Mshop->generate_serial($this->session->userdata(['user' => 'server'])))[0]);
                 if($this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64){
                     $this->createitem->serial2(true);
                 }
@@ -1042,7 +1041,7 @@
                 $this->load->model('character');
                 $this->vars['level_config'] = $this->config->values('buylevel_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['level_config']['active'] == 1){
-                    $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                    $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.buy_level', $this->vars);
                 } else{
                     $this->disabled();
@@ -1057,7 +1056,7 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('buygm')){
                     $this->load->model('character');
-                    $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                    $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.buy_gm', $this->vars);
                 }
             } else{
@@ -1070,7 +1069,7 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('buypoints')){
                     $this->load->model('character');
-                    $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                    $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.buy_statpoints', $this->vars);
                 }
             } else{
@@ -1089,7 +1088,7 @@
                         $this->disabled();
                     } else{
                         $this->load->model('character');
-                        $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                        $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                         $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.change_class', $this->vars);
                     }
                 }
@@ -1166,7 +1165,7 @@
                                                 $this->Maccount->set_vip_session($viptime, $this->vars['vip_data']);
                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
                                                 if($this->vars['vip_data']['wcoins'] > 0 && $table_config['wcoins']['table'] != '' && $table_config['wcoins']['column'] != ''){
-													$this->Mcharacter->add_wcoins($this->vars['vip_data']['wcoins'], $table_config['wcoins']);
+													$this->Mcharacter->add_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['vip_data']['wcoins'], $table_config['wcoins']);
 												}
 												$this->Maccount->add_account_log('Purchased vip ' . $this->vars['vip_data']['package_title'] . ' package for ' . $this->website->translate_credits($this->vars['vip_data']['payment_type'], $this->session->userdata(['user' => 'server'])) . '', -$this->vars['vip_data']['price'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                 if($this->config->values('email_config', 'vip_purchase_email') == 1){
@@ -1196,7 +1195,7 @@
 												$this->Maccount->set_vip_session($viptime, $this->vars['vip_data']);
 												$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
 												if($this->vars['vip_data']['wcoins'] > 0 && $table_config['wcoins']['table'] != '' && $table_config['wcoins']['column'] != ''){
-													$this->Mcharacter->add_wcoins($this->vars['vip_data']['wcoins'], $table_config['wcoins']);
+													$this->Mcharacter->add_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['vip_data']['wcoins'], $table_config['wcoins']);
 												}
 												$this->Maccount->add_account_log('Purchased vip ' . $this->vars['vip_data']['package_title'] . ' package for ' . $this->website->translate_credits($this->vars['vip_data']['payment_type'], $this->session->userdata(['user' => 'server'])) . '', -$this->vars['vip_data']['price'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 												if($this->config->values('email_config', 'vip_purchase_email') == 1){
@@ -1210,9 +1209,9 @@
                                         $this->Mshop->insert_vip_package($id, $viptime);
                                         $this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config);
                                         $this->Maccount->set_vip_session($viptime, $this->vars['vip_data']);
-                                        $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
+                                        $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
                                         if($this->vars['vip_data']['wcoins'] > 0 && $table_config['wcoins']['table'] != '' && $table_config['wcoins']['column'] != ''){
-											$this->Mcharacter->add_wcoins($this->vars['vip_data']['wcoins'], $table_config['wcoins']);
+											$this->Mcharacter->add_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['vip_data']['wcoins'], $table_config['wcoins']);
 										}
 										$this->Maccount->add_account_log('Purchased vip ' . $this->vars['vip_data']['package_title'] . ' package for ' . $this->website->translate_credits($this->vars['vip_data']['payment_type'], $this->session->userdata(['user' => 'server'])) . '', -$this->vars['vip_data']['price'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         if($this->config->values('email_config', 'vip_purchase_email') == 1){
@@ -1237,7 +1236,7 @@
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('character');
-                $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.change_name', $this->vars);
             } else{
                 $this->login();

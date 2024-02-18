@@ -81,16 +81,6 @@
                                     } ?>>IGCN
                                     </option>
                                     <option
-                                            value="scf" <?php if($this->config->val[$args[0] . '_' . $default]->skill_tree_type == 'scf'){
-                                        echo 'selected="selected"';
-                                    } ?>>TitansTech
-                                    </option>
-                                    <option
-                                            value="zteam" <?php if($this->config->val[$args[0] . '_' . $default]->skill_tree_type == 'zteam'){
-                                        echo 'selected="selected"';
-                                    } ?>>ZTeam / Ex-Team
-                                    </option>
-                                    <option
                                             value="muengine" <?php if($this->config->val[$args[0] . '_' . $default]->skill_tree_type == 'muengine'){
                                         echo 'selected="selected"';
                                     } ?>>MuEngine
@@ -98,7 +88,7 @@
                                     <option
                                             value="xteam" <?php if($this->config->val[$args[0] . '_' . $default]->skill_tree_type == 'xteam'){
                                         echo 'selected="selected"';
-                                    } ?>>X-Team
+                                    } ?>>X-Team/Louis/MuDevs
                                     </option>
                                 </select>
                             </div>

@@ -881,7 +881,7 @@
             $this->vars['table_config'] = $this->config->values('table_config', $server);
             if(isset($this->vars['table_config']['wcoins'])){
                 $this->load->model('character');
-                return $this->registry->Mcharacter->get_wcoins($this->vars['table_config']['wcoins'], $server);
+                return $this->registry->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $server);
             }
             return 0;
         }
@@ -891,7 +891,7 @@
             $this->vars['table_config'] = $this->config->values('table_config', $server);
             if(isset($this->vars['table_config']['goblinpoint'])){
                 $this->load->model('character');
-                return $this->registry->Mcharacter->get_wcoins($this->vars['table_config']['goblinpoint'], $server);
+                return $this->registry->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['goblinpoint'], $server);
             }
             return 0;
         }
@@ -915,23 +915,14 @@
 					else{
 						$db = $this->get_default_account_database();
 					}
-                    //if(isset($this->registry->account_db)  && $this->registry->account_db->getDB() == $db)
-                    //    return $this->registry->account_db; 
-					//else{
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $db], DRIVER);
-                        return $this->registry->account_db;
-                    //}
+
+                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $db], DRIVER);
+                    return $this->registry->account_db;
                     break;
                 case 'game':
 					$db = $this->get_db_from_server($server);
-									   
-                    //if(isset($this->registry->game_db) && $this->registry->game_db->getDB() == $db){
-                    //    return $this->registry->game_db; 
-					//}
-					//else{
-                        $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $db], DRIVER);
-                        return $this->registry->game_db;
-					//}
+                    $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $db], DRIVER);
+                    return $this->registry->game_db;
                     break;
                 default:
                     if(isset($this->registry->$db))

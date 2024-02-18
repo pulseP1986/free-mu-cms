@@ -19,9 +19,6 @@
             $this->load->model('character');
             $this->load->helper('breadcrumbs', [$this->request]);
             $this->load->helper('meta');
-            if($this->session->userdata(['user' => 'server'])){
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-            }
             $this->load->lib("itemimage");
             $this->load->lib("iteminfo");
             $this->load->model('warehouse');
@@ -40,8 +37,8 @@
                     if(!$this->Maccount->check_connect_stat()){
                         $this->vars['error'] = __('Please logout from game.');
                     } else{
-                        if($this->Mwarehouse->get_vault_content()){
-                            $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                        if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
+                            $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                             $this->vars['items'] = $this->Mwarehouse->load_items();
                         } else{
                             $this->vars['error'] = __('Please open your warehouse in game first.');
@@ -180,7 +177,7 @@
                     if($char == '')
                         $this->errors[] = __('Please select valid character.'); 
 					else{
-                        if(!$this->Mcharacter->check_char($char))
+                        if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $char))
                             $this->errors[] = __('Character not found.');
                     }
                     if($slot == '')
@@ -201,7 +198,7 @@
                     } 
                     else{
 						usleep(mt_rand(1000000, 5000000));
-                        if($this->Mwarehouse->get_vault_content()){
+                        if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                             if($this->Mwarehouse->find_item_by_slot($slot)){
                                 if(!$this->check_serial($start_pos)){
                                     json(['error' => sprintf(__('You are not allowed to sell items without serial. Item Serial: %s'), $this->serial)]);
@@ -221,7 +218,7 @@
                                             if($this->Mwarehouse->exe_opt_count > $this->config->config_entry('market|max_exe'))
                                                 json(['error' => sprintf(__('You are only allowed to sell items with max %d exe options.'), $this->config->config_entry('market|max_exe'))]); 
                                             else{
-                                                if($this->Mwarehouse->update_warehouse()){
+                                                if($this->Mwarehouse->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                                     $this->Mwarehouse->add_market_item($info, $price, $ptype, $time, $char, $highlighted);
                                                     if($highlighted == 1){
                                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('market|price_highlight'), $this->config->config_entry('market|price_highlight_type'));
@@ -321,14 +318,14 @@
                             case 'game':
                                 if($item = $this->Mwarehouse->check_web_wh_item($slot)){
 									usleep(mt_rand(1000000, 5000000));
-                                    if($vault = $this->Mshop->get_vault_content()){
+                                    if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                         $this->iteminfo->itemData($item['item']);
                                         $space = $this->Mshop->check_space($vault['Items'], $this->iteminfo->getX(), $this->iteminfo->getY(), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_hor_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_ver_size'));
                                         if($space === null){
                                             json(['error' => $this->Mshop->errors[0]]);
                                         } else{
                                             $this->Mshop->generate_new_items($item['item'], $space, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
-                                            $this->Mshop->update_warehouse();
+                                            $this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             $this->Mwarehouse->set_removed_web_item($slot);
                                             json(['success' => __('Item successfully transfered to game warehouse.')]);
                                         }
@@ -342,11 +339,11 @@
                             case 'web':
                                 if($this->config->config_entry('warehouse|allow_move_to_web_warehouse') == 1){
 									usleep(mt_rand(1000000, 5000000));
-                                    if($this->Mwarehouse->get_vault_content()){
+                                    if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                         if($this->Mwarehouse->find_item_by_slot($slot)){
                                             $this->Mwarehouse->insert_web_item();
                                             $this->Mwarehouse->generate_new_item_by_slot($slot);
-                                            $this->Mwarehouse->update_warehouse();
+                                            $this->Mwarehouse->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             json(['success' => __('Item successfully transfered to web warehouse.')]);
                                         } else{
                                             json(['error' => __('Item not found.')]);
@@ -380,11 +377,11 @@
                     if(!$this->Maccount->check_connect_stat())
                         json(['error' => __('Please logout from game.')]); else{
                         if($this->config->config_entry('warehouse|allow_delete_item') == 1){
-                            if($this->Mwarehouse->get_vault_content()){
+                            if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                 if($this->Mwarehouse->find_item_by_slot($slot)){
                                     $this->Mwarehouse->log_deleted_item();
                                     $this->Mwarehouse->generate_new_item_by_slot($slot);
-                                    $this->Mwarehouse->update_warehouse();
+                                    $this->Mwarehouse->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                     json(['success' => __('Item successfully removed from warehouse.')]);
                                 } else{
                                     json(['error' => __('Item not found.')]);

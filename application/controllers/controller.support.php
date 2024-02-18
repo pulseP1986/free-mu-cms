@@ -19,7 +19,6 @@
             $this->load->helper('meta');
             if($this->session->userdata(['user' => 'server'])){
                 $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
             }
         }
 
@@ -61,7 +60,7 @@
                                 } else{
                                     if($character == '')
                                         $this->vars['error'] = __('Please select character'); else{
-                                        if(!$this->Mcharacter->check_char($character))
+                                        if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $character))
                                             $this->vars['error'] = __('Character not found.'); else{
                                             if($files != false){
                                                 if(count($files['name']) > 3){
@@ -148,7 +147,7 @@
                 }
                 $this->vars['css'] = '<link rel="stylesheet" href="' . $this->config->base_url . 'assets/' . $this->config->config_entry("main|template") . '/css/jquery.cleditor.css" type="text/css" />';
                 $this->vars['js'] = '<script src="' . $this->config->base_url . 'assets/' . $this->config->config_entry("main|template") . '/js/jquery.cleditor.min.js"></script>';
-                $this->vars['char_list'] = $this->Mcharacter->load_char_list();
+                $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->vars['department_list'] = $this->Msupport->load_department_list();
                 $this->vars['priority_list'] = $this->Msupport->generate_priority(1, true);
                 $this->load->view($this->config->config_entry('main|template') . DS . 'support' . DS . 'view.index', $this->vars);

@@ -11,21 +11,13 @@
             parent::__construct();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_vault_content($user = '')
+		public function get_vault_content($user, $server)
         {
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
-			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
-			$stmt = $this->game_db->prepare('SELECT ' . $sql . ', Money FROM Warehouse WHERE AccountId = :user');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items, Money FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){ 
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $this->vault_items['Items']);
-					$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->vault_items['Items'] = $this->clean_hex($this->vault_items['Items']);
-				}
+				$unpack = unpack('H*', $this->vault_items['Items']);
+				$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
 				$this->vault_money = $this->vault_items['Money'];
 				return true;
 			} else{
@@ -33,8 +25,7 @@
 			}  
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_items()
+		public function load_items()
         {
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
             $items = [];
@@ -75,8 +66,7 @@
             $this->total_items = $count;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function find_item_by_slot($slot)
+		public function find_item_by_slot($slot)
         {
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
             $found = false;
@@ -87,8 +77,7 @@
             return $found;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_new_item_by_slot($slot)
+		public function generate_new_item_by_slot($slot)
         {
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
             if(isset($hex[$slot - 1])){
@@ -121,8 +110,7 @@
             return $stmt->execute([':id' => $id]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_web_items($page = 1, $item = '')
+		public function load_web_items($page = 1, $item = '')
         {
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('warehouse|web_items_per_page') * ((int)$page - 1);
 			$pp = ($item != '') ? 500 : $this->website->db('web')->sanitize_var((int)$this->config->config_entry('warehouse|web_items_per_page'));
@@ -169,15 +157,13 @@
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Web_Storage WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND is_removed = 0 AND expires_on > ' . time() . '');
         }
 
-        public function update_warehouse($user = '')
+        public function update_warehouse($user, $server)
         {
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
-            $stmt = $this->game_db->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_hex . ' WHERE AccountId = :user');
+            $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_hex . ' WHERE AccountId = :user');
             return $stmt->execute([':user' => $user]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_item_info($item = '')
+		public function load_item_info($item = '')
         {
 			if($item != ''){
 				$this->iteminfo->itemData($item);
@@ -258,11 +244,10 @@
         public function check_shop_item($item = null)
         {
 			$check = ($item != null) ? $item : $this->item;
-            return $this->website->db('web')->query('SELECT id FROM DmN_Shop_Logs WHERE SUBSTRING(item_hex ,7 ,8) = \'' . $this->game_db->sanitize_var(substr($check, 6, 8)) . '\'')->fetch();
+            return $this->website->db('web')->query('SELECT id FROM DmN_Shop_Logs WHERE SUBSTRING(item_hex ,7 ,8) = \'' . $this->website->db('web')->sanitize_var(substr($check, 6, 8)) . '\'')->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_market_item($info, $price, $ptype, $time, $char, $highlight, $password = '', $item = null)
+		public function add_market_item($info, $price, $ptype, $time, $char, $highlight, $password = '', $item = null)
         {
 			$item = ($item != null) ? $item : $this->item;
 			
@@ -342,29 +327,24 @@
             return $this->website->db('web')->query('SELECT COUNT(*) AS count FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND DATEDIFF(day, add_date, GETDATE()) = 0')->fetch();
         }
 
-        public function decrease_zen($account, $money)
+        public function decrease_zen($account, $server, $money)
         {
-            $stmt = $this->game_db->prepare('UPDATE Warehouse SET Money = Money - :money WHERE AccountId = :account');
+            $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Money = Money - :money WHERE AccountId = :account');
             return $stmt->execute([':money' => $money, ':account' => $account]);
         }
 
-        public function add_zen($account, $money)
+        public function add_zen($account, $server, $money)
         {
-            $stmt = $this->game_db->prepare('UPDATE Warehouse SET Money = Money + :money WHERE AccountId = :account');
+            $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Money = Money + :money WHERE AccountId = :account');
             return $stmt->execute([':money' => $money, ':account' => $account]);
         }
 
-        public function create_vault($user = '')
+        public function create_vault($user, $server)
         {
-            if($user != ''){
-                $stmt = $this->game_db->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_size') . ') as varbinary(' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_size') . ')), 0, getdate())');
-                $stmt->execute([':user' => $user]);
-            } else{
-                throw new Exception('Vault creation failed, user is not defined.');
-            }
+            $stmt = $this->website->db('game', $server)->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($server, 'wh_size') . ') as varbinary(' . $this->website->get_value_from_server($server, 'wh_size') . ')), 0, getdate())');
+            $stmt->execute([':user' => $user]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function clean_hex($data)
         {
             if(substr_count($data, "\0")){

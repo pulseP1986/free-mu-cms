@@ -25,8 +25,7 @@
             return isset($this->vars[$name]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function count_total_items($server)
+		public function count_total_items($server)
         {
             if($this->filter == true){
                 $this->query .= 'AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
@@ -36,8 +35,7 @@
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market ' . $this->query);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function count_total_history_items()
+		public function count_total_history_items()
         {
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\'');
         }
@@ -114,8 +112,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_query_post()
+		public function generate_query_post()
         {
             if(isset($this->vars['filter_items'])){
                 if(isset($this->vars['lvl'])){
@@ -231,8 +228,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_items($page, $server)
+		public function load_items($page, $server)
         {
             if(!isset($_SESSION['filter']['query'])){
                 $this->query = 'WHERE active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
@@ -282,8 +278,7 @@
             return $this->website->db('web')->query('SELECT DISTINCT(item_name) FROM DmN_Market WHERE item_name != \'NULL\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'')->fetch_all();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_search_items($name, $server)
+		public function load_search_items($name, $server)
         {
             $items = $this->website->db('web')->query('SELECT id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market WHERE item_name LIKE \'%' . $this->website->db('web')->sanitize_var($name) . '%\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC');
             $pos = 1;
@@ -322,7 +317,6 @@
             return $this->items;
         }	
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function load_filtered_items($cat, $id, $class, $server)
         {
             $where = '';
@@ -422,8 +416,7 @@
             return $this->items;
         }
 	
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-        public function get_jewel_image($code, $style = '')
+		public function get_jewel_image($code, $style = '')
         {
             switch($code){
                 case 4:
@@ -459,7 +452,6 @@
 			}
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function check_amount_of_jewels($amount, $type, $vault)
         {
             $hex = str_split($vault, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
@@ -525,7 +517,6 @@
             return false;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function charge_jewels($slots, $vault)
         {
             $hex = str_split($vault, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
@@ -542,8 +533,7 @@
             return implode('', $hex);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_jewels_to_web_wh($jewels, $account, $server)
+		public function add_jewels_to_web_wh($jewels, $account, $server)
         {
             $query = 'INSERT INTO DmN_Web_Storage (item, account, server, expires_on) VALUES';
             foreach($jewels AS $key => $jewel){
@@ -552,8 +542,7 @@
             return $this->website->db('web')->query(substr($query, 0, -1));
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_jewel_by_type($type)
+		public function get_jewel_by_type($type)
         {
             switch($type){
                 default:
@@ -581,8 +570,7 @@
             return $jewel;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function price_to_jewels($type)
+		public function price_to_jewels($type)
         {
             switch($type){
                 default:
@@ -610,8 +598,7 @@
             return $jewel;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_history_items($page)
+		public function load_history_items($page)
         {
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('market|items_per_page') * ((int)$page - 1);
             $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var((int)$this->config->config_entry('market|items_per_page')) . ' id, item, price, price_type, active, sold, removed, price_jewel, jewel_type FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY id DESC) ORDER BY id DESC');
@@ -704,7 +691,6 @@
             $stmt->execute([':id' => $id]);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function get_lattest_items($server)
         {
             $this->website->check_cache('last_market_' . $server, 'items', 3600, false);
@@ -714,7 +700,6 @@
             return $this->website->items;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function get_lattest_sold_items($server)
         {
             $this->website->check_cache('last_sold_market_' . $server, 'items', 3600, false);
@@ -724,8 +709,7 @@
             return $this->website->items;
         }
 		
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-		public function addSlots($user, $server){
+        public function addSlots($user, $server){
 			$check = $this->website->db('web')->query('SELECT slots FROM DmN_Market_Slots WHERE memb___id = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch();
 			if($check == false){
 				$this->website->db('web')->query('INSERT INTO DmN_Market_Slots (memb___id, server, slots) VALUES (\''.$this->website->db('web')->sanitize_var($user).'\', \''.$this->website->db('web')->sanitize_var($server).'\', 10)');

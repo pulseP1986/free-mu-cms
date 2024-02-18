@@ -70,8 +70,8 @@
                     } else{
                         $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                     }
-                    $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                    $this->load->model('account');
+                    
+					$this->load->model('account');
 					if(isset($_POST['buy_slots'])){
 						$status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('market|additionalslots_price_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
 						if($status < $this->config->config_entry('market|additionalslots_price')){
@@ -133,8 +133,8 @@
                     } else{
                         $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                     }
-                    $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                    $this->load->model('account');
+                    
+					$this->load->model('account');
                     if($id == ''){
                         $this->vars['error'] = __('Invalid item.');
                     } else{
@@ -157,7 +157,7 @@
 													$this->vars['error'] = sprintf(__('Item will be available for purchase on %s'), date(DATETIME_FORMAT, strtotime($this->Mmarket->item_info['add_date']) + $availableOn));
 												}
 											}	
-											if($vault = $this->Mshop->get_vault_content()){
+											if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 												if($this->Mmarket->item_info['price_jewel'] != 0 && $this->Mmarket->item_info['jewel_type'] != 0){
 													$this->price_with_tax = $this->Mmarket->item_info['price_jewel'];
 													$jewel_data = $this->Mmarket->check_amount_of_jewels($this->Mmarket->item_info['price_jewel'], $this->Mmarket->item_info['jewel_type'], $vault['Items']);
@@ -210,7 +210,7 @@
 															} else{
 																$this->load->lib("createitem", [MU_VERSION, SOCKET_LIBRARY]);
 																$jewel = $this->Mmarket->get_jewel_by_type($this->Mmarket->item_info['jewel_type']);																					
-																$last_serial = array_values($this->Mshop->generate_serial2($this->Mmarket->item_info['price_jewel']));
+																$last_serial = array_values($this->Mshop->generate_serial2($this->Mmarket->item_info['price_jewel'], $this->session->userdata(['user' => 'server'])));
 																$serial2 = false;
 																if($this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64){
 																	$serial2 = true;
@@ -226,7 +226,7 @@
 															$this->Maccount->add_account_log('Sold Market Item For ' . $this->price_type, $this->Mmarket->item_info['price'], $this->Mmarket->item_info['seller'], $this->Mmarket->item_info['server']);															
 															$this->Mmarket->log_purchase($this->session->userdata(['user' => 'username']), $this->price_with_tax, $id);
 															$this->Mshop->generate_new_items($this->Mmarket->item_info['item'], $space, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), $this->updated_vault);
-															$this->Mshop->update_warehouse();
+															$this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 															$this->website->db('web')->commit();
 															header('Location: ' . $this->config->base_url . 'market/success');
 														}
@@ -290,8 +290,8 @@
                     } else{
                         $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                     }
-                    $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                    $this->load->model('account');
+                    
+					$this->load->model('account');
 					
 					usleep(mt_rand(1000000, 5000000));
 					
@@ -307,7 +307,7 @@
 								$this->vars['error'] = __('Item not found in our database.');
 							} 
 							else{
-								if($vault = $this->Mshop->get_vault_content()){
+								if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 									$this->iteminfo->itemData($this->Mmarket->item_info['item']);
 									$space = $this->Mshop->check_space($vault['Items'], $this->iteminfo->getX(), $this->iteminfo->getY(), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_hor_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_ver_size'));
 									if($space === null){
@@ -345,7 +345,7 @@
 														if(!isset($this->vars['error'])){
 															$this->Mmarket->change_item_status($id);
 															$this->Mshop->generate_new_items($this->Mmarket->item_info['item'], $space, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
-															$this->Mshop->update_warehouse();
+															$this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 															$this->website->db('web')->commit();										
 															$this->vars['success'] = __('Item has been successfully removed from market.');
 														}

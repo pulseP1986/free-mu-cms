@@ -29,7 +29,6 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($server)]);
                 $this->load->lib(['online_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_serverlist($server)]);
                 $serv = $this->website->server_list($server);
                 $this->vars['server'] = $server;

@@ -428,12 +428,11 @@
                     } else{
                         $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                     }
-                    $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
                     $this->load->model('account');
 					$this->load->model('character');
                     if(isset($_POST['vote']) && ctype_digit($_POST['vote'])){
 						if($this->vars['votereward_config']['req_char'] == 1){
-							$this->vars['has_char'] = ($info = $this->Mcharacter->load_char_list()) ? $info : false;
+							$this->vars['has_char'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 						}
 						if(isset($this->vars['has_char']) && $this->vars['has_char'] == false){
 							 echo json_encode(['error' => __('Voting require character.')]);
@@ -637,9 +636,6 @@
 				} else{
 					$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
 				}
-				$this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-
-				//$this->game_db->beginTransaction();
 	
 				try{	
 					$this->load->model('account');
@@ -657,7 +653,7 @@
 						throw new \Exception(__('Please logout from game.')); 
 					}
 					
-					if(!$this->Mcharacter->check_char('', '', false)){
+					if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), '', '', false)){
 						throw new \Exception(__('Character not found.')); 
 					}
 					
@@ -817,7 +813,7 @@
 					}
 																  
 					if($this->Mcharacter->char_info['res_info']['clear_equipment'] == 1){							   
-						if(!$this->Mcharacter->check_equipment()){
+						if(!$this->Mcharacter->check_equipment($this->session->userdata(['user' => 'server']))){
 							throw new \Exception(__('Before reset please remove your equipped items.'));
 						}
 					}
@@ -848,7 +844,7 @@
 					
 					$req_zen = $this->Mcharacter->check_zen($this->Mcharacter->char_info['res_info']['money'], $this->Mcharacter->char_info['res_info']['money_x_reset'], 'resets');
 					if($req_zen !== true){
-						$req_zen_wallet = $this->Mcharacter->check_zen_wallet($this->Mcharacter->char_info['res_info']['money'], $this->Mcharacter->char_info['res_info']['money_x_reset'], 'resets');
+						$req_zen_wallet = $this->Mcharacter->check_zen_wallet($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->Mcharacter->char_info['res_info']['money'], $this->Mcharacter->char_info['res_info']['money_x_reset'], 'resets');
 						if($req_zen_wallet !== true){
 							throw new \Exception(sprintf(__('Your have insufficient amount of zen. Need: %s'), $this->website->zen_format($req_zen)));
 						}
@@ -878,8 +874,7 @@
 						}
 					}
 					
-					if($this->Mcharacter->reset_character() == true){
-						//$this->game_db->commit();
+					if($this->Mcharacter->reset_character($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])) == true){
 						if(defined('RESET_NORIA_IS_VIP_RESET') && RESET_NORIA_IS_VIP_RESET == true){
 							if(isset($_POST['vip']) && $_POST['vip'] == 1){
 								$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), RESET_NORIA_VIP_PRICE, RESET_NORIA_VIP_PRICE_TYPE);
@@ -893,7 +888,6 @@
 					
 				}
 				catch(\Exception $e){
-					//$this->game_db->rollback();
 					echo json_encode(['error' => $e->getMessage()]);
 				}   
 			}
@@ -911,10 +905,7 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-				
-				//$this->game_db->beginTransaction();
-				
+
 				try{
 					$this->load->model('account');
 					$this->load->model('character');
@@ -931,7 +922,7 @@
 						throw new \Exception(__('Please logout from game.')); 
 					}
 					
-					if(!$this->Mcharacter->check_char('', '', false)){
+					if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), '', '', false)){
 						throw new \Exception(__('Character not found.')); 
 					}
 					
@@ -1074,7 +1065,7 @@
 					
 					$req_zen = $this->Mcharacter->check_zen($this->Mcharacter->char_info['gres_info']['money'], $this->Mcharacter->char_info['gres_info']['money_x_reset'], 'grand_resets');
 					if($req_zen !== true){
-						$req_zen_wallet = $this->Mcharacter->check_zen_wallet($this->Mcharacter->char_info['gres_info']['money'], $this->Mcharacter->char_info['gres_info']['money_x_reset'], 'grand_resets');
+						$req_zen_wallet = $this->Mcharacter->check_zen_wallet($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->Mcharacter->char_info['gres_info']['money'], $this->Mcharacter->char_info['gres_info']['money_x_reset'], 'grand_resets');
 						if($req_zen_wallet !== true){
 							throw new \Exception(sprintf(__('Your have insufficient amount of zen. Need: %s'), $this->website->zen_format($req_zen)));
 						}
@@ -1108,8 +1099,7 @@
 						}
 					}
 					
-					if($this->Mcharacter->greset_character()){
-						//$this->game_db->commit();
+					if($this->Mcharacter->greset_character($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 						echo json_encode(['success' => __('Your character has been successfully reseted.')]);
 					} 
 					else{
@@ -1118,7 +1108,6 @@
 											
 				}
 				catch(\Exception $e){
-					//$this->game_db->rollback();
 					echo json_encode(['error' => $e->getMessage()]);
 				} 
             } 
@@ -1127,8 +1116,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function add_level_reward()
+		public function add_ref_reward()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($this->website->is_multiple_accounts() == true){
@@ -1136,54 +1124,6 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
-                $this->load->model('character');
-                $id = (isset ($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
-                $char = isset($_POST['char']) ? $_POST['char'] : '';
-                $level_rewards = $this->config->values('level_rewards_config');
-                if($id == '')
-                    echo json_encode(['error' => __('Invalid level reward id.')]); else{
-                    if($level_rewards == false || !array_key_exists($id, $level_rewards))
-                        echo json_encode(['error' => __('Level reward not found.')]); 
-					else{
-                        if($char == '')
-                            echo json_encode(['error' => __('Invalid Character')]); else{
-                            if(!$this->Mcharacter->check_char($char))
-                                echo json_encode(['error' => __('Character not found.')]); else{
-                                if($level_rewards[$id]['req_level'] > $this->Mcharacter->char_info['cLevel'])
-                                    echo json_encode(['error' => sprintf(__('Character lvl is too low required %d lvl'), $level_rewards[$id]['req_level'])]); else{
-                                    if($level_rewards[$id]['req_mlevel'] > $this->Mcharacter->char_info['mlevel'])
-                                        echo json_encode(['error' => sprintf(__('Character master lvl is too low required %d lvl'), $level_rewards[$id]['req_mlevel'])]); else{
-                                        if($this->Mcharacter->check_claimed_level_rewards($id, $char, $this->session->userdata(['user' => 'server']))){
-                                            echo json_encode(['error' => __('Reward was already claimed with this character.')]);
-                                        } else{
-                                            $this->website->add_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $level_rewards[$id]['reward'], $level_rewards[$id]['reward_type']);
-                                            $this->Maccount->add_account_log('Claimed level reward from character ' . $char . ' for ' . $this->website->translate_credits($level_rewards[$id]['reward_type'], $this->session->userdata(['user' => 'server'])), $level_rewards[$id]['reward'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                            $this->Mcharacter->log_level_reward($id, $char, $this->session->userdata(['user' => 'server']));
-                                            echo json_encode(['success' => __('Referral reward was claimed successfully.')]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else{
-                echo json_encode(['error' => __('Please login into website.')]);
-            }
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_ref_reward()
-        {
-            if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
                 $this->load->model('account');
                 $this->load->model('character');
                 $id = (isset ($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
@@ -1284,7 +1224,6 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
                 $this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
@@ -1298,7 +1237,7 @@
                     if(!isset($_POST['character']))
                         echo json_encode(['error' => __('Invalid Character')]); 
 					else{
-                        if(!$this->Mcharacter->check_char())
+                        if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                             echo json_encode(['error' => __('Character not found.')]); 
 						else{
                             if(!$this->Mcharacter->check_pk())
@@ -1314,7 +1253,7 @@
 									if($this->Mcharacter->char_info['Money'] < $price)
 										echo json_encode(['error' => sprintf(__('Your have insufficient amount of zen. Need: %s'), $this->website->zen_format($price))]); 
 									else{
-										$this->Mcharacter->clear_pk($price);
+										$this->Mcharacter->clear_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price);
 										echo json_encode(['success' => __('Your murders have been successfully reseted.')]);
 									}
 								}
@@ -1325,7 +1264,7 @@
 											echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($method, $this->session->userdata(['user' => 'server'])))]);
 										 }
 										 else{
-											$this->Mcharacter->clear_pk(0);
+											$this->Mcharacter->clear_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 0);
 											$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $method);
 											echo json_encode(['success' => __('Your murders have been successfully reseted.')]);
 										 }
@@ -1333,12 +1272,12 @@
 									else{
 										 $this->vars['table_config'] = $this->config->values('table_config', $this->session->userdata(['user' => 'server']));
 										 
-										 if($status = $this->Mcharacter->get_wcoins($this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
+										 if($status = $this->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
 											if($status < $price)
 												echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]);
 											else{
-												$this->Mcharacter->clear_pk(0);
-												$this->Mcharacter->remove_wcoins($this->vars['table_config']['wcoins'], $price);
+												$this->Mcharacter->clear_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 0);
+												$this->Mcharacter->remove_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $price);
 												echo json_encode(['success' => __('Your murders have been successfully reseted.')]);
 											}
 										} else{
@@ -1363,7 +1302,6 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
                 if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_stats') == 1){
                     $this->load->model('account');
                     $this->load->model('character');
@@ -1380,7 +1318,7 @@
                         if(!isset($_POST['character']))
                             echo json_encode(['error' => __('Invalid Character')]); 
 						else{
-                            if(!$this->Mcharacter->check_char())
+                            if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                                 echo json_encode(['error' => __('Character not found.')]); 
 							else{
                                 if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price') > 0){
@@ -1388,13 +1326,13 @@
                                     if($status['credits'] < $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price')){
                                         echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'), $this->session->userdata(['user' => 'server'])))]);
                                     } else{
-                                        $this->Mcharacter->reset_stats();
+                                        $this->Mcharacter->reset_stats($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'));
                                         $this->Mcharacter->add_account_log('Cleared character ' . $this->website->hex2bin($_POST['character']) . ' stats for ' . $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'), $this->session->userdata(['user' => 'server'])) . '', -$this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price'), $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         echo json_encode(['success' => __('Stats successfully reseted.')]);
                                     }
                                 } else{
-                                    $this->Mcharacter->reset_stats();
+                                    $this->Mcharacter->reset_stats($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                     echo json_encode(['success' => __('Stats successfully reseted.')]);
                                 }
                             }
@@ -1417,8 +1355,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_skilltree') == 1){
+                
+				if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_skilltree') == 1){
 					$this->load->model('account');
 					$this->load->model('character');
 					foreach($_POST as $key => $value){
@@ -1434,7 +1372,7 @@
 						if(!isset($_POST['character']))
 							echo json_encode(['error' => __('Invalid Character')]); 
 						else{
-							if(!$this->Mcharacter->check_char())
+							if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
 								echo json_encode(['error' => __('Character not found.')]); 
 							else{
 								if(!in_array($this->Mcharacter->char_info['Class'], $this->resetSkillTreeClass))
@@ -1447,7 +1385,7 @@
 									if($status < $price){
 										echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'), $this->session->userdata(['user' => 'server'])))]);
 									} else{
-										$skill_tree = $this->Mcharacter->reset_skill_tree($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skill_tree_type'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_level'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_points'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_points_multiplier'));
+										$skill_tree = $this->Mcharacter->reset_skill_tree($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skill_tree_type'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_level'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_points'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_points_multiplier'));
 										if($skill_tree){
 											$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'));
 											$this->Mcharacter->add_account_log('Cleared character ' . $this->website->hex2bin($_POST['character']) . ' skill tree for ' . $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'), $this->session->userdata(['user' => 'server'])), -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -1478,8 +1416,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
@@ -1489,14 +1427,14 @@
 								else{
                     if(!isset($this->Mcharacter->vars['character']))
                         echo json_encode(['error' => __('Invalid Character')]); 
-											else{
+					else{
                         if(!isset($this->Mcharacter->vars['inventory']) && !isset($this->Mcharacter->vars['equipment']) && !isset($this->Mcharacter->vars['store']) && !isset($this->Mcharacter->vars['exp_inv_1']) && !isset($this->Mcharacter->vars['exp_inv_2']))
                             echo json_encode(['error' => __('Please select one of options.')]); 
 													else{
-                            if(!$this->Mcharacter->check_char())
+                            if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                                 echo json_encode(['error' => __('Character not found.')]); 
-															else{
-                                $this->Mcharacter->clear_inv();
+							else{
+                                $this->Mcharacter->clear_inv($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                 echo json_encode(['success' => __('Character inventory successfully cleared.')]);
                             }
                         }
@@ -1515,8 +1453,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
                 $level_conf = $this->config->values('buylevel_config', $this->session->userdata(['user' => 'server']));
                 foreach($_POST as $key => $value){
@@ -1528,7 +1466,7 @@
                         echo json_encode(['error' => __('Invalid Character')]); else{
                         if(!isset($this->Mcharacter->vars['level']))
                             echo json_encode(['error' => __('Please select level.')]); else{
-                            if(!$this->Mcharacter->check_char())
+                            if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                                 echo json_encode(['error' => __('Character not found.')]); else{
                                 if(!array_key_exists($this->Mcharacter->vars['level'], $level_conf['levels']))
                                     echo json_encode(['error' => __('Invalid level selected.')]); else{
@@ -1538,7 +1476,7 @@
                                         if($status < $level_conf['levels'][$this->Mcharacter->vars['level']]['price']){
                                             echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type'], $this->session->userdata(['user' => 'server'])))]);
                                         } else{
-                                            if($this->Mcharacter->update_level()){
+                                            if($this->Mcharacter->update_level($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $level_conf['levels'][$this->Mcharacter->vars['level']]['price'], $level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type']);
                                                 echo json_encode(['success' => __('Character level updated.')]);
                                             } else{
@@ -1576,8 +1514,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
@@ -1588,7 +1526,7 @@
                         echo json_encode(['error' => __('Invalid Character')]); else{
                         if(!isset($this->Mcharacter->vars['points']))
                             echo json_encode(['error' => __('Please enter amount of points.')]); else{
-                            if(!$this->Mcharacter->check_char())
+                            if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                                 echo json_encode(['error' => __('Character not found.')]); else{
                                 if($this->Mcharacter->vars['points'] < $this->config->config_entry('buypoints|points'))
                                     echo json_encode(['error' => __('Minimal points value: %d points.', $this->config->config_entry('buypoints|points'))]); else{
@@ -1597,7 +1535,7 @@
                                     if($status < $price){
                                         echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('buypoints|price_type'), $this->session->userdata(['user' => 'server'])))]);
                                     } else{
-                                        if($this->Mcharacter->update_points()){
+                                        if($this->Mcharacter->update_points($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('buypoints|price_type'));
                                             echo json_encode(['success' => __('Character statpoints updated.')]);
                                         } else{
@@ -1622,8 +1560,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
@@ -1632,15 +1570,16 @@
                     echo json_encode(['error' => __('Please logout from game.')]); else{
                     if(!isset($this->Mcharacter->vars['character']))
                         echo json_encode(['error' => __('Invalid Character')]); else{
-                        if(!$this->Mcharacter->check_char())
+                        if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                             echo json_encode(['error' => __('Character not found.')]); else{
                             if($this->Mcharacter->char_info['CtlCode'] == $this->config->config_entry('buygm|gm_ctlcode'))
-                                echo json_encode(['error' => __('Your character already is GameMaster.')]); else{
+                                echo json_encode(['error' => __('Your character already is GameMaster.')]); 
+							else{
                                 $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                 if($status < $this->config->config_entry('buygm|price')){
                                     echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server'])))]);
                                 } else{
-                                    if($this->Mcharacter->update_gm()){
+                                    if($this->Mcharacter->update_gm($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                         $this->Maccount->add_account_log('Bought GM Status For ' . $this->website->translate_credits($this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server'])), -$this->config->config_entry('buygm|price'), $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('buygm|price'), $this->config->config_entry('buygm|price_t'));
                                         echo json_encode(['success' => __('Character successfully promoted to GameMaster.')]);
@@ -1845,8 +1784,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
@@ -1857,7 +1796,7 @@
                     if(!isset($this->Mcharacter->vars['character']))
                         echo json_encode(['error' => __('Invalid Character')]); 
 					else{
-                        if(!$this->Mcharacter->check_char())
+                        if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                             echo json_encode(['error' => __('Character not found.')]); 
 						else{
                             if($select = $this->Mcharacter->gen_class_select_field($this->config->values('change_class_config', 'class_list'))){
@@ -2048,8 +1987,8 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
 				
                 foreach($_POST as $key => $value){
@@ -2061,7 +2000,7 @@
                     if(!isset($this->Mcharacter->vars['character']))
                         echo json_encode(['error' => __('Invalid Character')]); 
 					else{
-                        if(!$this->Mcharacter->check_char())
+                        if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                             echo json_encode(['error' => __('Character not found.')]); 
 						else{
                             if(!isset($this->Mcharacter->vars['class_select']))
@@ -2123,9 +2062,9 @@
 											$foundRaven = false;
 											$horses = [];
 											$ravens = [];
-											$inv1 = $this->Mcharacter->load_inventory(1);
-											$inv2 = $this->Mcharacter->load_inventory(3);
-											$inv3 = $this->Mcharacter->load_inventory(4);
+											$inv1 = $this->Mcharacter->load_inventory(1, $this->session->userdata(['user' => 'server']));
+											$inv2 = $this->Mcharacter->load_inventory(3, $this->session->userdata(['user' => 'server']));
+											$inv3 = $this->Mcharacter->load_inventory(4, $this->session->userdata(['user' => 'server']));
 											if(!empty($inv1)){
 												foreach($inv1 AS $key => $val){
 													if(($val['item_id'] == 4 && $val['item_cat'] == 13) || ($val['item_id'] == 471 && $val['item_cat'] == 12)){
@@ -2293,7 +2232,7 @@
 											}
 										}
 
-                                        if($this->Mcharacter->check_equipment()){
+                                        if($this->Mcharacter->check_equipment($this->session->userdata(['user' => 'server']))){
                                             if(isset($this->vars['changeclass_config']['class_list'][$this->Mcharacter->char_info['Class']]) && in_array($this->Mcharacter->vars['class_select'], $this->vars['changeclass_config']['class_list'][$this->Mcharacter->char_info['Class']])){
                                                if(defined('CHANGE_CLASS_REQ_ITEMS') && CHANGE_CLASS_REQ_ITEMS == true){
 												    $changeClassTimes = $this->Mcharacter->count_change_class_times($this->session->userdata(['user' => 'server']), $this->Mcharacter->char_info['id']);
@@ -2314,7 +2253,7 @@
 												
 												if(isset($this->vars['changeclass_config']['skill_tree']['active']) && $this->vars['changeclass_config']['skill_tree']['active'] == 1){
                                                     if(in_array($this->Mcharacter->char_info['Class'], $this->resetSkillTreeClass)){
-                                                        $this->Mcharacter->reset_skill_tree($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skill_tree_type'), isset($this->vars['changeclass_config']['skill_tree']['reset_level']) ? $this->vars['changeclass_config']['skill_tree']['reset_level'] : 0, isset($this->vars['changeclass_config']['skill_tree']['reset_points']) ? $this->vars['changeclass_config']['skill_tree']['reset_points'] : 0, isset($this->vars['changeclass_config']['skill_tree']['points_multiplier']) ? $this->vars['changeclass_config']['skill_tree']['points_multiplier'] : 0);
+                                                        $this->Mcharacter->reset_skill_tree($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skill_tree_type'), isset($this->vars['changeclass_config']['skill_tree']['reset_level']) ? $this->vars['changeclass_config']['skill_tree']['reset_level'] : 0, isset($this->vars['changeclass_config']['skill_tree']['reset_points']) ? $this->vars['changeclass_config']['skill_tree']['reset_points'] : 0, isset($this->vars['changeclass_config']['skill_tree']['points_multiplier']) ? $this->vars['changeclass_config']['skill_tree']['points_multiplier'] : 0);
                                                     }
                                                 }
 												
@@ -2336,16 +2275,16 @@
 													$new_stats += $this->Mcharacter->char_info['Leadership'] - $baseStats['Leadership'];
 												}
 								
-                                                $this->Mcharacter->update_char_class();
-												$this->Mcharacter->clear_quests_list($this->Mcharacter->vars['class_select']);
+                                                $this->Mcharacter->update_char_class($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+												$this->Mcharacter->clear_quests_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->Mcharacter->vars['class_select']);
 												if(defined('CHANGE_CLASS_REQ_ITEMS') && CHANGE_CLASS_REQ_ITEMS == true){
 													 $this->Mcharacter->add_change_class_log($this->session->userdata(['user' => 'server']), $this->Mcharacter->char_info['id'], $this->Mcharacter->char_info['Class'], $this->Mcharacter->vars['class_select']);
 												}
-												$this->Mcharacter->check_char();
+												$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 												$baseStats = $this->Mcharacter->getBaseStats($this->Mcharacter->char_info['Class'], $this->session->userdata(['user' => 'server']));
-												$this->Mcharacter->reset_stats($this->Mcharacter->char_info['Name'], $new_stats, $baseStats);
+												$this->Mcharacter->reset_stats($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->Mcharacter->char_info['Name'], $new_stats, $baseStats);
 												if(defined('ELITE_CUSTOM_CHANGE_CLASS') && ELITE_CUSTOM_CHANGE_CLASS == true){		
-													$this->Mcharacter->setNewResGR($newGR, $leftRes, $newLevel, $this->Mcharacter->char_info['Name']);
+													$this->Mcharacter->setNewResGR($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->Mcharacter->char_info['Name'], $newGR, $leftRes, $newLevel);
 												}
 												
                                                 $this->Maccount->add_account_log('Changed Character ' . $this->Mcharacter->char_info['Name'] . ' class for ' . $this->website->translate_credits($this->vars['changeclass_config']['payment_type'], $this->session->userdata(['user' => 'server'])), -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -2378,12 +2317,15 @@
                 } else{
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                 }
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                $this->load->model('account');
+                
+				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
+				
+				$old_name = $this->website->hex2bin($this->Mcharacter->vars['old_name']);
+				
                 if(!$this->Maccount->check_connect_stat())
                     echo json_encode(['error' => __('Please logout from game.')]); 
 				else{
@@ -2400,10 +2342,10 @@
                                 if(mb_strlen($this->Mcharacter->vars['new_name']) < 4 || mb_strlen($this->Mcharacter->vars['new_name']) > $this->config->config_entry('changename|max_length')){
                                     echo json_encode(['error' => sprintf(__('Character Name can be 4-%d chars long!'), $this->config->config_entry('changename|max_length'))]);
                                 } else{
-                                    if($this->Mcharacter->vars['new_name'] === $this->website->hex2bin($this->Mcharacter->vars['old_name'])){
+                                    if($this->Mcharacter->vars['new_name'] === $old_name){
                                         echo json_encode(['error' => __('New name can not be same as old.')]);
                                     } else{
-                                        $old_char_data = $this->Mcharacter->check_if_char_exists($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->session->userdata(['user' => 'server']));
+                                        $old_char_data = $this->Mcharacter->check_if_char_exists($old_name, $this->session->userdata(['user' => 'server']));
                                         $new_char_data = $this->Mcharacter->check_if_char_exists($this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                         if(!$old_char_data){
                                             echo json_encode(['error' => __('Old character not found on your account.')]);
@@ -2414,7 +2356,7 @@
                                                 if($new_char_data){
                                                     echo json_encode(['error' => __('Character with this name already exists.')]);
                                                 } else{
-                                                    if($this->config->config_entry('changename|check_guild') == 1 && $this->Mcharacter->has_guild($this->website->hex2bin($this->Mcharacter->vars['old_name']))){
+                                                    if($this->config->config_entry('changename|check_guild') == 1 && $this->Mcharacter->has_guild($old_name, $this->session->userdata(['user' => 'server']))){
                                                         echo json_encode(['error' => __('You are not allowed to change name while you are in guild.')]);
                                                     } else{
                                                         $restricted_words = explode(',', $this->config->config_entry('changename|forbidden'));
@@ -2437,109 +2379,108 @@
                                                                 echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('changename|price_type'), $this->session->userdata(['user' => 'server'])))]);
                                                             } else{
                                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('changename|price_type'));
-                                                                if($this->Mcharacter->update_account_character($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'])){
+																if($this->Mcharacter->update_account_character($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']))){
                                                                     if($this->config->config_entry('changename|check_guild') == 0){
-                                                                        $this->Mcharacter->update_guild($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                        $this->Mcharacter->update_guild_member($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+                                                                        $this->Mcharacter->update_guild($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                        $this->Mcharacter->update_guild_member($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                                                     }
-                                                                    $this->Mcharacter->update_character($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_option_data($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_t_friendlist($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_t_friendmail($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_t_friendmain($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_t_cguid($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_T_CurCharName($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_T_Event_Inventory($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+                                                                    $this->Mcharacter->update_character($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_option_data($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_t_friendlist($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_t_friendmail($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_t_friendmain($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_t_cguid($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_T_CurCharName($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_T_Event_Inventory($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
 																	if($this->config->config_entry('changename|user_master_level') == 1 && (strtolower($this->config->values('table_config', [$this->session->userdata(['user' => 'server']), 'master_level', 'table'])) != 'character' && trim($this->config->values('table_config', [$this->session->userdata(['user' => 'server']), 'master_level', 'table'])) != '')){
-                                                                        $this->Mcharacter->update_master_level_table($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                        $this->Mcharacter->update_master_level_table($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                                                     }
 
-                                                                    $this->Mcharacter->update_IGC_Gens($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_IGC_GensAbuse($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_HuntingRecord($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_HuntingRecordOption($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_LabyrinthClearLog($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_LabyrinthInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_LabyrinthLeagueLog($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_LabyrinthLeagueUser($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_LabyrinthMissionInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_MixLostItemInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_Muun_Inventory($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_Muun_Period($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
-																	$this->Mcharacter->update_IGC_RestoreItem_Inventory($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_IGC_PeriodBuffInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_IGC_PeriodExpiredItemInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_IGC_PeriodItemInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_PentagramInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_PStore_Items($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_IGC_PStore_Data($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);																					   
-                                                                    $this->Mcharacter->update_IGC_PersonalStore_Info($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->insert_IGC_PersonalStore_ChangeName($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $old_char_data['id']);
+                                                                    $this->Mcharacter->update_IGC_Gens($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_IGC_GensAbuse($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_HuntingRecord($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_HuntingRecordOption($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_LabyrinthClearLog($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_LabyrinthInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_LabyrinthLeagueLog($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_LabyrinthLeagueUser($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_LabyrinthMissionInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_MixLostItemInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_Muun_Inventory($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_Muun_Period($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_RestoreItem_Inventory($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_IGC_PeriodBuffInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_IGC_PeriodExpiredItemInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_IGC_PeriodItemInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_PentagramInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_PStore_Items($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_IGC_PStore_Data($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));																					   
+                                                                    $this->Mcharacter->update_IGC_PersonalStore_Info($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->insert_IGC_PersonalStore_ChangeName($old_name, $this->Mcharacter->vars['new_name'], $old_char_data['id'], $this->session->userdata(['user' => 'server']));
 																	
-																	$this->Mcharacter->update_IGC_ArtifactInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);																					   
-																	$this->Mcharacter->update_IGC_BlessingBox_Character($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);																					   
-																	$this->Mcharacter->update_IGC_HuntPoint($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);																					   
-																	$this->Mcharacter->update_IGC_StatsSystem($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);																					   
-																	
-																	
-																	$this->Mcharacter->update_T_3rd_Quest_Info($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_GMSystem($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_LUCKY_ITEM_INFO($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_PentagramInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_QUEST_EXP_INFO($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_WaitFriend($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_WaitFriend($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_T_PSHOP_ITEMVALUE_INFO($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+																	$this->Mcharacter->update_IGC_ArtifactInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));																					   
+																	$this->Mcharacter->update_IGC_BlessingBox_Character($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));																					   
+																	$this->Mcharacter->update_IGC_HuntPoint($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));																					   
+																	$this->Mcharacter->update_IGC_StatsSystem($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));																					   
+																															
+																	$this->Mcharacter->update_T_3rd_Quest_Info($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_GMSystem($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_LUCKY_ITEM_INFO($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_PentagramInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_QUEST_EXP_INFO($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_WaitFriend($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_WaitFriend($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_T_PSHOP_ITEMVALUE_INFO($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                                                     
-																	$this->Mcharacter->update_PetWarehouse($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+																	$this->Mcharacter->update_PetWarehouse($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                                                     
-																	$this->Mcharacter->update_C_PlayerKiller_Info($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_C_PlayerKiller_Info2($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_C_Monster_KillCount($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_Gens_Left($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_Gens_Rank($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_Gens_Reward($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_EnhanceSkillTree($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_EventEntryCount($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_EventEntryLimit($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_EventInventory($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_FavoriteWarpList($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_GremoryCase($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_HelperData($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_MuHelperPlus($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_MuQuestInfo($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_MuunInventory($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_PentagramJewel($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_PersonalShopRenewalList($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_PShopItemValue($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_QuestGuide($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_QuestKillCount($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_QuestWorld($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_RankingBloodCastle($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_RankingCastleSiege($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_RankingChaosCastle($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_RankingDevilSquare($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_RankingDuel($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-																	$this->Mcharacter->update_RankingIllusionTemple($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+																	$this->Mcharacter->update_C_PlayerKiller_Info($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_C_PlayerKiller_Info2($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_C_Monster_KillCount($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_Gens_Left($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_Gens_Rank($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_Gens_Reward($old_name, $this->Mcharacter->vars['new_name']);
+																	$this->Mcharacter->update_EnhanceSkillTree($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_EventEntryCount($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_EventEntryLimit($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_EventInventory($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_FavoriteWarpList($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_GremoryCase($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_HelperData($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_MuHelperPlus($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_MuQuestInfo($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_MuunInventory($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_PentagramJewel($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_PersonalShopRenewalList($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_PShopItemValue($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_QuestGuide($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_QuestKillCount($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_QuestWorld($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_RankingBloodCastle($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_RankingCastleSiege($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_RankingChaosCastle($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_RankingDevilSquare($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_RankingDuel($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+																	$this->Mcharacter->update_RankingIllusionTemple($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
 																	
 																	$this->vars['table_config'] = $this->config->values('table_config', $this->session->userdata(['user' => 'server']));
 																	
 																	if(isset($this->vars['table_config']['bc'])){
-																		$this->Mcharacter->update_EVENT_INFO($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
-																		$this->Mcharacter->update_EVENT_INFO_BC_5TH($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
-																		$this->Mcharacter->update_EVENT_INFO_CC($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
-																		$this->Mcharacter->update_EVENT_INFO_IT($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
-																		$this->Mcharacter->update_T_ENTER_CHECK_BC($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
-																		$this->Mcharacter->update_T_ENTER_CHECK_ILLUSION_TEMPLE($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
+																		$this->Mcharacter->update_EVENT_INFO($old_name, $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
+																		$this->Mcharacter->update_EVENT_INFO_BC_5TH($old_name, $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
+																		$this->Mcharacter->update_EVENT_INFO_CC($old_name, $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
+																		$this->Mcharacter->update_EVENT_INFO_IT($old_name, $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
+																		$this->Mcharacter->update_T_ENTER_CHECK_BC($old_name, $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
+																		$this->Mcharacter->update_T_ENTER_CHECK_ILLUSION_TEMPLE($old_name, $this->Mcharacter->vars['new_name'], $this->vars['table_config']['bc'], $this->session->userdata(['user' => 'server']));
 																	}
 																	
-																	$this->Mcharacter->update_DmN_Ban_List($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_DmN_Gm_List($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_DmN_Market($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_DmN_Market_Logs($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
-                                                                    $this->Mcharacter->update_DmN_Votereward_Ranking($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+																	$this->Mcharacter->update_DmN_Ban_List($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_DmN_Gm_List($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_DmN_Market($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_DmN_Market_Logs($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
+                                                                    $this->Mcharacter->update_DmN_Votereward_Ranking($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                                                     $this->Maccount->add_account_log('Changed Name To ' . $this->Mcharacter->vars['new_name'] . ' for ' . $this->website->translate_credits($this->config->config_entry('changename|price_type'), $this->session->userdata(['user' => 'server'])), -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                                    $this->Mcharacter->add_to_change_name_history($this->website->hex2bin($this->Mcharacter->vars['old_name']), $this->Mcharacter->vars['new_name']);
+                                                                    $this->Mcharacter->add_to_change_name_history($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                                     echo json_encode(['success' => __('Character Name Successfully Changed.'), 'new_name' => bin2hex($this->Mcharacter->vars['new_name'])]);
                                                                 }
                                                             }
@@ -2593,16 +2534,16 @@
                                     echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); else{
                                     $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->Mcharacter->vars['credits'], $this->vars['wcoin_config']['credits_type']);
                                     $this->Maccount->add_account_log('Exchange ' . $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])) . ' to' . __('WCoins'), -$this->Mcharacter->vars['credits'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                    $this->Mcharacter->add_wcoins($total, $this->vars['table_config']['wcoins']);
+                                    $this->Mcharacter->add_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $total, $this->vars['table_config']['wcoins']);
                                     echo json_encode(['success' => __('WCoins successfully exchanged.')]);
                                 }
                                 exchange_credits:
-                                if($status = $this->Mcharacter->get_wcoins($this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
+                                if($status = $this->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
                                     if($status < $this->Mcharacter->vars['credits'])
                                         echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]); else{
                                         $this->website->add_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $total, $this->vars['wcoin_config']['credits_type']);
                                         $this->Maccount->add_account_log('Exchange ' . __('WCoins') . ' to ' . $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])), -$this->Mcharacter->vars['credits'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                        $this->Mcharacter->remove_wcoins($this->vars['table_config']['wcoins']);
+                                        $this->Mcharacter->remove_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins']);
                                         echo json_encode(['success' => __('WCoins successfully exchanged.')]);
                                     }
                                 } else{
@@ -2806,36 +2747,6 @@
             }
         }
 
-        public function click_ads()
-        {
-            if(defined('IS_GOOGLE_ADD_VOTE') && IS_GOOGLE_ADD_VOTE == true){
-                if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
-                    $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']))]);
-                    $this->load->model('account');
-                    if($this->Maccount->get_last_ads_vote(GOOGLE_ADD_TIME) != false){
-                        return false;
-                    } else{
-                        if($this->Maccount->log_ads_vote()){
-                            $this->Maccount->reward_voter(GOOGLE_ADD_REWARD, 1, $this->session->userdata(['user' => 'server']));
-                            return true;
-                        } else{
-                            return false;
-                        }
-                    }
-                } else{
-                    return false;
-                }
-            } else{
-                return false;
-            }
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function generate_string($input, $strength = 10) {
 			$input_length = strlen($input);
 			$random_string = '';
@@ -2847,7 +2758,6 @@
 			return $random_string;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function captcha($width = 200, $heigth = 50, $letter_spaccing = 170){
 			//$_SESSION['captcha_text'] = [];
 			$permitted_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';

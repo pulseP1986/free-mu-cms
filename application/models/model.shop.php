@@ -17,8 +17,7 @@
             parent::__construct();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_items($page = 1, $per_page = 20, $columns = 4, $category = '')
+		public function load_items($page = 1, $per_page = 20, $columns = 4, $category = '')
         {
             if($category != '')
                 $this->category = 'AND item_cat = ' . $this->website->db('web')->sanitize_var($this->website->c($category)) . ''; else{
@@ -60,7 +59,6 @@
             return $this->items;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function get_items($ids)
 		{
 
@@ -80,8 +78,7 @@
 
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_item_info($id = '')
+		public function get_item_info($id = '')
         {
             if($id == '')
                 return false;
@@ -130,8 +127,7 @@
             return $this->website->db('web')->query('SELECT hvalue, hname FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->sanitize_var($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->sanitize_var($hopt) . ' AND status = 1')->fetch_all();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_harmony($use = 0, $harmony = [])
+		public function check_harmony($use = 0, $harmony = [])
         {
             if($use == 1){
                 if(count($harmony) == 2){
@@ -156,8 +152,7 @@
             return $this->discount($info['socket_price']);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function socket_list($use_sockets, $check_part, $exe_type, $cat)
+		public function socket_list($use_sockets, $check_part, $exe_type, $cat)
         {
             $exe_type = ($cat <= 5) ? 1 : 0;
             if($use_sockets == 1){
@@ -170,8 +165,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_sockets_part_type($exe_type, $socket, $seed, $cat)
+		public function check_sockets_part_type($exe_type, $socket, $seed, $cat)
         {
             $exe_type = ($cat <= 5) ? 1 : 0;
             return $this->website->db('web')->query('SELECT seed, socket_id, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->sanitize_var($socket) . ' AND seed = ' . $this->website->db('web')->sanitize_var($seed) . ' AND status != 0 AND socket_part_type IN (-1, ' . $exe_type . ')')->fetch();
@@ -187,29 +181,17 @@
             return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shopp WHERE item_id = ' . $this->website->db('web')->sanitize_var($id) . ' AND original_item_cat = ' . $this->website->db('web')->sanitize_var($cat) . ' AND use_sockets = 1');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_serial($server = '')
+		public function generate_serial($server)
         {
-			if($server != ''){
-				$query = $this->website->db('game', $server)->query('EXEC WZ_GetItemSerial');
-			}
-			else{
-				$query = $this->game_db->query('EXEC WZ_GetItemSerial');
-			}
+			$query = $this->website->db('game', $server)->query('EXEC WZ_GetItemSerial');
             $data = $query->fetch();
             $query->close_cursor();
             return $data;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_serial2($count = 1, $server = '')
+		public function generate_serial2($count = 1, $server)
         {
-			if($server != ''){
-				$query = $this->website->db('game', $server)->query('EXEC WZ_GetItemSerial2 ' . $this->game_db->sanitize_var($count) . '');
-			}
-			else{
-				$query = $this->game_db->query('EXEC WZ_GetItemSerial2 ' . $this->game_db->sanitize_var($count) . '');
-			}
+			$query = $this->website->db('game', $server)->query('EXEC WZ_GetItemSerial2 ' . this->website->db('game', $server)->sanitize_var($count) . '');
             $data = $query->fetch();
             $query->close_cursor();
             return $data;
@@ -221,29 +203,20 @@
             return ($disc == 1) ? floor($price - (($price / 100) * $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|discount_perc'))) : $price;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_vault_content($user = '')
+		public function get_vault_content($user, $server)
         {
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
-			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
-			$stmt = $this->game_db->prepare('SELECT ' . $sql . ' FROM Warehouse WHERE AccountId = :user');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){ 
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $this->vault_items['Items']);
-					$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->vault_items['Items'] = $this->clean_hex($this->vault_items['Items']);
-				}
+				$unpack = unpack('H*', $this->vault_items['Items']);
+				$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
 				return $this->vault_items;
 			} else{
 				return false;
 			}            
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function clean_hex($data)
+		private function clean_hex($data)
         {
             if(substr_count($data, "\0")){
                 $data = str_replace("\0", '', $data);
@@ -251,8 +224,7 @@
             return strtoupper($data);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function check_space($items, $item_x, $item_y, $multiplier = 120, $size = 32, $hor = 8, $ver = 15, $add_to_slot = false)
+		public function check_space($items, $item_x, $item_y, $multiplier = 120, $size = 32, $hor = 8, $ver = 15, $add_to_slot = false)
         {
             $spots = str_repeat('0', $multiplier);
             $items_array = str_split($items, $size);
@@ -290,8 +262,7 @@
             return null;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function search($x, $y, $item_w, $item_h, &$spots, $vault_w)
+		public function search($x, $y, $item_w, $item_h, &$spots, $vault_w)
         {
             for($yy = 0; $yy < $item_h; $yy++){
                 for($xx = 0; $xx < $item_w; $xx++){
@@ -302,8 +273,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_new_items($new_item, $slot, $multiplier = 120, $size = 32, $items = false, $return = false)
+		public function generate_new_items($new_item, $slot, $multiplier = 120, $size = 32, $items = false, $return = false)
         {
             $items = ($items != false) ? $items : $this->vault_items['Items'];
             for($x = 0; $x < $multiplier; ++$x){
@@ -315,11 +285,9 @@
                 return $this->new_vault;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_warehouse($user = '')
+		public function update_warehouse($user, $server)
         {
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
-            $stmt = $this->game_db->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_vault . ' WHERE AccountId = :user');
+            $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_vault . ' WHERE AccountId = :user');
             $stmt->execute([':user' => $this->website->c($user)]);
         }
 
@@ -393,8 +361,7 @@
             return $stmt->fetch_all();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_vip($id, $server)
+		public function check_vip($id, $server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT [id]
                                               ,[package_title]
@@ -495,8 +462,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_vip_package($id, $viptime, $user = false, $server = false)
+		public function update_vip_package($id, $viptime, $user = false, $server = false)
         {
 			if(!$user)
 				$user = $this->session->userdata(['user' => 'username']);
@@ -519,8 +485,7 @@
             $stmt->execute([':account' => $user, ':server' => $server]);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_server_vip($viptime, $viptype, $connect_member_load, $query_config, $user = false, $server = false)
+		public function add_server_vip($viptime, $viptype, $connect_member_load, $query_config, $user = false, $server = false)
         {
             $user = ($user != false) ? $user : $this->session->userdata(['user' => 'username']);
 			$server = ($server != false) ? $server : $this->session->userdata(['user' => 'server']);
@@ -553,8 +518,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function update_server_vip($viptime, $paycode, $query, $user, $server)
+		private function update_server_vip($viptime, $paycode, $query, $user, $server)
         {
             $stmt = $this->website->db('account', $server)->prepare($query);
             $data = [':until_date' => ($paycode != -1) ? date('Y-m-d H:i:s', $viptime) : $viptime];
@@ -565,8 +529,7 @@
             return $stmt->execute($data);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function insert_server_vip($viptime, $paycode, $query, $user, $server)
+		private function insert_server_vip($viptime, $paycode, $query, $user, $server)
         {
             $stmt = $this->website->db('account', $server)->prepare($query);
             $data = [':account' => $user, ':until_date' => ($paycode != -1) ? date('Y-m-d H:i:s', $viptime) : $viptime];
@@ -576,8 +539,7 @@
             return $stmt->execute($data);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function add_to_connect_member($connect_member_load, $user = false)
+		private function add_to_connect_member($connect_member_load, $user = false)
         {
             $info = pathinfo($connect_member_load);
             if(isset($info['extension']) && $info['extension'] == 'txt'){
@@ -588,8 +550,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function write_to_txt_member($connect_member_load, $user = false)
+		private function write_to_txt_member($connect_member_load, $user = false)
         {
             if(is_writable($connect_member_load)){
                 $acc_exists = false;
@@ -609,8 +570,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function write_to_xml_member($connect_member_load, $user = false)
+		private function write_to_xml_member($connect_member_load, $user = false)
         {
             if(is_writable($connect_member_load)){
                 $data = simplexml_load_file($connect_member_load);

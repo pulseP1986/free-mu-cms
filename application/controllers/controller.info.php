@@ -33,11 +33,11 @@
                 $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
             }
             $this->load->model('account');
-            if($server != ''){
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($server)]);
-            } else{
+			
+            if($server == ''){
                 throw new Exception('Invalid server selected.');
             }
+			
             if($name == ''){
                 $this->vars['error'] = __('Invalid Character');
             } else{
@@ -50,10 +50,10 @@
                     }
                     $this->vars['country_code'] = $this->website->get_country_code($this->vars['status']['IP']);
                     $this->vars['country'] = $this->website->codeToCountryName($this->vars['country_code']);
-                    $this->vars['char_list'] = $this->Mcharacter->load_chars($this->Mcharacter->char_info['AccountId']);
-                    if($this->vars['guild_check'] = $this->Mcharacter->check_guild($this->Mcharacter->char_info['Name'])){
-                        $this->vars['guild_info'] = $this->Mcharacter->load_guild_info($this->vars['guild_check']['G_Name']);
-                        $this->vars['member_count'] = $this->Mcharacter->guild_member_count($this->vars['guild_check']['G_Name']);
+                    $this->vars['char_list'] = $this->Mcharacter->load_chars($this->Mcharacter->char_info['AccountId'], $server);
+                    if($this->vars['guild_check'] = $this->Mcharacter->check_guild($this->Mcharacter->char_info['Name'], $server)){
+                        $this->vars['guild_info'] = $this->Mcharacter->load_guild_info($this->vars['guild_check']['G_Name'], $server);
+                        $this->vars['member_count'] = $this->Mcharacter->guild_member_count($this->vars['guild_check']['G_Name'], $server);
                     } else{
                         $this->vars['no_guild'] = true;
                     }
@@ -64,7 +64,7 @@
                     if($this->config->config_entry('character_' . $server . '|show_equipment') == 1){
                         $this->vars['equipment'] = $this->Mcharacter->load_equipment($server);
 						if(isset($this->vars['equipment'][12]) && $this->vars['equipment'][12] != 0){
-							$this->vars['pentagram_data'] = $this->Mcharacter->getPentagramData($this->Mcharacter->char_info['AccountId'], $this->Mcharacter->char_info['Name'], $server, $this->vars['equipment'][12]['socket']);
+							$this->vars['pentagram_data'] = $this->Mcharacter->load_pentagram_data($this->Mcharacter->char_info['AccountId'], $this->Mcharacter->char_info['Name'], $server, $this->vars['equipment'][12]['socket']);
 						}
 						else{
 							$this->vars['pentagram_data'] = false;
@@ -94,11 +94,10 @@
 
         public function guild($name = '', $server = '')
         {
-            if($server != ''){
-                $this->load->lib(['game_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($server)]);
-            } else{
-                throw new Exception('Invalid server selected.');
+            if($server == ''){
+               throw new Exception('Invalid server selected.');
             }
+			
             if($name == ''){
                 $this->vars['errors'] = __('Invalid Guild');
             } else{
