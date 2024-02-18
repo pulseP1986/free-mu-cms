@@ -48,7 +48,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function get_muun_content($char, $server = '') {
 			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
-			if($this->website->db('game', $server)->check_table('MuunInventory') > 0)
+			if($this->website->db('game', $server)->check_if_table_exists('MuunInventory'))
 				$tbl = 'MuunInventory';
 			else
 				$tbl = 'IGC_Muun_Inventory';

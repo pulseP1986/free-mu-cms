@@ -191,11 +191,6 @@
             return $query['count'];
         }
 
-        public function check_table($table = '')
-        {
-            return $this->snumrows('SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_name = \'' . $this->sanitize_var($table) . '\'');
-        }
-
         public function rows_affected()
         {
             return $this->query->rowCount();
@@ -301,14 +296,16 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function check_if_table_exists($table)
         {
-            return $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'' . $this->sanitize_var($table) . '\'')->fetch();
+            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'' . $this->sanitize_var($table) . '\'')->fetch();
+			return ($data != false) ? true : false;
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function check_if_column_exists($column, $table)
         {
-            return $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $this->sanitize_var($table) . '\'  AND COLUMN_NAME = \'' . $this->sanitize_var($column) . '\'')->fetch();
-        }
+            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $this->sanitize_var($table) . '\'  AND COLUMN_NAME = \'' . $this->sanitize_var($column) . '\'')->fetch();
+			return ($data != false) ? true : false;
+		}
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function add_column($column, $table, $info)
@@ -574,12 +571,6 @@
             $query = $this->query($query)->fetch();
             return $query['count'];
         }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_table($table = '')
-        {
-            return $this->snumrows('SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_name = \'' . $this->sanitize_var($table) . '\'');
-        }
 
         public function rows_affected()
         {
@@ -690,14 +681,16 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function check_if_table_exists($table)
         {
-            return $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'' . $this->sanitize_var($table) . '\'')->fetch();
+            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'' . $this->sanitize_var($table) . '\'')->fetch();
+			return ($data != false) ? true : false;
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function check_if_column_exists($column, $table)
         {
-            return $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $this->sanitize_var($table) . '\'  AND COLUMN_NAME = \'' . $this->sanitize_var($column) . '\'')->fetch();
-        }
+            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $this->sanitize_var($table) . '\'  AND COLUMN_NAME = \'' . $this->sanitize_var($column) . '\'')->fetch();
+			return ($data != false) ? true : false;
+		}
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function add_column($column, $table, $info)

@@ -3401,7 +3401,7 @@
 					}
 				}
 				elseif(strlen($this->hex) > 64){
-					if($this->website->db('game', $this->server)->check_table('CashShopPeriodicItem') > 0){
+					if($this->website->db('game', $this->server)->check_if_table_exists('CashShopPeriodicItem')){
 						$serial = hexdec(substr($this->hex, 6, 8));
 						if($serial > 0){
 							$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT Time AS ExpireDate FROM CashShopPeriodicItem WHERE ItemSerial = '.$this->website->db('game', $this->server)->sanitize_var($serial).'', 360);
@@ -3413,7 +3413,7 @@
 						}
 					}
 					else{
-						if($this->website->db('game', $this->server)->check_table('CashShopPeriodItem') > 0){
+						if($this->website->db('game', $this->server)->check_if_table_exists('CashShopPeriodItem')){
 							if($serial > 0){
 								$serial = hexdec(substr($this->hex, 6, 8));
 								$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT Time AS ExpireDate FROM CashShopPeriodItem WHERE ItemSerial = '.$this->website->db('game', $this->server)->sanitize_var($serial).'', 360);

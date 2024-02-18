@@ -114,9 +114,9 @@
 			return false;
         }
 
-        public function check_if_validated($email)
+        public function check_if_validated($email, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb___id, memb__pwd, activated, activation_id FROM MEMB_INFO WHERE mail_addr = :email');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb___id, memb__pwd, activated, activation_id FROM MEMB_INFO WHERE mail_addr = :email');
             $stmt->execute([':email' => $email]);
             return $stmt->fetch();
         }
@@ -125,7 +125,7 @@
         {
             $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username Collate Database_Default)');
             $stmt->execute([':username' => $name]);
-            return ($stmt->fetch()) ? true : false;
+            return $stmt->fetch();
         }
 
         public function check_duplicate_email($email)
@@ -222,7 +222,7 @@
             $prepare = $this->account_db->prepare($this->account_db->get_insert('MEMB_INFO', $data));
 			//var_dump($this->account_db->get_insert('MEMB_INFO', $data));
             if($prepare->execute()){
-				if($this->account_db->check_table('VI_CURR_INFO') > 0){
+				if($this->account_db->check_if_table_exists('VI_CURR_INFO')){
 					$this->account_db->query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days ) VALUES ('2005','1',1234,'" . $this->account_db->sanitize_var($this->vars['user']) . "','" . $this->account_db->sanitize_var($this->vars['user']) . "',1,'7','6','3','6','6','".date("Ymd")."','0')");
 					return true;
 				}
@@ -668,7 +668,7 @@
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function checkMerchant($user, $server){
-			if($this->website->db('web')->check_table('DmN_Merchant_List') > 0){
+			if($this->website->db('web')->check_if_table_exists('DmN_Merchant_List')){
 				$stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Merchant_List WHERE memb___id = :user AND server = :server');
 				$stmt->execute(array(':user' => $user, ':server' => $server));
 				$data = $stmt->fetch();

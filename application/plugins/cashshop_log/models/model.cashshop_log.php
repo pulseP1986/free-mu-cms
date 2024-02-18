@@ -11,7 +11,7 @@
         }
 		
 		public function getLogs($user, $server){
-			if($this->website->db('game', $server)->check_table('T_InGameShop_Log') > 0){
+			if($this->website->db('game', $server)->check_if_table_exists('T_InGameShop_Log')){
 				$stmt = $this->website->db('game', $server)->prepare('SELECT ID1, ID2, ID3, Price, CoinType, BuyDate FROM T_InGameShop_Log WHERE AccountID = :user ORDER BY BuyDate DESC');
 				$stmt->execute([':user' => $user]);
 				$logs =  $stmt->fetch_all();

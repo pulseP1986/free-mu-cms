@@ -74,6 +74,7 @@
                 }
 				
                 $this->load->model('account');
+				
                 foreach($_POST as $key => $value){
                     $this->Maccount->$key = trim($value);
                 }
@@ -83,7 +84,7 @@
                     if(!$this->Maccount->valid_username($_POST['user'], 'a-zA-Z0-9_-', [$this->vars['config']['min_username'], $this->vars['config']['max_username']]))
                         $this->errors[] = __('The username you entered is invalid.');
 					else{
-                        if($this->Maccount->check_duplicate_account($_POST['user']))
+                        if($this->Maccount->check_duplicate_account($_POST['user']) != false)
                             $this->errors[] = __('The username you entered is already taken.');
                     }
                 }
@@ -332,16 +333,19 @@
                     }
                     $this->Maccount->email = $email;
                     if(!isset($_POST['user']))
-                        $this->vars['errors'][] = __('You haven\'t entered a username.'); else{
+                        $this->vars['errors'][] = __('You haven\'t entered a username.'); 
+					else{
                         if(!$this->Maccount->valid_username($_POST['user']))
-                            $this->vars['errors'][] = __('The username you entered is invalid.'); else{
-                            if($this->Maccount->check_duplicate_account($_POST['user']))
+                            $this->vars['errors'][] = __('The username you entered is invalid.'); 
+						else{
+                            if($this->Maccount->check_duplicate_account($_POST['user']) != false)
                                 $this->vars['errors'][] = __('The username you entered is already taken.');
                         }
                     }
                     if($this->vars['config']['generate_password'] == 0){
                         if(!isset($_POST['pass']))
-                            $this->vars['errors'][] = __('You haven\'t entered a password.'); else{
+                            $this->vars['errors'][] = __('You haven\'t entered a password.'); 
+						else{
                             if(!$this->Maccount->valid_password($_POST['pass']))
                                 $this->vars['errors'][] = __('The password you entered is invalid.');
                             $this->Maccount->test_password_strength($_POST['pass'], [$this->vars['config']['min_password'], $this->vars['config']['max_password']], $this->vars['config']['password_strength']);
@@ -454,20 +458,20 @@
                     if(isset($_POST['email'])){																   
                         if($this->website->is_multiple_accounts() == true){
                             $server = $_POST['server'];
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
                         } else{
                             $server = '';
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
                         }
                         $this->load->model('account');
                         foreach($_POST as $key => $value){
                             $this->Maccount->$key = trim($value);
                         }
                         if($_POST['email'] == '')
-                            $this->errors[] = __('You haven\'t entered an email-address.'); else{
+                            $this->errors[] = __('You haven\'t entered an email-address.'); 
+						else{
                             if(!$this->Maccount->valid_email($_POST['email']))
-                                $this->errors[] = __('You have entered an invalid email-address.'); else{
-                                $validated = $this->Maccount->check_if_validated($_POST['email']);
+                                $this->errors[] = __('You have entered an invalid email-address.'); 
+							else{
+                                $validated = $this->Maccount->check_if_validated($_POST['email'], $server);
                                 if($validated != false){
                                     if($validated['activated'] == 1){
                                         $this->errors[] = __('The email-address you entered is already activated.');

@@ -87,7 +87,12 @@
                 $table = 'WZ_CW_INFO';
             }
             $state = $this->website->db('game', $server)->query('SELECT CRYWOLF_STATE FROM ' . $table)->fetch();
-            return ($state['CRYWOLF_STATE'] == 0) ? __('Not Protected') : __('Protected');
+			if($state != false){
+				if($state['CRYWOLF_STATE'] != 0){
+					return __('Protected');
+				}
+			}
+            return __('Not Protected');
         }
 
         public function get_cs_info($server)
