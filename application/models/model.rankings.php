@@ -1,5 +1,5 @@
 <?php
-   //in_file();
+   in_file();
 
     class Mrankings extends model
     {
@@ -922,8 +922,7 @@
             return $this->website->cs;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_duel_rankings($server, $config, $table_config, $top)
+		private function load_duel_rankings($server, $config, $table_config, $top)
         {
             if(!isset($config['duels']) || ($table_config == false || $table_config['duels']['table'] == ''))
                 return false;
@@ -933,7 +932,7 @@
             $this->check_cache('duels', 'duels', $server, $config['duels']['cache_time']);
             if(!$this->website->cached){
 				$exclude_list = '';
-                if(isset($config['duels']['excluded_list'])){
+                if(isset($config['duels']['excluded_list']) && $config['duels']['excluded_list'] != ''){
                     $exclude_list = 'AND'.$this->exclude_list($config['duels']['excluded_list'], 'b.'.$table_config['duels']['identifier_column']);
                 }
                 if($exclude_list != ''){
