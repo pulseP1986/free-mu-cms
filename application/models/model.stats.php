@@ -191,11 +191,16 @@
 		
 		private function arca_table($server){
 			if($this->arca_table == null){
-				if($this->website->db('game', $server)->check_if_table_exists('IGC_ARCA_BATTLE_WIN_GUILD_INFO')){
-					$this->arca_table = 'IGC_ARCA_BATTLE_WIN_GUILD_INFO';
+				if($this->website->db('game', $server)->check_if_table_exists('ArcaBattleWinner')){
+					$this->arca_table = 'ArcaBattleWinner';
 				}
 				else{
-					$this->arca_table = 'ARCA_BATTLE_WIN_GUILD_INFO';
+					if($this->website->db('game', $server)->check_if_table_exists('IGC_ARCA_BATTLE_WIN_GUILD_INFO')){
+						$this->arca_table = 'IGC_ARCA_BATTLE_WIN_GUILD_INFO';
+					}
+					else{
+						$this->arca_table = 'ARCA_BATTLE_WIN_GUILD_INFO';
+					}
 				}
 			}
 			return $this->arca_table;
@@ -203,12 +208,18 @@
 		
 		public function get_arca_winner($server){
 			$table = $this->arca_table($server);
+			if($table == 'ArcaBattleWinner'){
+				return $this->website->db('game', $server)->query('SELECT a.GuildName AS G_Name, a.ObelistClass AS OuccupyObelisk, g.G_Mark, g.G_Master FROM '.$table.' AS a LEFT JOIN Guild AS g ON (a.GuildName COLLATE Database_Default = g.G_Name COLLATE Database_Default)')->fetch_all();  
+			}
 			return $this->website->db('game', $server)->query('SELECT a.G_Name, a.OuccupyObelisk, g.G_Mark, g.G_Master FROM '.$table.' AS a LEFT JOIN Guild AS g ON (a.G_Name COLLATE Database_Default = g.G_Name COLLATE Database_Default)')->fetch_all();           
 		}
 		
 		public function get_arca_guild_list($server, $cache_time)
         {
 			$table = $this->arca_table($server);
+			if($table == 'ArcaBattleWinner'){
+				return $this->website->db('game', $server)->query('SELECT GuildName AS G_Name FROM ArcaBattleGuildEmblem')->fetch_all();
+			}
 			$guild_list_table = ($table == 'IGC_ARCA_BATTLE_WIN_GUILD_INFO') ? 'IGC_ARCA_BATTLE_GUILDMARK_REG' : 'ARCA_BATTLE_GUILDMARK_REG';
             return $this->website->db('game', $server)->query('SELECT G_Name FROM '.$guild_list_table.'')->fetch_all();
         }
