@@ -1,0 +1,443 @@
+<script src="<%= base_url %>assets/plugins/js/workshop.js"></script>
+<script type="text/javascript">	
+	var workshop = new workshop();
+	workshop.setUrl('<%= base_url %>workshop');
+	workshop.set_category(<%= item.original_item_cat %>);
+	workshop.set_price(<%= price %>);
+	workshop.set_lvl_price(<%= config.level_price %>);
+	workshop.set_current_lvl(<%= level %>);
+	workshop.set_max_lvl(<%= config.max_level_allowed %>);
+	workshop.set_option_price(<%= config.option_price %>);
+	workshop.set_current_option(<%= option %>);
+	workshop.set_luck_price(<%= config.luck_price %>);
+	workshop.set_skill_price(<%= config.skill_price %>);
+	workshop.set_exe_price(<%= config.exe_opt_price %>);
+	workshop.set_remove_exe_price(<%= config.remove_exe_opt_price %>);
+	workshop.set_exe_limit(<%= config.max_exe_opt %>);	
+	workshop.set_current_exe_opts([<%= exe_opts[0] %> ,<%= exe_opts[1] %>,<%= exe_opts[2] %>,<%= exe_opts[3] %>,<%= exe_opts[4] %>,<%= exe_opts[5] %>,<%= exe_opts[6] %>,<%= exe_opts[7] %>,<%= exe_opts[8] %>,<%= exe_opts[9] %>]);
+	workshop.equal_seeds(<%= config.allow_equal_seed %>);
+	workshop.equal_sockets(<%= config.allow_equal_sockets %>);
+	workshop.set_current_socket_opts([<%= sockets[1] %> ,<%= sockets[2] %>,<%= sockets[3] %>,<%= sockets[4] %>,<%= sockets[4] %>,<%= exe_opts[5] %>]);
+	$(document).ready(function(){
+		workshop.intializeCalculator();
+		$('#upgrade_item').on('click', function(e){
+			workshop.upgradeItem(<%= payment_code %>);
+			e.preventDefault();
+		});
+	});	
+</script>
+<form method="POST" action="" name="upgrade_item" id="item_form">
+	<input type="hidden" name="sr" value="<%= sr %>" />
+	<input type="hidden" name="character" value="<%= char %>" />
+	<input type="hidden" id="item_level" name="item_level" value="<%= level %>" />
+	<input type="hidden" id="item_opt" name="item_opt" value="<%= option %>" />
+	<input type="hidden" id="item_luck" name="item_luck" value="<%= luck %>" /> 
+	<input type="hidden" id="item_skill" name="item_skill" value="<%= has_skill %>" /> 
+	<div class="upgtitle">Item Upgrade</div>
+	<div class="updates" style="display: block;">
+		<% 
+		var can_upgrade = false;
+		if(item.max_item_lvl != 0 && config.allow_upgrade_level != 0 && level >= config.min_level_required && level <= config.max_level_allowed && item.exetype != -1){
+			can_upgrade = true;
+		%>
+		<div class="group tooltip-toggle" id="credits_level" aria-label="Cost: 0 Points" tabindex="1"><%= App.lc.translate('Level').fetch() %>
+			<div class="add skew" id="lvl_add" data-max-option="<%= config.max_level_allowed %>"><i class="fa fa-plus"></i></div>
+			<div class="value skew" id="lvl_display">+<%= level %></div>
+		</div>
+		<% 
+		}
+		if(item.max_item_opt != 0 && config.allow_upgrade_option != 0 && option >= config.min_option_required && option <= config.max_option_allowed){ 
+			can_upgrade = true;
+		%>
+			<div class="group tooltip-toggle"  id="credits_opt" aria-label="Cost: 0 Points" tabindex="2">Option
+			<div class="add skew" id="opt_add" data-max-option="<%= config.max_option_allowed %>"><i class="fa fa-plus"></i></div>
+			<div class="value skew" id="opt_display">
+			<% if(item.original_item_cat == 13){ 
+				var view_a = option+'%';
+			}else{
+				var view_a = (option*((item.original_item_cat == 6) ? 5 : 4));
+			} %>
+			<% if(item.original_item_cat == 13){ %>
+			<%= view_a %>%
+			<% }else{ %>
+			+<%= view_a %>
+			<% } %>
+			</div>
+		</div>
+		<% 
+		} 
+		if(config.allow_add_luck == 1 && item.luck == 1 && luck == 0){
+			can_upgrade = true;
+		%>
+		<div class="group tooltip-toggle" id="credits_luck" aria-label="Cost: 0 Points" tabindex="3">Luck
+			<div class="ok skew" id="luck_add"><i class="fa fa-check"></i></div>
+			<div class="value skew" id="luck_value">No</div>
+		</div>
+		<% 
+		} 
+		if(config.allow_add_skill == 1 && skill != 0 && has_skill == 0){
+			can_upgrade = true;
+		%>
+		<div class="group tooltip-toggle" id="credits_skill" aria-label="Cost: 0 Points" tabindex="4">Skill
+			<div class="ok skew" id="skill_add"><i class="fa fa-check"></i></div>
+			<div class="value skew" id="skill_value">No</div>
+		</div>
+		<% 
+		} 
+		if(config.allow_add_exe == 1){
+		if(item.use_sockets != 1 || mu_version <= 5){ %>
+		<% if(item.exetype == 1){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Increases Mana After monster +Mana/8</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Increases Life After monster +Life/8</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Increase attacking(wizardly)speed+7</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Increase Damage +2%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Increase Damage +level/20</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Excellent Damage Rate +10%</div>
+				</div>
+			</div>
+		
+		<%
+		}
+		else if(item.exetype == 9){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Increases Mana After monster +Mana/8</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Increases Life After monster +Life/8</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Increase attacking(wizardly)speed+7</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Excellent Damage Rate +10%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex7" name="exe[]" type="checkbox" value="7" <% if(exe_opts[7] == 7){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex7"></label></div>
+					<div class="value skew">ATK DMG increases by %.1f every 20Lv</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex8" name="exe[]" type="checkbox" value="8" <% if(exe_opts[8] == 8){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex8"></label></div>
+					<div class="value skew">Increased by ATK DMG %d</div>
+				</div>
+			</div>
+		<%
+		}
+		else if(item.exetype == 2){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Increase Zen After Hunt +40%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Defense success rate +10%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Reflect damage +5%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Damage decrease +4%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Increase MaxMana +4%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Increase MaxHP +4%</div>
+				</div>
+			</div>
+		<%
+		}
+		else if(item.exetype == 10){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Defense success rate +10%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Reflect damage +5%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex7" name="exe[]" type="checkbox" value="7" <% if(exe_opts[7] == 7){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex7"></label></div>
+					<div class="value skew">Increase Maximum Life by %d</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex8" name="exe[]" type="checkbox" value="8" <% if(exe_opts[8] == 8){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex8"></label></div>
+					<div class="value skew">Increase Maximum Mana by %d</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex9" name="exe[]" type="checkbox" value="9" <% if(exe_opts[9] == 9){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex9"></label></div>
+					<div class="value skew">Decrease Damage By %d</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex10" name="exe[]" type="checkbox" value="10" <% if(exe_opts[10] == 10){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex10"></label></div>
+					<div class="value skew">Increases the amount of Zen acquired for hunting monsters by %d%%</div>
+				</div>
+			</div>
+		<% 
+		}
+		else if(item.exetype == 3){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">HP +115 Increase</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">MP +115 Increase</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Ignore enemys defensive power by 3%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Max AG +50 Increase</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Increase attacking(wizardly)speed+5</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+			</div>
+		<% 
+		}
+		else if(item.exetype == 5){ 
+			can_upgrade = true;
+		%>
+		<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Increase MaxHP +4%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Increase MaxMana +4</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Damage decrease +4%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Reflect damage +5%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Defense success rate +10%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Increase Zen After Hunt +40%</div>
+				</div>
+			</div>
+		<% 
+		}
+		else if(item.exetype == 6){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Ingore opponents defensive power by 5%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Returns the enemy's attack power in 5%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Complete recovery of life in 5% rate</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Complete recover of Mana in 5% rate</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+			</div>
+		<%
+		}
+		else if(item.exetype == 7){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Chance of Double Damage +4%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Chance of Damage From Breaking Enemy's Defense +4</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Complete recovery of life in 4% rate</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Complete recover of Mana in 5% rate</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+			</div>
+		<%
+		}
+		else if(item.exetype == 8){ 
+			can_upgrade = true;
+		%>
+			<div class="group excellent"> Excelent Option <small>(Maximum <%= config.max_exe_opt %>)</small>
+				<div>
+					<div class="add skew"><input id="ex1" name="exe[]" type="checkbox" value="1" <% if(exe_opts[1] == 1){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex1"></label></div>
+					<div class="value skew">Chance of Damage From Breaking Enemy's Def +3%</div>
+				</div>
+				<div>
+					<div class="add skew"><input id="ex2" name="exe[]" type="checkbox" value="2" <% if(exe_opts[2] == 2){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex2"></label></div>
+					<div class="value skew">Chance of Fully Recovering Life +5%</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex3" name="exe[]" type="checkbox" value="3" <% if(exe_opts[3] == 3){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex3"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex4" name="exe[]" type="checkbox" value="4" <% if(exe_opts[4] == 4){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex4"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex5" name="exe[]" type="checkbox" value="5" <% if(exe_opts[5] == 5){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex5"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+				<div style="display:none;">
+					<div class="add skew"><input id="ex6" name="exe[]" type="checkbox" value="6" <% if(exe_opts[6] == 6){ %> class="existing_exe" checked <% if(config.allow_remove_exe == 0) { %>disabled<% } %><% } %>><label class="fa" for="ex6"></label></div>
+					<div class="value skew">Empty</div>
+				</div>
+			</div>
+		<%
+		}
+		}
+		}
+		if(config.allow_add_socket == 1){
+		if(item.use_sockets == 1){
+		if(typeof item.socket_info != 'undefined'){
+		%>
+			<div class="group excellent"> Socket Options
+			<div>
+				<label class="label_select">
+					<select name="socket1" id="socket1">
+						<% for(var i=0; i<item.socket_info.length; i++){ %>
+								<option id="socket1-seed-<%= item.socket_info[i].seed %>-<%= i %>" value="<%= item.socket_info[i].seed %>-<%= item.socket_info[i].socket_id %>" <% if(sockets[1] == item.socket_info[i].socket_id){ %>selected="selected"<% } %>><%= item.socket_info[i].socket_name %></option>
+						<% } %>
+					</select>
+				</label>
+			</div>
+			<div>	
+				<label class="label_select">
+					<select name="socket2" id="socket2">
+						<% for(var i=0; i<item.socket_info.length; i++){ %>
+								<option id="socket2-seed-<%= item.socket_info[i].seed %>-<%= i %>" value="<%= item.socket_info[i].seed %>-<%= item.socket_info[i].socket_id %>" <% if(sockets[2] == item.socket_info[i].socket_id){ %>selected="selected"<% } %>><%= item.socket_info[i].socket_name %></option>
+						<% } %>
+					</select>
+				</label>
+			</div>
+			<div>	
+				<label class="label_select">
+					<select name="socket3" id="socket3">
+						<% for(var i=0; i<item.socket_info.length; i++){ %>
+								<option id="socket3-seed-<%= item.socket_info[i].seed %>-<%= i %>" value="<%= item.socket_info[i].seed %>-<%= item.socket_info[i].socket_id %>" <% if(sockets[3] == item.socket_info[i].socket_id){ %>selected="selected"<% } %>><%= item.socket_info[i].socket_name %></option>
+						<% } %>
+					</select>
+				</label>
+			</div>
+			<div>	
+				<label class="label_select">
+					<select name="socket4" id="socket4">
+						<% for(var i=0; i<item.socket_info.length; i++){ %>
+								<option id="socket4-seed-<%= item.socket_info[i].seed %>-<%= i %>" value="<%= item.socket_info[i].seed %>-<%= item.socket_info[i].socket_id %>" <% if(sockets[4] == item.socket_info[i].socket_id){ %>selected="selected"<% } %>><%= item.socket_info[i].socket_name %></option>
+						<% } %>
+					</select>
+				</label>
+			</div>
+			<div>	
+				<label class="label_select">
+					<select name="socket5" id="socket5">
+						<% for(var i=0; i<item.socket_info.length; i++){ %>
+								<option id="socket5-seed-<%= item.socket_info[i].seed %>-<%= i %>" value="<%= item.socket_info[i].seed %>-<%= item.socket_info[i].socket_id %>" <% if(sockets[5] == item.socket_info[i].socket_id){ %>selected="selected"<% } %>><%= item.socket_info[i].socket_name %></option>
+						<% } %>
+					</select>
+				</label>
+			</div>
+			
+			</div>
+			
+			
+
+		<%
+		}
+		}
+		}
+		%>
+		<div style="width: 100%; margin-left:20px;">
+			<%= App.lc.translate('Price').fetch() %> <span class="btimes" id="total_credits"><%= price %></span> <span class="normalcr"><%= payment_method %></span>
+		</div>
+		
+		<% 
+		if(can_upgrade){
+		%>
+		<div style="width: 100%; text-align: center;margin: 5px;"><a id="upgrade_item" href="#" class="myButton">Upgrade</a></div>
+		<%
+		}
+		%>
+	</div>
+</form>	
