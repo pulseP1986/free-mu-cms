@@ -293,7 +293,7 @@
         public function value($value)
         {
             if($this->plugin_data[$this->plugin_class] != false){
-                if(in_array($value, $this->plugin_data[$this->plugin_class])){
+                if(array_key_exists($value, $this->plugin_data[$this->plugin_class])){
                     return $this->plugin_data[$this->plugin_class][$value];
                 }
             }
