@@ -96,7 +96,7 @@
 							<td>' . date(DATETIME_FORMAT, strtotime($value['date'])) . '</td>
 							<td class="center">' . $value['seller'] . '</td>
 							<td class="center">' . $value['buyer'] . '</td>
-							<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+							<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 							<td class="center"><span id="log_item_' . $value['pos'] . '" data-info="' . $value['hex'] . '">' . $value['name'] . '</span></td>
 							<td class="center">' . $value['price'] . ' ' . $value['payment_type'] . '</td>
 							<td class="center">

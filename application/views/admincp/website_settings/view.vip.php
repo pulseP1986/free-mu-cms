@@ -77,7 +77,7 @@
 
                                 <td><?php echo $package['package_title']; ?></td>
                                 <td><?php echo $package['price']; ?><?php echo $this->website->translate_credits($package['payment_type'], $package['server']); ?></td>
-                                <td><?php echo $this->website->get_title_from_server($package['server']); ?></td>
+                                <td><?php echo $this->website->get_value_from_server($package['server'], 'title'); ?></td>
                                 <td><?php echo $this->website->seconds2days($package['vip_time']); ?></td>
                                 <td class="center" id="vip_status_icon_<?php echo $package['id']; ?>">
                                     <?php if($package['status'] == 1): ?>

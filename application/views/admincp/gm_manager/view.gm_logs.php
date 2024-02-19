@@ -104,7 +104,7 @@
 							<td>' . $value['account'] . '</td>
 							<td>' . date(DATETIME_FORMAT, strtotime($value['date'])) . '</td>
 							<td class="center">' . $value['text'] . '</td>
-							<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+							<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 							<td class="center">' . $value['ip'] . ' </td>
 						  </tr>';
                                 }

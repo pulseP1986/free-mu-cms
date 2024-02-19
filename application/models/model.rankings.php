@@ -938,7 +938,7 @@
                 if($exclude_list != ''){
                     $exclude_list = ' ' . str_replace(' AND', '', $exclude_list);
                 }
-                $query = $this->website->db($table_config['duels']['db'], $server)->query('SELECT TOP ' . (int)$this->top . ' b.' . $table_config['duels']['identifier_column'] . ', b.' . $table_config['duels']['column'] . ', b.' . $table_config['duels']['column2'] . ', c.Class, c.clevel, c.mlevel  FROM ' . $table_config['duels']['table'] . ' AS b INNER JOIN Character AS c ON (b.' . $table_config['duels']['identifier_column'] . ' Collate Database_Default = c.Name Collate Database_Default) WHERE b.' . $table_config['duels']['column'] . ' > 0 OR b.' . $table_config['duels']['column2'] . ' > 0 ' . $exclude_list . ' ORDER BY b.' . $table_config['duels']['column'] . ' DESC, b.' . $table_config['duels']['column2'] . ' ASC');
+                $query = $this->website->db($table_config['duels']['db'], $server)->query('SELECT TOP ' . (int)$this->top . ' b.' . $table_config['duels']['identifier_column'] . ', b.' . $table_config['duels']['column'] . ', b.' . $table_config['duels']['column2'] . ', c.Class, c.cLevel FROM ' . $table_config['duels']['table'] . ' AS b INNER JOIN Character AS c ON (b.' . $table_config['duels']['identifier_column'] . ' Collate Database_Default = c.Name Collate Database_Default) WHERE b.' . $table_config['duels']['column'] . ' > 0 OR b.' . $table_config['duels']['column2'] . ' > 0 ' . $exclude_list . ' ORDER BY b.' . $table_config['duels']['column'] . ' DESC, b.' . $table_config['duels']['column2'] . ' ASC');
                 if($query){
                     $i = 0;
                     while($row = $query->fetch()){
@@ -951,7 +951,7 @@
 							'ratio' => $this->duel_ratio($row[$table_config['duels']['column']], $row[$table_config['duels']['column2']]),
 							'class' => $this->website->get_char_class($row['Class']), 
 							'class_small' => $this->website->get_char_class($row['Class'], true),
-							'level' => $row['clevel'] + $row['mLevel'],
+							'level' => $row['cLevel'],
 							//'loc' => $this->website->get_map_name($row['MapNumber']),
 							'g_name' => ($guild != false) ? $guild['name'] : '',
 							'g_mark' => ($guild != false) ? $guild['logo'] : '',

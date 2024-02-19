@@ -77,7 +77,7 @@
                                     echo '<tr>
 							<td>' . $value['transaction'] . '</td>
 							<td>' . $value['sender'] . '</td>
-							<td class="center">' . $value['acc'] . ' - ' . $this->website->get_title_from_server($value['server']) . '</td>
+							<td class="center">' . $value['acc'] . ' - ' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 							<td class="center">' . $value['credits'] . '</td>
 						  </tr>';
                                 }

@@ -2823,7 +2823,7 @@
 							$amount,
 							$info['date'], 
 							$info['ip'], 
-							$this->website->get_title_from_server($info['server'])];
+							$this->website->get_value_from_server($info['server'], 'title')];
                     }
                 } else{
                     $this->vars['data'] = [];
@@ -4506,7 +4506,7 @@
                                         json(['error' => 'Please select valid reward type']); else{
                                         if(!$this->Madmin->check_referral_reward($req_lvl, $req_res, $req_gres, $reward_type, $server)){
                                             if($id = $this->Madmin->add_referral_reward($req_lvl, $req_res, $req_gres, $reward, $reward_type, $server)){
-                                                json(['success' => 'Reward successfully added', 'id' => $id, 'server' => $this->website->get_title_from_server($server), 'reward_type' => $this->website->translate_credits($reward_type, $server)]);
+                                                json(['success' => 'Reward successfully added', 'id' => $id, 'server' => $this->website->get_value_from_server($server, 'title'), 'reward_type' => $this->website->translate_credits($reward_type, $server)]);
                                             } else{
                                                 json(['error' => 'Unable to add new reward']);
                                             }
@@ -5533,7 +5533,7 @@
 										Edit Partner
 									</a>';
 						}
-                        $this->vars['data'][] = [$info['memb___id'], date(DATETIME_FORMAT, strtotime($info['reg_date'])), $info['country'], $this->website->get_title_from_server($info['server']), '<a class="btn btn-success" href="' . $this->config->base_url . ACPURL . '/edit-account/' . $info['id'] . '/' . $info['server'] . '">
+                        $this->vars['data'][] = [$info['memb___id'], date(DATETIME_FORMAT, strtotime($info['reg_date'])), $info['country'], $this->website->get_value_from_server($info['server'], 'title'), '<a class="btn btn-success" href="' . $this->config->base_url . ACPURL . '/edit-account/' . $info['id'] . '/' . $info['server'] . '">
 							<i class="icon-edit icon-white"></i>  
 							Edit                                            
 						</a> ' . $this->vars['activate_link'] . '

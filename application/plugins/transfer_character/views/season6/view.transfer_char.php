@@ -15,7 +15,7 @@
 			<h1><?php echo __($about['name']); ?></h1>
 		</div>
 		<div class="box-style1" style="margin-bottom: 20px;">
-			<h2 class="title"><?php echo sprintf(__('Transfer character to %s server'), $this->website->get_title_from_server($plugin_config['to']));?></h2>
+			<h2 class="title"><?php echo sprintf(__('Transfer character to %s server'), $this->website->get_value_from_server($plugin_config['to'], 'title'));?></h2>
 			<div class="entry" >
 				<?php
 				if(isset($error)){

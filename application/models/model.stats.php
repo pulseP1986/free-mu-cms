@@ -32,11 +32,11 @@
 				], 
 				'online' => [
 					'query' => 'SELECT COUNT(*) AS count FROM MEMB_STAT WHERE ConnectStat = 1 ' . $this->website->server_code($this->website->get_servercode($server)) . '', 
-					'db' => $this->website->db('online_db', $server)
+					'db' => $this->website->db('account', $server)
 				], 
 				'active' => [
 					'query' => 'SELECT DISTINCT(COUNT(ip)) AS count FROM MEMB_STAT WHERE ConnectTM >= \'' . date('Ymd H:i:s', strtotime('-1 days', mktime(0, 0, 0))) . '\' ' . $this->website->server_code($this->website->get_servercode($server)) . '', 
-					'db' => $this->website->db('online_db', $server)
+					'db' => $this->website->db('account', $server)
 				], 
 				'market_items' => [
 					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND sold != 1 AND removed != 1', 
@@ -189,7 +189,6 @@
             return $sec - 1;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		private function arca_table($server){
 			if($this->arca_table == null){
 				if($this->website->db('game', $server)->check_if_table_exists('IGC_ARCA_BATTLE_WIN_GUILD_INFO')){
@@ -202,13 +201,11 @@
 			return $this->arca_table;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function get_arca_winner($server){
 			$table = $this->arca_table($server);
 			return $this->website->db('game', $server)->query('SELECT a.G_Name, a.OuccupyObelisk, g.G_Mark, g.G_Master FROM '.$table.' AS a LEFT JOIN Guild AS g ON (a.G_Name COLLATE Database_Default = g.G_Name COLLATE Database_Default)')->fetch_all();           
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function get_arca_guild_list($server, $cache_time)
         {
 			$table = $this->arca_table($server);
@@ -216,7 +213,6 @@
             return $this->website->db('game', $server)->query('SELECT G_Name FROM '.$guild_list_table.'')->fetch_all();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function ice_wind_winner($server){
 			if($this->website->db('game', $server)->check_if_table_exists('IGC_IceWind_Data')){
 				return $this->website->db('game', $server)->query('SELECT cs.OwnerGuildNumber, cs.LastSiegeDate, g.G_Name, g.G_Master, g.G_Mark FROM IGC_IceWind_Data AS cs INNER JOIN Guild AS g ON (cs.OwnerGuildNumber = g.Number) ORDER By LastSiegeDate DESC')->fetch();           
@@ -224,7 +220,6 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function get_icewind_guild_list($server, $cache_time)
         {
 			if($this->website->db('game', $server)->check_if_table_exists('IGC_IceWind_RegGuildList')){
@@ -233,7 +228,6 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function getHuntingLog($name, $server)
 		{
 			if($this->website->db('game', $server)->check_if_table_exists('IGC_HuntingRecord')){
@@ -245,7 +239,6 @@
 			return $this->website->db('game', $server)->query('SELECT MapIndex, mDate, SUM(cast(HuntingAccrueSecond as decimal(38,0))) as TotalTime, SUM(cast(NormalAccrueDamage as decimal(38,0))) as TotalDmg, SUM(cast(PentagramAccrueDamage as decimal(38,0))) as TotalElDmg, SUM(cast(MonsterKillCount as decimal(38,0))) as TotalKills, SUM(cast(AccrueExp as decimal(38,0))) as TotalExp FROM '.$table.' WHERE Name = \''.$this->website->db('game', $server)->sanitize_var($name).'\' GROUP BY MapIndex, mDate ORDER BY SUM(HuntingAccrueSecond) DESC')->fetch_all();
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function getKillStats($name, $server)
 		{
 			if($this->website->db('game', $server)->check_if_table_exists('C_PlayerKiller_Info')){
@@ -254,7 +247,6 @@
 			return [];
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function findHiddenKillers($server, $cache_time = 120)
 		{
 			$this->website->check_cache('hidden_pk_chars', 'chars', $cache_time);

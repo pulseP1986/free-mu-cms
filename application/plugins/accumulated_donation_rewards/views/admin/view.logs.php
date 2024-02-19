@@ -85,7 +85,7 @@
 										<td><a href="'.$this->config->base_url.'accumulated-donation-rewards/edit/' . $value['reward_id'] .'/'. $value['server'] .'">' . $value['reward_id'] . '</a></td>
 										<td>' . $value['name'] . '</td>
 										<td class="center">' . $value['memb___id'] . '</td>
-										<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+										<td class="center">' . $this->website->get_value_from_server($server, 'title') . '</td>
 										<td class="center">' . $value['claim_date'] . '</td>
 									  </tr>';
                                     }

@@ -78,8 +78,8 @@
 										<td>'.$value['name'].'</td>
 										<td>' . $value['newname'] . '</td>
 										<td class="center">' . $value['fromAccount'] . '</td>
-										<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
-										<td class="center">' . $this->website->get_title_from_server($value['toserver']) . '</td>
+										<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
+										<td class="center">' . $this->website->get_value_from_server($value['toserver'], 'title') . '</td>
 										<td class="center">' . $value['date'] . '</td>
 									  </tr>';
                                     }

@@ -82,7 +82,7 @@
 												<td>' . $value['id'] . '</td>
 												<td>' . $value['merchant'] . '</td>
 												<td>' . $value['amount'] . ' - ' . $value['currency'] . '</td>
-												<td class="center">' . $value['account'] . ' - ' . $this->website->get_title_from_server($value['server']) . '</td>
+												<td class="center">' . $value['account'] . ' - ' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 												<td class="center">' . $value['date'] . '</td>
 											  </tr>';
                                     }

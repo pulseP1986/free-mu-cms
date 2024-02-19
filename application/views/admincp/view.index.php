@@ -51,19 +51,19 @@
                             <li>
                                 <a href="#">
                                     <span class="green"><?php echo $stats[$key]['reg_day']; ?></span> Registrations
-                                    Today <?php echo $this->website->get_title_from_server($key); ?>
+                                    Today <?php echo $this->website->get_value_from_server($key, 'title'); ?>
                                 </a>
                             </li>
                             <li>
                                 <a href="#">
                                     <span class="red"><?php echo $stats[$key]['reg_week']; ?></span> Registrations This
-                                    Week <?php echo $this->website->get_title_from_server($key); ?>
+                                    Week <?php echo $this->website->get_value_from_server($key, 'title'); ?>
                                 </a>
                             </li>
                             <li>
                                 <a href="#">
                                     <span class="blue"><?php echo $stats[$key]['reg_month']; ?></span> Registrations This
-                                    Month <?php echo $this->website->get_title_from_server($key); ?>
+                                    Month <?php echo $this->website->get_value_from_server($key, 'title'); ?>
                                 </a>
                             </li>
                         <?php

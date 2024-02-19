@@ -76,7 +76,7 @@
                                 foreach($logs as $key => $value){
                                     echo '<tr>
 							<td>' . number_format($value['amount'], 1, '.', ',') . ' - ' . $value['currency'] . '</td>
-							<td class="center">' . $value['acc'] . ' - ' . $this->website->get_title_from_server($value['server']) . '</td>
+							<td class="center">' . $value['acc'] . ' - ' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 							<td class="center">' . $value['credits'] . '</td>
 							<td class="center">' . $value['order_date'] . '</td>
 						  </tr>';

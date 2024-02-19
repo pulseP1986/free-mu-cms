@@ -99,7 +99,7 @@
 										<td>' . $this->Mvip_rewards->get_vip_package_title($value['vip_type']) . '</td>
 										<td>' . $value['reward_type'] . '</td>
 										<td class="center">' . $value['memb___id'] . '</td>
-										<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+										<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 										<td class="center">' . $value['claim_date'] . '</td>
 									  </tr>';
                                     }

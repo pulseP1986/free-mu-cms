@@ -597,7 +597,7 @@ $this->load->view('admincp' . DS . 'view.sidebar');
     <div class="row-fluid">
         <div class="box span12">
 			<div class="box-header well">
-				<h2><i class="icon-edit"></i> <?php echo $this->website->get_title_from_server($server); ?> Achievement List</h2>
+				<h2><i class="icon-edit"></i> <?php echo $this->website->get_value_from_server($server, 'title'); ?> Achievement List</h2>
 			</div>
 			<div class="box-content">
 				<table class="table"  id="achievementlist_sortable">

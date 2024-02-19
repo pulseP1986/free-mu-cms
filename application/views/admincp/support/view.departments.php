@@ -51,7 +51,7 @@
                                         <span class="label label-important">Inactive</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $this->website->get_title_from_server($departments['server']); ?></td>
+                                <td><?php echo $this->website->get_value_from_server($departments['server'], 'title'); ?></td>
                                 <td>
                                     <a class="btn btn-success"
                                        href="<?php echo $this->config->base_url . ACPURL . '/edit-support-department/' . $departments['id']; ?>">

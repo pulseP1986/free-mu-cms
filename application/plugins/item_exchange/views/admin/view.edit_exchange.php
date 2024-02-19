@@ -154,7 +154,7 @@ $this->load->view('admincp' . DS . 'view.sidebar');
         <div class="box span12">
             <div class="tab-content">          
 				<div class="box-header well">
-					<h2><i class="icon-edit"></i><?php echo $this->website->get_title_from_server($server); ?> Exchange List</h2>
+					<h2><i class="icon-edit"></i><?php echo $this->website->get_value_from_server($server, 'title'); ?> Exchange List</h2>
 				</div>
 				<div class="box-content">
 					<table class="table">

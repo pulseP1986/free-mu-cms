@@ -318,7 +318,7 @@
                             echo '<tr>
 								<td>' . htmlspecialchars($value['account']) . '</td>
 								<td class="center">' . htmlspecialchars($value['character']) . '</td>
-								<td class="center">' . $this->website->get_title_from_server(htmlspecialchars($value['server'])) . '</td>
+								<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 								<td class="center">
 									<a class="btn btn-info" href="' . $this->config->base_url . ACPURL . '/edit-gm/' . $value['character'] . '/' . $value['server'] . '">
 										<i class="icon-edit icon-white"></i>  

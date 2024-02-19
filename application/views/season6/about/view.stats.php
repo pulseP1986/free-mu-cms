@@ -84,15 +84,15 @@
                                     <td style="width:50%;text-align: left;"><?php echo $stats['total_sold']; ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="width:50%;text-align: left;"><?php echo __('Total Sales For'); ?><?php echo $this->config->config_entry('credits_' . $server . '|title_1'); ?></td>
+                                    <td style="width:50%;text-align: left;"><?php echo __('Total Sales For'); ?><?php echo $this->website->translate_credits(1, $server); ?></td>
                                     <td style="width:50%;text-align: left;"><?php echo $stats['sales_credits']; ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="width:50%;text-align: left;"><?php echo __('Total Sales For'); ?><?php echo $this->config->config_entry('credits_' . $server . '|title_2'); ?></td>
+                                    <td style="width:50%;text-align: left;"><?php echo __('Total Sales For'); ?><?php echo $this->website->translate_credits(2, $server); ?></td>
                                     <td style="width:50%;text-align: left;"><?php echo $stats['sales_gcredits']; ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="width:50%;text-align: left;"><?php echo __('Total Sales For'); ?><?php echo $this->config->config_entry('credits_' . $server . '|title_3'); ?></td>
+                                    <td style="width:50%;text-align: left;"><?php echo __('Total Sales For'); ?><?php echo $this->website->translate_credits(3, $server); ?></td>
                                     <td style="width:50%;text-align: left;"
                                         class="end"><?php echo $this->website->zen_format($stats['sales_zen']); ?></td>
                                 </tr>

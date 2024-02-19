@@ -91,7 +91,7 @@
 										<td><span id="mlog_item_' . $key . '" data-info="' . $value['item'] . '">' . $value['name'] . '</span></td>
 										<td class="center">' . $value['seller'] . '</td>
 										<td class="center">' . $value['buyer'] . '</td>
-										<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+										<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 										<td class="center">' . $value['purchase_date'] . '</td>
 									  </tr>';
                                     }

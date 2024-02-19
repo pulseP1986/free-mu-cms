@@ -118,7 +118,7 @@
                                         <td class="center"><?php echo $data['required_res']; ?></td>
                                         <td class="center"><?php echo $data['required_gres']; ?></td>
                                         <td class="center"><?php echo $data['reward']; ?> <?php echo $this->website->translate_credits($data['reward_type'], $data['server']); ?></td>
-                                        <td class="center"><?php echo $this->website->get_title_from_server($data['server']);?></td>
+                                        <td class="center"><?php echo $this->website->get_value_from_server($data['server'], 'title');?></td>
                                         <td class="center" id="status_icon_<?php echo $data['id']; ?>">
                                             <?php if ($data['status'] == 1): ?>
                                                 <span class="label label-success">Active</span>

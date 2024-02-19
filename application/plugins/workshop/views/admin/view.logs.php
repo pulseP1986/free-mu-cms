@@ -99,7 +99,7 @@
 							<td><span id="log_item_after_' . $i . '" data-info="' . $value['hex_after'] . '">' . $value['hex_after'] . '</span></td>
 							<td class="center">' . $value['price'] . ' - ' . $this->website->translate_credits($value['payment_method'], $value['server']) . '</td>
 							<td class="center">' . $value['upgrade_date'] . '</td>
-							<td>' . $this->website->get_title_from_server($value['server']) . '</td>
+							<td>' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 						  </tr>';
                                     }
                                 ?>

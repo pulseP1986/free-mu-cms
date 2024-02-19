@@ -762,7 +762,7 @@
 					'joined' => $joined, 
 					'country' => $info['dmn_country'], 
 					'server' => (isset($server)) ? $server : null, 
-					'server_t' => (isset($server)) ? $this->website->get_title_from_server($server) : null,
+					'server_t' => (isset($server)) ? $this->website->get_value_from_server($server, 'title') : null,
 					'logged_in' => true,
 					'salt' => $salt,
 					'partner' => (defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true) ? $info['dmn_partner'] : 0,

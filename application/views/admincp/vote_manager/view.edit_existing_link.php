@@ -352,7 +352,7 @@
 									<td>' . htmlspecialchars($value['name']) . '</td>
 									<td>' . htmlspecialchars($value['votelink']) . '</td>
 									<td class="center">' . $value['reward'] . '</td>
-									<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+									<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 									<td class="center">
 										<a class="btn btn-info" href="' . $this->config->base_url . ACPURL . '/edit-vote/' . $value['id'] . '">
 											<i class="icon-edit icon-white"></i>  

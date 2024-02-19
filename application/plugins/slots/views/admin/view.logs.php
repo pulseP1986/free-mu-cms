@@ -81,7 +81,7 @@
                                     foreach($logs as $key => $value){
                                         echo '<tr>
 											<td>' . $value['id'] . '</td>
-											<td class="center">' . $value['acc'] . ' - ' . $this->website->get_title_from_server($value['server']) . '</td>
+											<td class="center">' . $value['acc'] . ' - ' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 											<td>' . $value['bet'] . '</td>
 											<td class="center">' . $value['prize_id'] . '</td>
 											<td class="center">' . $value['payout_credits'] . '</td>

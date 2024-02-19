@@ -698,16 +698,13 @@
 			return false;
         }
 
-        public function get_title_from_server($server)
-        {
-            $servers = $this->server_list($server);
-            return isset($servers['title']) ? $servers['title'] : '';
-        }
-
         public function get_value_from_server($server, $val = 'db')
         {
-            $servers = $this->server_list($server);
-            return $servers[$val];
+			static $servers = null;
+			
+			if($servers == null)
+				$servers = $this->server_list($server);
+            return $servers[$val] ?? 'unknown val';
         }
 
         public function check_cache($file, $return, $time = false, $delete_old_cache = true)

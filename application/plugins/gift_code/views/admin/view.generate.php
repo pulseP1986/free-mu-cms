@@ -401,12 +401,12 @@ $this->load->view('admincp' . DS . 'view.sidebar');
 							if(substr_count($value['server'], ',') > 0){
 								$server = explode(',', $value['server']);
 								foreach($server AS $srv){
-									$servers .= $this->website->get_title_from_server($srv).', ';
+									$servers .= $this->website->get_value_from_server($srv, 'title').', ';
 								}
 								$servers = substr($servers, 0, -2);
 							}
 							else{
-								$servers .= $this->website->get_title_from_server($value['server']);
+								$servers .= $this->website->get_value_from_server($value['server'], 'title');
 							}
                             echo '<tr>
 								<td>' . htmlspecialchars($value['code']) . '</td>

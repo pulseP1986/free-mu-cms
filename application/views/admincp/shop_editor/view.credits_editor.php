@@ -222,7 +222,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><?php echo $this->website->get_title_from_server($credits_info['server']); ?></td>
+                            <td><?php echo $this->website->get_value_from_server($credits_info['server'], 'title'); ?></td>
                             <td><?php echo $credits_info['credits']['credits']; ?></td>
                             <td><?php echo $credits_info['credits2']['credits']; ?></td>
                             <td><?php echo $this->website->zen_format($credits_info['credits3']['credits']); ?></td>

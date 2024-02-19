@@ -96,7 +96,7 @@
                                         echo '<tr>
 										<td>' . $value['reward_id'] . '</td>
 										<td class="center">' . $value['account'] . '</td>
-										<td class="center">' . $this->website->get_title_from_server($value['server']) . '</td>
+										<td class="center">' . $this->website->get_value_from_server($value['server'], 'title') . '</td>
 										<td class="center">' . $value['used'] . '</td>
 									  </tr>';
                                     }

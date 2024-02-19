@@ -28,7 +28,7 @@
                     foreach($reset_config AS $server => $settings){
                         ?>
                         <div class="box-header well">
-                            <h2><i class="icon-edit"></i> <?php echo $this->website->get_title_from_server($server); ?>
+                            <h2><i class="icon-edit"></i> <?php echo $this->website->get_value_from_server($server, 'title'); ?>
                                 Reset Settings</h2>
                         </div>
                         <div class="box-content">
