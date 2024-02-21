@@ -13,7 +13,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function load_guides($search = '')
         {
-            $guides = $this->website->db('web')->query('SELECT id, title, text FROM DmN_Guides WHERE lang = \'' . $this->website->db('web')->sanitize_var($this->config->language()) . '\' ORDER BY date DESC')->fetch_all();
+            $guides = $this->website->db('web')->query('SELECT id, title, text FROM DmN_Guides WHERE lang = '.$this->website->db('web')->escape($this->config->language()).' ORDER BY date DESC')->fetch_all();
 			$newGuides = [];
 			$sGuides = [];
 			foreach($guides AS $guide){
@@ -36,7 +36,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function load_guides_by_category($id)
         {
-            $guides = $this->website->db('web')->query('SELECT id, title, text FROM DmN_Guides WHERE lang = \'' . $this->website->db('web')->sanitize_var($this->config->language()) . '\' AND category = ' . $this->website->db('web')->sanitize_var($id) . ' ORDER BY date DESC')->fetch_all();
+            $guides = $this->website->db('web')->query('SELECT id, title, text FROM DmN_Guides WHERE lang = '.$this->website->db('web')->escape($this->config->language()).' AND category = ' . $this->website->db('web')->escape($id) . ' ORDER BY date DESC')->fetch_all();
 			$newGuides = [];
 			foreach($guides AS $guide){
 				$newGuides[] = [

@@ -17,9 +17,6 @@
             $this->load->model('support');
             $this->load->helper('breadcrumbs', [$this->request]);
             $this->load->helper('meta');
-            if($this->session->userdata(['user' => 'server'])){
-                $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-            }
         }
 
         public function index()

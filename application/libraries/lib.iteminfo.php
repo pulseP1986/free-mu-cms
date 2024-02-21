@@ -119,7 +119,7 @@
 				$this->expiretime = '';
             } 
 			else{
-                $this->website->writelog('Invalid item hex value. Value: ' . $item, 'system_error');
+                writelog('Invalid item hex value. Value: ' . $item, 'system_error');
                 return 'Invalid item hex value. Value: ' . $item;
             }
         }
@@ -189,10 +189,10 @@
                         return true;
                     } else{
 						if($hex != null){
-							$this->website->writelog('Item file load error - item with id: ' . $id . ' not found in category: ' . $type.'. HEX: '.$hex, 'system_error');
+							writelog('Item file load error - item with id: ' . $id . ' not found in category: ' . $type.'. HEX: '.$hex, 'system_error');
 						}
 						else{
-							$this->website->writelog('Item file load error - item with id: ' . $id . ' not found in category: ' . $type, 'system_error');
+							writelog('Item file load error - item with id: ' . $id . ' not found in category: ' . $type, 'system_error');
 						}
                         throw new Exception('Item file load error - item with id: ' . $id . ' not found in category: ' . $type);
                     }
@@ -202,10 +202,10 @@
                 }
             } else{
 				if($hex != null){
-					$this->website->writelog('Item file load - error category with id: ' . $type . ' not found. HEX: '.$hex, 'system_error');
+					writelog('Item file load - error category with id: ' . $type . ' not found. HEX: '.$hex, 'system_error');
 				}
 				else{
-					$this->website->writelog('Item file load - error category with id: ' . $type . ' not found', 'system_error');
+					writelog('Item file load - error category with id: ' . $type . ' not found', 'system_error');
 				}
                 throw new Exception('Item file load error - category with id: ' . $type . ' not found');
             }
@@ -3388,7 +3388,7 @@
 					$serial = hexdec(substr($this->hex, 32, 8));
 					if($serial > 0){
 						$column = (MU_VERSION >= 11) ? 'SerialCode' : 'Serial';
-						$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT ExpireDate FROM IGC_PeriodItemInfo WHERE '.$column.' = '.$this->website->db('game', $this->server)->sanitize_var($serial).'', 360);
+						$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT ExpireDate FROM IGC_PeriodItemInfo WHERE '.$column.' = '.$this->website->db('game', $this->server)->escape($serial).'', 360);
 						if(!empty($data)){
 							if(ctype_digit($data[0]['ExpireDate'])){
 								$data[0]['ExpireDate'] = date(DATETIME_FORMAT, $data[0]['ExpireDate']);
@@ -3404,7 +3404,7 @@
 					if($this->website->db('game', $this->server)->check_if_table_exists('CashShopPeriodicItem')){
 						$serial = hexdec(substr($this->hex, 6, 8));
 						if($serial > 0){
-							$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT Time AS ExpireDate FROM CashShopPeriodicItem WHERE ItemSerial = '.$this->website->db('game', $this->server)->sanitize_var($serial).'', 360);
+							$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT Time AS ExpireDate FROM CashShopPeriodicItem WHERE ItemSerial = '.$this->website->db('game', $this->server)->escape($serial).'', 360);
 							if(!empty($data)){
 								if(ctype_digit($data[0]['ExpireDate'])){
 									$data[0]['ExpireDate'] = date(DATETIME_FORMAT, $data[0]['ExpireDate']);
@@ -3416,7 +3416,7 @@
 						if($this->website->db('game', $this->server)->check_if_table_exists('CashShopPeriodItem')){
 							if($serial > 0){
 								$serial = hexdec(substr($this->hex, 6, 8));
-								$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT Time AS ExpireDate FROM CashShopPeriodItem WHERE ItemSerial = '.$this->website->db('game', $this->server)->sanitize_var($serial).'', 360);
+								$data = $this->website->db('game', $this->server)->cached_query('item_'.$serial.'', 'SELECT Time AS ExpireDate FROM CashShopPeriodItem WHERE ItemSerial = '.$this->website->db('game', $this->server)->escape($serial).'', 360);
 								if(!empty($data)){
 									if(ctype_digit($data[0]['ExpireDate'])){
 										$data[0]['ExpireDate'] = date(DATETIME_FORMAT, $data[0]['ExpireDate']);
@@ -3494,7 +3494,7 @@
 			if(strlen($this->hex) == 64){
 				$serial = hexdec(substr($this->hex, 32, 8));
 	
-				$data = $this->website->db('game', $this->server)->cached_query('muun_'.$serial.'', 'SELECT ExpireDate FROM IGC_Muun_Period WHERE Serial = '.$this->website->db('game', $this->server)->sanitize_var($serial).'', 360);
+				$data = $this->website->db('game', $this->server)->cached_query('muun_'.$serial.'', 'SELECT ExpireDate FROM IGC_Muun_Period WHERE Serial = '.$this->website->db('game', $this->server)->escape($serial).'', 360);
 				if(!empty($data)){
 					$this->muunExpirationTime = strtotime($data[0]['ExpireDate']);
 													   
@@ -3700,7 +3700,7 @@
 				break;
 			}
             if($exetype == -2){
-				$this->website->writelog('Invalid item exe type. Slot: ' . $slot . ', id: ' . $id . ', cat: ' . $cat . '', 'system_error');
+				writelog('Invalid item exe type. Slot: ' . $slot . ', id: ' . $id . ', cat: ' . $cat . '', 'system_error');
 			}
             return $exetype;
         }

@@ -47,23 +47,17 @@
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function get_muun_content($char, $server = '') {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
 			if($this->website->db('game', $server)->check_if_table_exists('MuunInventory'))
 				$tbl = 'MuunInventory';
 			else
 				$tbl = 'IGC_Muun_Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM '.$tbl.' WHERE Name = :char');
-			$stmt->execute([':char' => $this->website->c($char)]);
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM '.$tbl.' WHERE Name = :char');
+			$stmt->execute([':char' => $char]);
 			$inv = $stmt->fetch();
 			$stmt->close_cursor();
 			if($inv != false){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Items']);
-					$this->vars['Items'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->vars['Items'] = $this->clean_hex($inv['Items']);
-				}
+				$unpack = unpack('H*', $inv['Items']);
+				$this->vars['Items'] = $this->website->clean_hex($unpack[1]);
 			} 
 			else{
 				$this->vars['Items'] = false;
@@ -122,17 +116,11 @@
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		public function inventory($char, $server){
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT Name, ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT Name, CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Inventory']);
-					$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-				}
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
 				$this->char_info['Name'] = $inv['Name'];
 			}  
         }
@@ -395,11 +383,11 @@
 		
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All') {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, account, server, spin_date, reward_id FROM DmN_Wheel_Of_Fortune_Log WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Wheel_Of_Fortune_Log ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, account, server, spin_date, reward_id FROM DmN_Wheel_Of_Fortune_Log WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Wheel_Of_Fortune_Log ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, account, server, spin_date, reward_id FROM DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, account, server, spin_date, reward_id FROM DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, account, server, spin_date, reward_id FROM DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, account, server, spin_date, reward_id FROM DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Wheel_Of_Fortune_Log WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -417,9 +405,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Wheel_Of_Fortune_Log ' . $sql . '');
@@ -498,13 +486,4 @@
             $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
             $stmt->close_cursor();
         }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-		private function clean_hex($data){
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
-        }
-
     }

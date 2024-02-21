@@ -42,10 +42,10 @@
 		}
 		
 		public function myTransfer($user, $server){
-			return  $this->website->db('web')->query('SELECT amount, type, transferDate, toAccount, message FROM DmN_CreditTransferLogs WHERE fromAccount = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch_all();
+			return  $this->website->db('web')->query('SELECT amount, type, transferDate, toAccount, message FROM DmN_CreditTransferLogs WHERE fromAccount = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
 		}
 		
 		public function myReceivedTransfer($user, $server){
-			return  $this->website->db('web')->query('SELECT amount, type, transferDate, fromAccount, message FROM DmN_CreditTransferLogs WHERE toAccount = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch_all();
+			return  $this->website->db('web')->query('SELECT amount, type, transferDate, fromAccount, message FROM DmN_CreditTransferLogs WHERE toAccount = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
 		}
     }

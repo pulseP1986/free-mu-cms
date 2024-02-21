@@ -28,16 +28,22 @@
                     }
                 }
                 if(isset($_POST['lost_info'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        if(!isset($_POST['server']) || $_POST['server'] == ''){
-                            $this->vars['error'] = __('Please select proper server.');
-                        } else{
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
+                    $servers = $this->website->server_list();
+                    $default = array_keys($servers)[0];
+                    if(!isset($_POST['server'])){
+                        $server = $default;
+                    } 
+                    else{
+                        if(!array_key_exists($_POST['server'], $servers)){
+                            $server = $default;
                         }
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
+                        else{
+                            $server = $_POST['server'];
+                        }
                     }
+
                     $this->load->model('account');
+                    
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
                     }
@@ -47,7 +53,7 @@
                         if(!$this->Maccount->valid_username($this->Maccount->vars['lost_info']) &&  !$this->Maccount->valid_email($this->Maccount->vars['lost_info']))
                             $this->vars['error'] = __('The username/email you entered is invalid.'); 
 						else{
-                            if(!$this->Maccount->check_duplicate_account($this->Maccount->vars['lost_info']) && !$this->Maccount->check_duplicate_email($this->Maccount->vars['lost_info']))
+                            if(!$this->Maccount->check_duplicate_account($this->Maccount->vars['lost_info'], $server) && !$this->Maccount->check_duplicate_email($this->Maccount->vars['lost_info'], $server))
                                 $this->vars['error'] = __('The username/email you entered doesn\'t exists.'); 
 							else{
                                 if($this->vars['security_config'] != false){
@@ -73,10 +79,10 @@
                                 }
                                 if(!isset($this->vars['error'])){
                                     if($this->vars['config']['method'] == 1){
-										$this->session->register('lost_password', ['user' => $this->Maccount->vars['lost_info'], 'server' => $this->is_server()]);
+										$this->session->register('lost_password', ['user' => $this->Maccount->vars['lost_info'], 'server' => $server]);
                                         $this->by_email();
                                     } else{
-                                        $this->session->register('lost_password', ['user' => $this->Maccount->vars['lost_info'], 'server' => $this->is_server()]);
+                                        $this->session->register('lost_password', ['user' => $this->Maccount->vars['lost_info'], 'server' => $server]);
                                         header('Location: ' . $this->config->base_url . 'lost-password/by-question/');
                                     }
                                 }
@@ -89,42 +95,26 @@
                 $this->disabled();
             }
         }
-
-        private function is_server()
-        {
-            if(isset($this->Maccount->vars['server'])){
-                return $this->Maccount->vars['server'];
-            }
-            return '';
-        }
-
         public function by_question()
         {
             $this->vars['secret_question_list'] = $this->website->secret_questions();
             if($this->session->userdata(['lost_password' => 'user'])){
                 if(isset($_POST['fpas_ques'], $_POST['fpas_answ'])){
                     if(!$this->website->secret_questions($_POST['fpas_ques']))
-                        $this->vars['error'] = __('Please select valid secret question.'); else{
+                        $this->vars['error'] = __('Please select valid secret question.'); 
+                    else{
                         if(!isset($_POST['fpas_answ']))
-                            $this->vars['error'] = __('You haven\'t entered an secret answer.'); else{
-                            if($this->website->is_multiple_accounts() == true){
-                                if($this->session->userdata(['lost_password' => 'server']) == ''){
-                                    $this->vars['error'] = __('Please select proper server.');
-                                } else{
-                                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
-                                }
-                            } else{
-                                $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                            }
+                            $this->vars['error'] = __('You haven\'t entered an secret answer.'); 
+                        else{
                             $this->load->model('account');
-                            $data = $this->Maccount->load_account_by_name($this->session->userdata(['lost_password' => 'user']));
+                            $data = $this->Maccount->load_account_by_name($this->session->userdata(['lost_password' => 'user']), $this->session->userdata(['lost_password' => 'server']));
                             if($data){
                                 $reminder = $this->Maccount->load_reminder_by_name($data['memb___id']);
                                 if($reminder){
                                     if((time() - $reminder['used']) < 600){
                                         $this->vars['error'] = __('The \'Lost Password\'-function was already used for this account less than 10 minutes ago.');
                                     } else{
-                                        if(!$this->Maccount->check_secret_q_a($this->session->userdata(['lost_password' => 'user']), $_POST['fpas_ques'], $_POST['fpas_answ']))
+                                        if(!$this->Maccount->check_secret_q_a($this->session->userdata(['lost_password' => 'user']), $this->session->userdata(['lost_password' => 'server']), $_POST['fpas_ques'], $_POST['fpas_answ']))
                                             $this->vars['error'] = __('Wrong secret question and/or answer.'); 
 										else{
                                             $this->Maccount->delete_reminder_entries_for_name($data['memb___id']);
@@ -135,7 +125,7 @@
                                         }
                                     }
                                 } else{
-                                    if(!$this->Maccount->check_secret_q_a($this->session->userdata(['lost_password' => 'user']), $_POST['fpas_ques'], $_POST['fpas_answ']))
+                                    if(!$this->Maccount->check_secret_q_a($this->session->userdata(['lost_password' => 'user']), $this->session->userdata(['lost_password' => 'server']), $_POST['fpas_ques'], $_POST['fpas_answ']))
                                         $this->vars['error'] = __('Wrong secret question and/or answer.'); 
 									else{
                                         $this->Maccount->delete_reminder_entries_for_name($data['memb___id']);
@@ -159,14 +149,14 @@
         {
             $data = $this->Maccount->load_account_by_name($this->Maccount->vars['lost_info']);
             if($data){
-                $reminder = $this->Maccount->load_reminder_by_name($data['memb___id']);
+                $reminder = $this->Maccount->load_reminder_by_name($data['memb___id'], $this->session->userdata(['lost_password' => 'server']));
                 if($reminder){
                     if((time() - $reminder['used']) < 600){
                         $this->vars['error'] = __('The \'Lost Password\'-function was already used for this account less than 10 minutes ago.');
                     } else{
                         $this->Maccount->delete_reminder_entries_for_name($data['memb___id']);
                         $code = $this->Maccount->create_reminder_entry_for_name($data['memb___id']);
-                        if($this->Maccount->send_lostpassword_email_for_name($data['memb___id'], $data['mail_addr'], $code, $data['sno__numb'])){
+                        if($this->Maccount->send_lostpassword_email_for_name($data['memb___id'], $data['mail_addr'], $code, $this->session->userdata(['lost_password' => 'server']), $data['sno__numb'])){
 							$this->Maccount->add_account_log('Used lost password.', 0, $this->session->userdata(['lost_password' => 'user']), $this->session->userdata(['lost_password' => 'server']));
                             $this->vars['success'] = __('An eMail was sent to your eMail-adress containing information on how to retrieve a new password.');
                         } else{
@@ -176,7 +166,7 @@
                     }
                 } else{
                     $code = $this->Maccount->create_reminder_entry_for_name($data['memb___id']);
-                    if($this->Maccount->send_lostpassword_email_for_name($data['memb___id'], $data['mail_addr'], $code, $data['sno__numb'])){
+                    if($this->Maccount->send_lostpassword_email_for_name($data['memb___id'], $data['mail_addr'], $code, $this->session->userdata(['lost_password' => 'server'])$data['sno__numb'])){
 						$this->Maccount->add_account_log('Used lost password.', 0, $this->session->userdata(['lost_password' => 'user']), $this->session->userdata(['lost_password' => 'server']));
                         $this->vars['success'] = __('An eMail was sent to your eMail-adress containing information on how to retrieve a new password.');
                     } else{
@@ -189,16 +179,11 @@
             }
         }
 
-        public function activation($code = '', $server = '')
+        public function activation($code, $server)
         {
             $this->vars['config'] = $this->config->values('lostpassword_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->vars['rconfig'] = $this->config->values('registration_config');
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($server, true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $code = strtolower(trim(preg_replace('/[^0-9a-f]/i', '', $code)));
                 if(strlen($code) <> 40){
@@ -224,7 +209,7 @@
                             if(count($this->errors) > 0){
                                 $this->vars['error'] = $this->errors;
                             } else{
-                                if($this->Maccount->update_password($reminder['assignto'])){
+                                if($this->Maccount->update_password($reminder['assignto'], $server)){
                                     $this->Maccount->delete_reminder_entries_for_name($reminder['assignto']);
                                     $this->vars['success'] = sprintf(__('Your password was changed to: <b>%s</b>'), $this->Maccount->vars['new_password']);
                                 } else{

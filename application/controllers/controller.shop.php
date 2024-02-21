@@ -75,7 +75,7 @@
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
-                    $this->vars['items'] = $this->Mshop->load_items($page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns'));
+                    $this->vars['items'] = $this->Mshop->load_items($this->session->userdata(['user' => 'server']), $page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns'));
                     $this->vars['total_columns'] = $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns');
                     $this->pagination->initialize($page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->Mshop->count_items, $this->config->base_url . 'shop/index/%s');
                     $this->vars['pagination'] = $this->pagination->create_links();
@@ -302,7 +302,7 @@
                     if($category === false){
                         $this->vars['error'] = __('Invalid Category');
                     } else{
-                        $this->vars['items'] = $this->Mshop->load_items($page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns'), $category);
+                        $this->vars['items'] = $this->Mshop->load_items($this->session->userdata(['user' => 'server']), $page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns'), $category);
                         $this->vars['total_columns'] = $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns');
                         $this->pagination->initialize($page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->Mshop->count_items, $this->config->base_url . 'shop/category/' . $cat . '/%s');
                         $this->vars['pagination'] = $this->pagination->create_links();
@@ -314,13 +314,12 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_item_data()
+		public function get_item_data()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     if(isset($_POST['id'])){
-                        if($item = $this->Mshop->get_item_info($_POST['id'])){
+                        if($item = $this->Mshop->get_item_info($this->session->userdata(['user' => 'server']), $_POST['id'])){
                             if($item == 'disabled'){
                                 json(['error' => __('This item is disabled on this server.')]);
                             } else{
@@ -346,17 +345,11 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function senditem($id = -1, $type = 'direct')
+		public function senditem($id = -1, $type = 'direct')
         {
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     if($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|module_status') == 1){
-                        if($this->website->is_multiple_accounts() == true){
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                        } else{
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                        }
                         $this->load->model('account');
                         $this->item_info = $this->Mshop->get_item_info($id);
                         if(!$this->item_info)
@@ -581,7 +574,7 @@
                                         json(['error' => $this->errors]);
                                 } else{
                                     if($type == 'direct'){
-                                        if(!$this->Maccount->check_connect_stat()){
+                                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                             json(['error' => __('Please logout from game.')]);
                                         } else{
                                             $this->calculate_price();
@@ -614,7 +607,7 @@
                                                     $this->Maccount->add_account_log('Bought Shop Item For ' . $this->website->translate_credits($this->payment_method, $this->session->userdata(['user' => 'server'])) . '', -$this->price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     $this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     $this->Mshop->set_total_bought(hexdec(substr($this->item_hex, 0, 2)), hexdec(substr($this->item_hex, 18, 1)));
-                                                    $this->Mshop->log_purchase($this->item_hex, $this->price, $this->payment_method);
+                                                    $this->Mshop->log_purchase($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->item_hex, $this->price, $this->payment_method);
                                                     json(['success' => __('Thank You, for your purchase.') . ' ' . __('Your item was moved into warehouse.'), 'price' => $this->price, 'payment_method' => $this->payment_method]);
                                                 }
                                             } else{
@@ -624,7 +617,7 @@
                                     } else if($type == 'card'){
                                         $this->calculate_price();
                                         $this->generate_item();
-                                        $this->Mshop->add_item_to_card($this->item_hex, $this->price, $this->payment_method);
+                                        $this->Mshop->add_item_to_card($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->item_hex, $this->price, $this->payment_method);
                                         json(['success' => __('Thank You, for your purchase.') . ' ' . __('Your item was added to cart.')]);
                                     } else{
                                         json(['error' => __('Error wrong  sending type.')]);
@@ -645,8 +638,8 @@
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
-                    $this->vars['credits_items'] = $this->Mshop->load_card_items(1);
-                    $this->vars['gcredits_items'] = $this->Mshop->load_card_items(2);
+                    $this->vars['credits_items'] = $this->Mshop->load_card_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 1);
+                    $this->vars['gcredits_items'] = $this->Mshop->load_card_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 2);
                     $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.card', $this->vars);
                 }
             } else{
@@ -659,8 +652,8 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     $id = (isset($_POST['id']) && ctype_digit($_POST['id'])) ? (int)$_POST['id'] : '';
-                    if($this->Mshop->item_exist_in_cart($id)){
-                        $this->Mshop->remove_item_from_cart($id);
+                    if($this->Mshop->item_exist_in_cart($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $id)){
+                        $this->Mshop->remove_item_from_cart($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $id);
                         json(['success' => __('Item successfully removed from cart.')]);
                     } else{
                         json(['error' => __('Item not found.')]);
@@ -671,18 +664,12 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function senditems()
+		public function senditems()
         {
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
-                    if(!$this->Maccount->check_connect_stat()){
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                         json(['error' => __('Please logout from game.')]);
                     } else{
                         if(isset($_POST['add_to_warehouse'])){
@@ -692,7 +679,7 @@
                                 $price_type = 1;
                                 $items_hex_values = [];
                                 foreach($_POST['add_to_warehouse'] as $key => $ids){
-                                    if($item = $this->Mshop->item_exist_in_cart($key)){
+                                    if($item = $this->Mshop->item_exist_in_cart($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $key)){
                                         $items_hex_values[] = [$item['item_hex'], $item['price'], $key];
                                         $total_price += $item['price'];
                                         $price_type = $item['price_type'];
@@ -728,8 +715,8 @@
                                         if($space[$items[0]] !== null){
                                             $this->Mshop->generate_new_items($items[0], $space[$items[0]], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), $new_items);
                                             $new_items = $this->Mshop->new_vault;
-                                            $this->Mshop->change_cart_item_status($items[0]);
-                                            $this->Mshop->log_purchase($items[0], $items[1], $price_type);
+                                            $this->Mshop->change_cart_item_status($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $items[0]);
+                                            $this->Mshop->log_purchase($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $items[0], $items[1], $price_type);
                                             $this->Mshop->set_total_bought(hexdec(substr($items[0], 0, 2)), hexdec(substr($items[0], 18, 1)));
                                         } else{
                                             $not_added_items[] = $items;
@@ -742,7 +729,7 @@
                                             $left_items = [];
                                             $total_not_added_items = count($not_added_items);
                                             foreach($not_added_items as $items){
-                                                if($info = $this->Mshop->get_not_added_item_price($items[0])){
+                                                if($info = $this->Mshop->get_not_added_item_price($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $items[0])){
                                                     $total_price -= $info['price'];
                                                     $left_items[] = $items[2];
                                                 }
@@ -816,118 +803,118 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function calculate_price()
         {
-            $this->price = $this->Mshop->discount($this->item_info['price']);
+            $this->price = $this->Mshop->discount($this->item_info['price'], $this->session->userdata(['user' => 'server']));
             if($this->item_info['original_item_cat'] == 12 && in_array($this->item_info['item_id'], $this->errtel_ids)){
                 if($this->element_type != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_type_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_type_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_1 != 0){
-                    $this->price += ($this->rank_1_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_1_price'));
+                    $this->price += ($this->rank_1_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_1_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_2 != 0){
-                    $this->price += ($this->rank_2_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_2_price'));
+                    $this->price += ($this->rank_2_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_2_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_3 != 0){
-                    $this->price += ($this->rank_3_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_3_price'));
+                    $this->price += ($this->rank_3_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_3_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_4 != 0){
-                    $this->price += ($this->rank_4_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_4_price'));
+                    $this->price += ($this->rank_4_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_4_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_5 != 0){
-                    $this->price += ($this->rank_5_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_5_price'));
+                    $this->price += ($this->rank_5_lvl + 1) * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_rank_5_price'), $this->session->userdata(['user' => 'server']));
                 }
             }
             if($this->item_info['original_item_cat'] == 12 && in_array($this->item_info['item_id'], $this->pentagram_ids)){
                 if($this->element_type != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_type_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|element_type_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_1 != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_anger_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_anger_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_2 != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_blessing_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_blessing_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_3 != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_integrity_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_integrity_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_4 != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_divinity_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_divinity_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->element_rank_5 != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_gale_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pentagram_slot_gale_price'), $this->session->userdata(['user' => 'server']));
                 }
             }
             if($this->item_info['exetype'] == 11){
                 if($this->wing_main_element != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_main_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_main_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_main_element_lvl != 0){
-                    $this->price += $this->wing_main_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_main_price'));
+                    $this->price += $this->wing_main_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_main_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional_element != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional_element_lvl != 0){
-                    $this->price += $this->wing_additional_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional_price'));
+                    $this->price += $this->wing_additional_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional2_element != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional2_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional2_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional2_element_lvl != 0){
-                    $this->price += $this->wing_additional2_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional2_price'));
+                    $this->price += $this->wing_additional2_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional2_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional3_element != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional3_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional3_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional3_element_lvl != 0){
-                    $this->price += $this->wing_additional3_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional3_price'));
+                    $this->price += $this->wing_additional3_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional3_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional4_element != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional4_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional4_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional4_element_lvl != 0){
-                    $this->price += $this->wing_additional4_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional4_price'));
+                    $this->price += $this->wing_additional4_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional4_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional5_element != 0){
-                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional5_price'));
+                    $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional5_price'), $this->session->userdata(['user' => 'server']));
                 }
                 if($this->wing_additional5_element_lvl != 0){
-                    $this->price += $this->wing_additional5_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional5_price'));
+                    $this->price += $this->wing_additional5_element_lvl * $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|wing_element_additional5_price'), $this->session->userdata(['user' => 'server']));
                 }
             }
             if($this->level > 0)
-                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|lvl_price')) * $this->level;
+                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|lvl_price'), $this->session->userdata(['user' => 'server'])) * $this->level;
             if($this->option > 0)
-                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|opt_price')) * $this->option;
+                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|opt_price'), $this->session->userdata(['user' => 'server'])) * $this->option;
             if($this->luck == 1)
-                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|luck_price'));
+                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|luck_price'), $this->session->userdata(['user' => 'server']));
             if($this->skill == 1)
-                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|skill_price'));
+                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|skill_price'), $this->session->userdata(['user' => 'server']));
             if($this->ancient == 1 || $this->ancient == 2)
-                $this->price += ($this->ancient == 1) ? $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|anc1_price')) : $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|anc2_price'));
+                $this->price += ($this->ancient == 1) ? $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|anc1_price'), $this->session->userdata(['user' => 'server'])) : $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|anc2_price'), $this->session->userdata(['user' => 'server']));
             if(count($this->exe) > 0)
-                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|exe_price') * count($this->exe));
+                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|exe_price') * count($this->exe), $this->session->userdata(['user' => 'server']));
             if(count($this->harmony) > 0){
                 $this->price += $this->Mshop->get_harmony_price($this->item_info['original_item_cat'], $this->harmony[0], $this->harmony[1]);
             }
 			
 			if($this->mastery_bonus_opt != 0){
 				if(in_array($this->mastery_bonus_opt, [1, 2, 3])){
-					 $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|bonus_mastery_price')) * $this->mastery_bonus_opt;
+					 $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|bonus_mastery_price'), $this->session->userdata(['user' => 'server'])) * $this->mastery_bonus_opt;
 				}
 			}
             if($this->ref == 1)
-                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|ref_price'));
+                $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|ref_price'), $this->session->userdata(['user' => 'server']));
             if($this->fenrir != 0){
                 switch($this->fenrir){
                     case 1:
-                        $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|dfenrir_price'));
+                        $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|dfenrir_price'), $this->session->userdata(['user' => 'server']));
                         break;
                     case 2:
-                        $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pfenrir_price'));
+                        $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|pfenrir_price'), $this->session->userdata(['user' => 'server']));
                         break;
                     case 4:
-                        $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|gfenrir_price'));
+                        $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|gfenrir_price'), $this->session->userdata(['user' => 'server']));
                         break;
                 }
             }
@@ -944,7 +931,6 @@
             }
         }
 	
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
 		private function generate_item()
         {
             if($this->iteminfo->setItemData($this->item_info['item_id'], $this->item_info['original_item_cat'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
@@ -1100,11 +1086,6 @@
         public function vip()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $vip_config = $this->config->values('vip_config');
                 if(!$vip_config){
@@ -1113,7 +1094,7 @@
                     if($vip_config['active'] == 0){
                         $this->disabled();
                     } else{
-                        $this->vars['vip_packages'] = $this->Mshop->load_vip_packages();
+                        $this->vars['vip_packages'] = $this->Mshop->load_vip_packages($this->session->userdata(['user' => 'server']));
                         $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.buy_vip', $this->vars);
                     }
                 }
@@ -1122,15 +1103,9 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function buy_vip($id = '')
+		public function buy_vip($id = '')
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
 				$this->load->model('character');
                 $vip_config = $this->config->values('vip_config');
@@ -1156,12 +1131,12 @@
                                 if($status < $this->vars['vip_data']['price']){
                                     $this->vars['error'] = sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['vip_data']['payment_type'], $this->session->userdata(['user' => 'server'])));
                                 } else{
-                                    if($this->vars['existing'] = $this->Mshop->check_existing_vip_package()){
+                                    if($this->vars['existing'] = $this->Mshop->check_existing_vip_package($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                         if($this->vars['existing']['viptype'] != $id){
                                             if($this->vars['existing']['viptime'] <= time()){									 
                                                 $viptime = time() + $this->vars['vip_data']['vip_time'];
-                                                $this->Mshop->update_vip_package($id, $viptime);
-                                                $this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config);
+                                                $this->Mshop->update_vip_package($id, $viptime, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+                                                $this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                 $this->Maccount->set_vip_session($viptime, $this->vars['vip_data']);
                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
                                                 if($this->vars['vip_data']['wcoins'] > 0 && $table_config['wcoins']['table'] != '' && $table_config['wcoins']['column'] != ''){
@@ -1190,8 +1165,8 @@
 												$this->vars['error'] = __('Your not allowed to purchase vip package before expiring.');
 											}
 											else{
-												$this->Mshop->update_vip_package($id, $viptime);
-												$this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config);
+												$this->Mshop->update_vip_package($id, $viptime, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+												$this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 												$this->Maccount->set_vip_session($viptime, $this->vars['vip_data']);
 												$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
 												if($this->vars['vip_data']['wcoins'] > 0 && $table_config['wcoins']['table'] != '' && $table_config['wcoins']['column'] != ''){
@@ -1206,8 +1181,8 @@
                                         }
                                     } else{
                                         $viptime = time() + $this->vars['vip_data']['vip_time'];
-                                        $this->Mshop->insert_vip_package($id, $viptime);
-                                        $this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config);
+                                        $this->Mshop->insert_vip_package($id, $viptime, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+                                        $this->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->Maccount->set_vip_session($viptime, $this->vars['vip_data']);
                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['vip_data']['price'], $this->vars['vip_data']['payment_type']);
                                         if($this->vars['vip_data']['wcoins'] > 0 && $table_config['wcoins']['table'] != '' && $table_config['wcoins']['column'] != ''){
@@ -1246,7 +1221,7 @@
         public function change_name_history()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                $this->vars['change_history'] = $this->Mshop->change_name_history();;
+                $this->vars['change_history'] = $this->Mshop->change_name_history($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.change_name_history', $this->vars);
             } else{
                 $this->login();

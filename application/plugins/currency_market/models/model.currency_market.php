@@ -46,16 +46,16 @@
 
         public function count_total_zen($server)
         {
-            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND reward_type = 3 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'');
+            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).'');
         }
 		
 		public function count_total_credits($server)
         {
 			$rewardType = '';
 			if(isset($_SESSION['filters'])){
-				$rewardType = 'reward_type IN ('.$this->website->db('web')->sanitize_var($_SESSION['filters']).') AND ';
+				$rewardType = 'reward_type IN ('.$this->website->db('web')->escape($_SESSION['filters']).') AND ';
 			}
-            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1 AND removed != 1 AND reward_type IN(1,2) AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'');
+            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1 AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).'');
         }
 
         public function load_market_zen($page, $per_page = 25, $server, $tax = 0)
@@ -68,7 +68,7 @@
 			if(isset($_SESSION['zen_filder']) && $_SESSION['zen_filder'] == 0){
 				$order = 'reward ASC';
 			}
-            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($this->per_page) . ' id FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY '.$order.'');
+            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY '.$order.'');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
 			$data = [];
             foreach($this->items->fetch_all() as $value){
@@ -99,9 +99,9 @@
 			}
 			$rewardType = '';
 			if(isset($_SESSION['filters'])){
-				$rewardType = 'reward_type IN ('.$this->website->db('web')->sanitize_var($_SESSION['filters']).') AND ';
+				$rewardType = 'reward_type IN ('.$this->website->db('web')->escape($_SESSION['filters']).') AND ';
 			}
-			$this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($this->per_page) . ' id FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY '.$order.'');
+			$this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY '.$order.'');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
 			$data = [];
             foreach($this->items->fetch_all() as $value){
@@ -122,7 +122,7 @@
 
         public function load_market_history($account, $server)
         {
-            return $this->website->db('web')->query('SELECT id, add_date, active_till, price, price_type, reward, reward_type, seller, sold, removed FROM DmN_Currency_Market WHERE server = \'' . $this->web_db->sanitize_var($server) . '\' AND seller_acc = \'' . $this->website->db('web')->sanitize_var($account) . '\' ORDER BY id DESC')->fetch_all();
+            return $this->website->db('web')->query('SELECT id, add_date, active_till, price, price_type, reward, reward_type, seller, sold, removed FROM DmN_Currency_Market WHERE server = \'' . $this->web_db->escape($server) . '\' AND seller_acc = '.$this->website->db('web')->escape($account).' ORDER BY id DESC')->fetch_all();
         }
 
         public function add_zen_into_market($amount, $mcharacter, $time, $payment_method, $price, $account, $server)
@@ -192,11 +192,11 @@
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Currency_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Currency_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1  AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1  AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -218,9 +218,9 @@
         {
             $sql = 'WHERE sold = 1';
             if($acc != '' && $acc != '-'){
-                $sql .= ' AND(seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\')';
+                $sql .= ' AND(seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\')';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market ' . $sql . '');

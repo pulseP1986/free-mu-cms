@@ -39,31 +39,31 @@
 					'db' => $this->website->db('account', $server)
 				], 
 				'market_items' => [
-					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND sold != 1 AND removed != 1', 
+					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE server = '.$this->website->db('web')->escape($server).' AND sold != 1 AND removed != 1', 
 					'db' => $this->website->db('web')
 				], 
 				'market_active' => [
-					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE active_till > GETDATE() AND active = 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND removed != 1', 
+					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE active_till > GETDATE() AND active = 1 AND server = '.$this->website->db('web')->escape($server).' AND removed != 1', 
 					'db' => $this->website->db('web')
 				], 
 				'market_expired' => [
-					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE active_till <= GETDATE() AND active = 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND removed != 1', 
+					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE active_till <= GETDATE() AND active = 1 AND server = '.$this->website->db('web')->escape($server).' AND removed != 1', 
 					'db' => $this->website->db('web')
 				], 
 				'total_sold' => [
-					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE sold = 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'', 
+					'query' => 'SELECT COUNT(id) AS count FROM DmN_Market WHERE sold = 1 AND server = '.$this->website->db('web')->escape($server).'', 
 					'db' => $this->website->db('web')
 				], 
 				'sales_credits' => [
-					'query' => 'SELECT SUM(price) AS count FROM DmN_Market WHERE sold = 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND price_type = 1', 
+					'query' => 'SELECT SUM(price) AS count FROM DmN_Market WHERE sold = 1 AND server = '.$this->website->db('web')->escape($server).' AND price_type = 1', 
 					'db' => $this->website->db('web')
 				], 
 				'sales_gcredits' => [
-					'query' => 'SELECT SUM(price) AS count FROM DmN_Market WHERE sold = 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND price_type = 2', 
+					'query' => 'SELECT SUM(price) AS count FROM DmN_Market WHERE sold = 1 AND server = '.$this->website->db('web')->escape($server).' AND price_type = 2', 
 					'db' => $this->website->db('web')
 				], 
 				'sales_zen' => [
-					'query' => 'SELECT SUM(price) AS count FROM DmN_Market WHERE sold = 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND price_type = 3', 
+					'query' => 'SELECT SUM(price) AS count FROM DmN_Market WHERE sold = 1 AND server = '.$this->website->db('web')->escape($server).' AND price_type = 3', 
 					'db' => $this->website->db('web')
 				]
 			];
@@ -121,7 +121,7 @@
         }
 		
 		public function count_total_votes($user, $server){
-			return $this->website->db('web')->snumrows('SELECT SUM(totalvotes) AS count FROM DmN_Votereward_Ranking WHERE account = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'');
+			return $this->website->db('web')->snumrows('SELECT SUM(totalvotes) AS count FROM DmN_Votereward_Ranking WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'');
 		}
 		
         private function siege_battle_start($time, $periods = [])
@@ -247,13 +247,13 @@
 			else{
 				$table = 'T_HuntingRecord';
 			}
-			return $this->website->db('game', $server)->query('SELECT MapIndex, mDate, SUM(cast(HuntingAccrueSecond as decimal(38,0))) as TotalTime, SUM(cast(NormalAccrueDamage as decimal(38,0))) as TotalDmg, SUM(cast(PentagramAccrueDamage as decimal(38,0))) as TotalElDmg, SUM(cast(MonsterKillCount as decimal(38,0))) as TotalKills, SUM(cast(AccrueExp as decimal(38,0))) as TotalExp FROM '.$table.' WHERE Name = \''.$this->website->db('game', $server)->sanitize_var($name).'\' GROUP BY MapIndex, mDate ORDER BY SUM(HuntingAccrueSecond) DESC')->fetch_all();
+			return $this->website->db('game', $server)->query('SELECT MapIndex, mDate, SUM(cast(HuntingAccrueSecond as decimal(38,0))) as TotalTime, SUM(cast(NormalAccrueDamage as decimal(38,0))) as TotalDmg, SUM(cast(PentagramAccrueDamage as decimal(38,0))) as TotalElDmg, SUM(cast(MonsterKillCount as decimal(38,0))) as TotalKills, SUM(cast(AccrueExp as decimal(38,0))) as TotalExp FROM '.$table.' WHERE Name = '.$this->website->db('game', $server)->escape($name).' GROUP BY MapIndex, mDate ORDER BY SUM(HuntingAccrueSecond) DESC')->fetch_all();
 		}
 		
 		public function getKillStats($name, $server)
 		{
 			if($this->website->db('game', $server)->check_if_table_exists('C_PlayerKiller_Info')){
-				return $this->website->db('game', $server)->query('SELECT Victim, Killer, KillDate FROM C_PlayerKiller_Info WHERE Victim = \''.$this->website->db('game', $server)->sanitize_var($name).'\' OR Killer = \''.$this->website->db('game', $server)->sanitize_var($name).'\' ORDER BY KillDate DESC')->fetch_all();
+				return $this->website->db('game', $server)->query('SELECT Victim, Killer, KillDate FROM C_PlayerKiller_Info WHERE Victim = '.$this->website->db('game', $server)->escape($name).' OR Killer = '.$this->website->db('game', $server)->escape($name).' ORDER BY KillDate DESC')->fetch_all();
 			}
 			return [];
 		}
@@ -262,11 +262,11 @@
 		{
 			$this->website->check_cache('hidden_pk_chars', 'chars', $cache_time);
 			if(!$this->website->cached){
-				$accounts = $this->website->db('web')->query('SELECT account FROM DmN_Hidden_Chars_PK WHERE until_date > '.time().' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch_all();
+				$accounts = $this->website->db('web')->query('SELECT account FROM DmN_Hidden_Chars_PK WHERE until_date > '.time().' AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
 				$chars = [];
 				if(!empty($accounts)){
 					foreach($accounts AS $account){
-						$row = $this->website->db('game', $server)->query('SELECT Name FROM Character WHERE AccountId = \''.$this->website->db('game', $server)->sanitize_var($account['account']).'\'')->fetch_all();
+						$row = $this->website->db('game', $server)->query('SELECT Name FROM Character WHERE AccountId = '.$this->website->db('game', $server)->escape($account['account']).'')->fetch_all();
 						if(!empty($row)){
 							foreach($row AS $char){
 								$chars[] = $char['Name'];

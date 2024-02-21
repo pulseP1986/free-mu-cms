@@ -105,7 +105,7 @@
         public function check_char()
         {
             $stmt = $this->game_db->prepare('SELECT AccountId, CtlCode FROM Character WHERE Name = :name');
-            $stmt->execute([':name' => $this->website->c($this->vars['name'])]);
+            $stmt->execute([':name' => $this->vars['name']]);
             $info = $stmt->fetch();
             if($info != false){
                 $guid = $this->get_guid($info['AccountId']);
@@ -118,7 +118,7 @@
         private function get_guid($acc)
         {
             $stmt = $this->account_db->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :acc');
-            $stmt->execute([':acc' => $this->website->c($acc)]);
+            $stmt->execute([':acc' => $acc]);
             return $stmt->fetch();
         }
 

@@ -7,7 +7,7 @@
         public function load($item_id, $cat, $level = 0, $tags = 1, $search_cat = false, $extensions = ['webp', 'gif'])
         {
             if($search_cat == true){
-                $real_cat = $this->website->db('web')->query('SELECT item_cat FROM DmN_Shopp WHERE item_id = ' . $this->website->db('web')->sanitize_var($item_id) . ' AND original_item_cat = ' . $this->website->db('web')->sanitize_var($cat) . '')->fetch();
+                $real_cat = $this->website->db('web')->query('SELECT item_cat FROM DmN_Shopp WHERE item_id = ' . $this->website->db('web')->escape($item_id) . ' AND original_item_cat = ' . $this->website->db('web')->escape($cat) . '')->fetch();
             } else{
                 $real_cat = ['item_cat' => $cat];
             }

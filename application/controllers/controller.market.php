@@ -5,7 +5,6 @@
     {
         public $vars = [], $errors = [], $charge_credits = false, $updated_vault = null, $price_type = 0, $status = 0, $price_with_tax = 0;
 
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function __construct()
         {
             parent::__construct();
@@ -65,12 +64,6 @@
 		public function buy_slots(){
 			if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
-                    
 					$this->load->model('account');
 					if(isset($_POST['buy_slots'])){
 						$status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('market|additionalslots_price_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
@@ -128,24 +121,18 @@
         {
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
-                    
 					$this->load->model('account');
                     if($id == ''){
                         $this->vars['error'] = __('Invalid item.');
                     } else{
-                        if(!$this->Maccount->check_connect_stat()){
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                             $this->vars['error'] = __('Please logout from game.');
                         } else{
 							$this->website->db('web')->beginTransaction();
-                            if($this->Mmarket->load_item_from_market($id)){
+                            if($this->Mmarket->load_item_from_market($id, $this->session->userdata(['user' => 'server']))){
                                 if(isset($_POST['buy_item'])){
 									//usleep(mt_rand(1000000, 5000000));
-									if($this->Mmarket->check_item_in_maket($id)){				  
+									if($this->Mmarket->check_item_in_maket($id, $this->session->userdata(['user' => 'server']))){				  
 										if($this->Mmarket->item_info['seller'] == $this->session->userdata(['user' => 'username'])){
 											$this->vars['error'] = __('You can not purchase own item.') . ' <a href="' . $this->config->base_url . 'market/remove/' . $id . '">' . __('Want to remove it?') . '</a>';
 										} else{
@@ -160,11 +147,11 @@
 											if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 												if($this->Mmarket->item_info['price_jewel'] != 0 && $this->Mmarket->item_info['jewel_type'] != 0){
 													$this->price_with_tax = $this->Mmarket->item_info['price_jewel'];
-													$jewel_data = $this->Mmarket->check_amount_of_jewels($this->Mmarket->item_info['price_jewel'], $this->Mmarket->item_info['jewel_type'], $vault['Items']);
+													$jewel_data = $this->Mmarket->check_amount_of_jewels($this->Mmarket->item_info['price_jewel'], $this->Mmarket->item_info['jewel_type'], $vault['Items'], $this->session->userdata(['user' => 'server']));
 													if(!$jewel_data){
 														$this->vars['error'] = sprintf(__('You have insufficient amount of %s'), 'jewels');
 													} else{
-														$this->updated_vault = $this->Mmarket->charge_jewels($jewel_data, $vault['Items']);
+														$this->updated_vault = $this->Mmarket->charge_jewels($jewel_data, $vault['Items'], $this->session->userdata(['user' => 'server']));
 														$this->price_type = $this->Mmarket->price_to_jewels($this->Mmarket->item_info['jewel_type']);
 													}
 												} else{
@@ -206,7 +193,7 @@
 														if(!isset($this->vars['error'])){
 															if($this->charge_credits){
 																$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->price_with_tax, $check);
-																$this->website->add_credits($this->Mmarket->item_info['seller'], $this->Mmarket->item_info['server'], $this->Mmarket->item_info['price'], $check, false, $this->Maccount->get_guid($this->Mmarket->item_info['seller']));
+																$this->website->add_credits($this->Mmarket->item_info['seller'], $this->Mmarket->item_info['server'], $this->Mmarket->item_info['price'], $check, false, $this->Maccount->get_guid($this->Mmarket->item_info['seller'], $this->Mmarket->item_info['server']));
 															} else{
 																$this->load->lib("createitem", [MU_VERSION, SOCKET_LIBRARY]);
 																$jewel = $this->Mmarket->get_jewel_by_type($this->Mmarket->item_info['jewel_type']);																					
@@ -270,9 +257,9 @@
         {
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    $this->Mmarket->count_total_history_items();
+                    $this->Mmarket->count_total_history_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     $this->pagination->initialize($page, $this->config->config_entry('market|items_per_page'), $this->Mmarket->total_items, $this->config->base_url . 'market/history/%s');
-                    $this->vars['items'] = $this->Mmarket->load_history_items($page);
+                    $this->vars['items'] = $this->Mmarket->load_history_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $page);
                     $this->vars['pagination'] = $this->pagination->create_links();
                     $this->load->view($this->config->config_entry('main|template') . DS . 'market' . DS . 'view.history', $this->vars);
                 } else{
@@ -285,24 +272,16 @@
         {
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
-                    
 					$this->load->model('account');
-					
-					usleep(mt_rand(1000000, 5000000));
-					
+
                     if($id == ''){
                         $this->vars['error'] = __('Invalid item.');
                     } else{
-                        if(!$this->Maccount->check_connect_stat()){
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                             $this->vars['error'] = __('Please logout from game.');
                         } else{
 							$this->website->db('web')->beginTransaction();
-							if(!$this->Mmarket->load_item_from_market_for_history($id)){
+							if(!$this->Mmarket->load_item_from_market_for_history($id, $this->session->userdata(['user' => 'server']))){
 								$this->website->db('web')->rollback();
 								$this->vars['error'] = __('Item not found in our database.');
 							} 

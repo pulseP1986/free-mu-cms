@@ -244,7 +244,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function check_guild($name, $server)
         {
-            $stmt = $this->website->db('game', $server)->query('SELECT gm.G_Name, g.G_Mark FROM GuildMember AS gm INNER JOIN Guild AS g ON (gm.G_Name Collate Database_Default = g.G_Name Collate Database_Default) WHERE gm.Name = \''.$this->website->c($name).'\'');
+            $stmt = $this->website->db('game', $server)->query('SELECT gm.G_Name, g.G_Mark FROM GuildMember AS gm INNER JOIN Guild AS g ON (gm.G_Name Collate Database_Default = g.G_Name Collate Database_Default) WHERE gm.Name = '.$this->website->db('game', $server)->escape($name).'');
 			$guild = $stmt->fetch();
             if($guild != false){
 				return [
@@ -303,7 +303,7 @@
         public function load_found_chars($name, $server)
         {
             $status = $this->join_memb_stat(1, 'c.AccountId', ', m.IP,  m.ConnectStat', $server);
-            $query = $this->website->db('game', $server)->query('SELECT c.Name, c.AccountId ' . $status[0] . ' FROM Character AS c ' . $status[1] . ' WHERE c.Name LIKE \'%' . $this->website->db('game', $server)->sanitize_var($name) . '%\'');
+            $query = $this->website->db('game', $server)->query('SELECT c.Name, c.AccountId ' . $status[0] . ' FROM Character AS c ' . $status[1] . ' WHERE c.Name LIKE \'%' . $this->website->db('game', $server)->escape($name) . '%\'');
             if($query){
                 $i = 0;
                 while($row = $query->fetch()){
@@ -321,7 +321,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function load_found_guilds($name, $server)
         {
-            $query = $this->website->db('game', $server)->query('SELECT G_Name FROM Guild WHERE G_Name LIKE \'%' . $this->website->db('game', $server)->sanitize_var($name) . '%\'');
+            $query = $this->website->db('game', $server)->query('SELECT G_Name FROM Guild WHERE G_Name LIKE \'%' . $this->website->db('game', $server)->escape($name) . '%\'');
             if($query){
                 $i = 0;
                 while($row = $query->fetch()){
@@ -544,11 +544,11 @@
                     $exclude_list = $this->exclude_list($config['voter']['excluded_list'], 'character');
                 }
                 $select = 'v.account, v.character, v.lastvote, v.totalvotes ' . $ip[0];
-                $query = $this->website->db('web')->query('SELECT TOP ' . (int)$this->top . ' ' . $select . ' FROM DmN_Votereward_Ranking AS v ' . $ip[1] . ' WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND year = ' . date('Y', time()) . ' AND month = \'' . date('F', time()) . '\' ' . $exclude_list . ' GROUP BY ' . $select . ' ORDER BY totalvotes DESC');
+                $query = $this->website->db('web')->query('SELECT TOP ' . (int)$this->top . ' ' . $select . ' FROM DmN_Votereward_Ranking AS v ' . $ip[1] . ' WHERE server = '.$this->website->db('web')->escape($server).' AND year = ' . date('Y', time()) . ' AND month = \'' . date('F', time()) . '\' ' . $exclude_list . ' GROUP BY ' . $select . ' ORDER BY totalvotes DESC');
                 if($query){
                     $i = 0;
                     while($row = $query->fetch()){
-                        $char = $this->website->db('game', $server)->query('SELECT GameIDC FROM AccountCharacter WHERE Id = \'' . $this->website->db('game', $server)->sanitize_var($row['account']) . '\'')->fetch();
+                        $char = $this->website->db('game', $server)->query('SELECT GameIDC FROM AccountCharacter WHERE Id = '.$this->website->db('game', $server)->escape($row['account']).'')->fetch();
                         $this->voters[] = ['name' => $char['GameIDC'], 'name_hex' => bin2hex($char['GameIDC']), 'lastvote' => date(DATE_FORMAT, $row['lastvote']), 'totalvotes' => $row['totalvotes'], 'country' => ($config['voter']['display_country'] == 1 && isset($row['IP'])) ? $this->website->get_country_code($row['IP']) : 'us'];
                         $i++;
                     }
@@ -579,7 +579,7 @@
                     $i = 0;
                     $rows = array_unique($query->fetch_all(), SORT_REGULAR);
                     foreach($rows AS $row){
-                        $char = $this->website->db('game', $server)->query('SELECT GameIDC FROM AccountCharacter WHERE Id = \'' . $this->website->db('game', $server)->sanitize_var($row['memb___id']) . '\'')->fetch();
+                        $char = $this->website->db('game', $server)->query('SELECT GameIDC FROM AccountCharacter WHERE Id = '.$this->website->db('game', $server)->escape($row['memb___id']).'')->fetch();
 										 
                         $this->online[] = ['name' => $char['GameIDC'], 'name_hex' => bin2hex($char['GameIDC']), 'server' => $server, 'h' => floor($row['TotalTime'] / 60), 'm' => ($row['TotalTime'] - (floor($row['TotalTime'] / 60) * 60)), 'country' => ($config['online']['display_country'] == 1 && isset($row['IP'])) ? $this->website->get_country_code($row['IP']) : 'us'];
                         $i++;
@@ -1029,7 +1029,7 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function online_time($memb___id, $server)
         {
-            return $this->website->db('web')->query('SELECT SUM(TotalTime) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = \'' . $this->website->db('web')->sanitize_var($memb___id) . '\' ' . $this->website->server_code($this->website->get_servercode($server)) . '')->fetch();
+            return $this->website->db('web')->query('SELECT SUM(TotalTime) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = '.$this->website->db('web')->escape($memb___id).' ' . $this->website->server_code($this->website->get_servercode($server)) . '')->fetch();
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
@@ -1109,14 +1109,14 @@
         private function exclude_list($list, $bound = 'c.Name', $quote = true, $stmt = 'NOT IN')
         {
             $data = implode(',', array_map(function($value) use ($quote){
-                return ($quote) ? "'" . $this->website->db('web')->sanitize_var($value) . "'" : $this->website->db('web')->sanitize_var($value);
+                return ($quote) ? "'" . $this->website->db('web')->escape($value) . "'" : $this->website->db('web')->escape($value);
             }, explode(',', $list)));
             return ($list != '') ? ' AND ' . $bound . ' ' . $stmt . ' (' . $data . ')' : '';
         }
 
         public function load_gm_list($server)
         {
-            $query = $this->website->db('web')->query('SELECT character, contact FROM DmN_Gm_List WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\'');
+            $query = $this->website->db('web')->query('SELECT character, contact FROM DmN_Gm_List WHERE server = '.$this->website->db('web')->escape($server).'');
             if($query){
                 while($row = $query->fetch()){
                     $this->gm_list[] = ['name' => htmlspecialchars($row['character']), 'contact' => htmlspecialchars($row['contact'])];
@@ -1128,7 +1128,7 @@
 
         public function load_ban_list($type, $server)
         {
-            $query = $this->website->db('web')->query('SELECT name, time, is_permanent, reason FROM DmN_Ban_List WHERE type = ' . $this->get_ban_type($type) . ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY time ASC, is_permanent ASC');
+            $query = $this->website->db('web')->query('SELECT name, time, is_permanent, reason FROM DmN_Ban_List WHERE type = ' . $this->get_ban_type($type) . ' AND server = '.$this->website->db('web')->escape($server).' ORDER BY time ASC, is_permanent ASC');
             if($query){
                 while($row = $query->fetch()){
                     $this->ban_list[] = ['name' => htmlspecialchars($row['name']), 'time' => ($row['is_permanent'] == 0) ? (($row['time'] < time()) ? 'Ban Expired' : date(DATETIME_FORMAT, $row['time'])) : 'Permanent Ban', 'reason' => htmlspecialchars($row['reason'])];

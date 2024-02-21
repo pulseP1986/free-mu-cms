@@ -93,20 +93,13 @@ class Mskill_tree_specialization extends model{
 	}
 	
 	private function get_skill_list($account, $server, $id){
-		$sql = (DRIVER == 'pdo_odbc') ? 'MagicList' : 'CONVERT(IMAGE, MagicList) AS MagicList';
-		$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :id AND AccountId = :user');
+		$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, MagicList) AS MagicList FROM Character WHERE '.$this->website->get_char_id_col($server).' = :id AND AccountId = :user');
 		$stmt->execute([
 			':id' => $id, 
-			':user' => $this->session->userdata(['user' => 'username'])
+			':user' => $account
 		]);
-		if(DRIVER == 'pdo_dblib'){
-			$skills = unpack('H*', implode('', $stmt->fetch()));
-			return $this->clean_hex($skills[1]);
-		} else{
-			if($skills = $stmt->fetch()){
-				return $this->clean_hex($skills['MagicList']);
-			}
-		}
+		$skills = unpack('H*', implode('', $stmt->fetch()));
+		return $this->website->clean_hex($skills[1]);
 	}
 	
 	/**
@@ -190,28 +183,16 @@ class Mskill_tree_specialization extends model{
 		$stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Skill_Tree_Specialization (title, account, server, name, mu_id, skills, skills2, skills3, level, mlevel, mlpoints, mlpoints2, class, mlexp, mlnextexp, addstr, adddex, addene, addvit) VALUES (:title, :account, :server, :name, :mu_id, :skills, :skills2, :skills3, :level, :mlevel, :mlpoints, :mlpoints4th, :class, :mlexp, :mlnextexp, :addstr, :adddex, :addene, :addvit)');
 		if($this->website->db('game', $server)->check_if_table_exists('MasterSkillTree')){
 			if(isset($data['MagicList'])){
-				if(DRIVER == 'pdo_dblib'){
-					$skills = unpack('H*', implode('', $data['MagicList']));
-					$data['MagicList'] = $this->clean_hex($skills[1]);
-				} else{
-					$data['MagicList'] = $this->clean_hex($data['MagicList']);
-				}
+				$skills = unpack('H*', implode('', $data['MagicList']));
+				$data['MagicList'] = $this->website->clean_hex($skills[1]);
 			}
 			if(isset($data['MagicList2'])){
-				if(DRIVER == 'pdo_dblib'){
-					$skills2 = unpack('H*', implode('', $data['MagicList2']));
-					$data['MagicList2'] = $this->clean_hex($skills2[1]);
-				} else{
-					$data['MagicList2'] = $this->clean_hex($data['MagicList2']);
-				}
+				$skills2 = unpack('H*', implode('', $data['MagicList2']));
+				$data['MagicList2'] = $this->website->clean_hex($skills2[1]);
 			}
 			if(isset($data['MagicList3'])){
-				if(DRIVER == 'pdo_dblib'){
-					$skills3 = unpack('H*', implode('', $data['MagicList3']));
-					$data['MagicList3'] = $this->clean_hex($skills3[1]);
-				} else{
-					$data['MagicList3'] = $this->clean_hex($data['MagicList3']);
-				}
+				$skills3 = unpack('H*', implode('', $data['MagicList3']));
+				$data['MagicList3'] = $this->website->clean_hex($skills3[1]);
 			}
 		}
 		$stmt->execute([
@@ -380,28 +361,16 @@ class Mskill_tree_specialization extends model{
 		$stmt = $this->website->db('web')->prepare('UPDATE DmN_Skill_Tree_Specialization SET mlpoints = :Points, mlpoints2 = :Points2,  mlevel = :mLevel, skills = :skills, skills2 = :skills2, skills3 = :skills3, mlexp = :mlexp, mlnextexp = :mlnextexp, addstr = :addstr, adddex = :adddex, addene = :addene, addvit = :addvit WHERE account = :account AND server = :server AND mu_id = :char_id AND id = :id');
 		if($this->website->db('game', $server)->check_if_table_exists('MasterSkillTree')){
 			if(isset($data['MagicList'])){
-				if(DRIVER == 'pdo_dblib'){
-					$skills = unpack('H*', implode('', $data['MagicList']));
-					$data['MagicList'] = $this->clean_hex($skills[1]);
-				} else{
-					$data['MagicList'] = $this->clean_hex($data['MagicList']);
-				}
+				$skills = unpack('H*', implode('', $data['MagicList']));
+				$data['MagicList'] = $this->website->clean_hex($skills[1]);
 			}
 			if(isset($data['MagicList2'])){
-				if(DRIVER == 'pdo_dblib'){
-					$skills2 = unpack('H*', implode('', $data['MagicList2']));
-					$data['MagicList2'] = $this->clean_hex($skills2[1]);
-				} else{
-					$data['MagicList2'] = $this->clean_hex($data['MagicList2']);
-				}
+				$skills2 = unpack('H*', implode('', $data['MagicList2']));
+				$data['MagicList2'] = $this->website->clean_hex($skills2[1]);
 			}
 			if(isset($data['MagicList3'])){
-				if(DRIVER == 'pdo_dblib'){
-					$skills3 = unpack('H*', implode('', $data['MagicList3']));
-					$data['MagicList3'] = $this->clean_hex($skills3[1]);
-				} else{
-					$data['MagicList3'] = $this->clean_hex($data['MagicList3']);
-				}
+				$skills3 = unpack('H*', implode('', $data['MagicList3']));
+				$data['MagicList3'] = $this->website->clean_hex($skills3[1]);
 			}
 		}
 		return $stmt->execute([
@@ -461,20 +430,4 @@ class Mskill_tree_specialization extends model{
 		}
 		return true;
     }
-	
-	private function is_hex($hex_code) {
-		return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
-	}
-	
-	private function clean_hex($data)
-	{
-		
-		if(!$this->is_hex($data)){
-			$data = bin2hex($data);
-		}
-		if(substr_count($data, "\0")){
-			$data = str_replace("\0", '', $data);
-		}
-		return strtoupper($data);
-	}
 }

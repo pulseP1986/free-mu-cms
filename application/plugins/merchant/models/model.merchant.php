@@ -152,10 +152,10 @@
         public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Merchant_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Merchant_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Merchant_Logs WHERE merchant like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['id' => $value['id'], 'merchant' => $value['merchant'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'account' => htmlspecialchars($value['account']), 'server' => htmlspecialchars($value['server']), 'date' => date(DATETIME_FORMAT, $value['date'])];
@@ -176,9 +176,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE merchant like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE merchant like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(merchant) AS count FROM DmN_Merchant_Logs ' . $sql . '');

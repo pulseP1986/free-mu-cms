@@ -461,7 +461,7 @@
                                                     $this->vars['error'] = __('Please logout from game.'); 
 												else{
                                                     if($space = $this->pluginaizer->Mcharacter_market->check_free_slot($this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']))){
-                                                        //$guid = $this->Maccount->get_guid($this->pluginaizer->session->userdata(array('user' => 'username')));
+                                                        //$guid = $this->Maccount->get_guid($this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
                                                         $this->pluginaizer->Mcharacter_market->update_sale_set_removed($id, $this->pluginaizer->session->userdata(['user' => 'username']));
                                                         $this->pluginaizer->Mcharacter_market->add_to_account_character($space, $this->pluginaizer->Mcharacter_market->char_info['Name'], $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
                                                         $this->pluginaizer->Mcharacter_market->update_character($this->pluginaizer->Mcharacter_market->char_info['id'], true, $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));

@@ -24,7 +24,7 @@
 		
 		public function get_vip_package_title($vip_type = 1)
         {
-			return $this->website->db('web')->query('SELECT package_title, vip_time FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->sanitize_var($vip_type).'')->fetch();
+			return $this->website->db('web')->query('SELECT package_title, vip_time FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->escape($vip_type).'')->fetch();
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
@@ -51,11 +51,11 @@
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, reward_id, char_id, memb___id, server, claim_date FROM DmN_Level_Claimed_Rewards WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Level_Claimed_Rewards ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, reward_id, char_id, memb___id, server, claim_date FROM DmN_Level_Claimed_Rewards WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Level_Claimed_Rewards ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, reward_id, char_id, memb___id, server, claim_date FROM DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, reward_id, char_id, memb___id, server, claim_date FROM DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, reward_id, char_id, memb___id, server, claim_date FROM DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, reward_id, char_id, memb___id, server, claim_date FROM DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Level_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -76,9 +76,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Level_Claimed_Rewards ' . $sql . '');
@@ -206,17 +206,11 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function inventory($char, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Inventory']);
-					$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-				}
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
 			}  
         }
 
@@ -282,7 +276,7 @@
 		}
 		
 		public function check_space_gremory_case($user, $server, $name){
-			return $this->website->db('game', $server)->snumrows('SELECT COUNT(GremoryCaseIndex) AS count FROM IGC_GremoryCase WHERE AccountID = \''.$this->website->db('web')->sanitize_var($user).'\' AND Name = \''.$this->website->db('web')->sanitize_var($name).'\' AND GCType = 2 AND UsedInfo = 0');
+			return $this->website->db('game', $server)->snumrows('SELECT COUNT(GremoryCaseIndex) AS count FROM IGC_GremoryCase WHERE AccountID = '.$this->website->db('web')->escape($user).' AND Name = '.$this->website->db('web')->escape($name).' AND GCType = 2 AND UsedInfo = 0');
 		}
 		
 		public function add_item_gremory_case($user, $server, $item, $name){
@@ -295,7 +289,7 @@
 					$itemTime = $item['expires'] * 60;
 					$itemTimeStamp = time() + $item['expires'] * 60;
 				}
-				$this->website->db('game', $server)->query('EXEC IGC_GremoryCaseInsert 2, 100, \''.$this->website->db('web')->sanitize_var($user).'\', \''.$this->website->db('web')->sanitize_var($name).'\', '.$item['cat'].', '.$item['id'].', '.$item['lvl'].', '.$item['dur'].', '.$item['skill'].', '.$item['luck'].', '.$item['opt'].', 0, 0, 0, '.$item['exe'].', 0, 0, 0, 0, 0, 0, 255, 255, 255, '.$serial.', '.$time.', '.$itemTime.', '.time().', '.(time() + $time).', '.$itemTimeStamp.', 0');
+				$this->website->db('game', $server)->query('EXEC IGC_GremoryCaseInsert 2, 100, '.$this->website->db('web')->escape($user).', '.$this->website->db('web')->escape($name).', '.$item['cat'].', '.$item['id'].', '.$item['lvl'].', '.$item['dur'].', '.$item['skill'].', '.$item['luck'].', '.$item['opt'].', 0, 0, 0, '.$item['exe'].', 0, 0, 0, 0, 0, 0, 255, 255, 255, '.$serial.', '.$time.', '.$itemTime.', '.time().', '.(time() + $time).', '.$itemTimeStamp.', 0');
 				return;
 			}
 		}
@@ -309,7 +303,7 @@
         }
 		
 		public function add_item_cash_shop($user, $server, $item){
-			$this->website->db('game', $server)->query('EXEC WZ_IBS_AddItem \''.$this->website->db('web')->sanitize_var($user).'\', 673, '.$item['cguid'].', '.$item['cid'].', 1, \'BattlePass\'');
+			$this->website->db('game', $server)->query('EXEC WZ_IBS_AddItem '.$this->website->db('web')->escape($user).', 673, '.$item['cguid'].', '.$item['cid'].', 1, \'BattlePass\'');
 			return;
 		}
 
@@ -405,14 +399,5 @@
                 return ($status['ConnectStat'] == 0);
             }
             return true;
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

@@ -79,23 +79,17 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function get_muun_content($char, $server = '')
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
 			if($this->website->db('game', $server)->check_if_table_exists('MuunInventory'))
 				$tbl = 'MuunInventory';
 			else
 				$tbl = 'IGC_Muun_Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM '.$tbl.' WHERE Name = :char');
-			$stmt->execute([':char' => $this->website->c($char)]);
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM '.$tbl.' WHERE Name = :char');
+			$stmt->execute([':char' => $char]);
 			$inv = $stmt->fetch();
 			$stmt->close_cursor();
 			if($inv != false){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Items']);
-					$this->vars['Items'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->vars['Items'] = $this->clean_hex($inv['Items']);
-				}
+				$unpack = unpack('H*', $inv['Items']);
+				$this->vars['Items'] = $this->website->clean_hex($unpack[1]);
 			} 
 			else{
 				$this->vars['Items'] = false;
@@ -224,14 +218,14 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function count_total_muuns($server)
         {
-            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'');
+            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'');
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function load_market($page, $per_page = 25, $server, $tax = 0)
         {
             $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
-            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, add_date, active_till, price, price_type, item, seller, server FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($this->per_page) . ' id FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, add_date, active_till, price, price_type, item, seller, server FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
 			$data = [];
             foreach($this->items->fetch_all() as $value){
@@ -257,14 +251,14 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function count_total_history_items()
         {
-            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Muun_Market WHERE seller_acc = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\'');
+            $this->total = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Muun_Market WHERE seller_acc = '.$this->website->db('web')->escape($this->session->userdata(['user' => 'username'])).' AND server = '.$this->website->db('web')->escape($this->session->userdata(['user' => 'server'])).'');
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function load_market_history($page, $per_page = 25, $tax = 0)
         {
             $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
-            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, item, price, price_type, active_till, sold, removed, seller, server FROM DmN_Muun_Market WHERE seller_acc = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($this->per_page) . ' id FROM DmN_Muun_Market WHERE seller_acc = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY id DESC) ORDER BY id DESC');
+            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, item, price, price_type, active_till, sold, removed, seller, server FROM DmN_Muun_Market WHERE seller_acc = '.$this->website->db('web')->escape($this->session->userdata(['user' => 'username'])).' AND server = '.$this->website->db('web')->escape($this->session->userdata(['user' => 'server'])).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Muun_Market WHERE seller_acc = '.$this->website->db('web')->escape($this->session->userdata(['user' => 'username'])).' AND server = '.$this->website->db('web')->escape($this->session->userdata(['user' => 'server'])).' ORDER BY id DESC) ORDER BY id DESC');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             $data = [];
 			foreach($this->items->fetch_all() as $value){
@@ -325,11 +319,11 @@
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, server, price, price_type, item, seller_acc, buyer_acc, purchase_date FROM DmN_Muun_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Muun_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, server, price, price_type, item, seller_acc, buyer_acc, purchase_date FROM DmN_Muun_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Muun_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, server, price, price_type, item, seller_acc, buyer_acc, purchase_date FROM DmN_Muun_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Muun_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, server, price, price_type, item, seller_acc, buyer_acc, purchase_date FROM DmN_Muun_Market WHERE sold = 1  AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Muun_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\') AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, server, price, price_type, item, seller_acc, buyer_acc, purchase_date FROM DmN_Muun_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->escape($acc) . '%\') AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Muun_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->escape($acc) . '%\') ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, server, price, price_type, item, seller_acc, buyer_acc, purchase_date FROM DmN_Muun_Market WHERE sold = 1  AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Muun_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -353,20 +347,14 @@
         {
             $sql = 'WHERE sold = 1';
             if($acc != '' && $acc != '-'){
-                $sql .= ' AND(seller_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\')';
+                $sql .= ' AND(seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer_acc like \'%' . $this->website->db('web')->escape($acc) . '%\')';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Muun_Market ' . $sql . '');
             return $count;
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function is_hex($hex_code) 
-		{
-			return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
-		}
 		
 		public function check_connect_stat($account, $server)
         {
@@ -376,18 +364,5 @@
                 return ($status['ConnectStat'] == 0);
             }
             return true;
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        private function clean_hex($data)
-        {
-			
-            if(!$this->is_hex($data)){
-                $data = bin2hex($data);
-            }
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

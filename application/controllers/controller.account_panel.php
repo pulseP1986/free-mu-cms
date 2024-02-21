@@ -27,30 +27,9 @@
             }
         }
 
-        public function level_reward()
-        {
-            if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                $this->vars['level_rewards'] = $this->config->values('level_rewards_config');
-                $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.level_reward', $this->vars);
-            } else{
-                $this->login();
-            }
-        }
-
         public function reset()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $reset_config = $this->config->values('reset_config', $this->session->userdata(['user' => 'server']));
 				if(defined('CUSTOM_RESET_REQ_ITEMS') && CUSTOM_RESET_REQ_ITEMS == true){
@@ -261,7 +240,7 @@
 								 $opt = ($this->iteminfo->getOption()*4);
 								 $exe = $this->iteminfo->exeForCompare();
 								 $this->load->model('warehouse');
-								 $items = $this->Mwarehouse->list_web_items();
+								 $items = $this->Mwarehouse->list_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 								 if(empty($items))
 									json(['error' => __('Item not found in web warehouse.')]);
 								 else{
@@ -373,11 +352,6 @@
         public function grand_reset()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $reset_config = $this->config->values('reset_config', $this->session->userdata(['user' => 'server']));
                 $greset_config = $this->config->values('greset_config', $this->session->userdata(['user' => 'server']));
@@ -594,7 +568,7 @@
 								 $opt = ($this->iteminfo->getOption()*4);
 								 $exe = $this->iteminfo->exeForCompare();
 								 $this->load->model('warehouse');
-								 $items = $this->Mwarehouse->list_web_items();
+								 $items = $this->Mwarehouse->list_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 								 if(empty($items))
 									json(['error' => __('Item not found in web warehouse.')]);
 								 else{
@@ -706,11 +680,6 @@
         public function add_stats($char = '')
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 if(!$char){
                     $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -723,8 +692,9 @@
                         foreach($_POST as $key => $value){
                             $this->Mcharacter->$key = trim($value);
                         }
-                        if(!$this->Maccount->check_connect_stat())
-                            $this->vars['error'] = __('Please logout from game.'); else{
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                            $this->vars['error'] = __('Please logout from game.'); 
+						else{
                             $this->Mcharacter->check_stats();
                             if(!preg_match('/^(\s*|[0-9]+)$/', $this->Mcharacter->vars['str_stat']))
                                 $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Strength') . '.'; else{
@@ -773,11 +743,6 @@
         public function hide_info()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $this->vars['hide_time'] = $this->Maccount->check_hide_time();
 				if(defined('ELITE_KILLER_HIDE') && ELITE_KILLER_HIDE == true){
@@ -819,15 +784,9 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function warp_char()
+		public function warp_char()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 				$this->vars['teleport_config'] = $this->config->values('teleport_config', $this->session->userdata(['user' => 'server']));
@@ -836,7 +795,7 @@
                     foreach($_POST as $key => $value){
                         $this->Mcharacter->$key = trim($value);
                     }
-                    if(!$this->Maccount->check_connect_stat())
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                         $this->vars['error'] = __('Please logout from game.'); 
 					else{
                         if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
@@ -875,23 +834,17 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function recover_master()
+		public function recover_master()
         {
             if(defined('RES_CUSTOM_BACKUP_MASTER') && RES_CUSTOM_BACKUP_MASTER == true){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     if(isset($_POST['character'])){
                         foreach($_POST as $key => $value){
                             $this->Mcharacter->$key = trim($value);
                         }
-                        if(!$this->Maccount->check_connect_stat())
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                             $this->vars['error'] = __('Please logout from game.'); 
 						else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), '', ', Master'))
@@ -933,17 +886,11 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function vote_reward()
+		public function vote_reward()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['votereward_config'] = $this->config->values('votereward_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['votereward_config']['active'] == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     if($this->vars['votereward_config']['req_char'] == 1){
                         $this->vars['has_char'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -976,7 +923,7 @@
                             } else{
                                 $countdown = $this->vars['votereward_config']['count_down'];
                             }
-                            $check_last_vote = $this->Maccount->get_last_vote($links['id'], $links['hours'], $links['api'], $this->vars['votereward_config']['xtremetop_same_acc_vote'], $this->vars['votereward_config']['xtremetop_link_numbers']);
+                            $check_last_vote = $this->Maccount->get_last_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $links['id'], $links['hours'], $links['api'], $this->vars['votereward_config']['xtremetop_same_acc_vote'], $this->vars['votereward_config']['xtremetop_link_numbers']);
                             if($check_last_vote != false){
                                 $this->vars['content'][] = ['id' => $links['id'], 'link' => $links['votelink'], 'name' => $links['name'], 'image' => $links['img_url'], 'voted' => 1, 'next_vote' => $this->Maccount->calculate_next_vote($check_last_vote, $links['hours']), 'api' => $links['api'], 'reward' => $links['reward'], 'reward_type' => $links['reward_type'], 'reward_sms' => ($links['api'] == 2) ? $links['mmotop_reward_sms'] : 0, 'countdown' => $countdown];
                             } else{
@@ -996,14 +943,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function two_factor_auth(){
-			if($this->website->is_multiple_accounts() == true){
-				$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_SESSION['tfa_temp_server'], true)]);
-			} 
-			else{
-				$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-			}
 			$this->load->model('account');
 			$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_SESSION['tfa_temp_user']);
 			
@@ -1017,7 +957,7 @@
 						$this->Maccount->password = $_SESSION['tfa_temp_password'];
 						$this->Maccount->server = $_SESSION['tfa_temp_server'];
 						$this->Maccount->servers = $_SESSION['tfa_temp_servers'];
-						$login = $this->Maccount->login_user();
+						$login = $this->Maccount->login_user($_SESSION['tfa_temp_server']);
 						$this->Maccount->log_user_ip();
 						$this->Maccount->clear_login_attemts();
 						$this->change_user_vip_session($_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_server']);
@@ -1035,14 +975,7 @@
 			$this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.two_factor_auth', $this->vars);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function reset_two_factor_auth(){
-			if($this->website->is_multiple_accounts() == true){
-				$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_SESSION['tfa_temp_server'], true)]);
-			} 
-			else{
-				$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-			}
 			$this->load->model('account');
 			$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_SESSION['tfa_temp_user']);
 			
@@ -1084,26 +1017,19 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function settings()
+		public function settings()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['config'] = $this->config->values('registration_config');
 				
-				if($this->website->is_multiple_accounts() == true){
-					$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-				} 
-				else{
-					$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-				}
 				$this->load->model('account');
 				
                 if(isset($_POST['recover_master_key'])){
-                    if(!$this->Maccount->check_connect_stat()){
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                         $this->vars['error'] = __('Please logout from game.');
                     } 
 					else{
-                        if(!$this->Maccount->recover_master_key_process()){
+                        if(!$this->Maccount->recover_master_key_process($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                             $this->vars['success'] = __('Your master key has been send to your email.');
                         } 
 						else{
@@ -1171,15 +1097,9 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function email_confirm($code)
+		public function email_confirm($code)
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $code = strtolower(trim(preg_replace('/[^0-9a-f]/i', '', $code)));
                 $this->vars['set_new_email'] = false;
@@ -1189,7 +1109,7 @@
                     $data = $this->Maccount->load_email_confirmation_by_code($code);
                     if($data){
                         if($data['old_email'] == 0){
-                            if($this->Maccount->update_email($data['account'], $data['email'])){
+                            if($this->Maccount->update_email($data['account'], $data['email'], $this->session->userdata(['user' => 'server']))){
                                 $this->Maccount->delete_old_confirmation_entries($data['account']);
                                 $this->vars['success'] = __('Email address successfully updated.');
                             }
@@ -1223,15 +1143,10 @@
         public function logs($page = 1)
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $this->load->lib("pagination");
-                $this->vars['logs'] = $this->Maccount->load_logs($page, $this->config->config_entry('account|account_logs_per_page'));
-                $this->pagination->initialize($page, $this->config->config_entry('account|account_logs_per_page'), $this->Maccount->count_total_logs(), $this->config->base_url . 'account-panel/logs/%s');
+                $this->vars['logs'] = $this->Maccount->load_logs($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $page, $this->config->config_entry('account|account_logs_per_page'));
+                $this->pagination->initialize($page, $this->config->config_entry('account|account_logs_per_page'), $this->Maccount->count_total_logs($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])), $this->config->base_url . 'account-panel/logs/%s');
                 $this->vars['pagination'] = $this->pagination->create_links();
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.logs', $this->vars);
             } else{
@@ -1239,17 +1154,11 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function zen_wallet()
+		public function zen_wallet()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
-                if(!$this->Maccount->check_connect_stat())
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                     $this->vars['error'] = __('Please logout from game.'); 
 				else{
                     $this->load->model('warehouse');
@@ -1257,7 +1166,7 @@
                         $this->vars['wh_zen'] = $this->Mwarehouse->vault_money;
                     }
                     $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                    $this->vars['wallet_zen'] = $this->Maccount->load_wallet_zen();
+                    $this->vars['wallet_zen'] = $this->Maccount->load_wallet_zen($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 					if(!$this->vars['wallet_zen']){
                         $this->vars['wallet_zen']['credits3'] = 0;
                     }							   
@@ -1351,18 +1260,13 @@
         public function my_referral_list()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
-                $this->vars['my_referral_list'] = $this->Maccount->load_my_referrals();
+                $this->vars['my_referral_list'] = $this->Maccount->load_my_referrals($this->session->userdata(['user' => 'username']));
                 if(!empty($this->vars['my_referral_list'])){
                     foreach($this->vars['my_referral_list'] as $key => $referrals){
                         $this->vars['my_referral_list'][$key]['ref_chars'] = $this->Mcharacter->load_chars_from_ref($referrals['refferal'], $this->session->userdata(['user' => 'server']));
                     }
-                    $this->vars['ref_rewards'] = $this->Maccount->load_referral_rewards();
+                    $this->vars['ref_rewards'] = $this->Maccount->load_referral_rewards($this->session->userdata(['user' => 'server']));
                 }
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.my_referral_list', $this->vars);
             } else{
@@ -1370,17 +1274,11 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function exchange_online()
+		public function exchange_online()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
-                $this->vars['online_time'] = $this->Maccount->load_online_hours();
+                $this->vars['online_time'] = $this->Maccount->load_online_hours($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 if($this->vars['online_time'] == false){
                     $this->vars['online_time'] = 0;
                     $this->vars['minutes_left'] = 0;
@@ -1390,13 +1288,13 @@
                     $this->vars['minutes_left'] = $this->vars['OnlineMinutes'] - (floor($this->vars['OnlineMinutes'] / 60) * 60);
                 }
                 if(isset($_POST['trade_hours'])){
-                    if(!$this->Maccount->check_connect_stat())
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                         $this->vars['error'] = __('Please logout from game.'); 
 					else{
                         if($this->vars['online_time'] <= 0)
                             $this->vars['error'] = __('You don\'t have online time on this server'); 
 						else{
-                            if($this->Maccount->exchange_online_hours($this->vars['online_time'], $this->vars['minutes_left'])){
+                            if($this->Maccount->exchange_online_hours($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['online_time'], $this->vars['minutes_left'])){
                                 $this->vars['success'] = 'Online time successfully exchanged';
                                 $this->vars['online_time'] = 0;
                             } else{
@@ -1414,11 +1312,6 @@
 		public function exchange_lucky_coins()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->vars['coin_config'] = $this->config->values('luckycoin_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['coin_config']['active'] == 1){
                     unset($this->vars['coin_config']['active']);
@@ -1429,16 +1322,21 @@
                         foreach($_POST as $key => $value){
                             $this->Mcharacter->$key = trim($value);
                         }
-                        if(!$this->Maccount->check_connect_stat())
-                            $this->vars['error'] = __('Please logout from game.'); else{
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                            $this->vars['error'] = __('Please logout from game.'); 
+						else{
                             if(!isset($this->Mcharacter->vars['character']))
-                                $this->vars['error'] = __('Invalid Character'); else{
+                                $this->vars['error'] = __('Invalid Character'); 
+							else{
                                 if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                    $this->vars['error'] = __('Character not found.'); else{
+                                    $this->vars['error'] = __('Character not found.'); 
+								else{
                                     if(!isset($this->Mcharacter->vars['lucky_coin']))
-                                        $this->vars['error'] = __('Please select option for exchange.'); else{
+                                        $this->vars['error'] = __('Please select option for exchange.'); 
+									else{
                                         if(!in_array($this->Mcharacter->vars['lucky_coin'], [10, 20, 30]))
-                                            $this->vars['error'] = __('Invalid exchange option selected.'); else{
+                                            $this->vars['error'] = __('Invalid exchange option selected.'); 
+										else{
                                             $this->vars['coin_data'] = $this->Mcharacter->check_amount_of_coins($this->session->userdata(['user' => 'server']));
                                             if(array_sum($this->vars['coin_data']) < $this->Mcharacter->vars['lucky_coin']){
                                                 $this->vars['error'] = __('You have insufficient amount of coins.');
@@ -1549,37 +1447,34 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.login');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function login_with_facebook()
+		public function login_with_facebook()
         {
             $this->load->lib('fb');
             $this->fb->check_fb_user();
             if(isset($_SESSION['fb_access_token'])){
-                $email = $this->fb->getEmail();
                 try{
-                    if($this->website->is_multiple_accounts() == true){
-                        if(isset($_POST['server'])){
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
-                            $this->load->model('account');
-                            if($info = $this->Maccount->check_fb_user($email, $_POST['server'])){
-                                $this->Maccount->clear_login_attemts();
-                                header('Location: ' . $this->config->base_url . 'account-panel');
-                            } else{
-                                $this->fb_register($_POST['server'], $this->vars['user_profile']['email']);
-                            }
-                        }
-                        $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.fb_login');
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                        $this->load->model('account');
-                        $server_list = array_keys($this->website->server_list());
-                        if($info = $this->Maccount->check_fb_user($this->fb->getEmail(), $server_list[0])){
-                            $this->Maccount->clear_login_attemts();
-                            header('Location: ' . $this->config->base_url . 'account-panel');
-                        } else{
-                            header('Location: ' . $this->config->base_url . 'registration/create-account-with-fb/' . $server_list[0] . '/' . urlencode($email));
-                        }
-                    }
+					$email = $this->fb->getEmail();
+					$servers = $this->website->server_list();
+					$default = array_keys($servers)[0];
+					
+					if(!isset($_POST['server'])){
+						$server = $default;
+					} 
+					else{
+						if(!array_key_exists($_POST['server'], $servers)){
+							$server = $default;
+						}
+						else{
+							$server = $_POST['server'];
+						}
+					}
+					
+					if($info = $this->Maccount->check_fb_user($email, $server)){
+						$this->Maccount->clear_login_attemts();
+						header('Location: ' . $this->config->base_url . 'account-panel');
+					} else{
+						header('Location: ' . $this->config->base_url . 'registration/create-account-with-fb/' . $server . '/' . urlencode($email));
+					}
                 } catch(FacebookApiException $e){
                     unset($_SESSION['fb_access_token']);
                     throw new exception($e->getMessage());
@@ -1587,7 +1482,6 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function coupons()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
@@ -1635,8 +1529,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function logout()
+		public function logout()
         {
             $email = $this->session->userdata(['user' => 'email']);
             $id = $this->session->userdata(['user' => 'ipb_id']);

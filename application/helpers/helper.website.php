@@ -19,7 +19,6 @@
             $this->load = $this->registry->load;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function check_server_status_by_port($ip, $port, $gs_list, $name, $cache_time, $db, $cache_name = '')
         {
             $this->check_cache('serv_status#'.$this->config->language().'#' . $cache_name, 'server', $cache_time);
@@ -54,8 +53,7 @@
             return $this->server;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function check_server_status($cache_time = 120)
+		public function check_server_status($cache_time = 120)
         {
             $serverlist = $this->server_list();
 			$this->check_cache('servers_status#'.$this->config->language(), 'servers', $cache_time);
@@ -106,8 +104,7 @@
             return $this->servers;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function total_online($cached_query = 60)
+		public function total_online($cached_query = 60)
         {
             $serverlist = $this->server_list();
             $max_online = 0;
@@ -128,8 +125,7 @@
             return ['online' => $online, 'percentage' => floor(100 * $online / $max_online)];
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function online_by_server($server, $cached_query = 60)
+		public function online_by_server($server, $cached_query = 60)
         {
             $db = $this->get_db_from_serverlist($server);
             if($db != ''){
@@ -142,14 +138,13 @@
 		public function online_by_subserver($server, $subkey, $cached_query = 60){
 			$db = $this->get_db_from_serverlist($server);
 			if($db != ''){
-                $online = $this->db($db)->cached_query('online_count_by_subserver_' . $server.$subkey, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 AND ServerName = \''.$this->db('web')->sanitize_var($subkey).'\'', [], $cached_query);
+                $online = $this->db($db)->cached_query('online_count_by_subserver_' . $server.$subkey, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 AND ServerName = \''.$this->db('web')->escape($subkey).'\'', [], $cached_query);
                 return (int)$online[0]['count'];
             }
             return 0;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function active_by_server($server, $cached_query = 60)
+		public function active_by_server($server, $cached_query = 60)
         {
             $db = $this->get_db_from_serverlist($server);
             if($db != ''){
@@ -170,8 +165,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function server_code($sv, $and = true)
+		public function server_code($sv, $and = true)
         {
             if(strpos($sv, ',') !== false){
                 $server_array = explode(',', $sv);
@@ -179,21 +173,20 @@
                 $serv = '';
                 foreach($server_array AS $key => $s){
                     if($key == 0){
-                        $serv .= ($and == true) ? 'AND (ServerName = \'' . $this->db('web')->sanitize_var($s) . '\'' : '(ServerName = \'' . $this->db('web')->sanitize_var($s) . '\'';
+                        $serv .= ($and == true) ? 'AND (ServerName = \'' . $this->db('web')->escape($s) . '\'' : '(ServerName = \'' . $this->db('web')->escape($s) . '\'';
                     } else if($key == $length - 1){
-                        $serv .= ' OR ServerName = \'' . $this->db('web')->sanitize_var($s) . '\')';
+                        $serv .= ' OR ServerName = \'' . $this->db('web')->escape($s) . '\')';
                     } else{
-                        $serv .= ' OR ServerName = \'' . $this->db('web')->sanitize_var($s) . '\'';
+                        $serv .= ' OR ServerName = \'' . $this->db('web')->escape($s) . '\'';
                     }
                 }
             } else{
-                $serv = ($and == true) ? 'AND ServerName = \'' . $this->db('web')->sanitize_var($sv) . '\'' : 'ServerName = \'' . $this->db('web')->sanitize_var($sv) . '\'';
+                $serv = ($and == true) ? 'AND ServerName = \'' . $this->db('web')->escape($sv) . '\'' : 'ServerName = \'' . $this->db('web')->escape($sv) . '\'';
             }
             return $serv;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_first_server_code($sv)
+		public function get_first_server_code($sv)
         {
             $serverlist = $this->server_list($sv);
             if(is_array($serverlist)){
@@ -227,7 +220,6 @@
             return $first['db_acc'];
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function get_char_id_col($server = '')
         {
             $serverlist = $this->server_list($server);
@@ -239,8 +231,7 @@
             return (bool)$this->server_list('', true);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function count_resets()
+		public function count_resets()
         {
             return $this->db($this->get_db_from_server($this->registry->session->userdata(['user' => 'server'])))->snumrows('SELECT SUM(' . $this->config->values('table_config', [$this->registry->session->userdata(['user' => 'server']), 'resets', 'column']) . ') AS count FROM Character WHERE AccountId = \'' . $this->registry->session->userdata(['user' => 'username']) . '\'');
         }
@@ -249,8 +240,7 @@
 			return $this->db($this->get_db_from_server($this->registry->session->userdata(['user' => 'server'])))->query('SELECT Name FROM Character WHERE AccountId = \''.$this->registry->session->userdata(['user' => 'server']).'\'')->fetch();
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function stats($server = '', $cached_query = 60)
+		public function stats($server = '', $cached_query = 60)
         {
             if(!$server)
                 $server = array_keys($this->server_list($server))[0];
@@ -300,7 +290,6 @@
 			return $this->db('game', $server)->cached_query('arcnana_pvp_dl_'.$server, 'SELECT TOP 1 Name, Class, MataMataDL AS MataMata FROM Character WHERE Class IN (64) ORDER BY MataMataDL DESC, Name DESC', $cache_time);	
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function topByClass($amount, $class, $server = false, $cacheTime = 180, $huntLog = false){
 			if(!$server){
                 $server = array_keys($this->server_list())[0];
@@ -314,8 +303,7 @@
 			return [$this->vars['data'], $this->vars['config']['player']];
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_cs_info($server = false)
+		public function get_cs_info($server = false)
         {
             if(!$server)
                 $server = array_keys($this->server_list())[0];
@@ -323,7 +311,6 @@
             return $this->registry->Mstats->get_cs_info($server);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function getArcaWinners($server = false){
 			if(!$server)
                $server = array_keys($this->server_list())[0];
@@ -331,7 +318,6 @@
             return $this->registry->Mstats->get_arca_winner($server);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function getIceWindWinners($server = false){
 			if(!$server)
                $server = array_keys($this->server_list())[0];
@@ -339,14 +325,13 @@
             return $this->registry->Mstats->ice_wind_winner($server);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function getTopPvp($server = false){
 			if(!$server)
                $server = array_keys($this->server_list())[0];
 			return $this->db('game', $server)->query('SELECT TOP 1 COUNT(Victim) AS KillCount, Killer FROM C_PlayerKiller_Info GROUP BY Killer, Victim ORDER BY COUNT(Victim) DESC')->fetch();	
 		}
 				
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
+			
 		public function get_gens_info($server = false, $cache_time = 120, $amount = 1)
         {
             if(!$server)
@@ -359,7 +344,6 @@
 			return $data;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function gens_gens_family($name, $server, $type)
         {
             switch($type){
@@ -387,7 +371,6 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function gens_rank($points, $rank)
         {
             if($points < 500)
@@ -423,8 +406,7 @@
             return $gens_rank;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_cs_guild_list($server = false)
+		public function get_cs_guild_list($server = false)
         {
             if(!$server)
                 $server = array_keys($this->server_list())[0];
@@ -432,7 +414,6 @@
             return $this->registry->Mstats->get_cs_guild_list($server);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function csGuildList($server = false, $cache_time = 180)
         {
             if(!$server)
@@ -441,7 +422,6 @@
             return $this->registry->Mstats->get_cs_guild_list($server, $cache_time);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function arcaGuildList($server = false, $cache_time = 120)
         {
             if(!$server)
@@ -450,7 +430,6 @@
             return $this->registry->Mstats->get_arca_guild_list($server, $cache_time);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function iceWindGuildList($server = false, $cache_time = 120)
         {
             if(!$server)
@@ -482,27 +461,23 @@
 			return $gms;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function checkResetItem($user, $server, $name, $range, $cat){
-			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Reset_Required_Items WHERE server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'')->fetch();
+			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Reset_Required_Items WHERE server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();
 			return $count;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function checkGResetItem($user, $server, $name, $range, $cat){
-			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_GrandReset_Required_Items WHERE server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'')->fetch();
+			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_GrandReset_Required_Items WHERE server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();
 			return $count;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function checkClassChangeItem($user, $server, $name, $cat){
-			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Change_Class_Required_Items WHERE server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'')->fetch();
+			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Change_Class_Required_Items WHERE server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();
 			return $count;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function addResetReqItems($user, $server, $name, $range, $cat, $id, $item){
-			$data = '('. $id .', \''.$this->db('web')->sanitize_var($name).'\', \''.$this->db('web')->sanitize_var($user).'\', \''.$this->db('web')->sanitize_var($server).'\', \''.$this->db('web')->sanitize_var($range).'\', \''.$cat.'\', \''.$item['hex'].'\'';
+			$data = '('. $id .', \''.$this->db('web')->escape($name).'\', \''.$this->db('web')->escape($user).'\', \''.$this->db('web')->escape($server).'\', \''.$this->db('web')->escape($range).'\', \''.$cat.'\', \''.$item['hex'].'\'';
 			if(isset($item['priceType']) && $item['priceType'] != 0){
 				$data .= ','.$item['skipPrice'].', '.$item['priceType'].'';
 			}
@@ -513,9 +488,8 @@
 			$this->db('web')->query('INSERT INTO DmN_Reset_Required_Items (config_id, character, memb___id, server, range, cat, hex, skip_price, skip_price_type) VALUES '.substr($data, 0, -1).'');
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function addGResetReqItems($user, $server, $name, $range, $cat, $id, $item){
-			$data = '('. $id .', \''.$this->db('web')->sanitize_var($name).'\', \''.$this->db('web')->sanitize_var($user).'\', \''.$this->db('web')->sanitize_var($server).'\', \''.$this->db('web')->sanitize_var($range).'\', \''.$cat.'\', \''.$item['hex'].'\'';
+			$data = '('. $id .', \''.$this->db('web')->escape($name).'\', \''.$this->db('web')->escape($user).'\', \''.$this->db('web')->escape($server).'\', \''.$this->db('web')->escape($range).'\', \''.$cat.'\', \''.$item['hex'].'\'';
 			if(isset($item['priceType']) && $item['priceType'] != 0){
 				$data .= ','.$item['skipPrice'].', '.$item['priceType'].'';
 			}
@@ -526,9 +500,8 @@
 			$this->db('web')->query('INSERT INTO DmN_GrandReset_Required_Items (config_id, character, memb___id, server, range, cat, hex, skip_price, skip_price_type) VALUES '.substr($data, 0, -1).'');
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function addChangeClassReqItems($user, $server, $name, $cat, $id, $item){
-			$data = '('. $id .', \''.$this->db('web')->sanitize_var($name).'\', \''.$this->db('web')->sanitize_var($user).'\', \''.$this->db('web')->sanitize_var($server).'\', \''.$cat.'\', \''.$item['hex'].'\'';
+			$data = '('. $id .', \''.$this->db('web')->escape($name).'\', \''.$this->db('web')->escape($user).'\', \''.$this->db('web')->escape($server).'\', \''.$cat.'\', \''.$item['hex'].'\'';
 			if(isset($item['priceType']) && $item['priceType'] != 0){
 				$data .= ','.$item['skipPrice'].', '.$item['priceType'].'';
 			}
@@ -539,66 +512,64 @@
 			$this->db('web')->query('INSERT INTO DmN_Change_Class_Required_Items (config_id, character, memb___id, server, cat, hex, skip_price, skip_price_type) VALUES '.substr($data, 0, -1).'');
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function checkCompletedResetItem($user, $server, $name, $id, $range, $cat){
-			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_Reset_Required_Items WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'')->fetch();	
+			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_Reset_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();	
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function checkCompletedGResetItem($user, $server, $name, $id, $range, $cat){
-			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_GrandReset_Required_Items WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'')->fetch();	
+			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_GrandReset_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();	
 		}
 		
 		public function checkCompletedChangeClassItem($user, $server, $name, $id, $cat){
-			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, hex FROM DmN_Change_Class_Required_Items WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'')->fetch();	
+			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, hex FROM DmN_Change_Class_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();	
 		}
 		
 		public function setSkippedResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($char).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
 		}
 		
 		public function setSkippedGResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($char).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
 		}
 		
 		public function setSkippedChangeClassItem($id, $char, $user, $server, $cat){
-			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($char).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
 		}
 		
 		public function setCompletedResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($char).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
 		}
 		
 		public function setCompletedGResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($char).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
 		}
 		
 		public function setCompletedChangeClassItem($id, $char, $user, $server, $cat){
-			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->sanitize_var($id).' AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($char).'\' AND cat = \''.$this->db('web')->sanitize_var($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
 		}
 		
 		public function checkNotCompletedItemCount($user, $server, $name, $range){
-			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Reset_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\'');
+			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Reset_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
 		}	
 		
 		public function checkNotCompletedItemCountGRes($user, $server, $name, $range){
-			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_GrandReset_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\'');
+			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_GrandReset_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
 		}
 		
 		public function checkNotCompletedItemCountChangeClass($user, $server, $name){
-			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Change_Class_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\'');
+			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Change_Class_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\'');
 		}
 		
 		public function removeResetItems($user, $server, $name, $range){
-			return $this->db('web')->query('DELETE FROM DmN_Reset_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\'');
+			return $this->db('web')->query('DELETE FROM DmN_Reset_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
 		}
 		
 		public function removeGResetItems($user, $server, $name, $range){
-			return $this->db('web')->query('DELETE FROM DmN_GrandReset_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\' AND range = \''.$this->db('web')->sanitize_var($range).'\'');
+			return $this->db('web')->query('DELETE FROM DmN_GrandReset_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
 		}
 		
 		public function removeChangeClassItems($user, $server, $name){
-			return $this->db('web')->query('DELETE FROM DmN_Change_Class_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->sanitize_var($server).'\' AND memb___id = \''.$this->db('web')->sanitize_var($user).'\' AND character = \''.$this->db('web')->sanitize_var($name).'\'');
+			return $this->db('web')->query('DELETE FROM DmN_Change_Class_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\'');
 		}
 
         public function module_disabled($config)
@@ -634,7 +605,7 @@
             }
             return false;
         }
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function server_list($sv = '', $check_multi_db_acc = false)
         {
             return server_list($sv, $check_multi_db_acc);
@@ -644,8 +615,7 @@
         {
             return ip();
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function hex2bin($hexstr)
         {
             if(ctype_xdigit($hexstr) && strlen($hexstr) <= 128){
@@ -741,8 +711,7 @@
         {
             return $this->cached;
         }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
+				  
         public function translate_credits($credits, $server = 'DEFAULT')
         {
             switch($credits){
@@ -760,8 +729,7 @@
                     break;	
             }
         }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
+				  
         public function get_user_credits_balance($user, $server, $type = 1, $guid = false)
         {
 			if($type == 4){
@@ -801,8 +769,7 @@
                 return $info;
             }
         }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM   
+				   
 		public function add_credits($user, $server, $credits, $type = 1, $decrease = false, $guid = false)
         {
 			if($type == 4){
@@ -828,8 +795,7 @@
         {
             $this->add_credits($account, $server, $credits, $decrease_type, true, $guid);
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         private function increase_credits($db, $table, $column, $identifier_column, $user, $guid, $server, $credits)
         {
             $data = [':credits' => $credits, ':user' => $user, ':server' => $server];
@@ -855,8 +821,7 @@
                 }
             }
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         private function decrease_credits($db, $table, $column, $identifier_column, $user, $guid, $server, $credits)
         {
             $data = [':credits' => $credits, ':user' => $user, ':server' => $server];
@@ -892,8 +857,7 @@
             }
             return 0;
         }
-
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+      
         public function db($db, $server = '')
         {
             switch($db){
@@ -968,8 +932,7 @@
                 return $this->$rss_name;
             }
         }
-
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+       
         public function load_data_from_url($url)
         {
             if(extension_loaded('curl')){
@@ -1030,7 +993,7 @@
             return $return;
         }
 	
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         private function sort_by_column(&$arr, $col, $dir = SORT_DESC)
         {
             $sort_col = [];
@@ -1076,7 +1039,6 @@
             return ($zens < 1000) ? (float)number_format($zen, 1, '.', '') : (float)number_format($zen, 1, '.', '') . " " . str_repeat("K", $i);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function ascii2hex($ascii) 
 		{
 			$hex = '';
@@ -1087,8 +1049,7 @@
 			}
 			return $hex;
 		}
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
         public function get_char_class($class, $short = false, $list = false)
         {
             $class_array = $this->config->values('class_config');
@@ -1105,22 +1066,19 @@
                     return __('Unknown Class').': '.$class;
             }
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
         public function get_guild_status($status)
         {
             $status_array = [0 => __('Member'), 32 => '<span style="color: green;">' . __('BattleMaster') . '</span>', 64 => '<span style="color: blue;">' . __('Assistant Guild Master') . '</span>', 128 => '<span style="color: red;font-weight: bold;">' . __('Guild Master') . '</span>'];
             return str_replace(array_keys($status_array), array_values($status_array), $status);
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function get_gens_family($influence)
         {
             $family_array = [1 => __('Duprian'), 2 => __('Vanert')];
             return str_replace(array_keys($family_array), array_values($family_array), $influence);
         }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function get_map_name($map_id, $list = false)
         {
             $maps_array = $this->config->values('map_config');
@@ -1131,7 +1089,6 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function get_map_code($map_name)
         {
             $maps_array = $this->config->values('map_config');
@@ -1142,7 +1099,6 @@
             return  -1;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function get_drop_cat($id)
         {
             $array = $this->config->values('drop_config');
@@ -1159,24 +1115,18 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function show65kStats($stat_value)
         {
             return ($stat_value < 0) ? $stat_value += 65536 : $stat_value;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function fb_login($type = '', $style = '')
         {
             $this->load->lib('fb');
             $this->registry->fb->get_fb_login_url($type, $style);
             return $this->registry->fb->redirect_url;
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function c($input)
-        {
-            return (!preg_match('/^\-?\d+(\.\d+)?$/D', $input) || preg_match('/^0\d+$/D', $input)) ? trim(preg_replace('/[^a-zA-Z0-9_@#$&amp;%[]()-,!<\/]/i', '', $input)) : $input;
         }
 
         public function get_country_code($ip)
@@ -1221,7 +1171,7 @@
             return $day;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
         public function load_event_timers()
         {
             $events = $this->config->values('event_config', ['events', 'event_timers']);
@@ -1315,6 +1265,7 @@
                 return array_key_exists($iso, $language_codes) ? $language_codes[$iso] : $iso;
             }
         }
+		
         public function secret_questions($check = false)
         {
             $questions = [0 => __('What is your mother`s maiden name?'), 1 => __('What was the name of your first school?'), 2 => __('Who is your favorite super hero?'), 3 => __('What is the name of your first pet?'), 4 => __('What was your favorite place to visit as a child?'), 5 => __('Who is your favorite cartoon character?'), 6 => __('What was the first game you played?'), 7 => __('What was the name of your first teacher?'), 8 => __('What was your favorite TV show as a child?'), 9 => __('What city was your mother born in?'),];
@@ -1324,8 +1275,7 @@
             return $questions;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function timezone_list()
+		public function timezone_list()
         {
             static $timezones = null;
             if($timezones === null){
@@ -1357,7 +1307,6 @@
             return $name;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function date_diff($start_date, $end_date)
 		{
 			if(!is_numeric($start_date)){
@@ -1413,6 +1362,22 @@
 			}
 			return $html;
 		}
+		
+		public function is_hex($hex_code) {
+			return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
+		}
+
+		public function clean_hex($data)
+        {
+			
+            if(!$this->is_hex($data)){
+                $data = bin2hex($data);
+            }
+            if(substr_count($data, "\0")){
+                $data = str_replace("\0", '', $data);
+            }
+            return strtoupper($data);
+        }
 
 		public function getPHPExecutablePath(){
 			getPHPExecutablePath();
@@ -1422,7 +1387,6 @@
 			writelog($text, $file);
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		public function checkTwitchStatus($user){
 			$token = $this->authTwitch();
 			$url = 'https://api.twitch.tv/helix/streams/?user_login='. $user;
@@ -1433,13 +1397,11 @@
 			return 'Not Streaming';
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		public function findTwitchStreamers(){
             $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'cache']]);
             return $this->registry->cache->get('twitch_streamer_data', true);
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function authTwitch(){
 			$url = 'https://id.twitch.tv/oauth2/token';
 			$data = array('client_id' => TWITCH_CLIENT_ID, 'client_secret' => TWITCH_SECRET, 'grant_type' => 'client_credentials');
@@ -1459,7 +1421,6 @@
 			return json_decode($result, true);
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function curlTwitch($url, $token) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);

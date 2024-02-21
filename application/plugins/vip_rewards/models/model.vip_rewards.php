@@ -103,7 +103,7 @@
 				}
 			}
 			else{
-				return $this->website->db('web')->query('SELECT package_title FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->sanitize_var($id).'')->fetch()['package_title'];
+				return $this->website->db('web')->query('SELECT package_title FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->escape($id).'')->fetch()['package_title'];
 			}
         }
 		
@@ -192,11 +192,11 @@
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, reward_type, vip_type, memb___id, server, claim_date FROM DmN_Vip_Claimed_Rewards WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Vip_Claimed_Rewards ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, reward_type, vip_type, memb___id, server, claim_date FROM DmN_Vip_Claimed_Rewards WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Vip_Claimed_Rewards ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, reward_type, vip_type, memb___id, server, claim_date FROM DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, reward_type, vip_type, memb___id, server, claim_date FROM DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, reward_type, vip_type, memb___id, server, claim_date FROM DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, reward_type, vip_type, memb___id, server, claim_date FROM DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Vip_Claimed_Rewards WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -215,9 +215,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Vip_Claimed_Rewards ' . $sql . '');
@@ -305,17 +305,11 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function inventory($char, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Inventory']);
-					$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-				}
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
 			}  
         }
 		
@@ -472,14 +466,5 @@
                 return ($status['ConnectStat'] == 0);
             }
             return true;
-        }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

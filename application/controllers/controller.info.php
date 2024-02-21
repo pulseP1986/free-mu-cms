@@ -27,11 +27,6 @@
 
         public function character($name = '', $server = '')
         {
-            if($this->website->is_multiple_accounts() == true){
-                $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($server, true)]);
-            } else{
-                $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-            }
             $this->load->model('account');
 			
             if($server == ''){

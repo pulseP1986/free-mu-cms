@@ -28,18 +28,13 @@
         {
             if(!$this->website->module_disabled('warehouse')){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
-                    if(!$this->Maccount->check_connect_stat()){
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                         $this->vars['error'] = __('Please logout from game.');
                     } else{
                         if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                             $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                            $this->vars['items'] = $this->Mwarehouse->load_items();
+                            $this->vars['items'] = $this->Mwarehouse->load_items($this->session->userdata(['user' => 'server']));
                         } else{
                             $this->vars['error'] = __('Please open your warehouse in game first.');
                         }
@@ -55,17 +50,12 @@
         {
             if(!$this->website->module_disabled('warehouse')){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     $this->load->lib("pagination");
 					
-					$this->Mwarehouse->count_total_web_items();
+					$this->Mwarehouse->count_total_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 					$this->pagination->initialize($page, $this->config->config_entry('warehouse|web_items_per_page'), $this->Mwarehouse->total_items, $this->config->base_url . 'warehouse/web/%s');
-					$this->vars['items'] = isset($_POST['search_item']) ? $this->Mwarehouse->load_web_items(1, $_POST['item']) : $this->Mwarehouse->load_web_items($page);
+					$this->vars['items'] = isset($_POST['search_item']) ? $this->Mwarehouse->load_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 1, $_POST['item']) : $this->Mwarehouse->load_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $page);
 					$this->vars['pagination'] = $this->pagination->create_links();
                     $this->load->view($this->config->config_entry('main|template') . DS . 'warehouse' . DS . 'view.web', $this->vars);
                 } else{
@@ -74,17 +64,11 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function sell_item()
         {
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     //$this->csrf->isTokenValid($this->csrf->verifyRequest('post', 'json'));
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     $price = (isset($_POST['price']) ? ctype_digit($_POST['price']) ? $_POST['price'] : '' : '');
                     $ptype = (isset($_POST['payment_method']) ? ctype_digit($_POST['payment_method']) ? $_POST['payment_method'] : '' : '');
@@ -92,7 +76,7 @@
                     $char = isset($_POST['char']) ? $_POST['char'] : '';
                     $highlighted = isset($_POST['highlight']) ? 1 : 0;
                     $slot = (isset($_POST['slot']) ? ctype_digit($_POST['slot']) ? $_POST['slot'] : '' : '');
-                    $item_count = $this->Mwarehouse->get_market_item_count();
+                    $item_count = $this->Mwarehouse->get_market_item_count($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     $start_pos = ($this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64) ? [6, 32] : 6;
                     if($price == '' || $price <= 0)
                         $this->errors[] = __('Please enter price.');
@@ -189,7 +173,7 @@
                         if($this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('market|price_highlight_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id'])) < $this->config->config_entry('market|price_highlight'))
                             $this->errors[] = vsprintf(__('For highlighting item you need %d %s'), [$this->config->config_entry('market|price_highlight'), $this->website->translate_credits($this->config->config_entry('market|price_highlight_type'), $this->session->userdata(['user' => 'server']))]);
                     }
-                    if(!$this->Maccount->check_connect_stat())
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                         $this->errors[] = __('Please logout from game.');
                     if(count($this->errors) > 0){
                         foreach($this->errors as $error){
@@ -199,7 +183,7 @@
                     else{
 						usleep(mt_rand(1000000, 5000000));
                         if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                            if($this->Mwarehouse->find_item_by_slot($slot)){
+                            if($this->Mwarehouse->find_item_by_slot($slot, $this->session->userdata(['user' => 'server']))){
                                 if(!$this->check_serial($start_pos)){
                                     json(['error' => sprintf(__('You are not allowed to sell items without serial. Item Serial: %s'), $this->serial)]);
                                 } 
@@ -212,14 +196,14 @@
                                         }
                                     }
                                     if($allow_sell){
-                                        $this->Mwarehouse->generate_new_item_by_slot($slot);
+                                        $this->Mwarehouse->generate_new_item_by_slot($slot, $this->session->userdata(['user' => 'server']));
                                         $info = $this->Mwarehouse->load_item_info();
                                         if($info != false){
                                             if($this->Mwarehouse->exe_opt_count > $this->config->config_entry('market|max_exe'))
                                                 json(['error' => sprintf(__('You are only allowed to sell items with max %d exe options.'), $this->config->config_entry('market|max_exe'))]); 
                                             else{
                                                 if($this->Mwarehouse->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                                                    $this->Mwarehouse->add_market_item($info, $price, $ptype, $time, $char, $highlighted);
+                                                    $this->Mwarehouse->add_market_item($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $info, $price, $ptype, $time, $char, $highlighted);
                                                     if($highlighted == 1){
                                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('market|price_highlight'), $this->config->config_entry('market|price_highlight_type'));
                                                         $this->Maccount->add_account_log('Item Higlighting Fee ' . $this->website->translate_credits($this->config->config_entry('market|price_highlight_type'), $this->session->userdata(['user' => 'server'])) . '', -(int)$this->config->config_entry('market|price_highlight'), $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -304,19 +288,14 @@
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $slot = (isset($_POST['slot']) ? ctype_digit($_POST['slot']) ? $_POST['slot'] : '' : '');
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     $this->load->model('shop');
-                    if(!$this->Maccount->check_connect_stat())
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                         json(['error' => __('Please logout from game.')]); 
 					else{
                         switch($type){
                             case 'game':
-                                if($item = $this->Mwarehouse->check_web_wh_item($slot)){
+                                if($item = $this->Mwarehouse->check_web_wh_item($slot, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 									usleep(mt_rand(1000000, 5000000));
                                     if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                         $this->iteminfo->itemData($item['item']);
@@ -340,9 +319,9 @@
                                 if($this->config->config_entry('warehouse|allow_move_to_web_warehouse') == 1){
 									usleep(mt_rand(1000000, 5000000));
                                     if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                                        if($this->Mwarehouse->find_item_by_slot($slot)){
-                                            $this->Mwarehouse->insert_web_item();
-                                            $this->Mwarehouse->generate_new_item_by_slot($slot);
+                                        if($this->Mwarehouse->find_item_by_slot($slot, $this->session->userdata(['user' => 'server']))){
+                                            $this->Mwarehouse->insert_web_item($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+                                            $this->Mwarehouse->generate_new_item_by_slot($slot, $this->session->userdata(['user' => 'server']));
                                             $this->Mwarehouse->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             json(['success' => __('Item successfully transfered to web warehouse.')]);
                                         } else{
@@ -367,20 +346,15 @@
         {
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     $slot = (isset($_POST['slot']) ? ctype_digit($_POST['slot']) ? $_POST['slot'] : '' : '');
-                    if(!$this->Maccount->check_connect_stat())
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                         json(['error' => __('Please logout from game.')]); else{
                         if($this->config->config_entry('warehouse|allow_delete_item') == 1){
                             if($this->Mwarehouse->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                                if($this->Mwarehouse->find_item_by_slot($slot)){
-                                    $this->Mwarehouse->log_deleted_item();
-                                    $this->Mwarehouse->generate_new_item_by_slot($slot);
+                                if($this->Mwarehouse->find_item_by_slot($slot, $this->session->userdata(['user' => 'server']))){
+                                    $this->Mwarehouse->log_deleted_item($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+                                    $this->Mwarehouse->generate_new_item_by_slot($slot, $this->session->userdata(['user' => 'server']));
                                     $this->Mwarehouse->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                     json(['success' => __('Item successfully removed from warehouse.')]);
                                 } else{

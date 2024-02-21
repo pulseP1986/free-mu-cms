@@ -243,25 +243,25 @@
 			$search = ' AND time BETWEEN '.$beginOfDay.' AND  '.$endOfDay.' AND validated = 1'; 
 			$search2 = ' AND time BETWEEN '.$beginOfDay.' AND  '.$endOfDay;
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Dmncms_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Dmncms_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Dmncms_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 			}	
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Gtop_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Gtop_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Gtop_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Log WHERE account = \''.$this->website->db('web')->sanitize_var($user).'\''.$search2)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Log WHERE account = '.$this->website->db('web')->escape($user).''.$search2)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Mmoserver_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Mmoserver_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Mmoserver_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Top100arena_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Top100arena_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Top100arena_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Topg_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Topg_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Topg_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Xtremetop_Log')){
-				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Xtremetop_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+				$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Xtremetop_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 			}
 			return array_sum($votes);
 		}
@@ -276,32 +276,32 @@
 			switch($type){
 				case 1:
 					if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Xtremetop_Log')){
-						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Xtremetop_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Xtremetop_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 					}
 				break;
 				case 2:
 					if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Gtop_Log')){
-						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Gtop_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Gtop_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 					}
 				break;
 				case 3:
 					if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Topg_Log')){
-						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Topg_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Topg_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 					}
 				break;
 				case 4:
 					if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Top100arena_Log')){
-						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Top100arena_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Top100arena_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 					}
 				break;
 				case 5:
 					if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Mmoserver_Log')){
-						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Mmoserver_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Mmoserver_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 					}
 				break;
 				case 6:
 					if($this->website->db('web')->check_if_table_exists('DmN_Votereward_Dmncms_Log')){
-						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Dmncms_Log WHERE memb_guid = \''.$this->website->db('web')->sanitize_var($guid).'\''.$search)->fetch()['tr'];
+						$votes[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Votereward_Dmncms_Log WHERE memb_guid = '.$this->website->db('web')->escape($guid).''.$search)->fetch()['tr'];
 					}
 				break;
 				
@@ -317,52 +317,52 @@
 			$endOfDay   = strtotime("tomorrow", $beginOfDay) - 1;
 			$search = ' AND order_date BETWEEN '.$beginOfDay.' AND  '.$endOfDay; 
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_CoinBase_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_CoinBase_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_CoinBase_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}	
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_CuentaDigital_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_CuentaDigital_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_CuentaDigital_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			//if($this->website->db('web')->check_if_table_exists('DmN_Donate_Fortumo')){
-			//	$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Fortumo WHERE account = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch()['tr'];
+			//	$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Fortumo WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch()['tr'];
 			//}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Interkassa_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Interkassa_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Interkassa_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_MercadoPago_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_MercadoPago_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_MercadoPago_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_NganLuong_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_NganLuong_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_NganLuong_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Paddle_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Paddle_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Paddle_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_PayCall_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_PayCall_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_PayCall_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Payeer_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Payeer_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Payeer_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Payssion_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Payssion_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Payssion_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_PayU_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_PayU_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_PayU_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Stripe_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Stripe_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Stripe_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\' AND status = \'Completed\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND status = \'Completed\''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_UnitPay_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_UnitPay_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_UnitPay_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_WalletOne_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_WalletOne_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_WalletOne_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			if($this->website->db('web')->check_if_table_exists('DmN_Donate_Gerencianet_Transactions')){
-				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Gerencianet_Transactions WHERE acc = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+				$transactions[] = $this->website->db('web')->query('SELECT COUNT(id) AS tr FROM DmN_Donate_Gerencianet_Transactions WHERE acc = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 			}
 			return array_sum($transactions);
 		}
@@ -408,7 +408,7 @@
 		}
 		
 		public function check_online_time($user, $guid, $server){ 
-			return $this->website->db('web')->query('SELECT SUM(TotalTime) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = \'' . $this->website->db('web')->sanitize_var($user) . '\' ' . $this->website->server_code($this->website->get_servercode($server)) . ' AND date = \''.date('Y-m-d', time()).'\'')->fetch()['OnlineMinutes'];
+			return $this->website->db('web')->query('SELECT SUM(TotalTime) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = '.$this->website->db('web')->escape($user).' ' . $this->website->server_code($this->website->get_servercode($server)) . ' AND date = \''.date('Y-m-d', time()).'\'')->fetch()['OnlineMinutes'];
 		}
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
@@ -636,25 +636,25 @@
 		}
 		
 		public function check_resets($user, $guid, $server){
-			return $this->website->db('web')->query('SELECT SUM(resets) AS resets FROM DmN_Character_Reset_Log WHERE account = \'' . $this->website->db('web')->sanitize_var($user) . '\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\' AND date = \''.date('Y-m-d', time()).'\'')->fetch()['resets'];
+			return $this->website->db('web')->query('SELECT SUM(resets) AS resets FROM DmN_Character_Reset_Log WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND date = \''.date('Y-m-d', time()).'\'')->fetch()['resets'];
 		}
 		
 		public function check_gresets($user, $guid, $server){
-			return $this->website->db('web')->query('SELECT SUM(resets) AS resets FROM DmN_Character_gReset_Log WHERE account = \'' . $this->website->db('web')->sanitize_var($user) . '\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\' AND date = \''.date('Y-m-d', time()).'\'')->fetch()['resets'];
+			return $this->website->db('web')->query('SELECT SUM(resets) AS resets FROM DmN_Character_gReset_Log WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND date = \''.date('Y-m-d', time()).'\'')->fetch()['resets'];
 		}
 		
 		public function check_shop($user, $guid, $server){
 			$beginOfDay = strtotime("today", time());
 			$endOfDay   = strtotime("tomorrow", $beginOfDay) - 1;
 			$search = ' AND date BETWEEN '.$this->website->db('web')->escape(date('Y-m-d H:i:s', $beginOfDay)).' AND  '.$this->website->db('web')->escape(date('Y-m-d H:i:s', $endOfDay)); 
-			return $this->website->db('web')->query('SELECT COUNT(memb___id) AS tr FROM DmN_Shop_Logs WHERE memb___id = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+			return $this->website->db('web')->query('SELECT COUNT(memb___id) AS tr FROM DmN_Shop_Logs WHERE memb___id = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 		}
 		
 		public function check_market($user, $guid, $server){
 			$beginOfDay = strtotime("today", time());
 			$endOfDay   = strtotime("tomorrow", $beginOfDay) - 1;
 			$search = ' AND sold_date BETWEEN '.$this->website->db('web')->escape(date('Y-m-d H:i:s', $beginOfDay)).' AND  '.$this->website->db('web')->escape(date('Y-m-d H:i:s', $endOfDay)); 
-			return $this->website->db('web')->query('SELECT COUNT(DISTINCT buyer) AS tr FROM DmN_Market_Logs WHERE seller = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\''.$search)->fetch()['tr'];
+			return $this->website->db('web')->query('SELECT COUNT(DISTINCT buyer) AS tr FROM DmN_Market_Logs WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 		}
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
@@ -665,17 +665,11 @@
 			if($characters != false){
 				$charData = [];
 				foreach($characters AS $char){
-					$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-					$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
+					$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 					$stmt->execute([':char' => $char['id']]);
 					if($inv = $stmt->fetch()){
-						if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-							$unpack = unpack('H*', $inv['Inventory']);
-							$charData[$char['id']] = $this->clean_hex($unpack[1]);
-						}
-						else{
-							$charData[$char['id']] = $this->clean_hex($inv['Inventory']);
-						}
+						$unpack = unpack('H*', $inv['Inventory']);
+						$charData[$char['id']] = $this->website->clean_hex($unpack[1]);
 					}
 				}
 				return $charData;
@@ -686,17 +680,11 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function inventory2($char, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Inventory']);
-					$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-				}
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
 			}  
         }
 		
@@ -841,7 +829,7 @@
 		
 		public function get_vip_package_title($vip_type = 1)
         {
-			return $this->website->db('web')->query('SELECT package_title, vip_time FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->sanitize_var($vip_type).'')->fetch();
+			return $this->website->db('web')->query('SELECT package_title, vip_time FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->escape($vip_type).'')->fetch();
         }
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
@@ -896,14 +884,5 @@
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
             $stmt->close_cursor();
-        }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

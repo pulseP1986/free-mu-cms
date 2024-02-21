@@ -38,8 +38,7 @@
             return preg_match('/^[' . $symbols . ']{' . $len[0] . ',' . $len[1] . '}+$/', $password);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function test_password_strength($password, $len = [3, 10], $requirements = false)
+		public function test_password_strength($password, $len = [3, 10], $requirements = false)
         {
             if(strlen($password) < $len[0]){
                 $this->vars['errors'][] = sprintf(__('The password you entered is too short. Minimum length %d'), $len[0]);
@@ -69,8 +68,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_password($min_length = 4, $max_length = 10, $requirements = false)
+		public function generate_password($min_length = 4, $max_length = 10, $requirements = false)
         {
             $chars = '';
             if($requirements['atleast_one_lowercase'] == 1){
@@ -98,8 +96,7 @@
             return $password;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public static function valid_email($email)
+		public static function valid_email($email)
         {
             if(filter_var($email, FILTER_VALIDATE_EMAIL) != false){
 				$emailParts = explode('@', $email);
@@ -121,22 +118,22 @@
             return $stmt->fetch();
         }
 
-        public function check_duplicate_account($name)
+        public function check_duplicate_account($name, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username Collate Database_Default)');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb___id FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username Collate Database_Default)');
             $stmt->execute([':username' => $name]);
             return $stmt->fetch();
         }
 
-        public function check_duplicate_email($email)
+        public function check_duplicate_email($email, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE mail_addr = :email');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb___id FROM MEMB_INFO WHERE mail_addr = :email');
             $stmt->execute([':email' => $email]);
             return ($stmt->fetch()) ? true : false;
         }
 		
-		public function count_accounts_by_email($email){
-			return $this->account_db->snumrows('SELECT COUNT(memb___id) AS count FROM MEMB_INFO WHERE mail_addr = \''.$this->account_db->sanitize_var($email).'\'');
+		public function count_accounts_by_email($email, $server){
+			return $this->website->db('account', $server)->snumrows('SELECT COUNT(memb___id) AS count FROM MEMB_INFO WHERE mail_addr = '.$this->website->db('account', $server)->escape($email).'');
 		}
 
         public function check_acc_by_guid($id, $server)
@@ -152,16 +149,15 @@
             $this->activation = $status;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function prepare_account($req_email = 1, $req_secret = 0, $serverCode = false)
+		public function prepare_account($server, $req_email = 1, $req_secret = 0, $serverCode = false)
         {
             $this->activation_code = strtoupper(sha1(microtime()));
             if($this->activation == 1){
-                if($this->send_activation_email()){
+                if($this->send_activation_email($server)){
                     return $this->create_account($req_email, $req_secret, $serverCode);
                 }
             } else{
-                if($this->create_account($req_email, $req_secret, $serverCode)){
+                if($this->create_account($server, $req_email, $req_secret, $serverCode)){
                     if($this->config->values('email_config', 'welcome_email') == 1 && $req_email == 1){
                         $this->send_welcome_email($this->vars['user'], $this->vars['email']);
                     }
@@ -171,19 +167,18 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function create_account($req_email = 1, $req_secret = 0, $serverCode = false)
+		public function create_account($server, $req_email = 1, $req_secret = 0, $serverCode = false)
         {
             if(MD5 == 1){
-                $prepare = $this->account_db->prepare('SET NOCOUNT ON;EXEC DmN_Check_Acc_MD5 :user, :pass');
+                $prepare = $this->website->db('account', $server)->prepare('SET NOCOUNT ON;EXEC DmN_Check_Acc_MD5 :user, :pass');
                 $prepare->execute([':user' => $this->vars['user'], ':pass' => $this->vars['pass']]);
                 $pw = $prepare->fetch();
 				if($pw == false){
-					$prepare = $this->account_db->prepare('EXEC DmN_Check_Acc_MD5 :user, :pass');
+					$prepare = $$this->website->db('account', $server)->prepare('EXEC DmN_Check_Acc_MD5 :user, :pass');
 					$prepare->execute([':user' => $this->vars['user'], ':pass' => $this->vars['pass']]);
 					$pw = $prepare->fetch();
 				}
-                $pw = (!$this->is_hex($pw['result'])) ? '0x' . strtoupper(bin2hex($pw['result'])) : '0x' . $pw['result'];
+                $pw = (!$this->website->is_hex($pw['result'])) ? '0x' . strtoupper(bin2hex($pw['result'])) : '0x' . $pw['result'];
             } else if(MD5 == 2){
                 $pw = md5($this->vars['pass']);
             } else{
@@ -219,11 +214,10 @@
 			if($serverCode !== false){
 				$data[] = ['field' => 'servercode', 'value' => $serverCode, 'type' => 's'];
 			}
-            $prepare = $this->account_db->prepare($this->account_db->get_insert('MEMB_INFO', $data));
-			//var_dump($this->account_db->get_insert('MEMB_INFO', $data));
+            $prepare = $this->website->db('account', $server)->prepare($this->website->db('account', $server)->get_insert('MEMB_INFO', $data));
             if($prepare->execute()){
-				if($this->account_db->check_if_table_exists('VI_CURR_INFO')){
-					$this->account_db->query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days ) VALUES ('2005','1',1234,'" . $this->account_db->sanitize_var($this->vars['user']) . "','" . $this->account_db->sanitize_var($this->vars['user']) . "',1,'7','6','3','6','6','".date("Ymd")."','0')");
+				if($this->website->db('account', $server)->check_if_table_exists('VI_CURR_INFO')){
+					$this->website->db('account', $server)->query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days ) VALUES ('2005','1',1234,'" . $this->website->db('account', $server)->escape($this->vars['user']) . "','" . $this->website->db('account', $server)->escape($this->vars['user']) . "',1,'7','6','3','6','6','".date("Ymd")."','0')");
 					return true;
 				}
 				return true;
@@ -237,9 +231,9 @@
             $stmt->execute([':referrer' => $referrer, ':referral' => $this->vars['user'], ':ip' => $this->website->ip()]);
         }
 
-        public function check_referral_ip()
+        public function check_referral_ip($server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb_guid FROM MEMB_INFO WHERE last_login_ip = :ip');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE last_login_ip = :ip');
             $stmt->execute([':ip' => $this->website->ip()]);
             if($stmt->fetch()){
                 return true;
@@ -253,18 +247,13 @@
             $this->add_account_log('Reward for referring player ' . $this->website->translate_credits($this->config->values('referral_config', 'reward_type')), $this->config->values('referral_config', 'reward_on_registration'), $referrer, $this->vars['ref_server']);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function send_activation_email()
+		protected function send_activation_email($server)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'reg_email_pattern.html');
             $body = str_replace('###USERNAME###', $this->vars['user'], $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
             $body = str_replace('###PASSWORD###', $this->vars['pass'], $body);
-            if($this->website->is_multiple_accounts() == true){
-                $body = str_replace('###ACTIVATIONURL###', $this->config->base_url . 'registration/activation/' . $this->activation_code . '/' . $this->vars['server'], $body);
-            } else{
-                $body = str_replace('###ACTIVATIONURL###', $this->config->base_url . 'registration/activation/' . $this->activation_code, $body);
-            }
+            $body = str_replace('###ACTIVATIONURL###', $this->config->base_url . 'registration/activation/' . $this->activation_code . '/' . $server, $body);
             $this->sendmail($this->vars['email'], 'Confirm Your Registration', $body);
             if($this->error == false){
                 return true;
@@ -273,18 +262,13 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function resend_activation_email($email, $user, $pwd, $server, $code)
+		public function resend_activation_email($email, $user, $pwd, $server, $code)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'reg_email_pattern_resend_activation.html');
             $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
             $body = (MD5 == 0) ? str_replace('###PASSWORD###', 'Password: ' . $pwd, $body) : str_replace('###PASSWORD###', '<br />', $body);
-            if($this->website->is_multiple_accounts() == true){
-                $body = str_replace('###ACTIVATIONURL###', $this->config->base_url . 'registration/activation/' . $code . '/' . $server, $body);
-            } else{
-                $body = str_replace('###ACTIVATIONURL###', $this->config->base_url . 'registration/activation/' . $code, $body);
-            }
+            $body = str_replace('###ACTIVATIONURL###', $this->config->base_url . 'registration/activation/' . $code . '/' . $server, $body);
             $this->sendmail($email, 'Confirm Your Registration', $body);
             if($this->error == false){
                 return true;
@@ -293,8 +277,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function send_welcome_email($user, $email)
+		public function send_welcome_email($user, $email)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'welcome_email_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
@@ -308,8 +291,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function sent_vip_purchase_email($user, $server, $email, $package_title, $time)
+		public function sent_vip_purchase_email($user, $server, $email, $package_title, $time)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'vip_purchase_email_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
@@ -325,7 +307,6 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function sent_vip_extend_email($user, $server, $email, $package_title, $time)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'vip_extend_email_pattern.html');
@@ -342,11 +323,10 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function send_email_confirmation()
+		public function send_email_confirmation($user)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'email_confirmation_pattern.html');
-            $body = str_replace('###USERNAME###', $this->session->userdata(['user' => 'username']), $body);
+            $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
             $body = str_replace('###IP###', $this->website->ip(), $body);
             $body = str_replace('###URL###', $this->config->base_url . 'account-panel/email-confirm/' . $this->activation_code, $body);
@@ -358,11 +338,10 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function send_master_key_recovery_email()
+		protected function send_master_key_recovery_email($user)
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'master_key_recovery_pattern.html');
-            $body = str_replace('###USERNAME###', $this->session->userdata(['user' => 'username']), $body);
+            $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
             $body = str_replace('###MASTERKEY###', $this->vars['master_key']['MasterKey'], $body);
             $this->sendmail($this->vars['master_key']['mail_addr'], 'Master Key Recovery', $body);
@@ -373,13 +352,12 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function recover_master_key_process()
+		public function recover_master_key_process($user, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT mail_addr, auth__code AS MasterKey FROM MEMB_INFO WHERE memb___id = :account');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username'])]);
+            $stmt =  $this->website->db('account', $server)->prepare('SELECT mail_addr, auth__code AS MasterKey FROM MEMB_INFO WHERE memb___id = :account');
+            $stmt->execute([':account' => $user]);
             if($this->vars['master_key'] = $stmt->fetch()){
-                if($this->send_master_key_recovery_email()){
+                if($this->send_master_key_recovery_email($user)){
                     return true;
                 }
                 return false;
@@ -387,22 +365,22 @@
             return false;
         }
 
-        public function check_activation_code($code)
+        public function check_activation_code($code, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb___id, mail_addr, activated FROM MEMB_INFO WHERE activation_id = :code');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb___id, mail_addr, activated FROM MEMB_INFO WHERE activation_id = :code');
             $stmt->execute([':code' => $code]);
             return $stmt->fetch();
         }
 
-        public function activate_account($acc, $code)
+        public function activate_account($acc, $server, $code)
         {
-            $stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET activated = 1 WHERE memb___id = :account AND activation_id = :code AND activated != 1');
+            $stmt = $this->website->db('account', $server)->prepare('UPDATE MEMB_INFO SET activated = 1 WHERE memb___id = :account AND activation_id = :code AND activated != 1');
             return $stmt->execute([':account' => $acc, ':code' => $code]);
         }
 
-        public function load_account_by_name($name)
+        public function load_account_by_name($name, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb___id, mail_addr, sno__numb FROM MEMB_INFO WHERE memb___id = :name or mail_addr = :email');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb___id, mail_addr, sno__numb FROM MEMB_INFO WHERE memb___id = :name or mail_addr = :email');
             $stmt->execute([':name' => $name, ':email' => $name]);
             return $stmt->fetch();
         }
@@ -439,19 +417,14 @@
             return $code;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function send_lostpassword_email_for_name($user, $email, $code, $sid = '')
+		public function send_lostpassword_email_for_name($user, $email, $code, $server, $sid = '')
         {
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'lostpassword_email_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
             $body = str_replace('###IP###', ip(), $body);
             $body = str_replace('###SID###', $sid, $body);
-            if($this->website->is_multiple_accounts() == true){
-                $body = str_replace('###URL###', $this->config->base_url . 'lost-password/activation/' . $code . '/' . $this->vars['server'], $body);
-            } else{
-                $body = str_replace('###URL###', $this->config->base_url . 'lost-password/activation/' . $code, $body);
-            }
+            $body = str_replace('###URL###', $this->config->base_url . 'lost-password/activation/' . $code . '/' . $server, $body);
             $this->sendmail($email, 'Password Reminder', $body);
             if($this->error == false){
                 return true;
@@ -460,16 +433,14 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_password($user = '')
+		public function update_password($user, $server)
         {		  
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
             if(MD5 == 1){
-                $query = $this->account_db->query('SET NOCOUNT ON;EXEC DmN_Check_Acc_MD5 \'' . $this->account_db->sanitize_var($user) . '\', \'' . $this->account_db->sanitize_var($this->vars['new_password']) . '\'');
+                $query = $this->website->db('account', $server)->query('SET NOCOUNT ON;EXEC DmN_Check_Acc_MD5 '.$this->website->db('account', $server)->escape($user).', '.$this->website->db('account', $server)->escape($this->vars['new_password']).'');
                 $fetch = $query->fetch();
 				$query->close_cursor();
 				if($fetch  == false){
-					$query = $this->account_db->query('EXEC DmN_Check_Acc_MD5 \'' . $this->account_db->sanitize_var($user) . '\', \'' . $this->account_db->sanitize_var($this->vars['new_password']) . '\'');
+					$query = $this->website->db('account', $server)->query('EXEC DmN_Check_Acc_MD5 '.$this->website->db('account', $server)->escape($user).', '.$this->website->db('account', $server)->escape($this->vars['new_password']).'');
 					$fetch = $query->fetch();
 					$query->close_cursor();
 				}
@@ -477,7 +448,7 @@
                 if($fetch['result'] == 'found'){
                     return true;
                 } else{
-                    $pw = (!$this->is_hex($fetch['result'])) ? '0x' . strtoupper(bin2hex($fetch['result'])) : '0x' . $fetch['result'];
+                    $pw = (!$this->website->is_hex($fetch['result'])) ? '0x' . strtoupper(bin2hex($fetch['result'])) : '0x' . $fetch['result'];
                 }
             } else if(MD5 == 2){
                 $pw = '\'' . md5($this->vars['new_password']) . '\'';
@@ -485,11 +456,10 @@
                 $pw = '\'' . $this->vars['new_password'] . '\'';
             }
 						
-            return $this->account_db->query('UPDATE MEMB_INFO SET memb__pwd = ' . $pw . ' WHERE (memb___id COLLATE Database_Default = \'' . $this->account_db->sanitize_var($user) . '\' COLLATE Database_Default)');				
+            return $this->website->db('account', $server)->query('UPDATE MEMB_INFO SET memb__pwd = ' . $pw . ' WHERE (memb___id COLLATE Database_Default = '.$this->website->db('account', $server)->escape($user).' COLLATE Database_Default)');				
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_login_attemts()
+		public function check_login_attemts()
         {
             $file = APP_PATH . DS . 'logs' . DS . 'login_attempts.txt';
             if(file_exists($file)){
@@ -504,8 +474,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_login_attemt()
+		public function add_login_attemt()
         {
             $file = APP_PATH . DS . 'logs' . DS . 'login_attempts.txt';
             if(!file_exists($file)){
@@ -528,8 +497,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function clear_login_attemts()
+		public function clear_login_attemts()
         {
             $file = APP_PATH . DS . 'logs' . DS . 'login_attempts.txt';
             if(file_exists($file)){
@@ -545,8 +513,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function log_user_ip($user = '')
+		public function log_user_ip($user = '')
         {
             if($user != '')
                 $this->vars['username'] = $user;
@@ -555,11 +522,6 @@
             } //else {
             //   $this->update_ip_log();
             //}
-        }
-
-        public function count_accounts()
-        {
-            return $this->account_db->snumrows('SELECT COUNT(memb___id) AS count FROM MEMB_INFO WHERE activated = 1');
         }
 
         private function ip_log_exists()
@@ -575,11 +537,8 @@
             return $stmt->execute([':account' => $this->vars['username'], ':ip' => ip()]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function login_user()
+		public function login_user($server)
         {
-			usleep(mt_rand(100000, 500000));
-			
 			$linked = '';
 			
 			if(defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true){
@@ -587,39 +546,40 @@
 			}
 			
             $serverQuery = '';
-			if(defined('CUSTOM_SERVER_CODES') && array_key_exists($this->vars['server'], CUSTOM_SERVER_CODES)){
-				$serverQuery = ' AND servercode = '.(int)CUSTOM_SERVER_CODES[$this->vars['server']];
+			if(defined('CUSTOM_SERVER_CODES') && array_key_exists($server, CUSTOM_SERVER_CODES)){
+				$serverQuery = ' AND servercode = '.(int)CUSTOM_SERVER_CODES[$server];
 			}
 			
             if(MD5 == 1){
-                $stmt = $this->account_db->prepare('SET NOCOUNT ON;EXEC DmN_Check_Acc_MD5 :user, :pass');
+                $stmt = $this->website->db('account', $server)->prepare('SET NOCOUNT ON;EXEC DmN_Check_Acc_MD5 :user, :pass');
                 $stmt->execute([':user' => $this->vars['username'], ':pass' => $this->vars['password']]);
                 $check = $stmt->fetch();
                 $stmt->close_cursor();
 				if($check == false){
-					$stmt = $this->account_db->prepare('EXEC DmN_Check_Acc_MD5 :user, :pass');
+					$stmt = $$this->website->db('account', $server)->prepare('EXEC DmN_Check_Acc_MD5 :user, :pass');
 					$stmt->execute([':user' => $this->vars['username'], ':pass' => $this->vars['password']]);
 					$check = $stmt->fetch();
 					$stmt->close_cursor();
 				}
                 if($check['result'] == 'found'){
-                    $stmt = $this->account_db->prepare('SELECT memb_guid, memb___id, memb__pwd, mail_addr, appl_days, modi_days, bloc_code, last_login, last_login_ip, activated, Admin, dmn_country '.$linked.' FROM MEMB_INFO WITH (NOLOCK) WHERE (memb___id Collate Database_Default = :user Collate Database_Default) '.$serverQuery.'');
+                    $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid, memb___id, memb__pwd, mail_addr, appl_days, modi_days, bloc_code, last_login, last_login_ip, activated, Admin, dmn_country '.$linked.' FROM MEMB_INFO WITH (NOLOCK) WHERE (memb___id Collate Database_Default = :user Collate Database_Default) '.$serverQuery.'');
                     $stmt->execute([':user' => $this->vars['username']]);
                     $info = $stmt->fetch();
                 } else{
                     $info = false;
                 }
             } else{
-                $stmt = $this->account_db->prepare('SELECT memb_guid, memb___id, memb__pwd, mail_addr, appl_days, modi_days, bloc_code, last_login, last_login_ip, activated, Admin, dmn_country '.$linked.' FROM MEMB_INFO WITH (NOLOCK) WHERE (memb___id Collate Database_Default = :user Collate Database_Default) AND memb__pwd = :pass '.$serverQuery.'');
+                $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid, memb___id, memb__pwd, mail_addr, appl_days, modi_days, bloc_code, last_login, last_login_ip, activated, Admin, dmn_country '.$linked.' FROM MEMB_INFO WITH (NOLOCK) WHERE (memb___id Collate Database_Default = :user Collate Database_Default) AND memb__pwd = :pass '.$serverQuery.'');
                 $stmt->execute([':user' => $this->vars['username'], ':pass' => (MD5 == 2) ? md5($this->vars['password']) : $this->vars['password']]);
                 $info = $stmt->fetch();
             }
+            
             if($info != false){
                 if($this->vars['username'] !== $info['memb___id']){
                     return false;
                 } else{
-                    $this->update_last_login($info['memb___id']);
-					if($info['appl_days'] instanceof \DateTime) {
+                    $this->update_last_login($info['memb___id'], $server);
+					if($info['appl_days'] instanceof \DateTime){
 						$joined = $info['appl_days']->format(DATE_FORMAT);
 						$last_login = $info['last_login']->format(DATETIME_FORMAT);
 					}
@@ -639,8 +599,8 @@
 						'admin' => $info['Admin'], 
 						'joined' => $joined, 
 						'country' => $info['dmn_country'], 
-						'server' => (isset($this->vars['server'])) ? $this->vars['server'] : null, 
-						'server_t' => (isset($this->vars['servers'])) ? $this->vars['servers'][$this->vars['server']]['title'] : null, 
+						'server' => $server, 
+                        'server_t' => $this->website->get_value_from_server($server, 'title'), 
 						'logged_in' => true,
 						'salt' => $salt,
 						'partner' => (defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true) ? $info['dmn_partner'] : 0,
@@ -657,7 +617,7 @@
 					if(defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true && $info['dmn_linked_to'] == NULL && $info['dmn_partner'] != 1){
 						$data = $this->checkLinkedPartnerIP(ip());
 						if($data != false){
-							$this->linkToPartner($data['username'], $info['memb___id']);
+							$this->linkToPartner($data['username'], $info['memb___id'], $server);
 						}
 					}
                     return $info;
@@ -666,31 +626,27 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function checkMerchant($user, $server){
 			if($this->website->db('web')->check_if_table_exists('DmN_Merchant_List')){
 				$stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Merchant_List WHERE memb___id = :user AND server = :server');
-				$stmt->execute(array(':user' => $user, ':server' => $server));
+				$stmt->execute([':user' => $user, ':server' => $server]);
 				$data = $stmt->fetch();
 				return ($data != false) ? 1 : 0;
 			}
 			return 0;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function checkLinkedPartnerIP($ip){
 			$stmt = $this->website->db('web')->prepare('SELECT username FROM DmN_Partner_Access_Ips WHERE ip = :ip');
 			$stmt->execute([':ip' => $ip]);
 			return $stmt->fetch();
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function linkToPartner($partner, $user){
-			$stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET dmn_linked_to = :partner, dmn_linked_on = GETDATE() WHERE memb___id = :user');
+		private function linkToPartner($partner, $user, $server){
+			$stmt = $this->website->db('account', $server)->prepare('UPDATE MEMB_INFO SET dmn_linked_to = :partner, dmn_linked_on = GETDATE() WHERE memb___id = :user');
 			$stmt->execute([':partner' => $partner, ':user' => $user]);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function check_user_salt($user)
 		{
 			$stmt = $this->website->db('web')->prepare('SELECT session_salt FROM DmN_User_Salts WHERE memb___id = :user');
@@ -698,31 +654,27 @@
 			return $stmt->fetch();
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		private function update_user_salt($user, $salt)
 		{
 			$stmt = $this->website->db('web')->prepare('UPDATE DmN_User_Salts SET session_salt = :salt WHERE memb___id = :user');
 			$stmt->execute(array(':salt' => $salt, ':user' => $user));
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function insert_user_salt($user, $salt)
 		{
 			$stmt = $this->website->db('web')->prepare('INSERT INTO DmN_User_Salts (memb___id, session_salt) VALUES (:user, :salt)');
 			$stmt->execute(array(':user' => $user, ':salt' => $salt));
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function update_last_login($user)
+		private function update_last_login($user, $server)
         {
 			$ip = ip();
             $country_code = get_country_code($ip);
-            $stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET last_login = GETDATE(), last_login_ip = :ip, dmn_country = :country WHERE memb___id = :user');
+            $stmt = $this->website->db('account', $server)->prepare('UPDATE MEMB_INFO SET last_login = GETDATE(), last_login_ip = :ip, dmn_country = :country WHERE memb___id = :user');
             $stmt->execute([':ip' => $ip, ':country' => $country_code, ':user' => $user]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_user_on_server($user, $server)
+		public function check_user_on_server($user, $server)
         {
 			$serverQuery = '';
 			if(defined('CUSTOM_SERVER_CODES') && array_key_exists($server, CUSTOM_SERVER_CODES)){
@@ -734,14 +686,13 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_fb_user($email, $server)
+		public function check_fb_user($email, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb_guid, memb___id, mail_addr, appl_days, modi_days, bloc_code, last_login, last_login_ip, activated, Admin, dmn_country FROM MEMB_INFO WHERE mail_addr = :email');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid, memb___id, mail_addr, appl_days, modi_days, bloc_code, last_login, last_login_ip, activated, Admin, dmn_country FROM MEMB_INFO WHERE mail_addr = :email');
             $stmt->execute([':email' => $email]);
             $info = $stmt->fetch();
             if($info){
-				$this->update_last_login($info['memb___id']);
+				$this->update_last_login($info['memb___id'], $server);
 				if($info['appl_days'] instanceof \DateTime) {
 					$joined = $info['appl_days']->format(DATE_FORMAT);
 					$last_login = $info['last_login']->format(DATETIME_FORMAT);
@@ -761,8 +712,8 @@
 					'admin' => $info['Admin'], 
 					'joined' => $joined, 
 					'country' => $info['dmn_country'], 
-					'server' => (isset($server)) ? $server : null, 
-					'server_t' => (isset($server)) ? $this->website->get_value_from_server($server, 'title') : null,
+					'server' => $server, 
+					'server_t' => $this->website->get_value_from_server($server, 'title'),
 					'logged_in' => true,
 					'salt' => $salt,
 					'partner' => (defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true) ? $info['dmn_partner'] : 0,
@@ -780,15 +731,14 @@
 				if(defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true && $info['dmn_linked_to'] == NULL && $info['dmn_partner'] != 1){
 					$data = $this->checkLinkedPartnerIP(ip());
 					if($data != false){
-						$this->linkToPartner($data['username'], $info['memb___id']);
+						$this->linkToPartner($data['username'], $info['memb___id'], $server);
 					}
 				}
 				return $info; 
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function sendmail($recipients, $subject, $message)
+		public function sendmail($recipients, $subject, $message)
         {
             $this->vars['email_config'] = $this->config->values('email_config');
 			$failures = [];			   
@@ -884,22 +834,21 @@
             return $status['credits'];
         }
 
-        public function load_vote_links()
+        public function load_vote_links($server)
         {
-            return $this->website->db('web')->query('SELECT id, votelink, name, img_url, hours, reward, reward_type, mmotop_stats_url, mmotop_reward_sms, api, server FROM DmN_Votereward WHERE server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY id')->fetch_all();
+            return $this->website->db('web')->query('SELECT id, votelink, name, img_url, hours, reward, reward_type, mmotop_stats_url, mmotop_reward_sms, api, server FROM DmN_Votereward WHERE server = '.$this->website->db('web')->escape($server).' ORDER BY id')->fetch_all();
         }
 
-        public function check_vote_link($link)
+        public function check_vote_link($link, $server)
         {
-            return $this->website->db('web')->query('SELECT name, hours, reward, reward_type, api  FROM DmN_Votereward WHERE id = ' . $this->website->db('web')->sanitize_var($link) . ' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\'')->fetch();
+            return $this->website->db('web')->query('SELECT name, hours, reward, reward_type, api  FROM DmN_Votereward WHERE id = ' . $this->website->db('web')->escape($link) . ' AND server = '.$this->website->db('web')->escape($server).'')->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_last_vote($link, $interval = 12, $api = 0, $xtremetop_same_acc_vote = 0, $links = '')
+		public function get_last_vote($user, $server, $link, $interval = 12, $api = 0, $xtremetop_same_acc_vote = 0, $links = '')
         {
             if($api != 2){
                 $vote_time = time() - (3600 * $interval);
-                $log1 = $this->website->db('web')->query('SELECT TOP 1 account, ip, time FROM DmN_Votereward_Log WHERE number = ' . $this->website->db('web')->sanitize_var($link) . '  AND account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND time > ' . $this->website->db('web')->sanitize_var($vote_time) . ' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY time DESC');//->fetch_all();
+                $log1 = $this->website->db('web')->query('SELECT TOP 1 account, ip, time FROM DmN_Votereward_Log WHERE number = ' . $this->website->db('web')->escape($link) . '  AND account = '.$this->website->db('web')->escape($user).' AND time > ' . $this->website->db('web')->escape($vote_time) . ' AND server = '.$this->website->db('web')->escape($server).' ORDER BY time DESC');
                 if($xtremetop_same_acc_vote == 1){
                     $ids = (strpos(trim($links), ',') !== false) ? explode(',', trim($links)) : [0 => $links];
                     if(in_array($link, $ids)){
@@ -910,7 +859,7 @@
                 } else{
                     $log1 = $log1->fetch();
                 }
-                $log2 = $this->website->db('web')->query('SELECT TOP 1 account, ip, time FROM DmN_Votereward_Log WHERE number = ' . $this->website->db('web')->sanitize_var($link) . '  AND ip = \'' . $this->website->db('web')->sanitize_var(ip()) . '\' AND time > ' . $this->website->db('web')->sanitize_var($vote_time) . ' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY time DESC')->fetch();
+                $log2 = $this->website->db('web')->query('SELECT TOP 1 account, ip, time FROM DmN_Votereward_Log WHERE number = ' . $this->website->db('web')->escape($link) . '  AND ip = '.$this->website->db('web')->escape(ip()).' AND time > ' . $this->website->db('web')->escape($vote_time) . ' AND server = '.$this->website->db('web')->escape($server).' ORDER BY time DESC')->fetch();
                 if((isset($log1['account']) || isset($log2['ip'])) || (isset($log1['account']) && isset($log2['ip']))){
                     return isset($log1['time']) ? $log1['time'] : $log2['time'];
                 }
@@ -918,10 +867,10 @@
             return false;
         }
 
-        public function log_vote($link)
+        public function log_vote($user, $server, $link)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Votereward_Log (number, ip, account, time, server) VALUES (:number, :ip, :account, :time, :server)');
-            return $stmt->execute([':number' => $link, ':ip' => ip(), ':account' => $this->session->userdata(['user' => 'username']), ':time' => time(), ':server' => $this->session->userdata(['user' => 'server'])]);
+            return $stmt->execute([':number' => $link, ':ip' => ip(), ':account' => $user, ':time' => time(), ':server' => $server]);
         }
 
         public function check_xtremetop_vote()
@@ -1134,8 +1083,7 @@
             $stmt->close_cursor();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function calculate_next_vote($time, $interval = 12)
+		public function calculate_next_vote($time, $interval = 12)
         {
             $hours = floor((((3600 * $interval) - (time() - $time)) / 3600));
             $minutes = floor(((((3600 * $interval) - (time() - $time)) % 3600) / 60));
@@ -1168,19 +1116,18 @@
                 if(!$stmt->fetch()){
                     $reward = true;
                     $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Mmotop_Stats (unid, character, vote_type, server) VALUES (:unid, :char, :vote_type, :server)');
-                    $stmt->execute([':unid' => $log[0], ':char' => $this->website->c($log[3]), ':vote_type' => $log[4], ':server' => $server]);
+                    $stmt->execute([':unid' => $log[0], ':char' => $log[3], ':vote_type' => $log[4], ':server' => $server]);
                 }
             }
             return $reward;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_mmotop_voters($rewards, $type, $server)
+		public function check_mmotop_voters($rewards, $type, $server)
         {
-            $query = $this->website->db('web')->query('SELECT unid, character, vote_type FROM DmN_Mmotop_Stats WHERE status = 0 AND server = \'' . $this->website->db('web')->sanitize_var($this->website->c($server)) . '\'')->fetch_all();
+            $query = $this->website->db('web')->query('SELECT unid, character, vote_type FROM DmN_Mmotop_Stats WHERE status = 0 AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
             foreach($query as $value){
                 $stmt = $this->website->db('game', $server)->prepare('SELECT TOP 1 AccountId FROM Character WHERE Name = :char OR AccountId = :acc');
-                $stmt->execute([':char' => $this->website->c($value['character']), ':acc' => $this->website->c($value['character'])]);
+                $stmt->execute([':char' => $value['character'], ':acc' => $value['character']]);
                 if($info = $stmt->fetch()){
                     $this->check_vote_rankings($info['AccountId'], $server);
                     $this->log_rewarded_mmotop_vote($value['unid']);
@@ -1200,35 +1147,26 @@
             $stmt->close_cursor();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_account_log($log, $credits, $acc, $server)
+		public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
             $stmt->close_cursor();
         }
 
-        public function reward_voter($reward, $type, $server, $account = '', $site = '')
+        public function reward_voter($reward, $type, $server, $user, $site = '')
         {
-            $acc = ($account != '') ? $account : $this->session->userdata(['user' => 'username']);
-            $this->website->add_credits($acc, $server, $reward, $type);
+            $this->website->add_credits($user, $server, $reward, $type);
 			if($site != ''){
-				$this->add_account_log('Reward ' . $this->website->translate_credits($type, $server) . ' votereward, site: '.$site.'', $reward, $acc, $server);
+				$this->add_account_log('Reward ' . $this->website->translate_credits($type, $server) . ' votereward, site: '.$site.'', $reward, $user, $server);
 			}
 			else{
-				$this->add_account_log('Reward ' . $this->website->translate_credits($type, $server) . ' votereward', $reward, $acc, $server);
+				$this->add_account_log('Reward ' . $this->website->translate_credits($type, $server) . ' votereward', $reward, $user, $server);
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_connect_stat($user = false, $server = false)
+		public function check_connect_stat($user, $server)
         {
-			if($user == false){
-				$user = $this->session->userdata(['user' => 'username']);
-			}
-			if($server == false){
-				$server = $this->session->userdata(['user' => 'server']);
-			}
 			$stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = :user');
 			$stmt->execute([':user' => $user]);
 			if($status = $stmt->fetch()){
@@ -1236,15 +1174,15 @@
 			}
         }
 
-        public function check_hide_time()
+        public function check_hide_time($user, $server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT until_date FROM DmN_Hidden_Chars WHERE account = :name AND server = :server');
-            $stmt->execute([':name' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':name' => $user, ':server' => $server]);
             if($info = $stmt->fetch()){
                 if($info['until_date'] > time()){
                     return date(DATETIME_FORMAT, $info['until_date']);
                 } else{
-                    $this->delete_expired_hide();
+                    $this->delete_expired_hide($user, $server);
                     return 'None';
                 }
             } else{
@@ -1252,15 +1190,15 @@
             }
         }
 		
-		public function check_hide_time_pk($server)
+		public function check_hide_time_pk($user, $server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT until_date FROM DmN_Hidden_Chars_PK WHERE account = :name AND server = :server');
-            $stmt->execute([':name' => $this->session->userdata(['user' => 'username']), ':server' => $server]);
+            $stmt->execute([':name' => $user, ':server' => $server]);
             if($info = $stmt->fetch()){
                 if($info['until_date'] > time()){
                     return date(DATETIME_FORMAT, $info['until_date']);
                 } else{
-                    $this->delete_expired_hide($server);
+                    $this->delete_expired_hide($user, $server);
                     return 'None';
                 }
             } else{
@@ -1268,78 +1206,85 @@
             }
         }
 
-        public function delete_expired_hide()
+        public function delete_expired_hide($user, $server)
         {
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Hidden_Chars WHERE account = :name AND server = :server');
-            $stmt->execute([':name' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':name' => $user, ':server' => $server]);
         }
 		
-		public function delete_expired_hide_PK($server)
+		public function delete_expired_hide_PK($user, $server)
         {
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Hidden_Chars_PK WHERE account = :name AND server = :server');
-            $stmt->execute([':name' => $this->session->userdata(['user' => 'username']), ':server' => $server]);
+            $stmt->execute([':name' => $user, ':server' => $server]);
         }
 
-        public function add_hide($price)
+        public function add_hide($user, $server, $price)
         {
-            $this->add_account_log('Bought character hide', -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+            $this->add_account_log('Bought character hide', -$price, $user, $server);
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Hidden_Chars (account, until_date, server) VALUES (:account, :until_date, :server)');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':until_date' => time() + (3600 * 24) * $this->config->config_entry('account|hide_char_days'), ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':account' => $user, ':until_date' => time() + (3600 * 24) * $this->config->config_entry('account|hide_char_days'), ':server' => $server]);
         }
 		
-		public function add_hide_PK($price, $user, $server)
+		public function add_hide_PK($user, $server, $price)
         {
             $this->add_account_log('Bought character PK hide', -$price, $user, $server);
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Hidden_Chars_PK (account, until_date, server) VALUES (:account, :until_date, :server)');
             $stmt->execute([':account' => $user, ':until_date' => time() + (3600 * 24) * ELITE_KILLER_HIDE_DAYS, ':server' => $server]);
         }
 
-        public function extend_hide($date, $price)
+        public function extend_hide($user, $server, $date, $price)
         {
-            $this->add_account_log('Extended character hide', -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+            $this->add_account_log('Extended character hide', -$price, $user, $server);
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Hidden_Chars SET until_date = :until_date WHERE account = :account AND server = :server');
-            $stmt->execute([':until_date' => strtotime($date) + (3600 * 24) * $this->config->config_entry('account|hide_char_days'), ':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':until_date' => strtotime($date) + (3600 * 24) * $this->config->config_entry('account|hide_char_days'), ':account' => $user, ':server' => $server]);
         }
 		
-		public function extend_hide_PK($date, $price, $user, $server)
+		public function extend_hide_PK($user, $server, $date, $price)
         {
             $this->add_account_log('Extended character PK hide', -$price, $user, $server);
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Hidden_Chars_PK SET until_date = :until_date WHERE account = :account AND server = :server');
             $stmt->execute([':until_date' => strtotime($date) + (3600 * 24) * ELITE_KILLER_HIDE_DAYS, ':account' => $user, ':server' => $server]);
         }
 
-        public function load_logs($page = 1, $per_page = 30)
+        public function load_logs($user, $server, $page = 1, $per_page = 30)
         {
             $next_page = ($page <= 1) ? 0 : (int)$per_page * ((int)$page - 1);
-            $logs = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var((int)$per_page) . ' id, text, amount, date, ip FROM DmN_Account_Logs WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($next_page) . ' id FROM DmN_Account_Logs WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY id DESC) ORDER BY id DESC');
+            $logs = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, text, amount, date, ip FROM DmN_Account_Logs WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($next_page) . ' id FROM DmN_Account_Logs WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($logs->fetch_all() as $key => $value){
-                $this->logs[] = ['id' => $value['id'], 'text' => $value['text'], 'amount' => $value['amount'], 'date' => strtotime($value['date']), 'ip' => $value['ip'], 'pos' => $pos];
+                $this->logs[] = [
+                    'id' => $value['id'], 
+                    'text' => $value['text'], 
+                    'amount' => $value['amount'], 
+                    'date' => strtotime($value['date']), 
+                    'ip' => $value['ip'], 
+                    'pos' => $pos
+                ];
                 $pos++;
             }
             return $this->logs;
         }
 
-        public function count_total_logs()
+        public function count_total_logs($user, $server)
         {
-            return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Account_Logs WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\'');
+            return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Account_Logs WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'');
         }
 
-        public function load_wallet_zen()
+        public function load_wallet_zen($user, $server)
         {
-            return $this->website->db('web')->query('SELECT credits4 AS credits3 FROM DmN_Shop_Credits WHERE memb___id = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\'')->fetch();
+            return $this->website->db('web')->query('SELECT credits4 AS credits3 FROM DmN_Shop_Credits WHERE memb___id = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch();
         }
 
-        public function check_acc_ban()
+        public function check_acc_ban($user)
         {
             $stmt = $this->website->db('web')->prepare('SELECT time, is_permanent, reason FROM DmN_Ban_List WHERE name = :name AND type = 1');
-            $stmt->execute([':name' => $this->vars['username']]);
+            $stmt->execute([':name' => $user]);
             return $stmt->fetch();
         }
 
-        public function check_secret_q_a($account, $question, $answer)
+        public function check_secret_q_a($account, $server, $question, $answer)
         {
-            $stmt = $this->account_db->prepare('SELECT TOP 1 memb_guid FROM MEMB_INFO WHERE memb___id = :account AND fpas_ques = :question AND fpas_answ = :answer');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT TOP 1 memb_guid FROM MEMB_INFO WHERE memb___id = :account AND fpas_ques = :question AND fpas_answ = :answer');
             $stmt->execute([':account' => $account, ':question' => $question, ':answer' => $answer]);
             return $stmt->fetch();
         }
@@ -1357,8 +1302,7 @@
             return $stmt->execute([':id' => $id, ':account' => $account, ':server' => $server]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_connect_member_file($connect_member_load, $account)
+		public function check_connect_member_file($connect_member_load, $account)
         {
             if($connect_member_load != null){
                 $info = pathinfo($connect_member_load);
@@ -1371,8 +1315,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function remove_from_txt_file($connect_member_load, $account)
+		private function remove_from_txt_file($connect_member_load, $account)
         {
             if(is_writable($connect_member_load)){
                 $acc = '"' . $account . '"';
@@ -1384,8 +1327,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function remove_from_xml_file($connect_member_load, $account)
+		private function remove_from_xml_file($connect_member_load, $account)
         {
             if(is_writable($connect_member_load)){
                 $data = file_get_contents($connect_member_load);
@@ -1434,10 +1376,10 @@
             $this->session->register('vip', ['time' => $viptime, 'title' => $data['package_title'], 'reset_price_decrease' => $data['reset_price_decrease'], 'reset_level_decrease' => $data['reset_level_decrease'], 'reset_bonus_points' => $data['reset_bonus_points'], 'grand_reset_bonus_credits' => $data['grand_reset_bonus_credits'], 'grand_reset_bonus_gcredits' => $data['grand_reset_bonus_gcredits'], 'hide_info_discount' => $data['hide_info_discount'], 'pk_clear_discount' => $data['pk_clear_discount'], 'clear_skilltree_discount' => $data['clear_skilltree_discount'], 'online_hour_exchange_bonus' => $data['online_hour_exchange_bonus'], 'change_name_discount' => $data['change_name_discount'], 'change_class_discount' => $data['change_class_discount'], 'bonus_credits_for_donate' => $data['bonus_credits_for_donate'], 'shop_discount' => $data['shop_discount']]);
         }
 
-        public function load_my_referrals()
+        public function load_my_referrals($user)
         {
             $stmt = $this->website->db('web')->prepare('SELECT refferal, date_reffered FROM DmN_Refferals WHERE refferer = :account ORDER BY date_reffered DESC');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username'])]);
+            $stmt->execute([':account' => $user]);
             return $stmt->fetch_all();
         }
         
@@ -1448,10 +1390,10 @@
             return ($data != false) ? true : false;
         }
 
-        public function load_referral_rewards()
+        public function load_referral_rewards($server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT id, required_lvl, required_res, required_gres, reward, reward_type, server FROM DmN_Refferal_Reward_List WHERE server = :server AND status = 1');
-            $stmt->execute([':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':server' => $server]);
             return $stmt->fetch_all();
         }
 
@@ -1462,8 +1404,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_claimed_referral_rewards($id, $chars, $server)
+		public function check_claimed_referral_rewards($curUser, $id, $chars, $server)
         {
             if(is_array($chars)){
                 $chars = array_map(function($a){
@@ -1474,7 +1415,7 @@
                 $search = '\'' . $chars . '\'';
             }
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id FROM DmN_Refferal_Claimed_Rewards WHERE reward_id = :id AND account = :account AND character IN(' . $search . ') AND server = :server');
-            $stmt->execute([':id' => $id, ':account' => $this->session->userdata(['user' => 'username']), ':server' => $server]);
+            $stmt->execute([':id' => $id, ':account' => $curUser, ':server' => $server]);
             return $stmt->fetch();
         }
 
@@ -1485,27 +1426,26 @@
             return $stmt->fetch_all();
         }
 
-        public function check_if_reward_was_claimed($id, $server, $account)
+        public function check_if_reward_was_claimed($curUser, $id, $server, $account)
         {
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id FROM DmN_Refferal_Claimed_Rewards WHERE reward_id = :id AND account = :account AND server = :server AND ref_account = :ref_account');
-            $stmt->execute([':id' => $id, ':account' => $this->session->userdata(['user' => 'username']), ':server' => $server, ':ref_account' => $account]);
+            $stmt->execute([':id' => $id, ':account' => $curUser, ':server' => $server, ':ref_account' => $account]);
             return $stmt->fetch();
         }
 
-        public function add_referral_reward($reward, $reward_type, $char)
+        public function add_referral_reward($curUser, $curServer, $reward, $reward_type, $char)
         {
-            $this->website->add_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $reward, $reward_type);
-            $this->add_account_log('Claimed referral reward from character ' . $char . ' for ' . $this->website->translate_credits($reward_type), $reward, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+            $this->website->add_credits($curUser, $curServer, $reward, $reward_type);
+            $this->add_account_log('Claimed referral reward from character ' . $char . ' for ' . $this->website->translate_credits($reward_type, $curServer), $reward, $curUser, $curServer);
         }
 
-        public function log_reward($id, $char, $server, $account)
+        public function log_reward($curUser, $id, $char, $server, $account)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Refferal_Claimed_Rewards (reward_id, account, character, server, ref_account) VALUES (:id, :account, :char, :server, :ref)');
-            return $stmt->execute([':id' => $id, ':account' => $this->session->userdata(['user' => 'username']), ':char' => $char, ':server' => $server, ':ref' => $account,]);
+            return $stmt->execute([':id' => $id, ':account' => $curUser, ':char' => $char, ':server' => $server, ':ref' => $account,]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_referral_ips($acc)
+		public function check_referral_ips($curUser, $acc)
         {
             $stmt = $this->website->db('web')->prepare('SELECT ip FROM DmN_IP_Log WHERE account = :account');
             $stmt->execute([':account' => $acc]);
@@ -1520,7 +1460,7 @@
                 if(!empty($ip_data)){
                     foreach($ip_data AS $key => $accounts){
                         foreach($accounts AS $acc){
-                            if($this->session->userdata(['user' => 'username']) == $acc){
+                            if($curUser == $acc){
                                 return true;
                             }
                         }
@@ -1530,31 +1470,22 @@
             return false;
         }
 
-        public function get_guid($user = '')
+        public function get_guid($user, $server)
         {
-            $stmt = $this->account_db->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :user');
+            $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :user');
             $stmt->execute([':user' => $user]);
             $info = $stmt->fetch();
-            return $info['memb_guid'];
-        }
-				
-		public function get_memb___id($user = '')
-        {
-            $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE memb_guid = :user');
-            $stmt->execute([':user' => $user]);
-            $info = $stmt->fetch();
-            return $info['memb___id'];
+            return ($info != false) ? $info['memb_guid'] : false;
         }
 
-        public function load_online_hours()
+        public function load_online_hours($user, $server)
         {
-            $stmt = $this->website->db('web')->prepare('SELECT SUM(OnlineMinutes) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = :acc ' . $this->website->server_code($this->website->get_servercode($this->session->userdata(['user' => 'server']))) . '');
-            $stmt->execute([':acc' => $this->session->userdata(['user' => 'username'])]);
+            $stmt = $this->website->db('web')->prepare('SELECT SUM(OnlineMinutes) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = :acc ' . $this->website->server_code($this->website->get_servercode($server)) . '');
+            $stmt->execute([':acc' => $user]);
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function exchange_online_hours($hours_to_exchange = 0, $minutes_left = 0)
+		public function exchange_online_hours($user, $server, $hours_to_exchange = 0, $minutes_left = 0)
         {
             if($hours_to_exchange > 0){
                 $reward = $this->config->config_entry('account|online_trade_reward');
@@ -1562,90 +1493,75 @@
                     $reward += $this->session->userdata(['vip' => 'online_hour_exchange_bonus']);
                 }
                 $reward = (int)($hours_to_exchange * $reward);
-                $this->website->add_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $reward, $this->config->config_entry('account|online_trade_reward_type'));
-                $this->add_account_log('Exchange ' . $hours_to_exchange . ' online hours for ' . $this->website->translate_credits($this->config->config_entry('account|online_trade_reward_type'), $this->session->userdata(['user' => 'server'])) . '', $reward, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                $stmt = $this->website->db('web')->prepare('UPDATE DmN_OnlineCheck SET OnlineMinutes = 0 WHERE  memb___id = :acc ' . $this->website->server_code($this->website->get_servercode($this->session->userdata(['user' => 'server']))) . '');
-                $stmt->execute([':acc' => $this->session->userdata(['user' => 'username'])]);
+                $this->website->add_credits($user, $server, $reward, $this->config->config_entry('account|online_trade_reward_type'));
+                $this->add_account_log('Exchange ' . $hours_to_exchange . ' online hours for ' . $this->website->translate_credits($this->config->config_entry('account|online_trade_reward_type'), $server) . '', $reward, $user, $server);
+                $stmt = $this->website->db('web')->prepare('UPDATE DmN_OnlineCheck SET OnlineMinutes = 0 WHERE  memb___id = :acc ' . $this->website->server_code($this->website->get_servercode($server)) . '');
+                $stmt->execute([':acc' => $user]);
                 if($minutes_left > 0){
                     $stmt = $this->website->db('web')->prepare('UPDATE DmN_OnlineCheck SET OnlineMinutes = :minutes WHERE memb___id = :acc AND ServerName = :server_name');
-                    $stmt->execute([':minutes' => $minutes_left, ':acc' => $this->session->userdata(['user' => 'username']), ':server_name' => $this->website->get_first_server_code($this->session->userdata(['user' => 'server']))]);
+                    $stmt->execute([':minutes' => $minutes_left, ':acc' => $user, ':server_name' => $this->website->get_first_server_code($server)]);
                 }
                 return true;
             }
             return false;
         }
 
-        public function check_existing_email()
+        public function check_existing_email($user, $server)
         {
-            $stm = $this->account_db->prepare('SELECT mail_addr FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username) AND mail_addr = :email');
-            $stm->execute([':username' => $this->website->c($this->session->userdata(['user' => 'username'])), ':email' => $this->website->c($this->vars['email'])]);
+            $stm = $this->website->db('account', $server)->prepare('SELECT mail_addr FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username) AND mail_addr = :email');
+            $stm->execute([':username' => $user, ':email' => $this->vars['email']]);
             return ($stm->fetch()) ? true : false;
         }
 
-        public function create_email_confirmation_entry($old = 1)
+        public function create_email_confirmation_entry($user, $old = 1)
         {
             $old = ($old == 1) ? 1 : 0;
             $this->activation_code = strtoupper(sha1(microtime()));
             $prepare = $this->website->db('web')->prepare('INSERT INTO DmN_Email_Confirmation (account, email, code, old_email) VALUES (:account, :email, :code, :old_email)');
-            return $prepare->execute([':account' => $this->website->c($this->session->userdata(['user' => 'username'])), ':email' => $this->website->c($this->vars['email']), ':code' => $this->activation_code, ':old_email' => $old]);
+            return $prepare->execute([':account' => $user, ':email' => $this->vars['email'], ':code' => $this->activation_code, ':old_email' => $old]);
         }
 
         public function delete_old_confirmation_entries($user, $old = 0)
         {
             $old = ($old == 1) ? 1 : 0;
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Email_Confirmation WHERE account = :acc AND old_email = ' . $old . '');
-            return $stmt->execute([':acc' => $this->website->c($user)]);
+            return $stmt->execute([':acc' => $user]);
         }
 
         public function load_email_confirmation_by_code($code)
         {
             $stmt = $this->website->db('web')->prepare('SELECT account, email, old_email FROM DmN_Email_Confirmation WHERE UPPER(code) = UPPER(:code)');
-            $stmt->execute([':code' => $this->website->c($code)]);
+            $stmt->execute([':code' => $code]);
             return $stmt->fetch();
         }
-
-        public function update_email($acc, $email)
+        
+        public function get_email($acc, $server)
         {
-            $stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET mail_addr = :email WHERE memb___id = :account');
-            return $stmt->execute([':email' => $this->website->c($email), ':account' => $this->website->c($acc)]);
-        }
-
-        public function get_last_ads_vote($interval = 12)
-        {
-            $vote_time = time() - (3600 * $interval);
-            $log1 = $this->website->db('web')->query('SELECT TOP 1 account, ip, time FROM DmN_GoogleAds_Click WHERE account = \'' . $this->web_db->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND time > ' . $this->web_db->sanitize_var($vote_time) . ' ORDER BY time DESC')->fetch();
-            $log2 = $this->website->db('web')->query('SELECT TOP 1 account, ip, time FROM DmN_GoogleAds_Click WHERE ip = \'' . $this->web_db->sanitize_var(ip()) . '\' AND time > ' . $this->web_db->sanitize_var($vote_time) . ' ORDER BY time DESC')->fetch();
-            if((isset($log1['account']) || isset($log2['ip'])) || (isset($log1['account']) && isset($log2['ip']))){
-                return isset($log1['time']) ? $log1['time'] : $log2['time'];
+            $stmt = $this->website->db('account', $server)->prepare('SELECT mail_addr FROM MEMB_INFO WHERE memb___id = :acc');
+            $stmt->execute([':acc' => $acc]);
+            if($email = $stmt->fetch()){
+                return $email['mail_addr'];
             }
             return false;
         }
 
-        public function log_ads_vote()
+        public function update_email($acc, $email, $server)
         {
-            $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_GoogleAds_Click (ip, account, time) VALUES (:ip, :account, :time)');
-            return $stmt->execute([':ip' => ip(), ':account' => $this->session->userdata(['user' => 'username']), ':time' => time()]);
+            $stmt = $this->website->db('account', $server)->prepare('UPDATE MEMB_INFO SET mail_addr = :email WHERE memb___id = :account');
+            return $stmt->execute([':email' => $email, ':account' => $acc]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function is_hex($hex_code) {
-			return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
-		}
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function check2FA($user){
 			$stmt = $this->website->db('web')->prepare('SELECT memb___id, secret, backup_code FROM DmN_2FA WHERE memb___id = :user');
             $stmt->execute([':user' => $user]);
             return $stmt->fetch();
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function add2FA($user, $secret, $backup){
 			$stmt = $this->website->db('web')->prepare('INSERT INTO DmN_2FA (memb___id, secret, backup_code) VALUES (:user, :secret, :backup)');
             $stmt->execute([':user' => $user, ':secret' => $secret, ':backup' => $backup]);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function remove2FA($user){
 			$stmt = $this->website->db('web')->prepare('DELETE FROM DmN_2FA WHERE memb___id = :user');
             $stmt->execute([':user' => $user]);

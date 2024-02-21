@@ -269,71 +269,39 @@
 
             foreach($columns AS $key => $data){
                 if($data == 'MagicList' || $data == 'Quest' || $data == 'Inventory' || $data == 'MuBotData' || $data == 'MuHelperData' || $data == 'EffectList' || $data == 'MuHelperPlusData'){
-                    $columns[$key] = (DRIVER == 'pdo_odbc') ? $data : 'CONVERT(IMAGE, ' . $data . ') AS ' . $data . '';
+                    $columns[$key] = 'CONVERT(IMAGE, ' . $data . ') AS ' . $data . '';
                 }
             }
             $char = $this->website->db('game', $this->session->userdata(['user' => 'server']))->query('SELECT ' . implode(',', $columns) . ' FROM Character WHERE AccountId = \'' . $from . '\' AND Name = \'' . $name . '\'')->fetch();
             foreach($char AS $k => $val){
                 if(strtolower($k) == 'inventory' || strtolower($k) == 'magiclist' || strtolower($k) == 'quest' || strtolower($k) == 'mubotdata' || strtolower($k) == 'muhelperdata' || strtolower($k) == 'effectlist' || strtolower($k) == 'muhelperplusdata'){
-					if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-						$unpack = unpack('H*', $val);
-						if(strtolower($k) == 'inventory' && $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64 && $titems == 1){
-							$items_array = str_split($this->clean_hex($unpack[1]), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
-							foreach($items_array AS $item){
-								if(strtoupper($item) != str_repeat('F', $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
-									$serial = hexdec(substr($item, 32, 8));
-									if($serial > 0){
-										$id = hexdec(substr($item, 0, 2));
-										$cat = hexdec(substr($item, 18, 1));
-										if($cat == 13 && in_array($id, [4,5])){
-											$this->pets[] = $serial;
-										}
-										$this->serials[] = $serial;
+					$unpack = unpack('H*', $val);
+					if(strtolower($k) == 'inventory' && $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64 && $titems == 1){
+						$items_array = str_split($this->website->clean_hex($unpack[1]), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
+						foreach($items_array AS $item){
+							if(strtoupper($item) != str_repeat('F', $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
+								$serial = hexdec(substr($item, 32, 8));
+								if($serial > 0){
+									$id = hexdec(substr($item, 0, 2));
+									$cat = hexdec(substr($item, 18, 1));
+									if($cat == 13 && in_array($id, [4,5])){
+										$this->pets[] = $serial;
 									}
+									$this->serials[] = $serial;
 								}
 							}
 						}
-						if(strtolower($k) == 'inventory'){
-							if($titems == 1){
-								$val = '0x' . $this->clean_hex($unpack[1]);
-							}
-							else{
-								$val = 'cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'inv_size') . ') as varbinary(' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'inv_size') . '))';
-							}
+					}
+					if(strtolower($k) == 'inventory'){
+						if($titems == 1){
+							$val = '0x' . $this->website->clean_hex($unpack[1]);
 						}
 						else{
-							$val = '0x' . $this->clean_hex($unpack[1]);
+							$val = 'cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'inv_size') . ') as varbinary(' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'inv_size') . '))';
 						}
 					}
 					else{
-						if(strtolower($k) == 'inventory' && $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64 && $titems == 1){
-							$items_array = str_split($this->clean_hex($val), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
-							foreach($items_array AS $item){
-								if(strtoupper($item) != str_repeat('F', $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
-									$serial = hexdec(substr($item, 32, 8));
-									if($serial > 0){
-										$id = hexdec(substr($item, 0, 2));
-										$cat = hexdec(substr($item, 18, 1));
-										if($cat == 13 && in_array($id, [4,5])){
-											$this->pets[] = $serial;
-										}
-										$this->serials[] = $serial;
-									}
-								}
-							}
-						}
-						
-						if(strtolower($k) == 'inventory'){
-							if($titems == 1){
-								$val = '0x' . $this->clean_hex($val);
-							}
-							else{
-								$val = 'cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'inv_size') . ') as varbinary(' . $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'inv_size') . '))';
-							}
-						}
-						else{
-							$val = '0x' . $this->clean_hex($val);
-						}
+						$val = '0x' . $this->website->clean_hex($unpack[1]);
 					}
                 }
                 if(strtolower($k) == 'accountid'){
@@ -452,13 +420,8 @@
                         $val = $new_name;
                     }
                     if(strtolower($k) == 'skillkey'){
-						if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-							$unpack = unpack('H*', $val);
-							$val = '0x' . $this->clean_hex($unpack[1]);
-						}
-						else{
-							$val = '0x' . $this->clean_hex($val);
-						}
+						$unpack = unpack('H*', $val);
+						$val = '0x' . $this->website->clean_hex($unpack[1]);
                     } else{
                         $val = $this->website->db('game', $this->session->userdata(['user' => 'server']))->escape($val);
                     }
@@ -488,7 +451,7 @@
 				$columns = array_diff($columns, ['id']);
 				foreach($columns AS $key => $data){
 					if($data == 'PentagramInfo'){
-						$columns[$key] = (DRIVER == 'pdo_odbc') ? $data : 'CONVERT(IMAGE, ' . $data . ') AS ' . $data . '';
+						$columns[$key] = 'CONVERT(IMAGE, ' . $data . ') AS ' . $data . '';
 					}
 				}
 
@@ -503,13 +466,8 @@
 							$val = $new_name;
 						}
 						if(strtolower($k) == 'pentagraminfo'){
-							if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-								$unpack = unpack('H*', $val);
-								$val = '0x' . $this->clean_hex($unpack[1]);
-							}
-							else{
-								$val = '0x' . $this->clean_hex($val);
-							}
+							$unpack = unpack('H*', $val);
+							$val = '0x' . $this->website->clean_hex($unpack[1]);
 						}
 						else{
 							$val = $this->website->db('game', $this->session->userdata(['user' => 'server']))->escape($val);
@@ -592,7 +550,7 @@
 
 				foreach($columns AS $key => $data){
 					if($data == 'Items'){
-						$columns[$key] = (DRIVER == 'pdo_odbc') ? $data : 'CONVERT(IMAGE, ' . $data . ') AS ' . $data . '';
+						$columns[$key] = 'CONVERT(IMAGE, ' . $data . ') AS ' . $data . '';
 					}
 				}
 
@@ -604,13 +562,8 @@
 							$val = $new_name;
 						}
 						if(strtolower($k) == 'items'){
-							if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-								$unpack = unpack('H*', $val);
-								$val = '0x' . $this->clean_hex($unpack[1]);
-							}
-							else{
-								$val = '0x' . $this->clean_hex($val);
-							}
+							$unpack = unpack('H*', $val);
+							$val = '0x' . $this->website->clean_hex($unpack[1]);
 						}
 						else{
 							$val = $this->website->db('game', $this->session->userdata(['user' => 'server']))->escape($val);
@@ -941,11 +894,11 @@
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_CharacterTransferServerLogs ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_CharacterTransferServerLogs ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_CharacterTransferServerLogs WHERE fromAccount like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -966,9 +919,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE fromAccount like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE fromAccount like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_CharacterTransferServerLogs ' . $sql . '');
@@ -1009,12 +962,4 @@
             return $arr;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
-        }
     }

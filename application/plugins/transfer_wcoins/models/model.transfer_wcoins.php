@@ -41,11 +41,11 @@
 		}
 		
 		public function myTransfer($user, $server){
-			return  $this->website->db('web')->query('SELECT amount, transferDate, toAccount, message FROM DmN_WCoinTransferLogs WHERE fromAccount = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch_all();
+			return  $this->website->db('web')->query('SELECT amount, transferDate, toAccount, message FROM DmN_WCoinTransferLogs WHERE fromAccount = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
 		}
 		
 		public function myReceivedTransfer($user, $server){
-			return  $this->website->db('web')->query('SELECT amount, transferDate, fromAccount, message FROM DmN_WCoinTransferLogs WHERE toAccount = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch_all();
+			return  $this->website->db('web')->query('SELECT amount, transferDate, fromAccount, message FROM DmN_WCoinTransferLogs WHERE toAccount = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
 		}
 		
 		public function add_wcoins($user, $server, $amount = 0, $config = [])

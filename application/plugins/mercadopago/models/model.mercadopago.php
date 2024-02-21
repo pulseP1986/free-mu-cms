@@ -132,10 +132,10 @@
         public function load_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_MercadoPago_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_MercadoPago_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_MercadoPago_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_MercadoPago_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Donate_MercadoPago_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -156,9 +156,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_Donate_MercadoPago_Transactions ' . $sql . '');
@@ -194,9 +194,9 @@
          */
         public function check_order_number($item)
         {
-            $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_MercadoPago_Orders WHERE hash = \'' . $this->website->db('web')->sanitize_var($item) . '\'');
+            $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_MercadoPago_Orders WHERE hash = '.$this->website->db('web')->escape($item).'');
             if($count == 1){
-                $this->order_details = $this->website->db('web')->query('SELECT amount, currency, account, server, credits FROM DmN_Donate_MercadoPago_Orders WHERE hash = \'' . $this->website->db('web')->sanitize_var($item) . '\'')->fetch();
+                $this->order_details = $this->website->db('web')->query('SELECT amount, currency, account, server, credits FROM DmN_Donate_MercadoPago_Orders WHERE hash = '.$this->website->db('web')->escape($item).'')->fetch();
                 return true;
             } else{
                 return false;
@@ -213,7 +213,7 @@
          */
         public function check_completed_transaction($item)
         {
-            $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_MercadoPago_Transactions WHERE order_hash = \'' . $this->website->db('web')->sanitize_var($item) . '\'');
+            $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_MercadoPago_Transactions WHERE order_hash = '.$this->website->db('web')->escape($item).'');
             if($count > 0){
                 return true;
             }
@@ -255,7 +255,7 @@
         }
 		
 		public function findReferral($acc){
-			return $this->website->db('web')->query('SELECT refferer FROM DmN_Refferals WHERE refferal = \'' . $this->website->db('web')->sanitize_var($acc) . '\'')->fetch()['refferer'];
+			return $this->website->db('web')->query('SELECT refferer FROM DmN_Refferals WHERE refferal = '.$this->website->db('web')->escape($acc).'')->fetch()['refferer'];
 		}
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM

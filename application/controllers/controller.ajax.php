@@ -27,8 +27,7 @@
             throw new exception('Nothing to see in here');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function checkcaptcha()
+		public function checkcaptcha()
         {
             if(isset($_POST['act'], $_POST['qaptcha_key'])){
                 $_SESSION['qaptcha_key'] = false;
@@ -43,8 +42,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function login()
+		public function login()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 echo json_encode(['error' => __('You are already logged in. Please logout first.')]);
@@ -52,23 +50,20 @@
                 $servers = $this->website->server_list();
                 $default = array_keys($servers)[0];
                 if(!isset($_POST['server'])){
-                    $_POST['server'] = $default;
-                } else{
+                    $server = $default;
+                } 
+				else{
                     if(!array_key_exists($_POST['server'], $servers)){
-                        $_POST['server'] = $default;
+                        $server = $default;
                     }
-                }
-				
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
+					else{
+						$server = $_POST['server'];
+					}
                 }
 				
                 $this->load->model('account');
                 $this->vars['config'] = $this->config->values('registration_config');
                 if($this->vars['config'] != false && !empty($this->vars['config'])){
-                    $this->Maccount->servers = $servers;
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
                     }
@@ -100,12 +95,8 @@
 						 if(!$this->Maccount->valid_password($this->Maccount->vars['password'], '\w\W', [$this->vars['config']['min_password'], $this->vars['config']['max_password']])){
 							 throw new Exception(__('The password you entered is invalid.')); 
 						 }
-						 if(isset($this->Maccount->vars['server'])){
-							 if($this->Maccount->vars['server'] == '')
-								throw new Exception(__('Please select proper server.')); 
-						 }
 						 
-						 $ban_info = $this->Maccount->check_acc_ban();
+						 $ban_info = $this->Maccount->check_acc_ban($this->Maccount->vars['username']);
 						 
 						 if($ban_info != false){
 							if($ban_info['time'] > time() && $ban_info['is_permanent'] == 0){
@@ -116,7 +107,7 @@
 							} 
 						 }
 						 
-						 if($login = $this->Maccount->login_user()){			
+						 if($login = $this->Maccount->login_user($server)){			
 							if(($this->vars['config']['email_validation'] == 1) && ($login['activated'] == 0)){
 								$this->session->unset_session_key('user');
 								throw new Exception(sprintf(__('Please activate your account first. <a id="repeat_activation" href="%s">Did not receive activation email?</a>'), $this->config->base_url . 'registration/resend-activation'));
@@ -127,7 +118,7 @@
 										$this->session->unset_session_key('user');
 										$_SESSION['tfa_temp_user'] = $_POST['username'];
 										$_SESSION['tfa_temp_password'] = $_POST['password'];
-										$_SESSION['tfa_temp_server'] = $_POST['server'];
+										$_SESSION['tfa_temp_server'] = $server;
 										$_SESSION['tfa_temp_servers'] = $servers;
 										echo json_encode(['tfa' => 'check']);
 										exit;
@@ -136,8 +127,8 @@
 								
 								$this->Maccount->log_user_ip();
 								$this->Maccount->clear_login_attemts();
-								$this->change_user_vip_session($this->Maccount->vars['username'], $this->Maccount->vars['server']);
-								setcookie("DmN_Current_User_Server_" . $this->Maccount->vars['username'], $_POST['server'], strtotime('+1 days', time()), "/");
+								$this->change_user_vip_session($this->Maccount->vars['username'], $server);
+								setcookie("DmN_Current_User_Server_" . $this->Maccount->vars['username'], $server, strtotime('+1 days', time()), "/");
 								if(defined('IPS_CONNECT') && IPS_CONNECT == true){
 									$this->load->lib('ipb');
 									if($this->ipb->checkEmail($this->session->userdata(['user' => 'email'])) == true){
@@ -165,7 +156,6 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function switch_server()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
@@ -180,7 +170,7 @@
 									echo json_encode(['error' => __('Account password not match. Please logout and login again.')]);
 								}
 								else{
-									$this->change_user_session_server($this->session->userdata(['user' => 'username']), $_POST['server'], $server_list);
+									$this->change_user_session_server($this->session->userdata(['user' => 'username']), $_POST['server']);
 									$this->change_user_vip_session($this->session->userdata(['user' => 'username']), $_POST['server']);
 								}
                                 echo json_encode(['success' => __('Server Changed.')]);
@@ -190,7 +180,7 @@
                             }
                         } 
 						else{
-                            $this->change_user_session_server($this->session->userdata(['user' => 'username']), $_POST['server'], $server_list);
+                            $this->change_user_session_server($this->session->userdata(['user' => 'username']), $_POST['server']);
                             $this->change_user_vip_session($this->session->userdata(['user' => 'username']), $_POST['server']);
                             echo json_encode(['success' => __('Server Changed.')]);
                         }
@@ -208,16 +198,14 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function change_user_session_server($user, $server, $server_list)
+		private function change_user_session_server($user, $server)
         {
             $this->session->session_key_overwrite('user', [0 => 'server', 1 => $server]);
-            $this->session->session_key_overwrite('user', [0 => 'server_t', 1 => $server_list[$server]['title']]);
+            $this->session->session_key_overwrite('user', [0 => 'server_t', 1 => $this->website->get_value_from_server($server, 'title')]);
             setcookie("DmN_Current_User_Server_" . $user, $server, strtotime('+1 days', time()), "/");
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function change_user_vip_session($user, $server)
+		private function change_user_vip_session($user, $server)
         {
 			$this->vars['config'] = $this->config->values('vip_config');
 			
@@ -239,38 +227,40 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function change_password()
+		public function change_password()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['config'] = $this->config->values('registration_config');
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 foreach($_POST as $key => $value){
                     $this->Maccount->$key = trim($value);
                 }
                 if(!isset($this->Maccount->vars['old_password']))
-                    echo json_encode(['error' => __('You haven\'t entered your current password.')]); else{
+                    echo json_encode(['error' => __('You haven\'t entered your current password.')]); 
+				else{
                     if(!$this->Maccount->compare_passwords())
-                        echo json_encode(['error' => __('The current password you entered is wrong.')]); else{
+                        echo json_encode(['error' => __('The current password you entered is wrong.')]); 
+					else{
                         if(!isset($this->Maccount->vars['new_password']))
-                            echo json_encode(['error' => __('You haven\'t entered your new password.')]); else{
+                            echo json_encode(['error' => __('You haven\'t entered your new password.')]); 
+						else{
                             if(!$this->Maccount->valid_password($this->Maccount->vars['new_password']))
-                                echo json_encode(['error' => __('The new password you entered is invalid.')]); else{
+                                echo json_encode(['error' => __('The new password you entered is invalid.')]); 
+							else{
                                 $this->Maccount->test_password_strength($this->Maccount->vars['new_password'], [$this->vars['config']['min_password'], $this->vars['config']['max_password']], $this->vars['config']['password_strength']);
                                 if(isset($this->Maccount->errors))
-                                    echo json_encode(['error' => $this->Maccount->vars['errors']]); else{
+                                    echo json_encode(['error' => $this->Maccount->vars['errors']]); 
+								else{
                                     if(!isset($this->Maccount->vars['new_password2']))
-                                        echo json_encode(['error' => __('You haven\'t entered new password-repetition.')]); else{
+                                        echo json_encode(['error' => __('You haven\'t entered new password-repetition.')]); 
+									else{
                                         if($this->Maccount->vars['new_password'] != $this->Maccount->vars['new_password2'])
-                                            echo json_encode(['error' => __('The two passwords you entered do not match.')]); else{
+                                            echo json_encode(['error' => __('The two passwords you entered do not match.')]); 
+										else{
                                             if($this->Maccount->vars['old_password'] == $this->Maccount->vars['new_password'])
-                                                echo json_encode(['error' => __('New password cannot be same as old!')]); else{
-                                                if($this->Maccount->update_password()){
+                                                echo json_encode(['error' => __('New password cannot be same as old!')]); 
+											else{
+                                                if($this->Maccount->update_password($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 													$this->Maccount->add_account_log('Changed password.', 0, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));          
                                                     $this->session->destroy();
                                                     echo json_encode(['success' => [__('Your password was successfully changed.'), __('You\'ve been logged out for security reasons!')]]);
@@ -294,23 +284,21 @@
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($this->config->config_entry('account|allow_mail_change') == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
                     }
                     if(!isset($this->Maccount->vars['email']))
-                        echo json_encode(['error' => __('You haven\'t entered your current email.')]); else{
+                        echo json_encode(['error' => __('You haven\'t entered your current email.')]); 
+					else{
                         if(!$this->Maccount->valid_email($this->Maccount->vars['email']))
-                            echo json_encode(['error' => __('You have entered an invalid email-address.')]); else{
-                            if(!$this->Maccount->check_existing_email())
-                                echo json_encode(['error' => __('Email-address is wrong for this account.')]); else{
-                                if($this->Maccount->create_email_confirmation_entry(1)){
-                                    if($this->Maccount->send_email_confirmation()){
+                            echo json_encode(['error' => __('You have entered an invalid email-address.')]); 
+						else{
+                            if(!$this->Maccount->check_existing_email($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                                echo json_encode(['error' => __('Email-address is wrong for this account.')]); 
+							else{
+                                if($this->Maccount->create_email_confirmation_entry($this->session->userdata(['user' => 'username']), 1)){
+                                    if($this->Maccount->send_email_confirmation($this->session->userdata(['user' => 'username']))){
                                         echo json_encode(['success' => __('Please check your current mail-box for confirmation link.')]);
                                     } else{
                                         $this->Maccount->delete_old_confirmation_entries($this->session->userdata(['user' => 'username']), 1);
@@ -332,23 +320,21 @@
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($this->config->config_entry('account|allow_mail_change') == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
                     }
                     if(!isset($this->Maccount->vars['email']))
-                        echo json_encode(['error' => __('You haven\'t entered your new email-address.')]); else{
+                        echo json_encode(['error' => __('You haven\'t entered your new email-address.')]); 
+					else{
                         if(!$this->Maccount->valid_email($this->Maccount->vars['email']))
-                            echo json_encode(['error' => __('You have entered an invalid email-address.')]); else{
-                            if($this->Maccount->check_duplicate_email($this->Maccount->vars['email']))
-                                echo json_encode(['error' => __('This email-address is already used.')]); else{
-                                if($this->Maccount->create_email_confirmation_entry(0)){
-                                    if($this->Maccount->send_email_confirmation()){
+                            echo json_encode(['error' => __('You have entered an invalid email-address.')]); 
+						else{
+                            if($this->Maccount->check_duplicate_email($this->Maccount->vars['email'], $this->session->userdata(['user' => 'server'])))
+                                echo json_encode(['error' => __('This email-address is already used.')]); 
+							else{
+                                if($this->Maccount->create_email_confirmation_entry($this->session->userdata(['user' => 'username']), 0)){
+                                    if($this->Maccount->send_email_confirmation($this->session->userdata(['user' => 'username']))){
                                         $this->Maccount->delete_old_confirmation_entries($this->session->userdata(['user' => 'username']), 1);
                                         echo json_encode(['success' => __('Please check your new mail-box for confirmation link.')]);
                                     } else{
@@ -376,15 +362,9 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function checkcredits()
+		public function checkcredits()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $payment_method = (isset($_POST['payment_method']) && ctype_digit($_POST['payment_method'])) ? (int)$_POST['payment_method'] : '';
                 $credits = (isset($_POST['credits']) && ctype_digit($_POST['credits'])) ? (int)$_POST['credits'] : '';
@@ -392,21 +372,21 @@
                 if(!in_array($payment_method, [1, 2]))
                     echo json_encode(['error' => __('Invalid payment method.')]); 
 				else if($credits === '')
-                    echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_1'))]);
+                    echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
                 else if($gcredits === '')
-                    echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_2'))]);
+                    echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits(2, $this->session->userdata(['user' => 'server'])))]);
                 else{
                     $status = $this->website->get_user_credits_balance($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $payment_method, $this->session->userdata(['user' => 'id']));
                     if($payment_method == 1){
                         if($status['credits'] < $credits){
-                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_1'))]);
+                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
                         } else{
                             echo json_encode(['success' => true]);
                         }
                     }
                     if($payment_method == 2){
                         if($status['credits'] < $gcredits){
-                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_2'))]);
+                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
                         } else{
                             echo json_encode(['success' => true]);
                         }
@@ -417,17 +397,11 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function vote()
+		public function vote()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['votereward_config'] = $this->config->values('votereward_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['votereward_config']['active'] == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
 					$this->load->model('character');
                     if(isset($_POST['vote']) && ctype_digit($_POST['vote'])){
@@ -452,13 +426,13 @@
 								echo json_encode(['error' => __('Your character total res sum need to be atleast') . ' ' . $this->vars['votereward_config']['req_res']]);
 							}
 						}
-                        if(!$check_link = $this->Maccount->check_vote_link($_POST['vote'])){
+                        if(!$check_link = $this->Maccount->check_vote_link($_POST['vote'], $this->session->userdata(['user' => 'server']))){
                             echo json_encode(['error' => __('Voting link not found.')]);
                         } else{
                             if($check_link['api'] == 2){
                                 echo json_encode(['success_mmotop' => __('Thank You, we will review your vote and reward you.')]);
                             } else{
-                                if($check_last_vote = $this->Maccount->get_last_vote($_POST['vote'], $check_link['hours'], 0, $this->vars['votereward_config']['xtremetop_same_acc_vote'], $this->vars['votereward_config']['xtremetop_link_numbers'])){
+                                if($check_last_vote = $this->Maccount->get_last_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'], $check_link['hours'], 0, $this->vars['votereward_config']['xtremetop_same_acc_vote'], $this->vars['votereward_config']['xtremetop_link_numbers'])){
                                     echo json_encode(['error' => sprintf(__('Already voted. Next vote after %s'), $this->Maccount->calculate_next_vote($check_last_vote, $check_link['hours']))]);
                                 } else{
                                     if($check_link['api'] == 1){
@@ -469,10 +443,10 @@
                                                 foreach($valid_votes AS $valid){
                                                     $i++;
                                                     $this->Maccount->set_valid_vote_xtremetop($valid['id']);
-                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
-                                                        if($this->Maccount->log_vote($_POST['vote'])){
+                                                        if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
                                                             echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
                                                             echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
@@ -493,10 +467,10 @@
                                                 foreach($valid_votes AS $valid){
                                                     $i++;
                                                     $this->Maccount->set_valid_vote_gtop100($valid['id']);
-                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
-                                                        if($this->Maccount->log_vote($_POST['vote'])){
+                                                        if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
                                                             echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
                                                             echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
@@ -517,10 +491,10 @@
                                                 foreach($valid_votes AS $valid){
                                                     $i++;
                                                     $this->Maccount->set_valid_vote_topg($valid['id']);
-                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
-                                                        if($this->Maccount->log_vote($_POST['vote'])){
+                                                        if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
                                                             echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
                                                             echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
@@ -535,8 +509,8 @@
                                         }
                                     } else if($check_link['api'] == 5){
                                         if($valid = $this->Maccount->check_top100arena_vote()){
-                                            if($this->Maccount->log_vote($_POST['vote']) && $this->Maccount->set_valid_vote_top100arena($valid['id'])){
-                                                $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                            if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote']) && $this->Maccount->set_valid_vote_top100arena($valid['id'])){
+                                                $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                 $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                 echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                             } else{
@@ -547,8 +521,8 @@
                                         }
                                     } else if($check_link['api'] == 6){
                                         if($valid = $this->Maccount->check_mmoserver_vote()){
-                                            if($this->Maccount->log_vote($_POST['vote']) && $this->Maccount->set_valid_vote_mmoserver($valid['id'])){
-                                                $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                            if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote']) && $this->Maccount->set_valid_vote_mmoserver($valid['id'])){
+                                                $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                 $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                 echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                             } else{
@@ -565,10 +539,10 @@
                                                 foreach($valid_votes AS $valid){
                                                     $i++;
                                                     $this->Maccount->set_valid_vote_dmncms($valid['id']);
-                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
-                                                        if($this->Maccount->log_vote($_POST['vote'])){
+                                                        if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
                                                             echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
                                                             echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
@@ -589,10 +563,10 @@
                                                 foreach($valid_votes AS $valid){
                                                     $i++;
                                                     $this->Maccount->set_valid_vote_gametop100($valid['id']);
-                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                                    $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
-                                                        if($this->Maccount->log_vote($_POST['vote'])){
+                                                        if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
                                                             echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
                                                             echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
@@ -606,8 +580,8 @@
                                             echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else{
-                                        if($this->Maccount->log_vote($_POST['vote'])){
-                                            $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), '', $check_link['name']);
+                                        if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
+                                            $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                             $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                             echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                         } else{
@@ -628,15 +602,8 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function reset_character(){
+		public function reset_character(){
             if($this->session->userdata(['user' => 'logged_in'])){				
-				if($this->website->is_multiple_accounts() == true){
-					$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-				} else{
-					$this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-				}
-	
 				try{	
 					$this->load->model('account');
 					$this->load->model('character');
@@ -649,7 +616,7 @@
 						}
 					}
 
-					if(!$this->Maccount->check_connect_stat()){
+					if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 						throw new \Exception(__('Please logout from game.')); 
 					}
 					
@@ -896,16 +863,9 @@
 			}  
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function greset_character()
+		public function greset_character()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-
 				try{
 					$this->load->model('account');
 					$this->load->model('character');
@@ -918,7 +878,7 @@
 						}
 					}
 					
-					if(!$this->Maccount->check_connect_stat()){
+					if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 						throw new \Exception(__('Please logout from game.')); 
 					}
 					
@@ -1119,11 +1079,6 @@
 		public function add_ref_reward()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $this->load->model('character');
                 $id = (isset ($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
@@ -1164,23 +1119,23 @@
 												} else{
 													$check_chars = [$char];
 												}
-												if($this->Maccount->check_claimed_referral_rewards($reward_data['id'], $check_chars, $reward_data['server'])){
+												if($this->Maccount->check_claimed_referral_rewards($this->session->userdata(['user' => 'username']), $reward_data['id'], $check_chars, $reward_data['server'])){
 													echo json_encode(['error' => __('Reward was already claimed with this character.')]);
 												} else{
 													if($this->config->values('referral_config', 'claim_type') == 0){
-														if($this->Maccount->check_if_reward_was_claimed($reward_data['id'], $reward_data['server'], $this->Mcharacter->char_info['AccountId'])){
+														if($this->Maccount->check_if_reward_was_claimed($this->session->userdata(['user' => 'username']), $reward_data['id'], $reward_data['server'], $this->Mcharacter->char_info['AccountId'])){
 															echo json_encode(['error' => __('Reward can be claimed only once. It was already claimed by different character.')]);
 															return; 
 														}
 													}
 													if($this->config->values('referral_config', 'compare_ips') == 1){
-														if($this->Maccount->check_referral_ips($this->Mcharacter->char_info['AccountId'])){
+														if($this->Maccount->check_referral_ips($this->session->userdata(['user' => 'username']), $this->Mcharacter->char_info['AccountId'])){
 															echo json_encode(['error' => __('You can not claim rewards for own accounts.')]);
 															return; 
 														}																		 
 													}
-													$this->Maccount->add_referral_reward($reward_data['reward'], $reward_data['reward_type'], $char);
-													$this->Maccount->log_reward($reward_data['id'], $char, $reward_data['server'], $this->Mcharacter->char_info['AccountId']);
+													$this->Maccount->add_referral_reward($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $reward_data['reward'], $reward_data['reward_type'], $char);
+													$this->Maccount->log_reward($this->session->userdata(['user' => 'username']), $reward_data['id'], $char, $reward_data['server'], $this->Mcharacter->char_info['AccountId']);
 													echo json_encode(['success' => __('Referral reward was claimed successfully.')]);
 												}
 											}
@@ -1219,11 +1174,6 @@
         public function pk_clear()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
@@ -1231,7 +1181,7 @@
                         $this->Mcharacter->$key = trim($this->website->hex2bin($value));
                     }																	
                 }
-                if(!$this->Maccount->check_connect_stat())
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                     echo json_encode(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($_POST['character']))
@@ -1297,11 +1247,6 @@
         public function reset_stats()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_stats') == 1){
                     $this->load->model('account');
                     $this->load->model('character');
@@ -1312,7 +1257,7 @@
                             $this->Mcharacter->$key = trim($value);
                         }
                     }
-                    if(!$this->Maccount->check_connect_stat())
+                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                         echo json_encode(['error' => __('Please logout from game.')]); 
 					else{
                         if(!isset($_POST['character']))
@@ -1346,16 +1291,9 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function reset_skilltree()
+		public function reset_skilltree()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_skilltree') == 1){
 					$this->load->model('account');
 					$this->load->model('character');
@@ -1366,7 +1304,7 @@
 							$this->Mcharacter->$key = trim($value);
 						}
 					}
-					if(!$this->Maccount->check_connect_stat())
+					if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
 						echo json_encode(['error' => __('Please logout from game.')]); 
 					else{
 						if(!isset($_POST['character']))
@@ -1407,22 +1345,15 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function clear_inventory()
+		public function clear_inventory()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                     echo json_encode(['error' => __('Please logout from game.')]); 
 								else{
                     if(!isset($this->Mcharacter->vars['character']))
@@ -1448,28 +1379,27 @@
         public function buy_level()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
                 $level_conf = $this->config->values('buylevel_config', $this->session->userdata(['user' => 'server']));
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
-                    echo json_encode(['error' => __('Please logout from game.')]); else{
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                    echo json_encode(['error' => __('Please logout from game.')]); 
+				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); else{
+                        echo json_encode(['error' => __('Invalid Character')]); 
+					else{
                         if(!isset($this->Mcharacter->vars['level']))
-                            echo json_encode(['error' => __('Please select level.')]); else{
+                            echo json_encode(['error' => __('Please select level.')]); 
+						else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Character not found.')]); else{
+                                echo json_encode(['error' => __('Character not found.')]); 
+							else{
                                 if(!array_key_exists($this->Mcharacter->vars['level'], $level_conf['levels']))
-                                    echo json_encode(['error' => __('Invalid level selected.')]); else{
+                                    echo json_encode(['error' => __('Invalid level selected.')]); 
+								else{
                                     if(!$this->check_max_level_allowed($level_conf, $this->Mcharacter->vars['level'], $this->Mcharacter->char_info['cLevel']))
                                         echo json_encode(['error' => sprintf(__('You will exceed max level allowed: %d, please try to buy lower level.'), isset($level_conf['max_level']) ? $level_conf['max_level'] : 0)]); else{
                                         $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
@@ -1509,23 +1439,20 @@
         public function buy_points()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
-                    echo json_encode(['error' => __('Please logout from game.')]); else{
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                    echo json_encode(['error' => __('Please logout from game.')]); 
+				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); else{
+                        echo json_encode(['error' => __('Invalid Character')]); 
+					else{
                         if(!isset($this->Mcharacter->vars['points']))
-                            echo json_encode(['error' => __('Please enter amount of points.')]); else{
+                            echo json_encode(['error' => __('Please enter amount of points.')]); 
+						else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                                 echo json_encode(['error' => __('Character not found.')]); else{
                                 if($this->Mcharacter->vars['points'] < $this->config->config_entry('buypoints|points'))
@@ -1555,23 +1482,20 @@
         public function buy_gm()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
-                    echo json_encode(['error' => __('Please logout from game.')]); else{
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                    echo json_encode(['error' => __('Please logout from game.')]); 
+				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); else{
+                        echo json_encode(['error' => __('Invalid Character')]); 
+					else{
                         if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            echo json_encode(['error' => __('Character not found.')]); else{
+                            echo json_encode(['error' => __('Character not found.')]); 
+						else{
                             if($this->Mcharacter->char_info['CtlCode'] == $this->config->config_entry('buygm|gm_ctlcode'))
                                 echo json_encode(['error' => __('Your character already is GameMaster.')]); 
 							else{
@@ -1596,7 +1520,6 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function skip_reset_item(){
 			if($this->session->userdata(['user' => 'logged_in'])){
 				$id = $_POST['id'];
@@ -1638,7 +1561,6 @@
 			}  
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		public function check_change_class_item(){
 			if($this->session->userdata(['user' => 'logged_in'])){
 				$id = $_POST['id'];
@@ -1664,7 +1586,7 @@
 								 $opt = ($this->iteminfo->getOption()*4);
 								 $exe = $this->iteminfo->exeForCompare();
 								 $this->load->model('warehouse');
-								 $items = $this->Mwarehouse->list_web_items();
+								 $items = $this->Mwarehouse->list_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 								 if(empty($items))
 									echo json_encode(['error' => __('Item not found in web warehouse.')]);
 								 else{
@@ -1775,22 +1697,15 @@
 			}  
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_class_list()
+		public function load_class_list()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                     echo json_encode(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
@@ -1978,23 +1893,16 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function buy_class()
+		public function buy_class()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
 				
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                     echo json_encode(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
@@ -2308,16 +2216,9 @@
             }
         }
 
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function change_name()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
-                
 				$this->load->model('account');
                 $this->load->model('character');
                 foreach($_POST as $key => $value){
@@ -2326,7 +2227,7 @@
 				
 				$old_name = $this->website->hex2bin($this->Mcharacter->vars['old_name']);
 				
-                if(!$this->Maccount->check_connect_stat())
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                     echo json_encode(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['old_name']) || $this->Mcharacter->vars['old_name'] == ''){
@@ -2500,8 +2401,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function exchange_wcoins()
+		public function exchange_wcoins()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
@@ -2509,17 +2409,21 @@
                 foreach($_POST as $key => $value){
                     $this->Mcharacter->$key = trim($value);
                 }
-                if(!$this->Maccount->check_connect_stat())
-                    echo json_encode(['error' => __('Please logout from game.')]); else{
+                if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                    echo json_encode(['error' => __('Please logout from game.')]); 
+				else{
                     if(!preg_match('/^[0-9]+$/', $this->Mcharacter->vars['credits']))
-                        echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); else{
+                        echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); 
+					else{
                         $this->vars['wcoin_config'] = $this->config->values('wcoin_exchange_config', $this->session->userdata(['user' => 'server']));
                         $this->vars['table_config'] = $this->config->values('table_config', $this->session->userdata(['user' => 'server']));
                         if(isset($this->vars['table_config']['wcoins']) && $this->vars['wcoin_config'] != false && $this->vars['wcoin_config']['active'] == 1){
                             if($this->Mcharacter->vars['credits'] < $this->vars['wcoin_config']['min_rate'])
-                                echo json_encode(['error' => vsprintf(__('Minimal exchange rate is %d %s'), [$this->vars['wcoin_config']['min_rate'], $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server']))])]); else{
+                                echo json_encode(['error' => vsprintf(__('Minimal exchange rate is %d %s'), [$this->vars['wcoin_config']['min_rate'], $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server']))])]); 
+							else{
                                 if($this->vars['wcoin_config']['reward_coin'] < 0)
-                                    $total = floor($this->Mcharacter->vars['credits'] * abs($this->vars['wcoin_config']['reward_coin'])); else
+                                    $total = floor($this->Mcharacter->vars['credits'] * abs($this->vars['wcoin_config']['reward_coin'])); 
+								else
                                     $total = floor($this->Mcharacter->vars['credits'] / $this->vars['wcoin_config']['reward_coin']);
                                 if($this->vars['wcoin_config']['change_back'] == 1){
                                     if($this->Mcharacter->vars['exchange_type'] == 1){
@@ -2531,7 +2435,8 @@
                                 exchange_wcoins:
                                 $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                 if($status < $this->Mcharacter->vars['credits'])
-                                    echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); else{
+                                    echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); 
+								else{
                                     $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->Mcharacter->vars['credits'], $this->vars['wcoin_config']['credits_type']);
                                     $this->Maccount->add_account_log('Exchange ' . $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])) . ' to' . __('WCoins'), -$this->Mcharacter->vars['credits'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                     $this->Mcharacter->add_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $total, $this->vars['table_config']['wcoins']);
@@ -2540,7 +2445,8 @@
                                 exchange_credits:
                                 if($status = $this->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
                                     if($status < $this->Mcharacter->vars['credits'])
-                                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]); else{
+                                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]); 
+									else{
                                         $this->website->add_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $total, $this->vars['wcoin_config']['credits_type']);
                                         $this->Maccount->add_account_log('Exchange ' . __('WCoins') . ' to ' . $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])), -$this->Mcharacter->vars['credits'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->Mcharacter->remove_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins']);
@@ -2580,8 +2486,7 @@
 			echo json_encode(['error' => true]); 
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function paypal()
+		public function paypal()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('donate');
@@ -2606,12 +2511,12 @@
 							$isKeys = 1;
 						}
 						else{
-							$package_data = $this->Mdonate->get_paypal_package_data_by_id($_POST['proccess_paypal']);
+							$package_data = $this->Mdonate->get_paypal_package_data_by_id($_POST['proccess_paypal'], $this->session->userdata(['user' => 'server']));
 						}
 					}
                     if($package_data != false){
-                        if($this->Mdonate->insert_paypal_order($package_data['reward'], $package_data['price'], $package_data['currency'], $isBattlePass, $isKeys))
-                            echo json_encode($this->Mdonate->get_paypal_data()); 
+                        if($this->Mdonate->insert_paypal_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'], $package_data['currency'], $isBattlePass, $isKeys))
+                            echo json_encode($this->Mdonate->get_paypal_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))); 
 						else
                             echo json_encode(['error' => __('Unable to checkout please try again.')]);
                     } 
@@ -2633,9 +2538,10 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('donate');
                 if(isset($_POST['proccess_paycall'])){
-                    if($package_data = $this->Mdonate->get_paycall_package_data_by_id($_POST['proccess_paycall'])){
-                        if($this->Mdonate->insert_paycall_order($package_data['reward'], $package_data['price']))
-                            echo json_encode($this->Mdonate->get_paycall_data($package_data['reward'], $package_data['price'])); else
+                    if($package_data = $this->Mdonate->get_paycall_package_data_by_id($_POST['proccess_paycall'], $this->session->userdata(['user' => 'server']))){
+                        if($this->Mdonate->insert_paycall_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price']))
+                            echo json_encode($this->Mdonate->get_paycall_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'])); 
+						else
                             echo json_encode(['error' => __('Unable to checkout please try again.')]);
                     } else{
                         echo json_encode(['error' => __('Paycall package not found.')]);
@@ -2651,11 +2557,6 @@
         public function hide_chars()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 if($this->config->config_entry('account|hide_char_enabled') == 1){														
                     $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('account|hide_char_price_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
@@ -2666,13 +2567,13 @@
                     if($status < $price){
                         echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('account|hide_char_price_type'), $this->session->userdata(['user' => 'server'])))]);
                     } else{
-                        $check_hide = $this->Maccount->check_hide_time();
+                        $check_hide = $this->Maccount->check_hide_time($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                         if($check_hide == 'None'){
-                            $this->Maccount->add_hide($price);
+                            $this->Maccount->add_hide($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('account|hide_char_price_type'));
                             echo json_encode(['success' => __('You have successfully hidden your chars')]);
                         } else{   
-                            $this->Maccount->extend_hide($check_hide, $price);
+                            $this->Maccount->extend_hide($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $check_hide, $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('account|hide_char_price_type'));
                             echo json_encode(['success' => __('You char hide time has been extended')]); 
                         }
@@ -2688,11 +2589,6 @@
 		public function hide_chars_pk()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                } else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                }
                 $this->load->model('account');
                 if(defined('ELITE_KILLER_HIDE') && ELITE_KILLER_HIDE == true){												
                     $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), ELITE_KILLER_HIDE_PRICE_TYPE, $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
@@ -2700,13 +2596,13 @@
                     if($status < $price){
                         echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(ELITE_KILLER_HIDE_PRICE_TYPE, $this->session->userdata(['user' => 'server'])))]);
                     } else{
-                        $check_hide = $this->Maccount->check_hide_time_pk($this->session->userdata(['user' => 'server']));
+                        $check_hide = $this->Maccount->check_hide_time_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                         if($check_hide == 'None'){
-                            $this->Maccount->add_hide_pk($price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+                            $this->Maccount->add_hide_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, ELITE_KILLER_HIDE_PRICE_TYPE);
                             echo json_encode(['success' => __('You have successfully hidden your chars PK stats')]);
                         } else{   
-                            $this->Maccount->extend_hide_pk($check_hide, $price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
+                            $this->Maccount->extend_hide_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $check_hide, $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, ELITE_KILLER_HIDE_PRICE_TYPE);
                             echo json_encode(['success' => __('You char hide time has been extended')]); 
                         }

@@ -111,30 +111,13 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
 		private function inventory($char, $server)
         {
-            if(DRIVER == 'pdo_dblib'){
-                $items_sql = '';
-                for($i = 0; $i < ($this->website->get_value_from_server($server, 'inv_size') / $this->website->get_value_from_server($server, 'inv_multiplier')); ++$i){
-                    $multiplier = ($i == 0) ? 1 : ($i * $this->website->get_value_from_server($server, 'inv_multiplier')) + 1;
-                    $items_sql .= 'SUBSTRING(Inventory, ' . $multiplier . ', ' . $this->website->get_value_from_server($server, 'inv_multiplier') . ') AS item' . $i . ', ';
-                }
-                $stmt = $this->website->db('game', $server)->prepare('SELECT ' . substr($items_sql, 0, -2) . ' FROM Character WHERE Name = :char');
-                $stmt->execute([':char' => $char]);
-                $items = unpack('H*', implode('', $stmt->fetch()));
-                $this->char_info['Inventory'] = $this->clean_hex($items[1]);
-            } else{
-				$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-                $stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE Name = :char');
-                $stmt->execute([':char' => $this->website->c($char)]);
-                if($inv = $stmt->fetch()){
-					if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv'])){
-						$unpack = unpack('H*', $inv['Inventory']);
-						$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-					}
-					else{
-						$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-					}
-                }
-            }
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
+			$stmt->execute([':char' => $char]);
+			if($inv = $stmt->fetch()){
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
+			}
+            
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
@@ -664,14 +647,5 @@
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
             $stmt->close_cursor();
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

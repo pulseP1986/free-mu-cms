@@ -71,7 +71,7 @@
 							$coins += ($additionalBonus / 100) * $coins;
 						}
 					}
-					$this->Mdonate->insert_paypal_order($coins, $this->vars['price'], DONATE_CURRENCY);
+					$this->Mdonate->insert_paypal_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $coins, $this->vars['price'], DONATE_CURRENCY);
 					$this->vars['order_id'] = $this->Mdonate->hash_item;
 					$this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paypal']);
 					$this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.paypalNew', $this->vars);
@@ -97,11 +97,6 @@
                 }
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paypal']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     if($this->vars['pass'] != false){
                         $this->load->model('application/plugins/battle_pass/models/battle_pass');
@@ -120,7 +115,7 @@
                             $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.keys', $this->vars);
                         }
                         else{
-                            $this->vars['paypal_packages'] = $this->Mdonate->get_paypal_packages();
+                            $this->vars['paypal_packages'] = $this->Mdonate->get_paypal_packages($this->session->userdata(['user' => 'server']));
                             $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.paypal', $this->vars);
                         }
                     }
@@ -139,18 +134,14 @@
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paypal']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
                     if(isset($this->vars['donation_config']['type']) && $this->vars['donation_config']['type'] == 2){
-                        if($this->website->is_multiple_accounts() == true){
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                        } else{
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                        }
                         $this->load->model('account');
-                        if(!$this->Maccount->check_connect_stat())
-                            $this->vars['error'] = __('Please logout from game.'); else{
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
+                            $this->vars['error'] = __('Please logout from game.'); 
+                        else{
                             //$this->csrf->verifyToken('get', 'exception', 3600, false);
                             if($package_data = $this->Mdonate->get_paypal_package_data_by_id($id)){
-                                if($this->Mdonate->insert_paypal_order($package_data['reward'], $package_data['price'], $package_data['currency'])){
-                                    $order_data = $this->Mdonate->get_paypal_data();
+                                if($this->Mdonate->insert_paypal_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'], $package_data['currency'])){
+                                    $order_data = $this->Mdonate->get_paypal_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                     $this->load->lib('paypal_express', [$this->vars['donation_config']]);
                                     $tax = 0;
                                     if(isset($this->vars['donation_config']['paypal_fee']) && $this->vars['donation_config']['paypal_fee'] != ''){
@@ -191,13 +182,8 @@
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paypal']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
                     if(isset($this->vars['donation_config']['type']) && $this->vars['donation_config']['type'] == 2){
-                        if($this->website->is_multiple_accounts() == true){
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                        } else{
-                            $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                        }
                         $this->load->model('account');
-                        if(!$this->Maccount->check_connect_stat())
+                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
                             $this->vars['error'] = __('Please logout from game.'); 
 						else{
                             $this->load->lib('paypal_express', [$this->vars['donation_config']]);
@@ -220,8 +206,8 @@
                                                         } else{
                                                             if($this->Mdonate->check_pending_transaction($do_payment["PAYMENTINFO_0_TRANSACTIONID"])){
                                                                 if($this->Mdonate->update_transaction_status(false, $do_payment["PAYMENTINFO_0_TRANSACTIONID"], $do_payment["PAYMENTINFO_0_PAYMENTSTATUS"])){
-                                                                    $this->Mdonate->add_account_log('Reward ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . ' Paypal', $this->Mdonate->order_details['credits'], $this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']);
-                                                                    $this->Mdonate->reward_user($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Mdonate->order_details['credits'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($this->Mdonate->order_details['account']));
+                                                                    $this->Maccount->add_account_log('Reward ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . ' Paypal', $this->Mdonate->order_details['credits'], $this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']);
+                                                                    $this->Mdonate->reward_user($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Mdonate->order_details['credits'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']));
                                                                     if(defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true ){
 																		$this->load->model('partner');
 																		$partner = $this->Mpartner->findLinkedPartner($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']);
@@ -239,27 +225,27 @@
 																		$ref = $this->Mdonate->findReferral($this->Mdonate->order_details['account']);
 																		if($ref != false){
 																			$ref_reward = floor(($this->config->values('referral_config', 'reward_on_donation') / 100) * $this->Mdonate->order_details['credits']);
-																			$this->Mdonate->reward_user($ref, $this->Mdonate->order_details['server'], $ref_reward, $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($ref));
-																			$this->Mdonate->add_account_log('Friend donation bonus ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . '', $ref_reward, $ref, $this->Mdonate->order_details['server']);
+																			$this->Mdonate->reward_user($ref, $this->Mdonate->order_details['server'], $ref_reward, $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($ref, $this->Mdonate->order_details['server']));
+																			$this->Maccount->add_account_log('Friend donation bonus ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . '', $ref_reward, $ref, $this->Mdonate->order_details['server']);
 																		}
 																	}
 																	if($this->config->values('email_config', 'donate_email_user') == 1){
-                                                                        $this->Mdonate->sent_donate_email($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Mdonate->get_email($this->Mdonate->order_details['account']), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($this->Mdonate->order_details['account'])));
+                                                                        $this->Mdonate->sent_donate_email($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Maccount->get_email($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'])));
                                                                     }
                                                                     if($this->config->values('email_config', 'donate_email_admin') == 1){
-                                                                        $this->Mdonate->sent_donate_email_admin($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('email_config', 'server_email'), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($this->Mdonate->order_details['account'])), 'PayPal');
+                                                                        $this->Mdonate->sent_donate_email_admin($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('email_config', 'server_email'), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'])), 'PayPal');
                                                                     }
                                                                     $this->vars['success'] = 'Payment Received! Your game currency will be sent to you very soon!';
                                                                 }
                                                             } else{
                                                                 if($this->Mdonate->insert_transaction_status($do_payment["PAYMENTINFO_0_TRANSACTIONID"], $do_payment['PAYMENTINFO_0_AMT'], $do_payment['PAYMENTINFO_0_CURRENCYCODE'], $do_payment["PAYMENTINFO_0_PAYMENTSTATUS"], $get_details['EMAIL'], $get_details['L_PAYMENTREQUEST_0_NUMBER0'], get_country_code(ip()))){
-                                                                    $this->Mdonate->add_account_log('Reward ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . ' Paypal', $this->Mdonate->order_details['credits'], $this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']);
-                                                                    $this->Mdonate->reward_user($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Mdonate->order_details['credits'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($this->Mdonate->order_details['account']));
+                                                                    $this->Maccount->add_account_log('Reward ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . ' Paypal', $this->Mdonate->order_details['credits'], $this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']);
+                                                                    $this->Mdonate->reward_user($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Mdonate->order_details['credits'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']));
                                                                     if($this->config->values('email_config', 'donate_email_user') == 1){
-                                                                        $this->Mdonate->sent_donate_email($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Mdonate->get_email($this->Mdonate->order_details['account']), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($this->Mdonate->order_details['account'])));
+                                                                        $this->Mdonate->sent_donate_email($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->Maccount->get_email($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server']), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'])));
                                                                     }
                                                                     if($this->config->values('email_config', 'donate_email_admin') == 1){
-                                                                        $this->Mdonate->sent_donate_email_admin($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('email_config', 'server_email'), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->get_guid($this->Mdonate->order_details['account'])), 'PayPal');
+                                                                        $this->Mdonate->sent_donate_email_admin($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('email_config', 'server_email'), $this->Mdonate->order_details['credits'], $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']), $this->website->get_user_credits_balance($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'], $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($this->Mdonate->order_details['account'], $this->Mdonate->order_details['server'])), 'PayPal');
                                                                     }
                                                                     $this->vars['success'] = 'Payment Received! Your game currency will be sent to you very soon!';
                                                                 }
@@ -273,15 +259,15 @@
                                                     }
                                                 } else{
                                                     $this->vars['error'] = 'Package currency does not match.';
-                                                    $this->Mdonate->writelog('Package currency does not match [currency received: ' . $do_payment['PAYMENTINFO_0_CURRENCYCODE'] . '], [package currency: ' . $this->Mdonate->order_details['currency'] . ']', 'Paypal');
+                                                    writelog('Package currency does not match [currency received: ' . $do_payment['PAYMENTINFO_0_CURRENCYCODE'] . '], [package currency: ' . $this->Mdonate->order_details['currency'] . ']', 'Paypal');
                                                 }
                                             } else{
                                                 $this->vars['error'] = 'Package price does not match.';
-                                                $this->Mdonate->writelog('Package price does not match [price received: ' . $do_payment['PAYMENTINFO_0_AMT'] . '], [package price: ' . number_format($this->Mdonate->order_details['amount'], 2, '.', ',') . ']', 'Paypal');
+                                                writelog('Package price does not match [price received: ' . $do_payment['PAYMENTINFO_0_AMT'] . '], [package price: ' . number_format($this->Mdonate->order_details['amount'], 2, '.', ',') . ']', 'Paypal');
                                             }
                                         } else{
                                             $this->vars['error'] = 'Order number not found.';
-                                            $this->Mdonate->writelog('PayPal sent invalid order [transaction id: ' . $get_details['L_PAYMENTREQUEST_0_NUMBER0'] . ']', 'Paypal');
+                                            writelog('PayPal sent invalid order [transaction id: ' . $get_details['L_PAYMENTREQUEST_0_NUMBER0'] . ']', 'Paypal');
                                         }
                                     }
                                     $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.paypal_status', $this->vars);
@@ -316,19 +302,14 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'cuenta_digital']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     if($id == ''){
                         $this->vars['cuenta_digital_packages'] = $this->Mdonate->get_cuenta_digital_packages();
                     } else{
-                        if($this->vars['package'] = $this->Mdonate->get_cuenta_digital_package_data_by_id((int)$id)){
+                        if($this->vars['package'] = $this->Mdonate->get_cuenta_digital_package_data_by_id((int)$id, $this->session->userdata(['user' => 'server']))){
                             $refference = $this->session->userdata(['user' => 'username']) . '-server-' . $this->session->userdata(['user' => 'server']) . '-' . uniqid();
                             $md5 = md5($refference . $this->vars['package']['price'] . $this->vars['package']['currency'] . $this->vars['donation_config']['voucher_api_password']);
-                            $this->Mdonate->insert_cuenta_digital_order($this->vars['package']['reward'], $this->vars['package']['price'], $this->vars['package']['currency'], $md5);
+                            $this->Mdonate->insert_cuenta_digital_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['package']['reward'], $this->vars['package']['price'], $this->vars['package']['currency'], $md5);
                             if($this->vars['donation_config']['api_type'] == 2){
                                 $url = 'https://www.cuentadigital.com/apivoucher.php?id=' . $this->vars['donation_config']['account_id'];
                                 $url .= '&comercio=' . urlencode($this->config->config_entry('main|servername'));
@@ -367,13 +348,8 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paycall']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($this->session->userdata(['user' => 'server']), true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
-                    $this->vars['paycall_packages'] = $this->Mdonate->get_paycall_packages();
+                    $this->vars['paycall_packages'] = $this->Mdonate->get_paycall_packages($this->session->userdata(['user' => 'server']));
                     $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.paycall', $this->vars);
                 } else{
                     $this->disabled();
@@ -446,14 +422,14 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), '2checkout']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
-                    $this->vars['packages'] = $this->Mdonate->get_2checkout_packages();
+                    $this->vars['packages'] = $this->Mdonate->get_2checkout_packages($this->session->userdata(['user' => 'server']));
                     if($id != ''){
                         if($this->vars['package'] = $this->Mdonate->check_2checkout_package((int)$id)){
                             $this->load->lib('two_checkout');
                             $this->two_checkout->setup($this->vars['donation_config']['seller_id'], $this->vars['donation_config']['private_key']);
                             $item = md5($this->session->userdata(['user' => 'username']) . uniqid(microtime(), 1));
                             $params = ['sid' => $this->vars['donation_config']['seller_id'], 'mode' => '2CO', 'li_0_type' => 'product', 'li_0_name' => $this->vars['package']['package'], 'li_0_quantity' => 1, 'li_0_price' => $this->vars['package']['price'], 'li_0_tangible' => 'N', 'li_0_description' => 'Description test', 'currency_code' => $this->vars['package']['currency'], 'x_receipt_link_url' => $this->config->base_url . 'payment/two-checkout', 'dmn_user' => $this->session->userdata(['user' => 'username']), 'dmn_server' => $this->session->userdata(['user' => 'server']), 'dmn_hash' => $item];
-                            $this->Mdonate->insert_2checkout_order($this->vars['package']['reward'], $this->vars['package']['price'], $this->vars['package']['currency'], $item);
+                            $this->Mdonate->insert_2checkout_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['package']['reward'], $this->vars['package']['price'], $this->vars['package']['currency'], $item);
                             $this->two_checkout->redirect($params);
                         } else{
                             $this->vars['error'] = __('2Checkout Package Not Found.');
@@ -473,7 +449,7 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'pagseguro']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
-                    $this->vars['packages'] = $this->Mdonate->get_pagseguro_packages();
+                    $this->vars['packages'] = $this->Mdonate->get_pagseguro_packages($this->session->userdata(['user' => 'server']));
                     if($id != ''){
                         if($this->vars['package'] = $this->Mdonate->check_pagseguro_package((int)$id)){
                             require_once(APP_PATH . DS . 'libraries' . DS . 'PagSeguroLibrary' . DS . 'PagSeguroLibrary.php');
@@ -487,7 +463,7 @@
 								
                             $credentials = new PagSeguroAccountCredentials($this->vars['donation_config']['email'], $this->vars['donation_config']['token']);
                             $item = md5($this->session->userdata(['user' => 'username']) . uniqid(microtime(), 1));
-                            $this->Mdonate->insert_pagseguro_order($this->vars['package']['reward'], $this->vars['package']['price'], $this->vars['package']['currency'], $item);
+                            $this->Mdonate->insert_pagseguro_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['package']['reward'], $this->vars['package']['price'], $this->vars['package']['currency'], $item);
                             $paymentrequest->setReference($item);
                             header('location: ' . $paymentrequest->register($credentials)); 
                         } else{
@@ -509,11 +485,11 @@
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'interkassa']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
                     if($id == ''){
-                        $this->vars['interkassa_packages'] = $this->Mdonate->get_interkassa_packages();
+                        $this->vars['interkassa_packages'] = $this->Mdonate->get_interkassa_packages($this->session->userdata(['user' => 'server']));
                         $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.interkassa', $this->vars);
                     } else{
-                        if($package_data = $this->Mdonate->get_interkassa_package_data_by_id($id)){
-                            if($this->Mdonate->insert_interkassa_order($package_data['reward'], $package_data['price'], $package_data['currency'])){
+                        if($package_data = $this->Mdonate->get_interkassa_package_data_by_id($id, $this->session->userdata(['user' => 'server']))){
+                            if($this->Mdonate->insert_interkassa_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'], $package_data['currency'])){
                                 $this->load->lib('interkassa');
                                 $shop = Interkassa_Shop::factory(['id' => $this->vars['donation_config']['shop_id'], 'secret_key' => $this->vars['donation_config']['secret_key']]);
                                 $this->vars['desc'] = vsprintf(__('Purchase %d %s for %s %s'), [$package_data['reward'], $this->website->translate_credits($this->vars['donation_config']['reward_type'], $this->session->userdata(['user' => 'server'])), $package_data['price'], $package_data['currency']]);
@@ -583,44 +559,6 @@
 		public function other()
         {
 			$this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.other');
-        }
-		
-        public function bank()
-        {
-            if($this->session->userdata(['user' => 'logged_in'])){
-                if(isset($_POST['add_ref_number'])){
-                    $bank = (isset($_POST['bank']) && ctype_digit($_POST['bank'])) ? $_POST['bank'] : '';
-                    $ref_number = isset($_POST['ref_number']) ? $_POST['ref_number'] : '';
-                    if($bank == '')
-                        $this->vars['error'] = __('Please select valid bank.'); else{
-                        if($ref_number == '')
-                            $this->vars['error'] = __('Please enter refference number.'); else{
-                            $bank_data = $this->Mdonate->get_bank_data($bank, $ref_number);
-                            if($bank_data != false){
-                                if($bank_data['is_assigned'] == 0){
-                                    $account = ($bank_data['account'] != null) ? $bank_data['account'] : $this->session->userdata(['user' => 'username']);
-                                    $server = ($bank_data['server'] != null) ? $bank_data['server'] : $this->session->userdata(['user' => 'server']);
-                                    if($bank_data['reward'] != null && $bank_data['reward_type']){
-                                        $this->Mdonate->assign_refference_number($bank_data['id'], $account, $server);
-                                        $this->Mdonate->reward_user($account, $server, $bank_data['reward'], $bank_data['reward_type']);
-                                        $this->vars['success'] = __('Thank You, your request was successfull.');
-                                    } else{
-                                        $this->vars['error'] = __('Your request is still being reviewed.');
-                                    }
-                                } else{
-                                    $this->vars['error'] = __('Refference number was already registered.');
-                                }
-                            } else{
-                                $this->Mdonate->insert_refference_number($bank, $ref_number);
-                                $this->vars['success'] = __('Your request will be reviewed and approved manually.');
-                            }
-                        }
-                    }
-                }
-                $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.bank', $this->vars);
-            } else{
-                $this->login();
-            }
         }
 
         public function login()

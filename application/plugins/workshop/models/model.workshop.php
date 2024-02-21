@@ -93,23 +93,12 @@
         // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         private function inventory($char, $server)
         {
-            if(DRIVER == 'pdo_dblibs'){
-                $items_sql = '';
-                for($i = 0; $i < ($this->website->get_value_from_server($server, 'inv_size') / $this->website->get_value_from_server($server, 'inv_multiplier')); ++$i){
-                    $multiplier = ($i == 0) ? 1 : ($i * $this->website->get_value_from_server($server, 'inv_multiplier')) + 1;
-                    $items_sql .= 'SUBSTRING(Inventory, ' . $multiplier . ', ' . $this->website->get_value_from_server($server, 'inv_multiplier') . ') AS item' . $i . ', ';
-                }
-                $stmt = $this->website->db('game', $server)->prepare('SELECT ' . substr($items_sql, 0, -2) . ' FROM Character WHERE Name = :char');
-                $stmt->execute([':char' => $char]);
-                $items = unpack('H*', implode('', $stmt->fetch()));
-                $this->char_info['Inventory'] = $this->clean_hex($items[1]);
-            } else{
-                $sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-                $stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE Name = :char');
-                $stmt->execute([':char' => $char]);
-                if($inv = $stmt->fetch()){
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-                }
+
+            $stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
+            $stmt->execute([':char' => $char]);
+            if($inv = $stmt->fetch()){
+                $unpack = unpack('H*', $inv['Inventory']);
+                $this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
             }
         }
         
@@ -233,12 +222,12 @@
         public function check_sockets_part_type($socket, $cat, $seed)
         {
             $exe_type = ($cat <= 5) ? 1 : 0;
-            return $this->website->db('web')->query('SELECT seed, socket_id, socket_price, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->sanitize_var($socket) . ' AND seed = ' . $this->website->db('web')->sanitize_var($seed) . ' AND status != 0 AND socket_part_type IN (-1, ' . $exe_type . ')')->fetch();
+            return $this->website->db('web')->query('SELECT seed, socket_id, socket_price, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND seed = ' . $this->website->db('web')->escape($seed) . ' AND status != 0 AND socket_part_type IN (-1, ' . $exe_type . ')')->fetch();
         }
 
         public function check_sockets($socket, $seed)
         {
-            return $this->website->db('web')->query('SELECT seed, socket_id, socket_price, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->sanitize_var($socket) . ' AND seed = ' . $this->website->db('web')->sanitize_var($seed) . ' AND status != 0')->fetch();
+            return $this->website->db('web')->query('SELECT seed, socket_id, socket_price, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND seed = ' . $this->website->db('web')->escape($seed) . ' AND status != 0')->fetch();
         }
 
         public function logUpgrade($oldHex, $newHex, $price, $payment_method, $char, $account, $server)
@@ -256,10 +245,10 @@
         public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_ItemUpgradeLog ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_ItemUpgradeLog ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_ItemUpgradeLog WHERE price > 0 AND account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['char' => $this->findCharName($value['mu_id'], $value['server']), 'hex_before' => $value['hex_before'], 'hex_after' => $value['hex_after'], 'price' => $value['price'], 'payment_method' => $value['payment_method'], 'account' => htmlspecialchars($value['account']), 'server' => htmlspecialchars($value['server']), 'upgrade_date' => date(DATETIME_FORMAT, $value['upgrade_date'])];
@@ -271,9 +260,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'AND account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'AND account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(account) AS count FROM DmN_ItemUpgradeLog WHERE price > 0 ' . $sql . '');
@@ -303,21 +292,5 @@
             $stmt->execute([':user' => $user]);
             $info = $stmt->fetch();
             return $info['memb_guid'];
-        }
-        
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        private function is_hex($hex_code) {
-			return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
-		}
-        
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        private function clean_hex($data){
-            if(!$this->is_hex($data)){
-                $data = bin2hex($data);
-            }
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

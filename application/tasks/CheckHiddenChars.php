@@ -66,7 +66,7 @@
 
         private function ban_list($server)
         {
-            $this->ban_list[$server] = $this->registry->website->db('web')->query('SELECT name, type FROM DmN_Ban_List WHERE server = \'' . $this->registry->website->db('web')->sanitize_var($server) . '\'')->fetch_all();
+            $this->ban_list[$server] = $this->registry->website->db('web')->query('SELECT name, type FROM DmN_Ban_List WHERE server = \'' . $this->registry->website->db('web')->escape($server) . '\'')->fetch_all();
         }
 
         private function check_in_banlist($name, $server, $type)

@@ -117,17 +117,11 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function inventory($char, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE Name = :char');
-			$stmt->execute([':char' => $this->website->c($char)]);
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
+			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Inventory']);
-					$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-				}
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
 			}  
         }
 
@@ -290,14 +284,14 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function count_total_chars($server)
         {
-            $this->total_characters = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1 AND removed != 1 AND server = \'' . $this->web_db->sanitize_var($server) . '\'');
+            $this->total_characters = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1 AND removed != 1 AND server = \'' . $this->web_db->escape($server) . '\'');
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function load_market_chars($page, $per_page = 25, $server, $tax = 0)
         {
             $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
-            $this->chars = $this->website->db('web')->query('SELECT Top ' . $this->web_db->sanitize_var($per_page) . ' id, mu_id, start_date, end_date, price, price_type, seller, class FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = \'' . $this->web_db->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->web_db->sanitize_var($this->per_page) . ' id FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = \'' . $this->web_db->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+            $this->chars = $this->website->db('web')->query('SELECT Top ' . $this->web_db->escape($per_page) . ' id, mu_id, start_date, end_date, price, price_type, seller, class FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = \'' . $this->web_db->escape($server) . '\' AND id Not IN (SELECT Top ' . $this->web_db->escape($this->per_page) . ' id FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = \'' . $this->web_db->escape($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($this->chars->fetch_all() as $value){
 				$info = $this->get_char_name_by_id($value['mu_id'], $server);
@@ -320,7 +314,7 @@
 
         public function load_market_history_chars($account, $server)
         {
-            return $this->website->db('web')->query('SELECT id, mu_id, start_date, end_date, price, price_type, seller, class, is_sold, removed FROM DmN_CharacterMarket WHERE server = \'' . $this->web_db->sanitize_var($server) . '\' AND seller_acc = \'' . $this->web_db->sanitize_var($account) . '\' ORDER BY id DESC')->fetch_all();
+            return $this->website->db('web')->query('SELECT id, mu_id, start_date, end_date, price, price_type, seller, class, is_sold, removed FROM DmN_CharacterMarket WHERE server = \'' . $this->web_db->escape($server) . '\' AND seller_acc = \'' . $this->web_db->escape($account) . '\' ORDER BY id DESC')->fetch_all();
         }
 
         public function insert_new_sale($id, $class, $account, $server)
@@ -863,14 +857,5 @@
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
             $stmt->close_cursor();
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

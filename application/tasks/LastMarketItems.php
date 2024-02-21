@@ -30,7 +30,7 @@
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		private function lastAdded($server){
-			$stmt = $this->registry->website->db('web')->prepare('SELECT TOP ' . $this->registry->website->db('web')->sanitize_var((int)$this->config->config_entry('modules|last_market_items_count')) . ' id, cat, item, price_type, price, price_jewel, jewel_type FROM DmN_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND server = :server ORDER BY add_date DESC');
+			$stmt = $this->registry->website->db('web')->prepare('SELECT TOP ' . $this->registry->website->db('web')->escape((int)$this->config->config_entry('modules|last_market_items_count')) . ' id, cat, item, price_type, price, price_jewel, jewel_type FROM DmN_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND server = :server ORDER BY add_date DESC');
 			$stmt->execute([':server' => $server]);
 			$items = $stmt->fetch_all();
 			if(!empty($items)){
@@ -61,7 +61,7 @@
 		
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		private function lastSold($server){
-			$stmt = $this->registry->website->db('web')->prepare('SELECT TOP ' . $this->registry->website->db('web')->sanitize_var((int)$this->config->config_entry('modules|last_market_items_count')) . ' id, cat, item, price_type, price, price_jewel, jewel_type FROM DmN_Market WHERE sold = 1 AND server = :server ORDER BY add_date DESC');
+			$stmt = $this->registry->website->db('web')->prepare('SELECT TOP ' . $this->registry->website->db('web')->escape((int)$this->config->config_entry('modules|last_market_items_count')) . ' id, cat, item, price_type, price, price_jewel, jewel_type FROM DmN_Market WHERE sold = 1 AND server = :server ORDER BY add_date DESC');
 			$stmt->execute([':server' => $server]);
 			$items = $stmt->fetch_all();
 			if(!empty($items)){

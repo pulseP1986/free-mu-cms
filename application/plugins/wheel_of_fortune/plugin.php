@@ -54,8 +54,7 @@
          * return mixed
          *
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        private function user_module()
+		private function user_module()
         {
 			//load website helper
 			$this->load->helper('website');
@@ -345,7 +344,6 @@
 			$this->load->view('plugins' . DS . $this->pluginaizer->get_plugin_class() . DS . 'views' . DS . 'default' . DS . $templateFile, $this->vars);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		public function my_rewards(){
 			//check if visitor has user privilleges
             if($this->pluginaizer->session->is_user()){
@@ -566,7 +564,6 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
 		public function claim_reward($id = ''){
 			//check if visitor has user privilleges
             if($this->pluginaizer->session->is_user()){
@@ -862,7 +859,6 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		public function spin($free = 0){
 			//check if visitor has user privilleges
             if($this->pluginaizer->session->is_user()){
@@ -1047,7 +1043,6 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		private function draw_chance(array $weightedValues){
 			$rand = mt_rand(1, (int)array_sum($weightedValues));
 
@@ -1248,8 +1243,7 @@
          * Set plugin data, create plugin config template, create sql schemes
          *
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function install()
+		public function install()
         {
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
@@ -1294,8 +1288,7 @@
          * Remove plugin data, delete plugin config, delete sql schemes
          *
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function uninstall()
+		public function uninstall()
         {
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){

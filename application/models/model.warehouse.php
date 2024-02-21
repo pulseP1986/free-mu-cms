@@ -17,7 +17,7 @@
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){ 
 				$unpack = unpack('H*', $this->vault_items['Items']);
-				$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
+				$this->vault_items['Items'] = $this->website->clean_hex($unpack[1]);
 				$this->vault_money = $this->vault_items['Money'];
 				return true;
 			} else{
@@ -25,16 +25,16 @@
 			}  
         }
 
-		public function load_items()
+		public function load_items($server)
         {
-            $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
+            $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $items = [];
             $i = 0;
             $x = 0;
             $y = 0;
              foreach($hex as $item){
                 $i++;
-                if($item != str_pad("", $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), "F")){
+                if($item != str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F")){
                     $this->iteminfo->itemData($item);
 												  
                     $items[$i]['item_id'] = $this->iteminfo->id;
@@ -66,36 +66,36 @@
             $this->total_items = $count;
         }
 
-		public function find_item_by_slot($slot)
+		public function find_item_by_slot($slot, $server)
         {
-            $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
+            $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $found = false;
-            if(isset($hex[$slot - 1]) && $hex[$slot - 1] != str_pad("", $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), "F")){
+            if(isset($hex[$slot - 1]) && $hex[$slot - 1] != str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F")){
                 $found = true;
                 $this->item = $hex[$slot - 1];
             }
             return $found;
         }
 
-		public function generate_new_item_by_slot($slot)
+		public function generate_new_item_by_slot($slot, $server)
         {
-            $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
+            $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             if(isset($hex[$slot - 1])){
-                $hex[$slot - 1] = str_pad("", $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), "F");
+                $hex[$slot - 1] = str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F");
             }
             $this->new_hex = implode('', $hex);
         }
 
-        public function insert_web_item($item = null)
+        public function insert_web_item($user, $server, $item = null)
         {
 			$item = ($item != null) ? $item : $this->item;
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Web_Storage (item, account, server, expires_on) VALUES (:item, :account, :server, :expires_on)');
-            return $stmt->execute([':item' => $item, ':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server']), ':expires_on' => strtotime('+' . $this->config->config_entry('warehouse|web_wh_item_expires_after'))]);
+            return $stmt->execute([':item' => $item, ':account' => $user, ':server' => $server, ':expires_on' => strtotime('+' . $this->config->config_entry('warehouse|web_wh_item_expires_after'))]);
         }
 
-        public function check_web_wh_item($id)
+        public function check_web_wh_item($id, $user, $server)
         {
-            return $this->website->db('web')->query('SELECT item FROM DmN_Web_Storage WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND is_removed = 0 AND expires_on > ' . time() . ' AND id = ' . $this->website->db('web')->sanitize_var($id) . '')->fetch();
+            return $this->website->db('web')->query('SELECT item FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . ' AND id = ' . $this->website->db('web')->escape($id) . '')->fetch();
         }
 
         public function set_removed_web_item($id)
@@ -110,11 +110,11 @@
             return $stmt->execute([':id' => $id]);
         }
 
-		public function load_web_items($page = 1, $item = '')
+		public function load_web_items($user, $server, $page = 1, $item = '')
         {
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('warehouse|web_items_per_page') * ((int)$page - 1);
-			$pp = ($item != '') ? 500 : $this->website->db('web')->sanitize_var((int)$this->config->config_entry('warehouse|web_items_per_page'));
-            $items = $this->website->db('web')->query('SELECT TOP ' . $pp . ' id, item, expires_on FROM DmN_Web_Storage WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND is_removed = 0 AND expires_on > ' . time() . ' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id FROM DmN_Web_Storage WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND is_removed = 0 AND expires_on > ' . time() . ' ORDER BY id DESC) ORDER BY id DESC');
+			$pp = ($item != '') ? 500 : $this->website->db('web')->escape((int)$this->config->config_entry('warehouse|web_items_per_page'));
+            $items = $this->website->db('web')->query('SELECT TOP ' . $pp . ' id, item, expires_on FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . ' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . ' ORDER BY id DESC) ORDER BY id DESC');
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $this->config->config_entry('warehouse|web_items_per_page')) + 1;
             foreach($items->fetch_all() as $value){
                 $this->iteminfo->itemData($value['item']);
@@ -148,13 +148,13 @@
             return $this->items;
         }
 		
-		public function list_web_items(){
-			return $this->website->db('web')->query('SELECT id, item FROM DmN_Web_Storage WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND is_removed = 0 AND expires_on > ' . time() . '')->fetch_all();
+		public function list_web_items($user, $server){
+			return $this->website->db('web')->query('SELECT id, item FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . '')->fetch_all();
 		}
 
-        public function count_total_web_items()
+        public function count_total_web_items($user, $server)
         {
-            $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Web_Storage WHERE account = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND is_removed = 0 AND expires_on > ' . time() . '');
+            $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . '');
         }
 
         public function update_warehouse($user, $server)
@@ -244,10 +244,10 @@
         public function check_shop_item($item = null)
         {
 			$check = ($item != null) ? $item : $this->item;
-            return $this->website->db('web')->query('SELECT id FROM DmN_Shop_Logs WHERE SUBSTRING(item_hex ,7 ,8) = \'' . $this->website->db('web')->sanitize_var(substr($check, 6, 8)) . '\'')->fetch();
+            return $this->website->db('web')->query('SELECT id FROM DmN_Shop_Logs WHERE SUBSTRING(item_hex ,7 ,8) = '.$this->website->db('web')->escape(substr($check, 6, 8)).'')->fetch();
         }
 
-		public function add_market_item($info, $price, $ptype, $time, $char, $highlight, $password = '', $item = null)
+		public function add_market_item($user, $server, $info, $price, $ptype, $time, $char, $highlight, $password = '', $item = null)
         {
 			$item = ($item != null) ? $item : $this->item;
 			
@@ -260,13 +260,13 @@
             }
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Market (cat, item, price_type, price, seller, add_date, active_till, serial, serial2, has_luck, has_skill, lvl, highlighted, char, server, has_ancient, has_exe_1, has_exe_2, has_exe_3, has_exe_4, has_exe_5, has_exe_6, has_exe_7, has_exe_8, has_exe_9, is_sm, is_bk, is_me, is_mg, is_dl, is_sum, is_rf, is_gl, is_rw, is_sl, is_gc, is_km, is_lm, is_ik, price_jewel, jewel_type, item_name, item_id, item_password)
 										VALUES 
-										(:cat, :item, :ptype, :price, :user, GETDATE(), \'' . $this->website->db('web')->sanitize_var(date('Ymd H:i:s', strtotime('+' . $time . ' days', time()))) . '\', :serial, :seriall, :luck, :skill, :lvl, :higlight, :char, :server, :has_ancient, :has_exe_a, :has_exe_b, :has_exe_c, :has_exe_d, :has_exe_e, :has_exe_f, :has_exe_h, :has_exe_i, :has_exe_j, :is_sm, :is_bk, :is_me, :is_mg, :is_dl, :is_sum, :is_rf, :is_gl, :is_rw, :is_sl, :is_gc, :is_km, :is_lm, :is_ik, :price_jewel, :jewel_type, :item_name, :item_id, :password)');
+										(:cat, :item, :ptype, :price, :user, GETDATE(), '.$this->website->db('web')->escape(date('Ymd H:i:s', strtotime('+' . $time . ' days', time()))).', :serial, :seriall, :luck, :skill, :lvl, :higlight, :char, :server, :has_ancient, :has_exe_a, :has_exe_b, :has_exe_c, :has_exe_d, :has_exe_e, :has_exe_f, :has_exe_h, :has_exe_i, :has_exe_j, :is_sm, :is_bk, :is_me, :is_mg, :is_dl, :is_sum, :is_rf, :is_gl, :is_rw, :is_sl, :is_gc, :is_km, :is_lm, :is_ik, :price_jewel, :jewel_type, :item_name, :item_id, :password)');
             $stmt->execute([
 				':cat' => $info['info']['cat'], 
 				':item' => $item, 
 				':ptype' => $ptype, 
 				':price' => $price, 
-				':user' => $this->session->userdata(['user' => 'username']), 
+				':user' => $user, 
 				':serial' => $info['info']['serial'], 
 				':seriall' => $info['info']['serial2'], 
 				':luck' => $info['luck'], 
@@ -274,7 +274,7 @@
 				':lvl' => $info['info']['lvl'], 
 				':higlight' => $highlight, 
 				':char' => $char,
-				':server' => $this->session->userdata(['user' => 'server']), 
+				':server' => $server, 
 				':has_ancient' => $info['info']['anc'], 
 				':has_exe_a' => $info['exe_opts'][0], 
 				':has_exe_b' => $info['exe_opts'][1], 
@@ -314,17 +314,15 @@
             return $stmt->fetch();
         }
 
-        public function log_deleted_item($user = '', $server = '', $by_admin = 0)
+        public function log_deleted_item($user, $server, $by_admin = 0)
         {
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
-            $server = ($user != '') ? $server : $this->session->userdata(['user' => 'server']);
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Warehouse_Delete_Log (account, server, item, date, deleted_by_admin) VALUES (:account, :server, :item, GETDATE(), :by_admin)');
             $stmt->execute([':account' => $user, ':server' => $server, ':item' => $this->item, ':by_admin' => $by_admin]);
         }
 
-        public function get_market_item_count()
+        public function get_market_item_count($user, $server)
         {
-            return $this->website->db('web')->query('SELECT COUNT(*) AS count FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND DATEDIFF(day, add_date, GETDATE()) = 0')->fetch();
+            return $this->website->db('web')->query('SELECT COUNT(*) AS count FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND DATEDIFF(day, add_date, GETDATE()) = 0')->fetch();
         }
 
         public function decrease_zen($account, $server, $money)
@@ -344,17 +342,9 @@
             $stmt = $this->website->db('game', $server)->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($server, 'wh_size') . ') as varbinary(' . $this->website->get_value_from_server($server, 'wh_size') . ')), 0, getdate())');
             $stmt->execute([':user' => $user]);
         }
-
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
-        } 
 		
 		public function checkAdditionalSlots($user, $server){
-			$check = $this->website->db('web')->query('SELECT slots FROM DmN_Market_Slots WHERE memb___id = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch()['slots'];
+			$check = $this->website->db('web')->query('SELECT slots FROM DmN_Market_Slots WHERE memb___id = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch()['slots'];
 			if($check == false){
 				return 0;
 			}

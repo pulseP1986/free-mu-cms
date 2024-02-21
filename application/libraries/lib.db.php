@@ -37,8 +37,7 @@
 			return $this->db;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function make_connection()
+		private function make_connection()
         {
             switch($this->driver){
                 case 'pdo_sqlsrv':
@@ -105,8 +104,7 @@
 			$this->db_conn->rollback();
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function query($query)
+		public function query($query)
         {
             try{
                 $this->query = $this->db_conn->query($query);
@@ -123,8 +121,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function cached_query($name, $query, $data = [], $cache_time = 60)
+		public function cached_query($name, $query, $data = [], $cache_time = 60)
         {
             if($this->config->config_entry('main|cache_type') == 'file'){
                 $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'cache']]);
@@ -196,19 +193,17 @@
             return $this->query->rowCount();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function escape($string, $param_type = PDO::PARAM_STR)
+		public function escape($string, $param_type = PDO::PARAM_STR)
         {
             if(is_int($string) || is_float($string))
                 return $string;
             if(($value = $this->db_conn->quote($string, $param_type)) !== false)
                 return $value; 
 			else
-                return "'" . addcslashes(str_replace("'", "''", $string), "\000\n\r\\\032") . "'";
+                return "'" . addcslashes(str_replace("'", "''", $this->sanitize_var($string)), "\000\n\r\\\032") . "'";
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function sanitize_var($var)
+		public function sanitize_var($var)
         {
             return (!preg_match('/^\-?\d+(\.\d+)?$/D', $var) || preg_match('/^0\d+$/D', $var)) ? preg_replace('/[\000\010\011\012\015\032\047\134]/', '', $var) : $var;
         }
@@ -228,8 +223,7 @@
             return $this->query->bindParam($parameter, $variable, $data_type, $length);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function last_insert_id()
+		public function last_insert_id()
         {
             return $this->db_conn->lastInsertId();
         }
@@ -240,8 +234,7 @@
             return $this->error[2];
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function log($query, $file = 'database_log.txt')
+		private function log($query, $file = 'database_log.txt')
         {
             $this->file = @fopen(APP_PATH . DS . 'logs' . DS . $file, 'a');
 			$mtime = microtime(true);
@@ -254,8 +247,7 @@
             @fclose($this->file);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_insert($table, $data)
+		public function get_insert($table, $data)
         {
             foreach($data as $curdata){
                 $this->fields[] = $curdata['field'];
@@ -264,10 +256,10 @@
                         $this->values[] = (int)$curdata['value'];
                         break;
                     case 's':
-                        $this->values[] = '\'' . $curdata['value'] . '\'';
+                        $this->values[] = $this->escape($curdata['value']);
                         break;
                     case 'v':
-                        $this->values[] = $curdata['value'];
+                        $this->values[] = $this->escape($curdata['value']);
                         break;
                     case 'd':
                         $this->values[] = '\'' . date('Ymd H:i:s', $curdata['value']) . '\'';
@@ -293,24 +285,21 @@
             return $this->queries;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_if_table_exists($table)
+		public function check_if_table_exists($table)
         {
-            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'' . $this->sanitize_var($table) . '\'')->fetch();
+            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N' . $this->escape($table) . '')->fetch();
 			return ($data != false) ? true : false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_if_column_exists($column, $table)
+		public function check_if_column_exists($column, $table)
         {
-            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $this->sanitize_var($table) . '\'  AND COLUMN_NAME = \'' . $this->sanitize_var($column) . '\'')->fetch();
+            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->escape($table) . '  AND COLUMN_NAME = ' . $this->escape($column) . '')->fetch();
 			return ($data != false) ? true : false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_column($column, $table, $info)
+		public function add_column($column, $table, $info)
         {
-            $query = 'ALTER TABLE ' . $this->sanitize_var($table) . ' ADD ' . $this->sanitize_var($column) . ' ' . $info['type'];
+            $query = 'ALTER TABLE ' . $this->escape($table) . ' ADD ' . $this->escape($column) . ' ' . $info['type'];
             if($info['identity'] == 1){
                 $query .= ' IDENTITY(1,1)';
             }
@@ -324,14 +313,12 @@
             return $this->query($query);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function remove_table($table)
+		public function remove_table($table)
         {
-            return $this->query('DROP TABLE ' . $this->sanitize_var($table) . '');
+            return $this->query('DROP TABLE ' . $this->escape($table) . '');
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function debug_pdo_query($raw_sql, $params = [])
+		private function debug_pdo_query($raw_sql, $params = [])
         {
             $keys = [];
             $values = $params;
@@ -383,8 +370,7 @@
             $this->make_connection();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function make_connection()
+		private function make_connection()
         {
             if(!extension_loaded('sqlsrv')){
                 throw new Exception('Please enable sqlsrv extension in your php.ini');
@@ -428,8 +414,7 @@
             return $this;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function execute($params = [], $dump = false)
+		public function execute($params = [], $dump = false)
         {
 			$this->stmt = sqlsrv_prepare($this->db_conn, $this->replace_named_params($this->query), $this->remove_keys_from_params($params));
 			if($this->stmt != false){
@@ -455,7 +440,6 @@
 			}
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		private function remove_keys_from_params($params){
 			$data = [];
 			foreach($params AS $key => $value){
@@ -464,7 +448,6 @@
 			return $data;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		private function replace_named_params($sql){
 			if(strpos($sql, ':') === false)
 				return $sql;
@@ -483,8 +466,7 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        function compile_binds($sql, $binds, $dump = false)
+		private function compile_binds($sql, $binds, $dump = false)
         {
             if(strpos($sql, ':') === false)
                 return $sql;
@@ -503,8 +485,7 @@
             return $sql;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function query($query)
+		public function query($query)
         {
             $this->stmt = sqlsrv_query($this->db_conn, $query);
             if($this->stmt != false){
@@ -521,8 +502,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function cached_query($name, $query, $data = [], $cache_time = 60)
+		public function cached_query($name, $query, $data = [], $cache_time = 60)
         {
             if($this->config->config_entry('main|cache_type') == 'file'){
                 $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'cache']]);
@@ -587,8 +567,7 @@
             return;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function last_insert_id()
+		public function last_insert_id()
         {
             $q = $this->query('SELECT @@IDENTITY AS id')->fetch();
             return $q['id'];
@@ -606,8 +585,7 @@
 			return $message;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_insert($table, $data)
+		public function get_insert($table, $data)
         {
             foreach($data as $curdata){
                 $this->fields[] = $curdata['field'];
@@ -616,10 +594,10 @@
                         $this->values[] = (int)$curdata['value'];
                         break;
                     case 's':
-                        $this->values[] = '\'' . $curdata['value'] . '\'';
+                        $this->values[] = $this->escape($curdata['value']);
                         break;
                     case 'v':
-                        $this->values[] = $curdata['value'];
+                        $this->values[] = $this->escape($curdata['value']);
                         break;
                     case 'd':
                         $this->values[] = '\'' . date('Ymd H:i:s', $curdata['value']) . '\'';
@@ -635,7 +613,6 @@
             return 'INSERT INTO ' . $table . ' (' . implode(', ', $this->fields) . ') VALUES (' . implode(', ', $this->values) . ')';
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
 		private function log($query, $file = 'database_log.txt')
         {
             $this->file = @fopen(APP_PATH . DS . 'logs' . DS . $file, 'a');
@@ -658,44 +635,38 @@
         {
             return $this->queries;
         }
+
+		public function escape($string)
+        {
+			if(is_int($string) || is_float($string))
+                return $string;
+            if(is_bool($string))
+                return ($string === false) ? 0 : 1;
+			if(is_null($string))
+                return 'NULL';	
+            return "'" . addcslashes(str_replace("'", "''", $this->sanitize_var($string)), "\000\n\r\\\032") . "'";
+        }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function sanitize_var($var)
+		public function sanitize_var($var)
         {
             return (!preg_match('/^\-?\d+(\.\d+)?$/D', $var) || preg_match('/^0\d+$/D', $var)) ? preg_replace('/[\000\010\011\012\015\032\047\134]/', '', $var) : $var;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function escape($str)
+		public function check_if_table_exists($table)
         {
-            if(is_string($str)){
-                $str = "'" . $this->sanitize_var($str) . "'";
-            } else if(is_bool($str)){
-                $str = ($str === false) ? 0 : 1;
-            } else if(is_null($str)){
-                $str = 'NULL';
-            }
-            return $str;
-        }
-		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_if_table_exists($table)
-        {
-            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'' . $this->sanitize_var($table) . '\'')->fetch();
+            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N' . $this->escape($table) . '')->fetch();
 			return ($data != false) ? true : false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_if_column_exists($column, $table)
+		public function check_if_column_exists($column, $table)
         {
-            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $this->sanitize_var($table) . '\'  AND COLUMN_NAME = \'' . $this->sanitize_var($column) . '\'')->fetch();
+            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->escape($table) . '  AND COLUMN_NAME = ' . $this->escape($column) . '')->fetch();
 			return ($data != false) ? true : false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_column($column, $table, $info)
+		public function add_column($column, $table, $info)
         {
-            $query = 'ALTER TABLE ' . $this->sanitize_var($table) . ' ADD ' . $this->sanitize_var($column) . ' ' . $info['type'];
+            $query = 'ALTER TABLE ' . $this->escape($table) . ' ADD ' . $this->escape($column) . ' ' . $info['type'];
             if($info['identity'] == 1){
                 $query .= ' IDENTITY(1,1)';
             }
@@ -709,9 +680,8 @@
             return $this->query($query);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function remove_table($table)
+		public function remove_table($table)
         {
-            return $this->query('DROP TABLE ' . $this->sanitize_var($table) . '');
+            return $this->query('DROP TABLE ' . $this->escape($table) . '');
         }
     }

@@ -91,7 +91,7 @@
 		
 		public function get_vip_package_title($vip_type = 1)
         {
-			return $this->website->db('web')->query('SELECT package_title, vip_time FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->sanitize_var($vip_type).'')->fetch();
+			return $this->website->db('web')->query('SELECT package_title, vip_time FROM DmN_Vip_Packages WHERE id = '.$this->website->db('web')->escape($vip_type).'')->fetch();
         }
 
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 		
@@ -123,25 +123,25 @@
 			$sql1 = 'WHERE ';
 			$sql2 = '';
 			if($acc != '' && $acc != '-'){
-				$sql1 .= 'memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND ';
-				$sql2 .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ';
+				$sql1 .= 'memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND ';
+				$sql2 .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' ';
 			}
 			if($server != '' && $server != 'All'){
 				if($sql1 != ''){
-					$sql1 .= 'server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND ';
+					$sql1 .= 'server = '.$this->website->db('web')->escape($server).' AND ';
 				} 
 				else{
-					$sql1 .= 'server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND ';
+					$sql1 .= 'server = '.$this->website->db('web')->escape($server).' AND ';
 				}
 				if($sql2 != ''){
-					$sql2 .= 'AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ';
+					$sql2 .= 'AND server = '.$this->website->db('web')->escape($server).' ';
 				} 
 				else{
-					$sql2 .= 'WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ';
+					$sql2 .= 'WHERE server = '.$this->website->db('web')->escape($server).' ';
 				}
 			}
                 
-			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, exchange_key, char_id, memb___id, server, claim_date FROM DmN_Item_Exchange_Log '.$sql1.' id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Item_Exchange_Log '.$sql2.' ORDER BY id DESC) ORDER BY id DESC'); 
+			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, exchange_key, char_id, memb___id, server, claim_date FROM DmN_Item_Exchange_Log '.$sql1.' id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Item_Exchange_Log '.$sql2.' ORDER BY id DESC) ORDER BY id DESC'); 
 
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -171,25 +171,25 @@
 			$sql1 = 'WHERE ';
 			$sql2 = '';
 			if($acc != '' && $acc != '-'){
-				$sql1 .= 'memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND ';
-				$sql2 .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ';
+				$sql1 .= 'memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND ';
+				$sql2 .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' ';
 			}
 			if($server != '' && $server != 'All'){
 				if($sql1 != ''){
-					$sql1 .= 'server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND ';
+					$sql1 .= 'server = '.$this->website->db('web')->escape($server).' AND ';
 				} 
 				else{
-					$sql1 .= 'server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND ';
+					$sql1 .= 'server = '.$this->website->db('web')->escape($server).' AND ';
 				}
 				if($sql2 != ''){
-					$sql2 .= 'AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ';
+					$sql2 .= 'AND server = '.$this->website->db('web')->escape($server).' ';
 				} 
 				else{
-					$sql2 .= 'WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ';
+					$sql2 .= 'WHERE server = '.$this->website->db('web')->escape($server).' ';
 				}
 			}
                 
-			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . '  id, memb___id, server, points FROM DmN_Item_Exchange_Points '.$sql1.' id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Item_Exchange_Points '.$sql2.' ORDER BY id DESC) ORDER BY id DESC'); 
+			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, memb___id, server, points FROM DmN_Item_Exchange_Points '.$sql1.' id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Item_Exchange_Points '.$sql2.' ORDER BY id DESC) ORDER BY id DESC'); 
 
 			$logs = [];
             foreach($items->fetch_all() as $value){
@@ -207,9 +207,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Item_Exchange_Log ' . $sql . '');
@@ -220,9 +220,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Item_Exchange_Points ' . $sql . '');
@@ -232,17 +232,11 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 		
 		public function vault($user, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Warehouse WHERE AccountId = :user');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($vault = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $vault['Items']);
-					$this->vars['vault_items'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->vars['vault_items'] = $this->clean_hex($vault['Items']);
-				}
+				$unpack = unpack('H*', $vault['Items']);
+				$this->vars['vault_items'] = $this->website->clean_hex($unpack[1]);
 				return true;
 			} 
 			return false;
@@ -251,17 +245,11 @@
 		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 		
 		public function inventory($char, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->website->db('game', $server)->prepare('SELECT ' . $sql . ' FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
-				if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $inv['Inventory']);
-					$this->char_info['Inventory'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->char_info['Inventory'] = $this->clean_hex($inv['Inventory']);
-				}
+				$unpack = unpack('H*', $inv['Inventory']);
+				$this->char_info['Inventory'] = $this->website->clean_hex($unpack[1]);
 			}  
         }
 
@@ -446,14 +434,5 @@
                 return ($status['ConnectStat'] == 0);
             }
             return true;
-        }
-
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 		
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
     }

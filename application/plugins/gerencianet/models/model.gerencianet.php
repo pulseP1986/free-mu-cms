@@ -150,12 +150,12 @@ class Mgerencianet extends model{
 	
 	public function load_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
         if (($acc == '' || $acc == '-') && $server == 'All')
-            $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Gerencianet_Transactions WHERE status = \'completed\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Gerencianet_Transactions ORDER BY id DESC) ORDER BY id DESC');
+            $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Gerencianet_Transactions WHERE status = \'completed\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Gerencianet_Transactions ORDER BY id DESC) ORDER BY id DESC');
         else{
             if (($acc != '' && $acc != '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Gerencianet_Transactions WHERE status = \'completed\' AND acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Gerencianet_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC');
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Gerencianet_Transactions WHERE status = \'completed\' AND acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Gerencianet_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC');
             else
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Gerencianet_Transactions WHERE status = \'completed\' AND acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Donate_Gerencianet_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Gerencianet_Transactions WHERE status = \'completed\' AND acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Donate_Gerencianet_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
         }
 
         foreach ($items->fetch_all() as $value){
@@ -185,9 +185,9 @@ class Mgerencianet extends model{
 	public function count_total_transactions($acc = '', $server = 'All'){
         $sql = '';
         if ($acc != '' && $acc != '-'){
-            $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+            $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
             if ($server != 'All'){
-                $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
             }
         }
 
@@ -231,9 +231,9 @@ class Mgerencianet extends model{
      */
 	
 	public function check_order_number($item){
-        $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_Gerencianet_Orders where hash = \'' . $this->website->db('web')->sanitize_var($item) . '\'');
+        $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_Gerencianet_Orders where hash = '.$this->website->db('web')->escape($item).'');
         if ($count == 1){
-            $this->order_details = $this->website->db('web')->query('SELECT amount, currency, account, server, credits, hash FROM DmN_Donate_Gerencianet_Orders where hash = \'' . $this->website->db('web')->sanitize_var($item) . '\'')->fetch();
+            $this->order_details = $this->website->db('web')->query('SELECT amount, currency, account, server, credits, hash FROM DmN_Donate_Gerencianet_Orders where hash = '.$this->website->db('web')->escape($item).'')->fetch();
             return true;
         } 
 		else{
@@ -251,7 +251,7 @@ class Mgerencianet extends model{
      */
 	
 	public function check_completed_transaction($item){
-        return $this->website->db('web')->query('SELECT amount, currency, acc, server, credits, status FROM DmN_Donate_Gerencianet_Transactions where order_hash = \'' . $this->website->db('web')->sanitize_var($item) . '\'')->fetch();
+        return $this->website->db('web')->query('SELECT amount, currency, acc, server, credits, status FROM DmN_Donate_Gerencianet_Transactions where order_hash = '.$this->website->db('web')->escape($item).'')->fetch();
     }
 	
 	/**
@@ -320,6 +320,6 @@ class Mgerencianet extends model{
     }
 	
 	public function findReferral($acc){
-		return $this->website->db('web')->query('SELECT refferer FROM DmN_Refferals WHERE refferal = \'' . $this->website->db('web')->sanitize_var($acc) . '\'')->fetch()['refferer'];
+		return $this->website->db('web')->query('SELECT refferer FROM DmN_Refferals WHERE refferal = '.$this->website->db('web')->escape($acc).'')->fetch()['refferer'];
 	}
 }

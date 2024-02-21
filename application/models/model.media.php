@@ -23,14 +23,14 @@
         public function load_wallpapers($page = 1)
         {
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('media|images_per_page') * ((int)$page - 1);
-            $gallery = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var((int)$this->config->config_entry('media|images_per_page')) . ' id, name FROM DmN_Gallery  WHERE section = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id FROM DmN_Gallery ORDER BY id DESC) ORDER BY id DESC')->fetch_all();
+            $gallery = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$this->config->config_entry('media|images_per_page')) . ' id, name FROM DmN_Gallery  WHERE section = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Gallery ORDER BY id DESC) ORDER BY id DESC')->fetch_all();
             return ($gallery) ? $gallery : false;
         }
 
         public function load_screens($page = 1)
         {
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('media|images_per_page') * ((int)$page - 1);
-            $gallery = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var((int)$this->config->config_entry('media|images_per_page')) . ' id, name FROM DmN_Gallery  WHERE section = 2 AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id FROM DmN_Gallery ORDER BY id DESC) ORDER BY id DESC')->fetch_all();
+            $gallery = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$this->config->config_entry('media|images_per_page')) . ' id, name FROM DmN_Gallery  WHERE section = 2 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Gallery ORDER BY id DESC) ORDER BY id DESC')->fetch_all();
             return ($gallery) ? $gallery : false;
         }
 

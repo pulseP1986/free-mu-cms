@@ -656,10 +656,10 @@
 		public function load_partner_logs($page = 1, $per_page = 25, $coupon = '')
         {
             if($coupon == '' || $coupon == '-')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if($coupon != '' && $coupon != '-')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->sanitize_var($coupon) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->sanitize_var($coupon) . '%\' ORDER BY id DESC) ORDER BY id DESC'); 
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' ORDER BY id DESC) ORDER BY id DESC'); 
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -678,12 +678,12 @@
         public function load_shop_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = '')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' ORDER BY id DESC) ORDER BY id DESC'); 
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); 
 				else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -709,10 +709,10 @@
         public function load_paypal_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date']), 'status' => $value['status'], 'payer_email' => $value['payer_email'], 'country' => $this->website->codeToCountryName($value['country'])];
@@ -723,10 +723,10 @@
         public function load_pagseguro_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -737,10 +737,10 @@
         public function load_interkassa_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -751,10 +751,10 @@
         public function load_cuenta_digital_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -765,10 +765,10 @@
         public function load_twocheckout_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date']), 'payer_email' => $value['payer_email']];
@@ -779,10 +779,10 @@
         public function load_pw_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 switch($value['type']){
@@ -804,10 +804,10 @@
         public function load_fortumo_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['payment_id'], 'sender' => $value['sender'], 'acc' => htmlspecialchars($value['account']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits']];
@@ -818,10 +818,10 @@
         public function load_paygol_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['message_id'], 'sender' => $value['sender'], 'country' => $value['country'], 'currency' => $value['currency'], 'price' => $value['price'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server'])];
@@ -832,10 +832,10 @@
         public function load_paycall_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_PayCall_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_PayCall_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -846,10 +846,10 @@
         public function load_market_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = '')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND sold_date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND sold_date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND sold_date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND sold_date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -895,7 +895,7 @@
 				$condition2 = 'WHERE ' . substr($this->sql_condition, 5);
 			}
 			
-			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' text, amount, date, account, server, ip FROM DmN_Account_Logs WHERE id Not IN (SELECT Top ' . $page . ' id FROM DmN_Account_Logs '.$condition2.' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . ''); 
+			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, amount, date, account, server, ip FROM DmN_Account_Logs WHERE id Not IN (SELECT Top ' . $page . ' id FROM DmN_Account_Logs '.$condition2.' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . ''); 
             foreach($items->fetch_all() as $value){
 				if($value['date'] instanceof \DateTime) {
 					$date = $value['date']->format(DATETIME_FORMAT);
@@ -918,10 +918,10 @@
         public function load_gm_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = '')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' text, date, account, server, ip FROM DmN_GM_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, date, account, server, ip FROM DmN_GM_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($date_from) . '\' AND \'' . $this->website->db('web')->sanitize_var($date_to) . '\' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -935,7 +935,7 @@
         {
             $sql = '';
             if($coupon != '' && $coupon != '-'){
-                $sql .= 'WHERE coupon like \'%' . $this->website->db('web')->sanitize_var($coupon) . '%\'';
+                $sql .= 'WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\'';
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Partner_Used_Coupons ' . $sql . '');
             return $count;
@@ -945,12 +945,12 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
                 if($from != '' && $to != ''){
-                    $sql .= ' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($from) . '\' AND \'' . $this->website->db('web')->sanitize_var($to) . '\'';
+                    $sql .= ' AND date BETWEEN '.$this->website->db('web')->escape($from).' AND '.$this->website->db('web')->escape($to).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(memb___id) AS count FROM DmN_Shop_Logs ' . $sql . '');
@@ -961,9 +961,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_Donate_Transactions ' . $sql . '');
@@ -974,9 +974,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_PagSeguro_Transactions ' . $sql . '');
@@ -987,9 +987,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_Donate_Interkassa_Transactions ' . $sql . '');
@@ -1000,9 +1000,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_Donate_CuentaDigital_Transactions ' . $sql . '');
@@ -1013,9 +1013,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_2CheckOut_Transactions ' . $sql . '');
@@ -1026,9 +1026,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE uid like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(uid) AS count FROM DmN_Donate ' . $sql . '');
@@ -1039,9 +1039,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(account) AS count FROM DmN_Donate_Fortumo ' . $sql . '');
@@ -1052,9 +1052,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_PayGoal_Log ' . $sql . '');
@@ -1065,9 +1065,9 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(acc) AS count FROM DmN_Donate_PayCall_Transactions ' . $sql . '');
@@ -1078,12 +1078,12 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE seller like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
                 if($from != '' && $to != ''){
-                    $sql .= ' AND sold_date BETWEEN \'' . $this->website->db('web')->sanitize_var($from) . '\' AND \'' . $this->website->db('web')->sanitize_var($to) . '\'';
+                    $sql .= ' AND sold_date BETWEEN '.$this->website->db('web')->escape($from).' AND '.$this->website->db('web')->escape($to).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(seller) AS count FROM DmN_Market_Logs ' . $sql . '');
@@ -1104,12 +1104,12 @@
         {
             $sql = '';
             if($acc != '' && $acc != '-'){
-                $sql .= 'WHERE  account like \'%' . $this->website->db('web')->sanitize_var($acc) . '%\'';
+                $sql .= 'WHERE  account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
                 if($server != 'All'){
-                    $sql .= ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                    $sql .= ' AND server = '.$this->website->db('web')->escape($server).'';
                 }
                 if($from != '' && $to != ''){
-                    $sql .= ' AND date BETWEEN \'' . $this->website->db('web')->sanitize_var($from) . '\' AND \'' . $this->website->db('web')->sanitize_var($to) . '\'';
+                    $sql .= ' AND date BETWEEN '.$this->website->db('web')->escape($from).' AND '.$this->website->db('web')->escape($to).'';
                 }
             }
             $count = $this->website->db('web')->snumrows('SELECT COUNT(account) AS count FROM DmN_GM_Logs ' . $sql . '');
@@ -1118,27 +1118,21 @@
 
         public function search_char_inventory($serial)
         {
-            return $this->game_db->query('SELECT Name FROM Character WHERE (charindex (0x' . $this->game_db->sanitize_var($serial) . ', Inventory) %16=4)')->fetch();
+            return $this->game_db->query('SELECT Name FROM Character WHERE (charindex (0x' . $this->game_db->escape($serial) . ', Inventory) %16=4)')->fetch();
         }
 
         public function search_warehouse($serial)
         {
-            return $this->game_db->query('SELECT AccountId FROM Warehouse WHERE (charindex (0x' . $this->game_db->sanitize_var($serial) . ', Items) %16=4)')->fetch();
+            return $this->game_db->query('SELECT AccountId FROM Warehouse WHERE (charindex (0x' . $this->game_db->escape($serial) . ', Items) %16=4)')->fetch();
         }
 
         public function get_vault_content($user, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Items' : 'CONVERT(IMAGE, Items) AS Items';
-			$stmt = $this->game_db->prepare('SELECT ' . $sql . ' FROM Warehouse WHERE AccountId = :user');
+			$stmt = $this->game_db->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){
-                if(in_array(DRIVER, ['sqlsrv', 'pdo_sqlsrv', 'pdo_dblib'])){
-					$unpack = unpack('H*', $this->vault_items['Items']);
-					$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
-				}
-				else{
-					$this->vault_items['Items'] = $this->clean_hex($this->vault_items['Items']);
-				}
+                $unpack = unpack('H*', $this->vault_items['Items']);
+                $this->vault_items['Items'] = $this->website->clean_hex($unpack[1]);
 				return $this->vault_items;
 			} else{
 				return false;
@@ -1240,11 +1234,11 @@
 
         public function get_inventory_content($char, $server)
         {
-			$sql = (DRIVER == 'pdo_odbc') ? 'Inventory' : 'CONVERT(IMAGE, Inventory) AS Inventory';
-			$stmt = $this->game_db->prepare('SELECT ' . $sql . ' FROM Character WHERE Name = :char');
+			$stmt = $this->game_db->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
 			$stmt->execute([':char' => $char]);
 			if($this->inventory_items = $stmt->fetch()){
-				$this->inventory_items['Inventory'] = $this->clean_hex($this->inventory_items['Inventory']);
+                $unpack = unpack('H*', $this->inventory_items['Inventory']);
+				$this->inventory_items['Inventory'] = $this->website->clean_hex($unpack[1]);
 			}       
         }
 
@@ -1766,7 +1760,7 @@
 
         public function xtremetop100_autoload_links($server)
         {
-            $query = $this->website->db('web')->query('SELECT id, votelink FROM DmN_Votereward WHERE server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id ASC');
+            $query = $this->website->db('web')->query('SELECT id, votelink FROM DmN_Votereward WHERE server = '.$this->website->db('web')->escape($server).' ORDER BY id ASC');
             $links = '';
             while($row = $query->fetch()){
                 if(preg_match('/\b(xtremetop\w+)\b/', $row['votelink'])){
@@ -1853,7 +1847,7 @@
 
         public function load_item_list($page = 1, $per_page = 25, $category = '')
         {
-            $category = ($category != '') ? 'WHERE item_cat = ' . $this->website->db('web')->sanitize_var((int)$category) : '';
+            $category = ($category != '') ? 'WHERE item_cat = ' . $this->website->db('web')->escape((int)$category) : '';
             $items = $this->website->db('web')->query('SELECT id, item_id, original_item_cat, item_cat, name, price, stick_level FROM DmN_Shopp ' . $category . ' ORDER BY  item_cat ASC, item_id ASC')->fetch_all();
             $this->count_items = count($items);
             $this->items_sql = array_slice($items, (int)(($page - 1) * $per_page), $per_page);
@@ -1932,12 +1926,12 @@
 
         private function add_to_price_list($id, $cat, $prices)
         {
-            return $this->website->db('web')->query('INSERT INTO DmN_Shop_Custom_Price_List (item_id, item_cat, price) VALUES (' . $this->website->db('web')->sanitize_var($id) . ', ' . $this->website->db('web')->sanitize_var($cat) . ', \'' . $this->website->db('web')->sanitize_var($prices) . '\')');
+            return $this->website->db('web')->query('INSERT INTO DmN_Shop_Custom_Price_List (item_id, item_cat, price) VALUES (' . $this->website->db('web')->escape($id) . ', ' . $this->website->db('web')->escape($cat) . ', '.$this->website->db('web')->escape($prices).')');
         }
 
         private function update_price_list($id, $cat, $prices)
         {
-            return $this->website->db('web')->query('UPDATE DmN_Shop_Custom_Price_List SET price = \'' . $this->website->db('web')->sanitize_var($prices) . '\' WHERE item_id = ' . $this->website->db('web')->sanitize_var($id) . ' AND item_cat = ' . $this->website->db('web')->sanitize_var($cat) . '');
+            return $this->website->db('web')->query('UPDATE DmN_Shop_Custom_Price_List SET price = '.$this->website->db('web')->escape($prices).' WHERE item_id = ' . $this->website->db('web')->escape($id) . ' AND item_cat = ' . $this->website->db('web')->escape($cat) . '');
         }
 
         public function delete_from_price_list($id)
@@ -2300,7 +2294,7 @@
 
         public function load_harmony_values($cat = 0, $hopt = 0)
         {
-            return $this->website->db('web')->query('SELECT hvalue, hname FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->sanitize_var($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->sanitize_var($hopt) . ' AND status = 1')->fetch_all();
+            return $this->website->db('web')->query('SELECT hvalue, hname FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->escape($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->escape($hopt) . ' AND status = 1')->fetch_all();
         }
 
         private function get_type($cat)
@@ -2334,7 +2328,7 @@
         {
             if($id == '')
                 return false;
-            $item = $this->website->db('web')->query('SELECT item_id, item_cat, exetype, name, luck, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, original_item_cat, total_bought, stick_level FROM DmN_Shopp WHERE id = ' . $this->website->db('web')->sanitize_var($id))->fetch();
+            $item = $this->website->db('web')->query('SELECT item_id, item_cat, exetype, name, luck, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, original_item_cat, total_bought, stick_level FROM DmN_Shopp WHERE id = ' . $this->website->db('web')->escape($id))->fetch();
             if($item){
                 $this->iteminfo->setItemData($item['item_id'], $item['original_item_cat'], (int)$this->website->get_value_from_server($server, 'item_size'));
                 $item['data'] = $this->iteminfo->item_data;
@@ -2347,7 +2341,7 @@
         {
             if($use == 1){
                 if(count($harmony) == 2){
-                    $check_harmony = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shop_Harmony WHERE hoption = ' . $this->website->db('web')->sanitize_var($harmony[0]) . ' AND hvalue = ' . $this->website->db('web')->sanitize_var($harmony[1]) . ' AND status = 1');
+                    $check_harmony = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shop_Harmony WHERE hoption = ' . $this->website->db('web')->escape($harmony[0]) . ' AND hvalue = ' . $this->website->db('web')->escape($harmony[1]) . ' AND status = 1');
                     return $check_harmony > 0;
                 } else{
                     return false;
@@ -2532,7 +2526,7 @@
 					}
 				}
 			}		
-            $accounts = $this->account_db->query('SELECT TOP ' . $per_page . ' m.memb_guid, m.memb___id, m.appl_days, m.dmn_country, m.activated, '.$partner.' d.viptime FROM MEMB_INFO AS m LEFT JOIN ['.WEB_DB.'].dbo.DmN_Vip_Users AS d ON(m.memb___id Collate Database_Default = d.memb___id Collate Database_Default) WHERE memb_guid NOT IN (SELECT Top ' . $this->website->db('web')->sanitize_var($page) . ' memb_guid FROM MEMB_INFO ' . $condition2 . ' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . '');
+            $accounts = $this->account_db->query('SELECT TOP ' . $per_page . ' m.memb_guid, m.memb___id, m.appl_days, m.dmn_country, m.activated, '.$partner.' d.viptime FROM MEMB_INFO AS m LEFT JOIN ['.WEB_DB.'].dbo.DmN_Vip_Users AS d ON(m.memb___id Collate Database_Default = d.memb___id Collate Database_Default) WHERE memb_guid NOT IN (SELECT Top ' . $this->website->db('web')->escape($page) . ' memb_guid FROM MEMB_INFO ' . $condition2 . ' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . '');
             foreach($accounts->fetch_all() as $row){
                 $this->accounts[] = ['id' => $row['memb_guid'], 'memb___id' => htmlspecialchars($row['memb___id']), 'reg_date' => $row['appl_days'], 'country' => $this->website->codeToCountryName($row['dmn_country']), 'server' => $server, 'activated' => $row['activated']];
             }
@@ -2543,7 +2537,7 @@
         {
 																			 
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
-            $accounts = $this->game_db->query('SELECT TOP ' . $per_page . ' AccountId, Name, '.$this->website->get_char_id_col($server).' FROM Character WHERE '.$this->website->get_char_id_col($server).' NOT IN (SELECT Top ' . $this->website->db('web')->sanitize_var($pos) . ' '.$this->website->get_char_id_col($server).' FROM Character ORDER BY Name ASC)  ORDER BY Name ASC');
+            $accounts = $this->game_db->query('SELECT TOP ' . $per_page . ' AccountId, Name, '.$this->website->get_char_id_col($server).' FROM Character WHERE '.$this->website->get_char_id_col($server).' NOT IN (SELECT Top ' . $this->website->db('web')->escape($pos) . ' '.$this->website->get_char_id_col($server).' FROM Character ORDER BY Name ASC)  ORDER BY Name ASC');
             foreach($accounts->fetch_all() as $row){
                 $this->chars[] = ['id' => $row[$this->website->get_char_id_col($server)], 'name' => htmlspecialchars($row['Name']), 'account' => htmlspecialchars($row['AccountId'])];
                 $pos++;
@@ -2553,7 +2547,7 @@
 
         public function search_account_list($account)
         {
-            $stmt = $this->account_db->query('SELECT memb_guid, memb___id, appl_days FROM MEMB_INFO WHERE memb___id LIKE \'' . $this->account_db->sanitize_var($account) . '%\' ORDER BY appl_days DESC');
+            $stmt = $this->account_db->query('SELECT memb_guid, memb___id, appl_days FROM MEMB_INFO WHERE memb___id LIKE \'' . $this->account_db->escape($account) . '%\' ORDER BY appl_days DESC');
             foreach($stmt->fetch_all() as $row){
                 $this->accounts[] = ['id' => (int)$row['memb_guid'], 'memb___id' => htmlspecialchars($row['memb___id']), 'reg_date' => $row['appl_days']];
             }
@@ -2630,23 +2624,23 @@
         }
 		
 		public function countPurchasesReffered($account, $server){
-			return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Partner_Share_Log WHERE partner = \''.$this->website->db('web')->sanitize_var($account).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'');
+			return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Partner_Share_Log WHERE partner = '.$this->website->db('web')->escape($account).' AND server = '.$this->website->db('web')->escape($server).'');
 		}
 		
 		public function totalAmountShares($account, $server){
-			return $this->website->db('web')->snumrows('SELECT SUM(fullAmount) AS count FROM DmN_Partner_Share_Log WHERE partner = \''.$this->website->db('web')->sanitize_var($account).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'');
+			return $this->website->db('web')->snumrows('SELECT SUM(fullAmount) AS count FROM DmN_Partner_Share_Log WHERE partner = '.$this->website->db('web')->escape($account).' AND server = '.$this->website->db('web')->escape($server).'');
 		}
 		
 		public function earnedAmountShares($account, $server){
-			return $this->website->db('web')->snumrows('SELECT SUM(amount) AS count FROM DmN_Partner_Share_Log WHERE partner = \''.$this->website->db('web')->sanitize_var($account).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'');
+			return $this->website->db('web')->snumrows('SELECT SUM(amount) AS count FROM DmN_Partner_Share_Log WHERE partner = '.$this->website->db('web')->escape($account).' AND server = '.$this->website->db('web')->escape($server).'');
 		}
 		
 		public function accountsReferred($account, $server){
-			return $this->website->db('account', $server)->snumrows('SELECT count(memb___id) AS count FROM MEMB_INFO WHERE dmn_linked_to = \''.$this->website->db('web')->sanitize_var($account).'\'');
+			return $this->website->db('account', $server)->snumrows('SELECT count(memb___id) AS count FROM MEMB_INFO WHERE dmn_linked_to = '.$this->website->db('web')->escape($account).'');
 		}
 		
 		public function findStreamLog($account){
-			return $this->website->db('web')->query('SELECT TOP 10 SUM(stream_time) AS time, day FROM DmN_Partner_Stream_Log  WHERE username = \''.$this->website->db('web')->sanitize_var($account).'\' GROUP BY [day] ORDER By day DESC')->fetch_all();
+			return $this->website->db('web')->query('SELECT TOP 10 SUM(stream_time) AS time, day FROM DmN_Partner_Stream_Log  WHERE username = '.$this->website->db('web')->escape($account).' GROUP BY [day] ORDER By day DESC')->fetch_all();
 		}
 		
 		public function get_account_data_for_partner($acc)
@@ -2763,7 +2757,7 @@
                     if($pw['result'] == 'found'){
                         $update_pw = false;
                     } else{
-                        $pw = !$this->is_hex($pw['result']) ? '0x' . strtoupper(bin2hex($pw['result'])) : '0x' . $pw['result'];
+                        $pw = !$this->website->is_hex($pw['result']) ? '0x' . strtoupper(bin2hex($pw['result'])) : '0x' . $pw['result'];
                     }
                 }
             }
@@ -2884,7 +2878,7 @@
             foreach($chars as $char){
                 $c .= ',\'' . $char['Name'] . '\'';
             }
-            return $stmt = $this->game_db->query('DELETE FROM Character WHERE AccountId = \'' . $this->game_db->sanitize_var($account) . '\' AND Name IN (' . substr($c, 1, strlen($c)) . ')');
+            return $stmt = $this->game_db->query('DELETE FROM Character WHERE AccountId = \'' . $this->game_db->escape($account) . '\' AND Name IN (' . substr($c, 1, strlen($c)) . ')');
         }
 
         public function delete_account_log($account, $server)
@@ -2925,7 +2919,7 @@
 
         public function load_ban_list($type)
         {
-            $query = $this->website->db('web')->query('SELECT name, server, time, type, is_permanent, reason FROM DmN_Ban_List WHERE type = ' . $this->website->db('web')->sanitize_var($type) . ' ORDER BY time ASC, is_permanent ASC');
+            $query = $this->website->db('web')->query('SELECT name, server, time, type, is_permanent, reason FROM DmN_Ban_List WHERE type = ' . $this->website->db('web')->escape($type) . ' ORDER BY time ASC, is_permanent ASC');
             while($row = $query->fetch()){
                 $this->bans[] = ['name' => htmlspecialchars($row['name']), 'type' => ($row['type'] == 1) ? 'Account' : 'Character', 'time' => ($row['is_permanent'] == 0) ? (($row['time'] < time()) ? 'Ban Expired' : date(DATETIME_FORMAT, $row['time'])) : 'Permanent Ban', 'reason' => $row['reason']];
             }
@@ -3016,7 +3010,7 @@
             } else{
                 $order_by2 = ' DESC';
             }
-            $query = $this->website->db('web')->query('SELECT TOP ' . $this->website->db('web')->sanitize_var($per_page) . ' id, subject, create_time, creator_account, status, department FROM DmN_Support_Tickets WHERE id NOT IN (SELECT TOP ' . $this->website->db('web')->sanitize_var($per_page * ($page - 1)) . ' id FROM DmN_Support_Tickets ORDER BY id DESC) ' . $and . ' ORDER BY ' . $order_by . $order_by2 . '');
+            $query = $this->website->db('web')->query('SELECT TOP ' . $this->website->db('web')->escape($per_page) . ' id, subject, create_time, creator_account, status, department FROM DmN_Support_Tickets WHERE id NOT IN (SELECT TOP ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Support_Tickets ORDER BY id DESC) ' . $and . ' ORDER BY ' . $order_by . $order_by2 . '');
             foreach($query->fetch_all() as $value){
                 $this->items[] = [
 					'id' => $value['id'], 
@@ -3043,7 +3037,7 @@
 
         private function reply_count($id)
         {
-            return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Support_Replies WHERE ticket_id = ' . $this->website->db('web')->sanitize_var($id) . '');
+            return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Support_Replies WHERE ticket_id = ' . $this->website->db('web')->escape($id) . '');
         }
 
         public function count_total_tickets($d_filter, $p_filter, $s_filter)
@@ -3066,7 +3060,7 @@
         public function change_ticket_status($ids, $status)
         {
             $in = implode(", ", array_keys($ids));
-            $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET status = :status WHERE id IN(' . $this->website->db('web')->sanitize_var($in) . ')');
+            $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET status = :status WHERE id IN(' . $this->website->db('web')->escape($in) . ')');
             return $stmt->execute([':status' => $status]);
         }
 
@@ -3775,7 +3769,7 @@
             $this->get_recipient_list($servers);
             $this->recipients[0] = call_user_func_array('array_merge', $this->recipients);
             if($this->create_recipient_list($this->arrayUniqueMulti($this->recipients[0], true), $subject)){
-                return $this->website->db('web')->query('UPDATE DmN_Bulk_Emails SET sending_started = NULL, sending_finished = NULL, sent_to = 0, failed = 0, is_finished = 0 WHERE seo_subject = \'' . $this->website->db('web')->sanitize_var($subject) . '\'');
+                return $this->website->db('web')->query('UPDATE DmN_Bulk_Emails SET sending_started = NULL, sending_finished = NULL, sent_to = 0, failed = 0, is_finished = 0 WHERE seo_subject = '.$this->website->db('web')->escape($subject).'');
             }
             return false;
         }
@@ -3868,22 +3862,6 @@
                 }
             }
             return false;
-        }
-		
-		private function is_hex($hex_code) {
-			return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
-		}
-		
-        private function clean_hex($data)
-        {
-			
-            if(!$this->is_hex($data)){
-                $data = bin2hex($data);
-            }
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
 		
 		public function sent_ticket_reply_email_user($user, $server, $uemail, $subject, $id)

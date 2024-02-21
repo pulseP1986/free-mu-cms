@@ -56,22 +56,24 @@
 				
 				$serverCode = false;
 				
-                if($this->website->is_multiple_accounts() == true){
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
-					if(defined('CUSTOM_SERVER_CODES') && array_key_exists($_POST['server'], CUSTOM_SERVER_CODES)){
-						$serverCode = CUSTOM_SERVER_CODES[$_POST['server']];
-					}
-                } 
+				$servers = $this->website->server_list();
+				$default = array_keys($servers)[0];
+				
+				if(!isset($_POST['server'])){
+					$server = $default;
+				} 
 				else{
-                    $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-					if(defined('CUSTOM_SERVER_CODES')){
-						$serverlist = $this->website->server_list();
-						$first = key(reset($serverlist));
-						if(array_key_exists($first, CUSTOM_SERVER_CODES)){
-							$serverCode = CUSTOM_SERVER_CODES[$first];
-						}
+					if(!array_key_exists($_POST['server'], $servers)){
+						$server = $default;
 					}
-                }
+					else{
+						$server = $_POST['server'];
+					}
+				}
+				
+				if(defined('CUSTOM_SERVER_CODES') && array_key_exists($server, CUSTOM_SERVER_CODES)){
+					$serverCode = CUSTOM_SERVER_CODES[$server];
+				}
 				
                 $this->load->model('account');
 				
@@ -84,7 +86,7 @@
                     if(!$this->Maccount->valid_username($_POST['user'], 'a-zA-Z0-9_-', [$this->vars['config']['min_username'], $this->vars['config']['max_username']]))
                         $this->errors[] = __('The username you entered is invalid.');
 					else{
-                        if($this->Maccount->check_duplicate_account($_POST['user']) != false)
+                        if($this->Maccount->check_duplicate_account($_POST['user'], $server) != false)
                             $this->errors[] = __('The username you entered is already taken.');
                     }
                 }
@@ -118,7 +120,7 @@
 							if(!isset($this->vars['config']['accounts_per_email']) || $this->vars['config']['accounts_per_email'] <= 0){
 								$this->vars['config']['accounts_per_email'] = 1;
 							}
-							$emailsCount = $this->Maccount->count_accounts_by_email($_POST['email']);
+							$emailsCount = $this->Maccount->count_accounts_by_email($_POST['email'], $server);
 
                             if($emailsCount >= $this->vars['config']['accounts_per_email'])
                                 $this->errors[] = __('The email-address you entered is already in use.');
@@ -175,7 +177,7 @@
                         if(!$this->Maccount->valid_id($_POST['referrer']))
                             $this->errors[] = __('The referrer id you entered is invalid.'); 
 						else{
-                            if(!$referrer_account = $this->Maccount->check_acc_by_guid($_POST['referrer'], $_POST['server']))
+                            if(!$referrer_account = $this->Maccount->check_acc_by_guid($_POST['referrer'], $server))
                                 $this->errors[] = __('The referrer you entered doesn\'t exists.');
                         }
                     }
@@ -197,13 +199,13 @@
                     if($this->vars['config']['email_validation'] == 1){
                         $this->Maccount->set_activation(1);
                     }
-                    if($this->Maccount->prepare_account($this->vars['config']['req_email'], $this->vars['config']['req_secret'], $serverCode)){
+                    if($this->Maccount->prepare_account($server, $this->vars['config']['req_email'], $this->vars['config']['req_secret'], $serverCode)){
                         $this->Maccount->log_user_ip($_POST['user']);
                         if($this->config->values('referral_config', 'active') == 1){
                             if(isset($_POST['referrer'])){
                                 $this->Maccount->insert_referrer($referrer_account['memb___id']);
                                 if($this->config->values('referral_config', 'reward_on_registration') != 0){
-                                    if(!$this->Maccount->check_referral_ip()){
+                                    if(!$this->Maccount->check_referral_ip($server)){
                                         $this->Maccount->add_ref_reward_after_reg($referrer_account['memb___id']);
                                     }
                                 }
@@ -214,10 +216,9 @@
                         if(!empty($vip_data)){
                             $vip_query_config = $this->config->values('vip_query_config');
                             foreach($vip_data AS $key => $data){
-                                $server = isset($_POST['server']) ? $_POST['server'] : $data['server'];
                                 $viptime = time() + $data['vip_time'];
                                 $this->Mshop->insert_vip_package($data['id'], $viptime, $_POST['user'], $server);
-                                $this->Mshop->add_server_vip($viptime, $data['server_vip_package'], $data['connect_member_load'], $vip_query_config, $_POST['user']);
+                                $this->Mshop->add_server_vip($viptime, $data['server_vip_package'], $data['connect_member_load'], $vip_query_config, $_POST['user'], $server);
                                 $this->Maccount->add_account_log('Added free vip ' . $data['package_title'] . ' package', 0, $_POST['user'], $server);
                             }
                         }
@@ -320,13 +321,8 @@
         {
             $this->vars['config'] = $this->config->values('registration_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
-                $this->vars['server'] = ($server != false) ? $server : '';
+                $this->vars['server'] = $server;
                 if(isset($_POST['add_fb_account'])){
-                    if($this->website->is_multiple_accounts() == true){
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
-                    } else{
-                        $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-                    }
                     $this->load->model('account');
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
@@ -338,7 +334,7 @@
                         if(!$this->Maccount->valid_username($_POST['user']))
                             $this->vars['errors'][] = __('The username you entered is invalid.'); 
 						else{
-                            if($this->Maccount->check_duplicate_account($_POST['user']) != false)
+                            if($this->Maccount->check_duplicate_account($_POST['user'], $server) != false)
                                 $this->vars['errors'][] = __('The username you entered is already taken.');
                         }
                     }
@@ -354,7 +350,8 @@
                             }
                         }
                         if(!isset($_POST['rpass']))
-                            $this->vars['errors'][] = __('You haven\'t entered the password-repetition.'); else{
+                            $this->vars['errors'][] = __('You haven\'t entered the password-repetition.'); 
+						else{
                             if($_POST['pass'] !== $_POST['rpass'])
                                 $this->vars['errors'][] = __('The two passwords you entered do not match.');
                         }
@@ -363,9 +360,11 @@
                     }
                     if($this->vars['config']['req_secret'] == 1){
                         if(!isset($_POST['fpas_ques']))
-                            $this->vars['errors'][] = __('You haven\'t selected secret question.'); else{
+                            $this->vars['errors'][] = __('You haven\'t selected secret question.'); 
+						else{
                             if(!$this->website->secret_questions($_POST['fpas_ques']))
-                                $this->vars['errors'][] = __('Please select valid secret question.'); else{
+                                $this->vars['errors'][] = __('Please select valid secret question.'); 
+							else{
                                 if(!isset($_POST['fpas_answ']))
                                     $this->vars['errors'][] = __('You haven\'t entered an secret answer.');
                             }
@@ -376,7 +375,7 @@
                             $this->vars['errors'] = $this->vars['errors'][0];
                     } else{
                         $this->Maccount->set_activation(0);
-                        if($this->Maccount->prepare_account(1, $this->vars['config']['req_secret'])){
+                        if($this->Maccount->prepare_account($server, 1, $this->vars['config']['req_secret'])){
                             $this->Maccount->check_fb_user($email, $server);
                             $this->Maccount->clear_login_attemts();
                             header('Location: ' . $this->config->base_url . 'account-panel');
@@ -407,11 +406,16 @@
 
         public function activation($code = '', $server = '')
         {
-            if($this->website->is_multiple_accounts() == true){
-                $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($server, true)]);
-            } else{
-                $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_default_account_database()]);
-            }
+            $servers = $this->website->server_list();
+			$default = array_keys($servers)[0];
+			if($server == ''){
+				$server = $default;
+			} 
+			else{
+				if(!array_key_exists($server, $servers)){
+					$server = $default;
+				}
+			}
             $this->load->model('account');
             $this->vars['config'] = $this->config->values('registration_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
@@ -419,13 +423,13 @@
                 if(strlen($code) <> 40){
                     $this->vars['error'] = __('Invalid account activation code.');
                 } else{
-                    if(!$activation = $this->Maccount->check_activation_code($code)){
+                    if(!$activation = $this->Maccount->check_activation_code($code, $server)){
                         $this->vars['error'] = __('Activation code doesn\'t exist in our database.');
                     } else{
                         if($activation['activated'] == 1){
                             $this->vars['error'] = __('This account is already activated.');
                         } else{
-                            if($this->Maccount->activate_account($activation['memb___id'], $code)){
+                            if($this->Maccount->activate_account($activation['memb___id'], $server, $code)){
                                 if($this->config->values('email_config', 'welcome_email') == 1){
                                     $this->Maccount->send_welcome_email($activation['memb___id'], $activation['mail_addr']);
                                 }
@@ -456,11 +460,19 @@
                     $this->vars['not_required'] = __('Account validation not required');
                 } else{
                     if(isset($_POST['email'])){																   
-                        if($this->website->is_multiple_accounts() == true){
-                            $server = $_POST['server'];
-                        } else{
-                            $server = '';
-                        }
+						$servers = $this->website->server_list();
+						$default = array_keys($servers)[0];
+						if(!isset($_POST['server'])){
+							$server = $default;
+						} 
+						else{
+							if(!array_key_exists($_POST['server'], $servers)){
+								$server = $default;
+							}
+							else{
+								$server = $_POST['server'];
+							}
+						}
                         $this->load->model('account');
                         foreach($_POST as $key => $value){
                             $this->Maccount->$key = trim($value);

@@ -28,32 +28,32 @@
 		public function count_total_items($server)
         {
             if($this->filter == true){
-                $this->query .= 'AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                $this->query .= 'AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'';
             } else{
-                $this->query .= 'active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1  AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                $this->query .= 'active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1  AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'';
             }
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market ' . $this->query);
         }
 
-		public function count_total_history_items()
+		public function count_total_history_items($user, $server)
         {
-            $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\'');
+            $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'');
         }
 		
 		public function get_item_list_from_cat($cat, $server)
         {
-            return $this->website->db('web')->query('SELECT DISTINCT item_name, item_id FROM DmN_Market WHERE cat = ' . $this->website->db('web')->sanitize_var($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY item_id ASC')->fetch_all();
+            return $this->website->db('web')->query('SELECT DISTINCT item_name, item_id FROM DmN_Market WHERE cat = ' . $this->website->db('web')->escape($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY item_id ASC')->fetch_all();
         }
 		
 		public function count_items_by_id($id, $cat, $server){
 			$times = [60, 70, 80, 90, 100];
-			$count = $this->website->db('web')->cached_query('market_item_count_' . $id.'_'.$cat.'_'.$server, 'SELECT COUNT(id) AS count FROM DmN_Market WHERE item_id = ' . $this->website->db('web')->sanitize_var($id) . ' AND cat = ' . $this->website->db('web')->sanitize_var($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'', $times[array_rand($times)]);
+			$count = $this->website->db('web')->cached_query('market_item_count_' . $id.'_'.$cat.'_'.$server, 'SELECT COUNT(id) AS count FROM DmN_Market WHERE item_id = ' . $this->website->db('web')->escape($id) . ' AND cat = ' . $this->website->db('web')->escape($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'', $times[array_rand($times)]);
 			return $count[0]['count'];
 		}
 		
 		public function count_items_by_cat($cat, $server){
 			$times = [60, 70, 80, 90, 100];
-			$count = $this->website->db('web')->cached_query('market_item_count_'.$cat.'_'.$server, 'SELECT COUNT(id) AS count FROM DmN_Market WHERE cat = ' . $this->website->db('web')->sanitize_var($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'', $times[array_rand($times)]);
+			$count = $this->website->db('web')->cached_query('market_item_count_'.$cat.'_'.$server, 'SELECT COUNT(id) AS count FROM DmN_Market WHERE cat = ' . $this->website->db('web')->escape($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'', $times[array_rand($times)]);
 			return $count[0]['count'];
 		}
 
@@ -119,7 +119,7 @@
                     $this->vars['lvl'] = array_filter($this->vars['lvl'], 'is_numeric');
                     if(!empty($this->vars['lvl'])){
                         $_SESSION['filter']['lvl'] = $this->vars['lvl'];
-                        $this->query .= 'lvl IN (' . $this->website->db('web')->sanitize_var(implode(',', $this->vars['lvl'])) . ') ';
+                        $this->query .= 'lvl IN (' . $this->website->db('web')->escape(implode(',', $this->vars['lvl'])) . ') ';
                     } else{
                         unset($_SESSION['filter']['lvl']);
                     }
@@ -128,19 +128,19 @@
                 }
                 if(isset($this->vars['luck'])){
                     $_SESSION['filter']['luck'] = is_numeric($this->vars['luck']) ? $this->vars['luck'] : 0;
-                    $this->query .= isset($this->vars['lvl']) ? 'AND has_luck = ' . $this->website->db('web')->sanitize_var($_SESSION['filter']['luck']) . ' ' : 'has_luck = ' . $this->website->db('web')->sanitize_var($_SESSION['filter']['luck']) . ' ';
+                    $this->query .= isset($this->vars['lvl']) ? 'AND has_luck = ' . $this->website->db('web')->escape($_SESSION['filter']['luck']) . ' ' : 'has_luck = ' . $this->website->db('web')->escape($_SESSION['filter']['luck']) . ' ';
                 } else{
                     unset($_SESSION['filter']['luck']);
                 }
                 if(isset($this->vars['skill'])){
                     $_SESSION['filter']['skill'] = is_numeric($this->vars['skill']) ? $this->vars['skill'] : 0;
-                    $this->query .= (isset($this->vars['lvl']) || isset($this->vars['luck'])) ? 'AND has_skill = ' . $this->website->db('web')->sanitize_var($_SESSION['filter']['skill']) . ' ' : 'has_skill = ' . $this->website->db('web')->sanitize_var($_SESSION['filter']['skill']) . ' ';
+                    $this->query .= (isset($this->vars['lvl']) || isset($this->vars['luck'])) ? 'AND has_skill = ' . $this->website->db('web')->escape($_SESSION['filter']['skill']) . ' ' : 'has_skill = ' . $this->website->db('web')->escape($_SESSION['filter']['skill']) . ' ';
                 } else{
                     unset($_SESSION['filter']['skill']);
                 }
                 if(isset($this->vars['ancient'])){
                     $_SESSION['filter']['ancient'] = is_numeric($this->vars['ancient']) ? $this->vars['ancient'] : 0;
-                    $this->query .= (isset($this->vars['lvl']) || isset($this->vars['luck']) || isset($this->vars['skill'])) ? 'AND has_ancient = ' . $this->website->db('web')->sanitize_var($_SESSION['filter']['ancient']) . ' ' : 'has_ancient = ' . $this->website->db('web')->sanitize_var($_SESSION['filter']['ancient']) . ' ';
+                    $this->query .= (isset($this->vars['lvl']) || isset($this->vars['luck']) || isset($this->vars['skill'])) ? 'AND has_ancient = ' . $this->website->db('web')->escape($_SESSION['filter']['ancient']) . ' ' : 'has_ancient = ' . $this->website->db('web')->escape($_SESSION['filter']['ancient']) . ' ';
                 } else{
                     unset($_SESSION['filter']['ancient']);
                 }
@@ -150,9 +150,9 @@
                     $exe_count = count($this->vars['excellent']);
                     foreach($this->vars['excellent'] as $key => $exe){
                         if($exe_count > 1 && ($key != $exe_count - 1)){
-                            $exe_query .= 'has_exe_' . $this->website->db('web')->sanitize_var((int)$exe) . ' = 1 AND ';
+                            $exe_query .= 'has_exe_' . $this->website->db('web')->escape((int)$exe) . ' = 1 AND ';
                         } else{
-                            $exe_query .= 'has_exe_' . $this->website->db('web')->sanitize_var((int)$exe) . ' = 1 ';
+                            $exe_query .= 'has_exe_' . $this->website->db('web')->escape((int)$exe) . ' = 1 ';
                         }
                     }
                     $this->query .= (isset($this->vars['lvl']) || isset($this->vars['luck']) || isset($this->vars['skill']) || isset($this->vars['ancient'])) ? 'AND ' . $exe_query : $exe_query;
@@ -163,7 +163,7 @@
                     $this->vars['cat'] = array_filter($this->vars['cat'], 'is_numeric');
                     if(!empty($this->vars['cat'])){
                         $_SESSION['filter']['cat'] = $this->vars['cat'];
-                        $this->query .= ((isset($this->vars['lvl']) && !empty($this->vars['lvl'])) || isset($this->vars['luck']) || isset($this->vars['skill']) || isset($this->vars['ancient']) || isset($this->vars['excellent'])) ? 'AND cat IN (' . $this->website->db('web')->sanitize_var(implode(',', $this->vars['cat'])) . ') ' : 'cat IN (' . $this->website->db('web')->sanitize_var(implode(',', $this->vars['cat'])) . ') ';
+                        $this->query .= ((isset($this->vars['lvl']) && !empty($this->vars['lvl'])) || isset($this->vars['luck']) || isset($this->vars['skill']) || isset($this->vars['ancient']) || isset($this->vars['excellent'])) ? 'AND cat IN (' . $this->website->db('web')->escape(implode(',', $this->vars['cat'])) . ') ' : 'cat IN (' . $this->website->db('web')->escape(implode(',', $this->vars['cat'])) . ') ';
                     } else{
                         unset($_SESSION['filter']['cat']);
                     }
@@ -231,12 +231,12 @@
 		public function load_items($page, $server)
         {
             if(!isset($_SESSION['filter']['query'])){
-                $this->query = 'WHERE active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                $this->query = 'WHERE active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'';
             } else{
-                $this->query .= ' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'';
+                $this->query .= ' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'';
             }
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('market|items_per_page') * ((int)$page - 1);
-            $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var((int)$this->config->config_entry('market|items_per_page')) . ' id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market ' . $this->query . ' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id FROM DmN_Market ' . $this->query . ' ORDER BY id DESC) ORDER BY id DESC');
+            $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$this->config->config_entry('market|items_per_page')) . ' id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market ' . $this->query . ' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Market ' . $this->query . ' ORDER BY id DESC) ORDER BY id DESC');
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $this->config->config_entry('market|items_per_page')) + 1;
             foreach($items->fetch_all() as $value){
                 $this->iteminfo->itemData($value['item']);
@@ -275,12 +275,12 @@
 
         public function load_all_items_names($server)
         {
-            return $this->website->db('web')->query('SELECT DISTINCT(item_name) FROM DmN_Market WHERE item_name != \'NULL\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'')->fetch_all();
+            return $this->website->db('web')->query('SELECT DISTINCT(item_name) FROM DmN_Market WHERE item_name != \'NULL\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
         }
 
 		public function load_search_items($name, $server)
         {
-            $items = $this->website->db('web')->query('SELECT id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market WHERE item_name LIKE \'%' . $this->website->db('web')->sanitize_var($name) . '%\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC');
+            $items = $this->website->db('web')->query('SELECT id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market WHERE item_name LIKE \'%' . $this->website->db('web')->escape($name) . '%\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC');
             $pos = 1;
             foreach($items->fetch_all() as $value){
                 $this->iteminfo->itemData($value['item']);
@@ -322,14 +322,14 @@
             $where = '';
             if($cat != 'all'){
                 $catId = $this->catNameToId($cat);
-                $where .= 'WHERE cat = ' . $this->website->db('web')->sanitize_var($catId) . '';
+                $where .= 'WHERE cat = ' . $this->website->db('web')->escape($catId) . '';
             }
             if($id != 'all' && is_numeric($id)){
                 $item_id = $id;
                 if(isset($catId)){
-                    $where .= ' AND item_id = ' . $this->website->db('web')->sanitize_var($item_id) . '';
+                    $where .= ' AND item_id = ' . $this->website->db('web')->escape($item_id) . '';
                 } else{
-                    $where .= 'WHERE item_id = ' . $this->website->db('web')->sanitize_var($item_id) . '';
+                    $where .= 'WHERE item_id = ' . $this->website->db('web')->escape($item_id) . '';
                 }
             }
             if($class != 'all'){
@@ -380,7 +380,7 @@
 			if($where == ''){
 				$where = 'WHERE 1 = 1';
 			}
-            $items = $this->website->db('web')->query('SELECT id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market ' . $where . ' AND active_till > GETDATE() AND ACTIVE = 1 AND sold != 1 AND removed != 1 AND SERVER = \'' . $this->website->db('web')->sanitize_var($server) . '\' ORDER BY id DESC');
+            $items = $this->website->db('web')->query('SELECT id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market ' . $where . ' AND active_till > GETDATE() AND ACTIVE = 1 AND sold != 1 AND removed != 1 AND SERVER = '.$this->website->db('web')->escape($server).' ORDER BY id DESC');
             $pos = 1;
             foreach($items->fetch_all() as $value){
                 $this->iteminfo->itemData($value['item']);
@@ -452,9 +452,9 @@
 			}
         }
         
-        public function check_amount_of_jewels($amount, $type, $vault)
+        public function check_amount_of_jewels($amount, $type, $vault, $server)
         {
-            $hex = str_split($vault, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
+            $hex = str_split($vault, $this->website->get_value_from_server($server, 'item_size'));
             if($type == 4){ //chaos
                 $search = [1 => [12, 15], 2 => [12, 141]];
             }
@@ -475,7 +475,7 @@
             }
             $found_items = [];
             foreach($hex as $key => $it){
-                if($it != str_pad("", $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), "F")){
+                if($it != str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F")){
                     $this->iteminfo->itemData($it);
                     if($this->iteminfo->id == $search[1][1] && $this->iteminfo->type == $search[1][0]){
                         $found_items[$key] = [
@@ -517,12 +517,12 @@
             return false;
         }
         
-        public function charge_jewels($slots, $vault)
+        public function charge_jewels($slots, $vault, $server)
         {
-            $hex = str_split($vault, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
+            $hex = str_split($vault, $this->website->get_value_from_server($server, 'item_size'));
             if(!empty($slots[0])){
                 foreach($slots[0] as $k1 => $s1){
-                    $hex[$s1] = str_pad("", $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), "F");
+                    $hex[$s1] = str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F");
                 }
             }
             if(!empty($slots[1])){
@@ -598,10 +598,10 @@
             return $jewel;
         }
 
-		public function load_history_items($page)
+		public function load_history_items($user, $server, $page)
         {
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('market|items_per_page') * ((int)$page - 1);
-            $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->sanitize_var((int)$this->config->config_entry('market|items_per_page')) . ' id, item, price, price_type, active, sold, removed, price_jewel, jewel_type FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' AND id Not IN (SELECT Top ' . $this->website->db('web')->sanitize_var($per_page) . ' id FROM DmN_Market WHERE seller = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'username'])) . '\' AND server = \'' . $this->website->db('web')->sanitize_var($this->session->userdata(['user' => 'server'])) . '\' ORDER BY id DESC) ORDER BY id DESC');
+            $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$this->config->config_entry('market|items_per_page')) . ' id, item, price, price_type, active, sold, removed, price_jewel, jewel_type FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $this->config->config_entry('market|items_per_page')) + 1;
             foreach($items->fetch_all() as $value){
                 $this->iteminfo->itemData($value['item']);
@@ -610,13 +610,13 @@
                 } else{
                     switch($value['price_type']){
                         case 1:
-                            $price = round(($value['price'] / 100) * $this->config->config_entry('market|sell_tax') + $value['price']) . ' ' . $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_1');
+                            $price = round(($value['price'] / 100) * $this->config->config_entry('market|sell_tax') + $value['price']) . ' ' . $this->website->translate_credits(1, $server);
                             break;
                         case 2:
-                            $price = round(($value['price'] / 100) * $this->config->config_entry('market|sell_tax') + $value['price']) . ' ' . $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_2');
+                            $price = round(($value['price'] / 100) * $this->config->config_entry('market|sell_tax') + $value['price']) . ' ' . $this->website->translate_credits(2, $server);
                             break;
                         case 3:
-                            $price = $this->website->zen_format(round(($value['price'] / 100) * $this->config->config_entry('market|sell_tax') + $value['price'])) . ' ' . $this->config->config_entry('credits_' . $this->session->userdata(['user' => 'server']) . '|title_3');
+                            $price = $this->website->zen_format(round(($value['price'] / 100) * $this->config->config_entry('market|sell_tax') + $value['price'])) . ' ' . $this->website->translate_credits(3, $server);
                             break;
                     }
                 }
@@ -636,29 +636,29 @@
             return $this->items;
         }
 
-        public function load_item_from_market($id)
+        public function load_item_from_market($id, $server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 item, price, price_type, seller, add_date, active_till, cat, char, server, price_jewel, jewel_type, item_password AS password FROM DmN_Market WITH (UPDLOCK) WHERE id = :id AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND removed != 1 AND server = :server');
-            $stmt->execute([':id' => (int)$id, ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':id' => (int)$id, ':server' => $server]);
             if($this->item_info = $stmt->fetch()){
                 return true;
             }
             return false;
         }
 
-		public function check_item_in_maket($id){
+		public function check_item_in_maket($id, $server){
 			$stmt = $this->website->db('web')->prepare('SELECT TOP 1 item FROM DmN_Market WHERE id = :id AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND removed != 1 AND server = :server');
-			$stmt->execute([':id' => (int)$id, ':server' => $this->session->userdata(['user' => 'server'])]);
+			$stmt->execute([':id' => (int)$id, ':server' => $server]);
 			if($stmt->fetch()){
 				return true;
 			}
 			return false;
 		}
 		
-        public function load_item_from_market_for_history($id)
+        public function load_item_from_market_for_history($id, $server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 item, price, price_type, seller, add_date, active_till, active, sold, removed, cat, char, server FROM DmN_Market WITH (UPDLOCK) WHERE id = :id AND server = :server');
-            $stmt->execute([':id' => $id, ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':id' => $id, ':server' => $server]);
             if($this->item_info = $stmt->fetch()){
                 return true;
             }
@@ -710,12 +710,12 @@
         }
 		
         public function addSlots($user, $server){
-			$check = $this->website->db('web')->query('SELECT slots FROM DmN_Market_Slots WHERE memb___id = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'')->fetch();
+			$check = $this->website->db('web')->query('SELECT slots FROM DmN_Market_Slots WHERE memb___id = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch();
 			if($check == false){
-				$this->website->db('web')->query('INSERT INTO DmN_Market_Slots (memb___id, server, slots) VALUES (\''.$this->website->db('web')->sanitize_var($user).'\', \''.$this->website->db('web')->sanitize_var($server).'\', 10)');
+				$this->website->db('web')->query('INSERT INTO DmN_Market_Slots (memb___id, server, slots) VALUES ('.$this->website->db('web')->escape($user).', '.$this->website->db('web')->escape($server).', 10)');
 			}
 			else{
-				$this->website->db('web')->query('UPDATE DmN_Market_Slots SET slots = slots +10 WHERE memb___id = \''.$this->website->db('web')->sanitize_var($user).'\' AND server = \''.$this->website->db('web')->sanitize_var($server).'\'');
+				$this->website->db('web')->query('UPDATE DmN_Market_Slots SET slots = slots +10 WHERE memb___id = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'');
 			}
 		}
     }

@@ -671,8 +671,8 @@
 									$this->load->model('account');
 									$this->vars['vip_data'] = $this->pluginaizer->Mshop->check_vip($this->vars['reward_list'][$type]['vip_type'], $this->pluginaizer->session->userdata(['user' => 'server']));
 									$viptime = time() + $this->vars['vip_data']['vip_time'];
-									$this->pluginaizer->Mshop->insert_vip_package($this->vars['reward_list'][$type]['vip_type'], $viptime);
-									$this->pluginaizer->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config);
+									$this->pluginaizer->Mshop->insert_vip_package($this->vars['reward_list'][$type]['vip_type'], $viptime, $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
+									$this->pluginaizer->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config, $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
 									$this->pluginaizer->Maccount->set_vip_session($viptime, $this->vars['vip_data']);																				
 								}
 								if(!empty($this->vars['reward_list'][$type]['items'])){
@@ -1042,8 +1042,8 @@
 										$this->load->model('account');
 										$this->vars['vip_data'] = $this->pluginaizer->Mshop->check_vip($this->vars['reward_list'][$type]['vip_type'], $this->pluginaizer->session->userdata(['user' => 'server']));
 										$viptime = time() + $this->vars['vip_data']['vip_time'];
-										$this->pluginaizer->Mshop->insert_vip_package($this->vars['reward_list'][$type]['vip_type'], $viptime);
-										$this->pluginaizer->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config);
+										$this->pluginaizer->Mshop->insert_vip_package($this->vars['reward_list'][$type]['vip_type'], $viptime, $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
+										$this->pluginaizer->Mshop->add_server_vip($viptime, $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $vip_query_config, $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
 										$this->pluginaizer->Maccount->set_vip_session($viptime, $this->vars['vip_data']);																				
 									}
 									if(!empty($this->vars['reward_list'][$type]['items'])){

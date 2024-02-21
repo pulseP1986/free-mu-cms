@@ -17,10 +17,11 @@
             parent::__construct();
         }
 
-		public function load_items($page = 1, $per_page = 20, $columns = 4, $category = '')
+		public function load_items($server, $page = 1, $per_page = 20, $columns = 4, $category = '')
         {
             if($category != '')
-                $this->category = 'AND item_cat = ' . $this->website->db('web')->sanitize_var($this->website->c($category)) . ''; else{
+                $this->category = 'AND item_cat = ' . $this->website->db('web')->escape($category) . ''; 
+            else{
                 $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
                 $cat_list = '';
                 foreach($load_cat_list as $key => $category){
@@ -29,13 +30,13 @@
                         $cat_list .= $category_data[0] . ',';
                     }
                 }
-                $this->category = 'AND item_cat IN (' . $this->website->db('web')->sanitize_var($this->website->c(substr($cat_list, 0, -1))) . ')';
+                $this->category = 'AND item_cat IN (' . $this->website->db('web')->escape(substr($cat_list, 0, -1)) . ')';
             }
             $items = $this->website->db('web')->query('SELECT id, item_id, item_cat, name, original_item_cat, stick_level, price FROM DmN_Shopp WHERE price >= 1 ' . $this->category . ' ORDER BY  item_cat ASC, item_id ASC')->fetch_all();
             $this->count_items = count($items);
             $this->items_sql = array_slice($items, (int)(($page - 1) * $per_page), $per_page);
             foreach($this->items_sql as $value){
-				if($this->iteminfo->setItemData($value['item_id'], $value['original_item_cat'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
+				if($this->iteminfo->setItemData($value['item_id'], $value['original_item_cat'], $this->website->get_value_from_server($server, 'item_size'))){
 					$class = $this->iteminfo->canEquip(true);
 				} 
 				else{
@@ -62,7 +63,7 @@
 		public function get_items($ids)
 		{
 
-			$stmt = $this->website->db('web')->prepare('SELECT id, item_id, item_cat, name, stick_level FROM DmN_Shopp WHERE id IN(' . $this->website->db('web')->sanitize_var($ids) . ') AND price >= 1');
+			$stmt = $this->website->db('web')->prepare('SELECT id, item_id, item_cat, name, stick_level FROM DmN_Shopp WHERE id IN(' . $this->website->db('web')->escape($ids) . ') AND price >= 1');
 			$stmt->execute();
 
 			foreach ($stmt->fetch_all() as $key => $value) {
@@ -78,27 +79,27 @@
 
 		}
 
-		public function get_item_info($id = '')
+		public function get_item_info($server, $id = '')
         {
             if($id == '')
                 return false;
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, item_id, item_cat, exetype, name, luck, price, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, payment_type, original_item_cat, total_bought, stick_level FROM DmN_Shopp WHERE id = :id AND price >= 1');
             $stmt->execute([':id' => (int)$id]);
             if($item = $stmt->fetch()){
-				if($this->iteminfo->setItemData($item['item_id'], $item['original_item_cat'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
+				if($this->iteminfo->setItemData($item['item_id'], $item['original_item_cat'], $this->website->get_value_from_server($server, 'item_size'))){
 					$item['data'] = $this->iteminfo->item_data;
 					$item['image'] = $this->itemimage->load($item['item_id'], $item['original_item_cat'], $item['stick_level']);
 					$item['ancient_info'] = $this->webshop->load_ancient_settings();
-					$item['socket_info'] = $this->socket_list($item['use_sockets'], $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|check_socket_part_type'), $item['exetype'], $item['original_item_cat']);
-					$item['price_p'] = $this->discount($item['price']);
+					$item['socket_info'] = $this->socket_list($item['use_sockets'], $this->config->config_entry('shop_' . $server . '|check_socket_part_type'), $item['exetype'], $item['original_item_cat']);
+					$item['price_p'] = $this->discount($item['price'], $server);
 					$price_info = $this->load_custom_item_price($item['item_id'], $item['original_item_cat']);
 					if($price_info != false){
-						if(array_key_exists($this->session->userdata(['user' => 'server']), $price_info)){
-							if($price_info[$this->session->userdata(['user' => 'server'])] <= 0){
+						if(array_key_exists($server, $price_info)){
+							if($price_info[$server] <= 0){
 								return 'disabled';
 							} else{
-								$item['price'] = $price_info[$this->session->userdata(['user' => 'server'])];
-								$item['price_p'] = $this->discount($price_info[$this->session->userdata(['user' => 'server'])]);
+								$item['price'] = $price_info[$server];
+								$item['price_p'] = $this->discount($price_info[$server], $server);
 							}
 						}
 					}
@@ -124,14 +125,14 @@
 
         public function load_harmony_values($cat = 0, $hopt = 0)
         {
-            return $this->website->db('web')->query('SELECT hvalue, hname FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->sanitize_var($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->sanitize_var($hopt) . ' AND status = 1')->fetch_all();
+            return $this->website->db('web')->query('SELECT hvalue, hname FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->escape($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->escape($hopt) . ' AND status = 1')->fetch_all();
         }
 
 		public function check_harmony($use = 0, $harmony = [])
         {
             if($use == 1){
                 if(count($harmony) == 2){
-                    $check_harmony = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shop_Harmony WHERE hoption = ' . $this->website->db('web')->sanitize_var($harmony[0]) . ' AND hvalue = ' . $this->website->db('web')->sanitize_var($harmony[1]) . ' AND status = 1');
+                    $check_harmony = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shop_Harmony WHERE hoption = ' . $this->website->db('web')->escape($harmony[0]) . ' AND hvalue = ' . $this->website->db('web')->escape($harmony[1]) . ' AND status = 1');
                     return $check_harmony > 0;
                 } else{
                     return false;
@@ -142,13 +143,13 @@
 
         public function get_harmony_price($cat = 0, $hopt = 0, $hval = 0)
         {
-            $info = $this->website->db('web')->query('SELECT TOP 1 price FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->sanitize_var($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->sanitize_var($hopt) . ' AND hvalue = ' . $this->website->db('web')->sanitize_var($hval) . ' AND status = 1')->fetch();
+            $info = $this->website->db('web')->query('SELECT TOP 1 price FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->escape($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->escape($hopt) . ' AND hvalue = ' . $this->website->db('web')->escape($hval) . ' AND status = 1')->fetch();
             return $this->discount($info['price']);
         }
 
         public function get_socket_price($socket)
         {
-            $info = $this->website->db('web')->query('SELECT TOP 1 socket_price FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->sanitize_var($socket) . ' AND status != 0')->fetch();
+            $info = $this->website->db('web')->query('SELECT TOP 1 socket_price FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND status != 0')->fetch();
             return $this->discount($info['socket_price']);
         }
 
@@ -168,17 +169,17 @@
 		public function check_sockets_part_type($exe_type, $socket, $seed, $cat)
         {
             $exe_type = ($cat <= 5) ? 1 : 0;
-            return $this->website->db('web')->query('SELECT seed, socket_id, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->sanitize_var($socket) . ' AND seed = ' . $this->website->db('web')->sanitize_var($seed) . ' AND status != 0 AND socket_part_type IN (-1, ' . $exe_type . ')')->fetch();
+            return $this->website->db('web')->query('SELECT seed, socket_id, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND seed = ' . $this->website->db('web')->escape($seed) . ' AND status != 0 AND socket_part_type IN (-1, ' . $exe_type . ')')->fetch();
         }
 
         public function check_sockets($socket, $seed)
         {
-            return $this->website->db('web')->query('SELECT seed, socket_id, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->sanitize_var($socket) . ' AND seed = ' . $this->website->db('web')->sanitize_var($seed) . ' AND status != 0')->fetch();
+            return $this->website->db('web')->query('SELECT seed, socket_id, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND seed = ' . $this->website->db('web')->escape($seed) . ' AND status != 0')->fetch();
         }
 
         public function is_socket_item($id, $cat)
         {
-            return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shopp WHERE item_id = ' . $this->website->db('web')->sanitize_var($id) . ' AND original_item_cat = ' . $this->website->db('web')->sanitize_var($cat) . ' AND use_sockets = 1');
+            return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shopp WHERE item_id = ' . $this->website->db('web')->escape($id) . ' AND original_item_cat = ' . $this->website->db('web')->escape($cat) . ' AND use_sockets = 1');
         }
 
 		public function generate_serial($server)
@@ -189,18 +190,18 @@
             return $data;
         }
 
-		public function generate_serial2($count = 1, $server)
+		public function generate_serial2($count, $server)
         {
-			$query = $this->website->db('game', $server)->query('EXEC WZ_GetItemSerial2 ' . this->website->db('game', $server)->sanitize_var($count) . '');
+			$query = $this->website->db('game', $server)->query('EXEC WZ_GetItemSerial2 ' . this->website->db('game', $server)->escape($count) . '');
             $data = $query->fetch();
             $query->close_cursor();
             return $data;
         }
 
-        public function discount($price)
+        public function discount($price, $server)
         {
-            $disc = (strtotime($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|discount_time')) >= time()) ? $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|discount') : 0;
-            return ($disc == 1) ? floor($price - (($price / 100) * $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|discount_perc'))) : $price;
+            $disc = (strtotime($this->config->config_entry('shop_' . $server . '|discount_time')) >= time()) ? $this->config->config_entry('shop_' . $server . '|discount') : 0;
+            return ($disc == 1) ? floor($price - (($price / 100) * $this->config->config_entry('shop_' . $server . '|discount_perc'))) : $price;
         }
 
 		public function get_vault_content($user, $server)
@@ -209,19 +210,11 @@
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){ 
 				$unpack = unpack('H*', $this->vault_items['Items']);
-				$this->vault_items['Items'] = $this->clean_hex($unpack[1]);
+				$this->vault_items['Items'] = $this->website->clean_hex($unpack[1]);
 				return $this->vault_items;
 			} else{
 				return false;
 			}            
-        }
-
-		private function clean_hex($data)
-        {
-            if(substr_count($data, "\0")){
-                $data = str_replace("\0", '', $data);
-            }
-            return strtoupper($data);
         }
 		
 		public function check_space($items, $item_x, $item_y, $multiplier = 120, $size = 32, $hor = 8, $ver = 15, $add_to_slot = false)
@@ -297,10 +290,10 @@
             $stmt->execute([':id' => $id, ':cat' => $cat]);
         }
 
-        public function log_purchase($hex, $price, $method)
+        public function log_purchase($user, $server, $hex, $price, $method)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Shop_Logs (memb___id, server, item_hex, date, price, price_type, ip) VALUES (:user, :server, :hex, GETDATE(), :price, :price_text, :ip)');
-            $stmt->execute([':user' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server']), ':hex' => $hex, ':price' => $price, ':price_text' => $method, ':ip' => $this->website->ip()]);
+            $stmt->execute([':user' => $user, ':server' => $server, ':hex' => $hex, ':price' => $price, ':price_text' => $method, ':ip' => $this->website->ip()]);
         }
 
         private function get_type($cat)
@@ -315,49 +308,49 @@
                 return 1;
         }
 
-        public function add_item_to_card($hex, $price, $payment_type)
+        public function add_item_to_card($user, $server, $hex, $price, $payment_type)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Shop_Card (account, item_hex, price, price_type, server, time_added) VALUES (:account, :item_hex, :price, :price_type, :server, :time_added)');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':item_hex' => $hex, ':price' => $price, ':price_type' => $payment_type, ':server' => $this->session->userdata(['user' => 'server']), ':time_added' => time()]);
+            $stmt->execute([':account' => $user, ':item_hex' => $hex, ':price' => $price, ':price_type' => $payment_type, ':server' => $server, ':time_added' => time()]);
         }
 
-        public function load_card_items($type = 1)
+        public function load_card_items($user, $server, $type = 1)
         {
             $stmt = $this->website->db('web')->prepare('SELECT id, item_hex, price FROM DmN_Shop_Card WHERE account = :account AND price_type = :type AND server = :server AND bought = 0 AND time_added >= :time_until_expires');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':type' => $type, ':server' => $this->session->userdata(['user' => 'server']), ':time_until_expires' => time() - $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|card_item_expires')]);
+            $stmt->execute([':account' => $user, ':type' => $type, ':server' => $server, ':time_until_expires' => time() - $this->config->config_entry('shop_' . $server . '|card_item_expires')]);
             return $stmt->fetch_all();
         }
 
-        public function item_exist_in_cart($id)
+        public function item_exist_in_cart($user, $server, $id)
         {
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, item_hex, price, price_type FROM DmN_Shop_Card WHERE account = :account AND id = :id AND server = :server AND bought = 0 AND time_added >= :time_until_expires');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':id' => $id, ':server' => $this->session->userdata(['user' => 'server']), ':time_until_expires' => time() - $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|card_item_expires')]);
+            $stmt->execute([':account' => $user, ':id' => $id, ':server' => $server, ':time_until_expires' => time() - $this->config->config_entry('shop_' . $server . '|card_item_expires')]);
             return $stmt->fetch();
         }
 
-        public function remove_item_from_cart($id)
+        public function remove_item_from_cart($user, $server, $id)
         {
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Shop_Card WHERE account = :account AND id = :id AND server = :server AND bought = 0');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':id' => $id, ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':account' => $user, ':id' => $id, ':server' => $server]);
         }
 
-        public function change_cart_item_status($hex)
+        public function change_cart_item_status($user, $server, $hex)
         {
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Card SET bought = 1 WHERE account = :account AND item_hex = :hex AND server = :server AND bought = 0');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':hex' => $hex, ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':account' => $user, ':hex' => $hex, ':server' => $server]);
         }
 
-        public function get_not_added_item_price($hex)
+        public function get_not_added_item_price($user, $server, $hex)
         {
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 price FROM DmN_Shop_Card WHERE account = :account AND item_hex = :hex AND server = :server AND bought = 0');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':hex' => $hex, ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':account' => $user, ':hex' => $hex, ':server' => $server]);
             return $stmt->fetch();
         }
 
-        public function change_name_history()
+        public function change_name_history($user, $server)
         {
             $stmt = $this->website->db('web')->prepare('SELECT old_name, new_name, change_date FROM DmN_ChangeName_History WHERE account = :account AND server = :server ORDER BY change_date DESC');
-            $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
+            $stmt->execute([':account' => $user, ':server' => $server]);
             return $stmt->fetch_all();
         }
 
@@ -392,10 +385,8 @@
             return $stmt->fetch();
         }
 
-        public function load_vip_packages($server = false)
+        public function load_vip_packages($server)
         {
-			if(!$server)
-				$server = $this->session->userdata(['user' => 'server']);
             $stmt = $this->website->db('web')->prepare('SELECT [id]
                                               ,[package_title]
                                               ,[price]
@@ -426,7 +417,7 @@
 
         public function load_registration_vip_packages($server = '')
         {
-            $srv = ($server != '') ? ' AND server = \'' . $this->website->db('web')->sanitize_var($server) . '\'' : '';
+            $srv = ($server != '') ? ' AND server = '.$this->website->db('web')->escape($server).'' : '';
             return $this->website->db('web')->query('SELECT [id]
                                               ,[package_title]
                                               ,[price]
@@ -451,31 +442,21 @@
                                               ,[server_bonus_info] FROM DmN_Vip_Packages WHERE is_registration_package = 1 ' . $srv . '')->fetch_all();
         }
 
-        public function check_existing_vip_package($user = false, $server = false)
+        public function check_existing_vip_package($user, $server)
         {
-			if(!$user)
-				$user = $this->session->userdata(['user' => 'username']);
-			if(!$server)
-				$server = $this->session->userdata(['user' => 'server']);
             $stmt = $this->website->db('web')->prepare('SELECT viptype, viptime FROM DmN_Vip_Users WHERE memb___id = :account AND server = :server');
             $stmt->execute([':account' => $user, ':server' => $server]);
             return $stmt->fetch();
         }
 
-		public function update_vip_package($id, $viptime, $user = false, $server = false)
+		public function update_vip_package($id, $viptime, $user, $server)
         {
-			if(!$user)
-				$user = $this->session->userdata(['user' => 'username']);
-			if(!$server)
-				$server = $this->session->userdata(['user' => 'server']);
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Vip_Users SET viptype = :id, viptime = :viptime WHERE memb___id = :account AND server = :server');
             return $stmt->execute([':id' => $id, ':viptime' => $viptime, ':account' => $user, ':server' => $server]);
         }
 
-        public function insert_vip_package($id, $viptime, $user = '', $server = '')
+        public function insert_vip_package($id, $viptime, $user, $server)
         {
-            $user = ($user != '') ? $user : $this->session->userdata(['user' => 'username']);
-            $server = ($server != '') ? $server : $this->session->userdata(['user' => 'server']);
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Vip_Users (viptype, viptime, memb___id, server) VALUES (:id, :viptime, :account, :server)');
             return $stmt->execute([':id' => $id, ':viptime' => $viptime, ':account' => $user, ':server' => $server]);
         }
@@ -485,10 +466,8 @@
             $stmt->execute([':account' => $user, ':server' => $server]);
 		}
 
-		public function add_server_vip($viptime, $viptype, $connect_member_load, $query_config, $user = false, $server = false)
+		public function add_server_vip($viptime, $viptype, $connect_member_load, $query_config, $user, $server)
         {
-            $user = ($user != false) ? $user : $this->session->userdata(['user' => 'username']);
-			$server = ($server != false) ? $server : $this->session->userdata(['user' => 'server']);
             if($viptype != null){
                 if(substr_count($viptype, '|') > 0){
                     $vip = explode('|', $viptype);

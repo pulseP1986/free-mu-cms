@@ -69,7 +69,7 @@
         private function exclude_list($list, $bound = 'c.Name', $quote = true, $stmt = 'NOT IN')
         {
             $data = implode(',', array_map(function($value) use ($quote){
-                return ($quote) ? "'" . $this->registry->website->db('web')->sanitize_var($value) . "'" : $this->registry->website->db('web')->sanitize_var($value);
+                return ($quote) ? "'" . $this->registry->website->db('web')->escape($value) . "'" : $this->registry->website->db('web')->escape($value);
             }, explode(',', $list)));
             return ($list != '') ? ' AND ' . $bound . ' ' . $stmt . ' (' . $data . ')' : '';
         }
