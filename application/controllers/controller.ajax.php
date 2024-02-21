@@ -33,19 +33,19 @@
                 $_SESSION['qaptcha_key'] = false;
                 if(htmlentities($_POST['act'], ENT_QUOTES, 'UTF-8') == 'qaptcha'){
                     $_SESSION['qaptcha_key'] = $_POST['qaptcha_key'];
-                    echo json_encode(['error' => false]);
+                    json(['error' => false]);
                 } else{
-                    echo json_encode(['error' => true]);
+                    json(['error' => true]);
                 }
             } else{
-                echo json_encode(['error' => true]);
+                json(['error' => true]);
             }
         }
 
 		public function login()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                echo json_encode(['error' => __('You are already logged in. Please logout first.')]);
+                json(['error' => __('You are already logged in. Please logout first.')]);
             } else{
                 $servers = $this->website->server_list();
                 $default = array_keys($servers)[0];
@@ -120,7 +120,7 @@
 										$_SESSION['tfa_temp_password'] = $_POST['password'];
 										$_SESSION['tfa_temp_server'] = $server;
 										$_SESSION['tfa_temp_servers'] = $servers;
-										echo json_encode(['tfa' => 'check']);
+										json(['tfa' => 'check']);
 										exit;
 									}
 								}
@@ -135,10 +135,10 @@
 										$salt = $this->ipb->fetchSalt(2, $this->session->userdata(['user' => 'email']));
 										$ipb_login_data = $this->ipb->login(2, $this->session->userdata(['user' => 'email']), $this->ipb->encrypt_password($this->Maccount->vars['password'], $salt));
 										$this->session->session_key_overwrite('user', [0 => 'ipb_id', 1 => $ipb_login_data['connect_id']]);
-										echo json_encode(['success' => __('You have logged in successfully.'), 'ipb_login' => $this->ipb->crossLogin($ipb_login_data['connect_id'], $this->config->base_url . 'account-panel')]);																									  
+										json(['success' => __('You have logged in successfully.'), 'ipb_login' => $this->ipb->crossLogin($ipb_login_data['connect_id'], $this->config->base_url . 'account-panel')]);																									  
 									}
 								}																														   
-								echo json_encode(['success' => __('You have logged in successfully.')]);
+								json(['success' => __('You have logged in successfully.')]);
 							}
 						} 
 						else{
@@ -147,11 +147,11 @@
 						}	 
 					}
 					catch(Exception $e){
-						echo json_encode(['error' => $e->getMessage()]);
+						json(['error' => $e->getMessage()]);
 					}
                    
                 } else{
-                    echo json_encode(['error' => __('Registration settings has not yet been configured.')]);
+                    json(['error' => __('Registration settings has not yet been configured.')]);
                 }
             }
         }
@@ -167,34 +167,34 @@
 							$check = $this->Maccount->check_user_on_server($this->session->userdata(['user' => 'username']), $_POST['server']);
                             if($check != false){
 								if(sha1($check['memb__pwd']) != $this->session->userdata(['user' => 'pass'])){
-									echo json_encode(['error' => __('Account password not match. Please logout and login again.')]);
+									json(['error' => __('Account password not match. Please logout and login again.')]);
 								}
 								else{
 									$this->change_user_session_server($this->session->userdata(['user' => 'username']), $_POST['server']);
 									$this->change_user_vip_session($this->session->userdata(['user' => 'username']), $_POST['server']);
 								}
-                                echo json_encode(['success' => __('Server Changed.')]);
+                                json(['success' => __('Server Changed.')]);
                             } 
 							else{
-                                echo json_encode(['error' => __('You have not created account on this server. Please logout and create.')]);
+                                json(['error' => __('You have not created account on this server. Please logout and create.')]);
                             }
                         } 
 						else{
                             $this->change_user_session_server($this->session->userdata(['user' => 'username']), $_POST['server']);
                             $this->change_user_vip_session($this->session->userdata(['user' => 'username']), $_POST['server']);
-                            echo json_encode(['success' => __('Server Changed.')]);
+                            json(['success' => __('Server Changed.')]);
                         }
                     } 
 					else{
-                        echo json_encode(['error' => __('Invalid server selected.')]);
+                        json(['error' => __('Invalid server selected.')]);
                     }
                 } 
 				else{
-                    echo json_encode(['error' => __('Invalid server selected.')]);
+                    json(['error' => __('Invalid server selected.')]);
                 }
             } 
 			else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -236,36 +236,36 @@
                     $this->Maccount->$key = trim($value);
                 }
                 if(!isset($this->Maccount->vars['old_password']))
-                    echo json_encode(['error' => __('You haven\'t entered your current password.')]); 
+                    json(['error' => __('You haven\'t entered your current password.')]); 
 				else{
                     if(!$this->Maccount->compare_passwords())
-                        echo json_encode(['error' => __('The current password you entered is wrong.')]); 
+                        json(['error' => __('The current password you entered is wrong.')]); 
 					else{
                         if(!isset($this->Maccount->vars['new_password']))
-                            echo json_encode(['error' => __('You haven\'t entered your new password.')]); 
+                            json(['error' => __('You haven\'t entered your new password.')]); 
 						else{
                             if(!$this->Maccount->valid_password($this->Maccount->vars['new_password']))
-                                echo json_encode(['error' => __('The new password you entered is invalid.')]); 
+                                json(['error' => __('The new password you entered is invalid.')]); 
 							else{
                                 $this->Maccount->test_password_strength($this->Maccount->vars['new_password'], [$this->vars['config']['min_password'], $this->vars['config']['max_password']], $this->vars['config']['password_strength']);
                                 if(isset($this->Maccount->errors))
-                                    echo json_encode(['error' => $this->Maccount->vars['errors']]); 
+                                    json(['error' => $this->Maccount->vars['errors']]); 
 								else{
                                     if(!isset($this->Maccount->vars['new_password2']))
-                                        echo json_encode(['error' => __('You haven\'t entered new password-repetition.')]); 
+                                        json(['error' => __('You haven\'t entered new password-repetition.')]); 
 									else{
                                         if($this->Maccount->vars['new_password'] != $this->Maccount->vars['new_password2'])
-                                            echo json_encode(['error' => __('The two passwords you entered do not match.')]); 
+                                            json(['error' => __('The two passwords you entered do not match.')]); 
 										else{
                                             if($this->Maccount->vars['old_password'] == $this->Maccount->vars['new_password'])
-                                                echo json_encode(['error' => __('New password cannot be same as old!')]); 
+                                                json(['error' => __('New password cannot be same as old!')]); 
 											else{
                                                 if($this->Maccount->update_password($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
 													$this->Maccount->add_account_log('Changed password.', 0, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));          
                                                     $this->session->destroy();
-                                                    echo json_encode(['success' => [__('Your password was successfully changed.'), __('You\'ve been logged out for security reasons!')]]);
+                                                    json(['success' => [__('Your password was successfully changed.'), __('You\'ve been logged out for security reasons!')]]);
                                                 } else{
-                                                    echo json_encode(['error' => __('Password could not be updated.')]);
+                                                    json(['error' => __('Password could not be updated.')]);
                                                 }
                                             }
                                         }
@@ -276,7 +276,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -289,30 +289,30 @@
                         $this->Maccount->$key = trim($value);
                     }
                     if(!isset($this->Maccount->vars['email']))
-                        echo json_encode(['error' => __('You haven\'t entered your current email.')]); 
+                        json(['error' => __('You haven\'t entered your current email.')]); 
 					else{
                         if(!$this->Maccount->valid_email($this->Maccount->vars['email']))
-                            echo json_encode(['error' => __('You have entered an invalid email-address.')]); 
+                            json(['error' => __('You have entered an invalid email-address.')]); 
 						else{
                             if(!$this->Maccount->check_existing_email($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Email-address is wrong for this account.')]); 
+                                json(['error' => __('Email-address is wrong for this account.')]); 
 							else{
                                 if($this->Maccount->create_email_confirmation_entry($this->session->userdata(['user' => 'username']), 1)){
                                     if($this->Maccount->send_email_confirmation($this->session->userdata(['user' => 'username']))){
-                                        echo json_encode(['success' => __('Please check your current mail-box for confirmation link.')]);
+                                        json(['success' => __('Please check your current mail-box for confirmation link.')]);
                                     } else{
                                         $this->Maccount->delete_old_confirmation_entries($this->session->userdata(['user' => 'username']), 1);
-                                        echo json_encode(['error' => $this->Maccount->error]);
+                                        json(['error' => $this->Maccount->error]);
                                     }
                                 } else{
-                                    echo json_encode(['error' => __('Unable to write confirmation code into database.')]);
+                                    json(['error' => __('Unable to write confirmation code into database.')]);
                                 }
                             }
                         }
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -325,40 +325,40 @@
                         $this->Maccount->$key = trim($value);
                     }
                     if(!isset($this->Maccount->vars['email']))
-                        echo json_encode(['error' => __('You haven\'t entered your new email-address.')]); 
+                        json(['error' => __('You haven\'t entered your new email-address.')]); 
 					else{
                         if(!$this->Maccount->valid_email($this->Maccount->vars['email']))
-                            echo json_encode(['error' => __('You have entered an invalid email-address.')]); 
+                            json(['error' => __('You have entered an invalid email-address.')]); 
 						else{
                             if($this->Maccount->check_duplicate_email($this->Maccount->vars['email'], $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('This email-address is already used.')]); 
+                                json(['error' => __('This email-address is already used.')]); 
 							else{
                                 if($this->Maccount->create_email_confirmation_entry($this->session->userdata(['user' => 'username']), 0)){
                                     if($this->Maccount->send_email_confirmation($this->session->userdata(['user' => 'username']))){
                                         $this->Maccount->delete_old_confirmation_entries($this->session->userdata(['user' => 'username']), 1);
-                                        echo json_encode(['success' => __('Please check your new mail-box for confirmation link.')]);
+                                        json(['success' => __('Please check your new mail-box for confirmation link.')]);
                                     } else{
                                         $this->Maccount->delete_old_confirmation_entries($this->session->userdata(['user' => 'username']));
-                                        echo json_encode(['error' => $this->Maccount->error]);
+                                        json(['error' => $this->Maccount->error]);
                                     }
                                 } else{
-                                    echo json_encode(['error' => __('Unable to write confirmation code into database.')]);
+                                    json(['error' => __('Unable to write confirmation code into database.')]);
                                 }
                             }
                         }
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
         public function status()
         {
             if($this->session->userdata(['user' => 'logged_in'])){
-                echo json_encode(['success' => true]);
+                json(['success' => true]);
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -370,30 +370,30 @@
                 $credits = (isset($_POST['credits']) && ctype_digit($_POST['credits'])) ? (int)$_POST['credits'] : '';
                 $gcredits = (isset($_POST['gcredits']) && ctype_digit($_POST['gcredits'])) ? (int)$_POST['gcredits'] : '';
                 if(!in_array($payment_method, [1, 2]))
-                    echo json_encode(['error' => __('Invalid payment method.')]); 
+                    json(['error' => __('Invalid payment method.')]); 
 				else if($credits === '')
-                    echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
+                    json(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
                 else if($gcredits === '')
-                    echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits(2, $this->session->userdata(['user' => 'server'])))]);
+                    json(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits(2, $this->session->userdata(['user' => 'server'])))]);
                 else{
                     $status = $this->website->get_user_credits_balance($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $payment_method, $this->session->userdata(['user' => 'id']));
                     if($payment_method == 1){
                         if($status['credits'] < $credits){
-                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
+                            json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
                         } else{
-                            echo json_encode(['success' => true]);
+                            json(['success' => true]);
                         }
                     }
                     if($payment_method == 2){
                         if($status['credits'] < $gcredits){
-                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
+                            json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(1, $this->session->userdata(['user' => 'server'])))]);
                         } else{
-                            echo json_encode(['success' => true]);
+                            json(['success' => true]);
                         }
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -409,7 +409,7 @@
 							$this->vars['has_char'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 						}
 						if(isset($this->vars['has_char']) && $this->vars['has_char'] == false){
-							 echo json_encode(['error' => __('Voting require character.')]);
+							 json(['error' => __('Voting require character.')]);
 						}
 						if(isset($this->vars['has_char'])) {
 							$lvl_total = 0;
@@ -420,20 +420,20 @@
 							}
 
 							if ($this->vars['votereward_config']['req_lvl'] > $lvl_total) {
-								echo json_encode(['error' => __('Your character total level sum need to be atleast') . ' ' . $this->vars['votereward_config']['req_lvl']]);
+								json(['error' => __('Your character total level sum need to be atleast') . ' ' . $this->vars['votereward_config']['req_lvl']]);
 							}
 							if ($this->vars['votereward_config']['req_res'] > $res_total) {
-								echo json_encode(['error' => __('Your character total res sum need to be atleast') . ' ' . $this->vars['votereward_config']['req_res']]);
+								json(['error' => __('Your character total res sum need to be atleast') . ' ' . $this->vars['votereward_config']['req_res']]);
 							}
 						}
                         if(!$check_link = $this->Maccount->check_vote_link($_POST['vote'], $this->session->userdata(['user' => 'server']))){
-                            echo json_encode(['error' => __('Voting link not found.')]);
+                            json(['error' => __('Voting link not found.')]);
                         } else{
                             if($check_link['api'] == 2){
-                                echo json_encode(['success_mmotop' => __('Thank You, we will review your vote and reward you.')]);
+                                json(['success_mmotop' => __('Thank You, we will review your vote and reward you.')]);
                             } else{
                                 if($check_last_vote = $this->Maccount->get_last_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'], $check_link['hours'], 0, $this->vars['votereward_config']['xtremetop_same_acc_vote'], $this->vars['votereward_config']['xtremetop_link_numbers'])){
-                                    echo json_encode(['error' => sprintf(__('Already voted. Next vote after %s'), $this->Maccount->calculate_next_vote($check_last_vote, $check_link['hours']))]);
+                                    json(['error' => sprintf(__('Already voted. Next vote after %s'), $this->Maccount->calculate_next_vote($check_last_vote, $check_link['hours']))]);
                                 } else{
                                     if($check_link['api'] == 1){
                                         if($valid_votes = $this->Maccount->check_xtremetop_vote()){
@@ -447,17 +447,17 @@
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
                                                         if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
-                                                            echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                            json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
-                                                            echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                            json(['error' => __('Unable to log vote. Please try again latter')]);
                                                         }
                                                     }
                                                 }
                                             } else{
-                                                echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                json(['error' => __('Unable to log vote. Please try again latter')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else if($check_link['api'] == 3){
                                         if($valid_votes = $this->Maccount->check_gtop100_vote()){
@@ -471,17 +471,17 @@
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
                                                         if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
-                                                            echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                            json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
-                                                            echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                            json(['error' => __('Unable to log vote. Please try again latter')]);
                                                         }
                                                     }
                                                 }
                                             } else{
-                                                echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                                json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else if($check_link['api'] == 4){
                                         if($valid_votes = $this->Maccount->check_topg_vote()){
@@ -495,41 +495,41 @@
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
                                                         if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
-                                                            echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                            json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
-                                                            echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                            json(['error' => __('Unable to log vote. Please try again latter')]);
                                                         }
                                                     }
                                                 }
                                             } else{
-                                                echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                                json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else if($check_link['api'] == 5){
                                         if($valid = $this->Maccount->check_top100arena_vote()){
                                             if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote']) && $this->Maccount->set_valid_vote_top100arena($valid['id'])){
                                                 $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                 $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                             } else{
-                                                echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                json(['error' => __('Unable to log vote. Please try again latter')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else if($check_link['api'] == 6){
                                         if($valid = $this->Maccount->check_mmoserver_vote()){
                                             if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote']) && $this->Maccount->set_valid_vote_mmoserver($valid['id'])){
                                                 $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                                 $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                             } else{
-                                                echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                json(['error' => __('Unable to log vote. Please try again latter')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else if($check_link['api'] == 8){
                                         if($valid_votes = $this->Maccount->check_dmncms_vote()){
@@ -543,17 +543,17 @@
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
                                                         if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
-                                                            echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                            json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
-                                                            echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                            json(['error' => __('Unable to log vote. Please try again latter')]);
                                                         }
                                                     }
                                                 }
                                             } else{
-                                                echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                json(['error' => __('Unable to log vote. Please try again latter')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else if($check_link['api'] == 9){
                                         if($valid_votes = $this->Maccount->check_gametop100_vote()){
@@ -567,38 +567,38 @@
                                                     $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                     if($i == $count){
                                                         if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
-                                                            echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                                            json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                                         } else{
-                                                            echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                            json(['error' => __('Unable to log vote. Please try again latter')]);
                                                         }
                                                     }
                                                 }
                                             } else{
-                                                echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                                json(['error' => __('Unable to log vote. Please try again latter')]);
                                             }
                                         } else{
-                                            echo json_encode(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
+                                            json(['error' => __('Unable to validate vote. Please try again after few minutes.')]);
                                         }
                                     } else{
                                         if($this->Maccount->log_vote($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $_POST['vote'])){
                                             $this->Maccount->reward_voter($check_link['reward'], $check_link['reward_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'username']), $check_link['name']);
                                             $this->Maccount->check_vote_rankings($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                            echo json_encode(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
+                                            json(['success' => vsprintf(__('Vote was successful. You have received %d %s'), [$check_link['reward'], $this->website->translate_credits($check_link['reward_type'], $this->session->userdata(['user' => 'server']))]), 'next_vote' => $this->Maccount->calculate_next_vote((time() - 60), $check_link['hours']), 'reward' => $check_link['reward']]);
                                         } else{
-                                           echo json_encode(['error' => __('Unable to log vote. Please try again latter')]);
+                                           json(['error' => __('Unable to log vote. Please try again latter')]);
                                         }
                                     }
                                 }
                             }
                         }
                     } else{
-                        echo json_encode(['error' => __('Invalid voting link.')]);
+                        json(['error' => __('Invalid voting link.')]);
                     }
                 } else{
-                    echo json_encode(['error' => __('Module disabled.')]);
+                    json(['error' => __('Module disabled.')]);
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -847,7 +847,7 @@
 								$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), RESET_NORIA_VIP_PRICE, RESET_NORIA_VIP_PRICE_TYPE);
 							}
 						}
-						echo json_encode(['success' => __('Your character has been successfully reseted.'), 'newlvl' => $this->Mcharacter->char_info['res_info']['level_after_reset']]);
+						json(['success' => __('Your character has been successfully reseted.'), 'newlvl' => $this->Mcharacter->char_info['res_info']['level_after_reset']]);
 					} 
 					else{
 						throw new \Exception(__('Unable to reset character.'));
@@ -855,11 +855,11 @@
 					
 				}
 				catch(\Exception $e){
-					echo json_encode(['error' => $e->getMessage()]);
+					json(['error' => $e->getMessage()]);
 				}   
 			}
 			else{
-				echo json_encode(['error' => __('Please login into website.')]);
+				json(['error' => __('Please login into website.')]);
 			}  
         }
 		
@@ -1060,7 +1060,7 @@
 					}
 					
 					if($this->Mcharacter->greset_character($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-						echo json_encode(['success' => __('Your character has been successfully reseted.')]);
+						json(['success' => __('Your character has been successfully reseted.')]);
 					} 
 					else{
 						throw new \Exception(__('Unable to reset character.'));
@@ -1068,11 +1068,11 @@
 											
 				}
 				catch(\Exception $e){
-					echo json_encode(['error' => $e->getMessage()]);
+					json(['error' => $e->getMessage()]);
 				} 
             } 
 			else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1085,28 +1085,28 @@
                 $char = isset($_POST['char']) ? $_POST['char'] : '';
 														  															
                 if($id == '')
-                    echo json_encode(['error' => __('Invalid referral reward id.')]); 
+                    json(['error' => __('Invalid referral reward id.')]); 
 				else{
                     if(!$reward_data = $this->Maccount->check_referral_reward($id, $this->session->userdata(['user' => 'server'])))
-                        echo json_encode(['error' => __('Referral reward not found.')]); 
+                        json(['error' => __('Referral reward not found.')]); 
 					else{
                         if($char == '')
-                            echo json_encode(['error' => __('Invalid Character')]); 
+                            json(['error' => __('Invalid Character')]); 
 						else{
                             if(!$this->Mcharacter->check_char_no_account($char, $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Character not found.')]); 
+                                json(['error' => __('Character not found.')]); 
 							else{
 								if(!$this->Maccount->check_if_referral_exists($this->session->userdata(['user' => 'username']), $this->Mcharacter->char_info['AccountId']))
-									echo json_encode(['error' => __('Referral not found.')]); 
+									json(['error' => __('Referral not found.')]); 
 								else{
 									if($reward_data['required_lvl'] > $this->Mcharacter->char_info['cLevel'] + $this->Mcharacter->char_info['mlevel'])
-										echo json_encode(['error' => sprintf(__('Character lvl is too low required %d lvl'), $reward_data['required_lvl'])]); 
+										json(['error' => sprintf(__('Character lvl is too low required %d lvl'), $reward_data['required_lvl'])]); 
 									else{
 										if(!$this->check_ref_req_resets($reward_data['required_res'], $this->Mcharacter->char_info))
-											echo json_encode(['error' => sprintf(__('Character reset is too low required %d reset'), $reward_data['required_res'])]); 
+											json(['error' => sprintf(__('Character reset is too low required %d reset'), $reward_data['required_res'])]); 
 										else{
 											if(!$this->check_ref_req_gresets($reward_data['required_gres'], $this->Mcharacter->char_info))
-												echo json_encode(['error' => sprintf(__('Character grand reset is too low required %d grand reset'), $reward_data['required_gres'])]); 
+												json(['error' => sprintf(__('Character grand reset is too low required %d grand reset'), $reward_data['required_gres'])]); 
 											else{
 												$history = $this->Maccount->check_name_in_history($char, $reward_data['server']);
 												if(!empty($history)){
@@ -1120,23 +1120,23 @@
 													$check_chars = [$char];
 												}
 												if($this->Maccount->check_claimed_referral_rewards($this->session->userdata(['user' => 'username']), $reward_data['id'], $check_chars, $reward_data['server'])){
-													echo json_encode(['error' => __('Reward was already claimed with this character.')]);
+													json(['error' => __('Reward was already claimed with this character.')]);
 												} else{
 													if($this->config->values('referral_config', 'claim_type') == 0){
 														if($this->Maccount->check_if_reward_was_claimed($this->session->userdata(['user' => 'username']), $reward_data['id'], $reward_data['server'], $this->Mcharacter->char_info['AccountId'])){
-															echo json_encode(['error' => __('Reward can be claimed only once. It was already claimed by different character.')]);
+															json(['error' => __('Reward can be claimed only once. It was already claimed by different character.')]);
 															return; 
 														}
 													}
 													if($this->config->values('referral_config', 'compare_ips') == 1){
 														if($this->Maccount->check_referral_ips($this->session->userdata(['user' => 'username']), $this->Mcharacter->char_info['AccountId'])){
-															echo json_encode(['error' => __('You can not claim rewards for own accounts.')]);
+															json(['error' => __('You can not claim rewards for own accounts.')]);
 															return; 
 														}																		 
 													}
 													$this->Maccount->add_referral_reward($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $reward_data['reward'], $reward_data['reward_type'], $char);
 													$this->Maccount->log_reward($this->session->userdata(['user' => 'username']), $reward_data['id'], $char, $reward_data['server'], $this->Mcharacter->char_info['AccountId']);
-													echo json_encode(['success' => __('Referral reward was claimed successfully.')]);
+													json(['success' => __('Referral reward was claimed successfully.')]);
 												}
 											}
 										}
@@ -1147,7 +1147,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1182,16 +1182,16 @@
                     }																	
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($_POST['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            echo json_encode(['error' => __('Character not found.')]); 
+                            json(['error' => __('Character not found.')]); 
 						else{
                             if(!$this->Mcharacter->check_pk())
-                                echo json_encode(['error' => __('You are not a murder.')]); 
+                                json(['error' => __('You are not a murder.')]); 
 							else{
                                 $price = $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|pk_clear_price');
 								$method = $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|pk_clear_payment_method');
@@ -1201,22 +1201,22 @@
                                 }
 								if($method == 0){
 									if($this->Mcharacter->char_info['Money'] < $price)
-										echo json_encode(['error' => sprintf(__('Your have insufficient amount of zen. Need: %s'), $this->website->zen_format($price))]); 
+										json(['error' => sprintf(__('Your have insufficient amount of zen. Need: %s'), $this->website->zen_format($price))]); 
 									else{
 										$this->Mcharacter->clear_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price);
-										echo json_encode(['success' => __('Your murders have been successfully reseted.')]);
+										json(['success' => __('Your murders have been successfully reseted.')]);
 									}
 								}
 								else{
 									if(in_array($method, [1,2])){
 										 $status = $this->website->get_user_credits_balance($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $method, $this->session->userdata(['user' => 'id']));
 										 if($status['credits'] < $price){
-											echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($method, $this->session->userdata(['user' => 'server'])))]);
+											json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($method, $this->session->userdata(['user' => 'server'])))]);
 										 }
 										 else{
 											$this->Mcharacter->clear_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 0);
 											$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $method);
-											echo json_encode(['success' => __('Your murders have been successfully reseted.')]);
+											json(['success' => __('Your murders have been successfully reseted.')]);
 										 }
 									}
 									else{
@@ -1224,14 +1224,14 @@
 										 
 										 if($status = $this->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
 											if($status < $price)
-												echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]);
+												json(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]);
 											else{
 												$this->Mcharacter->clear_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 0);
 												$this->Mcharacter->remove_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $price);
-												echo json_encode(['success' => __('Your murders have been successfully reseted.')]);
+												json(['success' => __('Your murders have been successfully reseted.')]);
 											}
 										} else{
-											echo json_encode(['error' => __('Unable to load wcoins')]);
+											json(['error' => __('Unable to load wcoins')]);
 										}
 									}
 								}
@@ -1240,7 +1240,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1258,36 +1258,36 @@
                         }
                     }
                     if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                        echo json_encode(['error' => __('Please logout from game.')]); 
+                        json(['error' => __('Please logout from game.')]); 
 					else{
                         if(!isset($_POST['character']))
-                            echo json_encode(['error' => __('Invalid Character')]); 
+                            json(['error' => __('Invalid Character')]); 
 						else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Character not found.')]); 
+                                json(['error' => __('Character not found.')]); 
 							else{
                                 if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price') > 0){
                                     $status = $this->website->get_user_credits_balance($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'), $this->session->userdata(['user' => 'id']));
                                     if($status['credits'] < $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price')){
-                                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'), $this->session->userdata(['user' => 'server'])))]);
+                                        json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'), $this->session->userdata(['user' => 'server'])))]);
                                     } else{
                                         $this->Mcharacter->reset_stats($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'));
                                         $this->Mcharacter->add_account_log('Cleared character ' . $this->website->hex2bin($_POST['character']) . ' stats for ' . $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_payment_type'), $this->session->userdata(['user' => 'server'])) . '', -$this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|reset_stats_price'), $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                        echo json_encode(['success' => __('Stats successfully reseted.')]);
+                                        json(['success' => __('Stats successfully reseted.')]);
                                     }
                                 } else{
                                     $this->Mcharacter->reset_stats($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                    echo json_encode(['success' => __('Stats successfully reseted.')]);
+                                    json(['success' => __('Stats successfully reseted.')]);
                                 }
                             }
                         }
                     }
                 } else{
-                    echo json_encode(['error' => __('Reset Stats Disabled')]);
+                    json(['error' => __('Reset Stats Disabled')]);
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1305,31 +1305,31 @@
 						}
 					}
 					if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-						echo json_encode(['error' => __('Please logout from game.')]); 
+						json(['error' => __('Please logout from game.')]); 
 					else{
 						if(!isset($_POST['character']))
-							echo json_encode(['error' => __('Invalid Character')]); 
+							json(['error' => __('Invalid Character')]); 
 						else{
 							if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-								echo json_encode(['error' => __('Character not found.')]); 
+								json(['error' => __('Character not found.')]); 
 							else{
 								if(!in_array($this->Mcharacter->char_info['Class'], $this->resetSkillTreeClass))
-									echo json_encode(['error' => __('Your class is not allowed to reset skilltree.')]); else{
+									json(['error' => __('Your class is not allowed to reset skilltree.')]); else{
 									$status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
 									$price = $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price');
 									if($this->session->userdata('vip')){
 										$price -= ($price / 100) * $this->session->userdata(['vip' => 'clear_skilltree_discount']);
 									}
 									if($status < $price){
-										echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'), $this->session->userdata(['user' => 'server'])))]);
+										json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'), $this->session->userdata(['user' => 'server'])))]);
 									} else{
 										$skill_tree = $this->Mcharacter->reset_skill_tree($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skill_tree_type'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_level'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_points'), $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_points_multiplier'));
 										if($skill_tree){
 											$this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'));
 											$this->Mcharacter->add_account_log('Cleared character ' . $this->website->hex2bin($_POST['character']) . ' skill tree for ' . $this->website->translate_credits($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|skilltree_reset_price_type'), $this->session->userdata(['user' => 'server'])), -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-											echo json_encode(['success' => __('SkillTree successfully reseted.')]);
+											json(['success' => __('SkillTree successfully reseted.')]);
 										} else{
-											echo json_encode(['error' => __('Unable to reset skilltree.')]);
+											json(['error' => __('Unable to reset skilltree.')]);
 										}
 									}
 								}
@@ -1338,10 +1338,10 @@
 					}
 				}
 				else{
-					echo json_encode(['error' => __('Reset SkillTree Disabled')]);
+					json(['error' => __('Reset SkillTree Disabled')]);
 				}
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1354,25 +1354,25 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 								else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!isset($this->Mcharacter->vars['inventory']) && !isset($this->Mcharacter->vars['equipment']) && !isset($this->Mcharacter->vars['store']) && !isset($this->Mcharacter->vars['exp_inv_1']) && !isset($this->Mcharacter->vars['exp_inv_2']))
-                            echo json_encode(['error' => __('Please select one of options.')]); 
+                            json(['error' => __('Please select one of options.')]); 
 													else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Character not found.')]); 
+                                json(['error' => __('Character not found.')]); 
 							else{
                                 $this->Mcharacter->clear_inv($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                echo json_encode(['success' => __('Character inventory successfully cleared.')]);
+                                json(['success' => __('Character inventory successfully cleared.')]);
                             }
                         }
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1386,31 +1386,31 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!isset($this->Mcharacter->vars['level']))
-                            echo json_encode(['error' => __('Please select level.')]); 
+                            json(['error' => __('Please select level.')]); 
 						else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Character not found.')]); 
+                                json(['error' => __('Character not found.')]); 
 							else{
                                 if(!array_key_exists($this->Mcharacter->vars['level'], $level_conf['levels']))
-                                    echo json_encode(['error' => __('Invalid level selected.')]); 
+                                    json(['error' => __('Invalid level selected.')]); 
 								else{
                                     if(!$this->check_max_level_allowed($level_conf, $this->Mcharacter->vars['level'], $this->Mcharacter->char_info['cLevel']))
-                                        echo json_encode(['error' => sprintf(__('You will exceed max level allowed: %d, please try to buy lower level.'), isset($level_conf['max_level']) ? $level_conf['max_level'] : 0)]); else{
+                                        json(['error' => sprintf(__('You will exceed max level allowed: %d, please try to buy lower level.'), isset($level_conf['max_level']) ? $level_conf['max_level'] : 0)]); else{
                                         $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                         if($status < $level_conf['levels'][$this->Mcharacter->vars['level']]['price']){
-                                            echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type'], $this->session->userdata(['user' => 'server'])))]);
+                                            json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type'], $this->session->userdata(['user' => 'server'])))]);
                                         } else{
                                             if($this->Mcharacter->update_level($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $level_conf['levels'][$this->Mcharacter->vars['level']]['price'], $level_conf['levels'][$this->Mcharacter->vars['level']]['payment_type']);
-                                                echo json_encode(['success' => __('Character level updated.')]);
+                                                json(['success' => __('Character level updated.')]);
                                             } else{
-                                                echo json_encode(['error' => __('Unable to update character level.')]);
+                                                json(['error' => __('Unable to update character level.')]);
                                             }
                                         }
                                     }
@@ -1420,7 +1420,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1445,28 +1445,28 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!isset($this->Mcharacter->vars['points']))
-                            echo json_encode(['error' => __('Please enter amount of points.')]); 
+                            json(['error' => __('Please enter amount of points.')]); 
 						else{
                             if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                echo json_encode(['error' => __('Character not found.')]); else{
+                                json(['error' => __('Character not found.')]); else{
                                 if($this->Mcharacter->vars['points'] < $this->config->config_entry('buypoints|points'))
-                                    echo json_encode(['error' => __('Minimal points value: %d points.', $this->config->config_entry('buypoints|points'))]); else{
+                                    json(['error' => __('Minimal points value: %d points.', $this->config->config_entry('buypoints|points'))]); else{
                                     $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('buypoints|price_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                     $price = ceil(($this->Mcharacter->vars['points'] * $this->config->config_entry('buypoints|price')) / $this->config->config_entry('buypoints|points'));
                                     if($status < $price){
-                                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('buypoints|price_type'), $this->session->userdata(['user' => 'server'])))]);
+                                        json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('buypoints|price_type'), $this->session->userdata(['user' => 'server'])))]);
                                     } else{
                                         if($this->Mcharacter->update_points($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('buypoints|price_type'));
-                                            echo json_encode(['success' => __('Character statpoints updated.')]);
+                                            json(['success' => __('Character statpoints updated.')]);
                                         } else{
-                                            echo json_encode(['error' => __('Unable to update character statpoints.')]);
+                                            json(['error' => __('Unable to update character statpoints.')]);
                                         }
                                     }
                                 }
@@ -1475,7 +1475,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1488,27 +1488,27 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            echo json_encode(['error' => __('Character not found.')]); 
+                            json(['error' => __('Character not found.')]); 
 						else{
                             if($this->Mcharacter->char_info['CtlCode'] == $this->config->config_entry('buygm|gm_ctlcode'))
-                                echo json_encode(['error' => __('Your character already is GameMaster.')]); 
+                                json(['error' => __('Your character already is GameMaster.')]); 
 							else{
                                 $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                 if($status < $this->config->config_entry('buygm|price')){
-                                    echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server'])))]);
+                                    json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server'])))]);
                                 } else{
                                     if($this->Mcharacter->update_gm($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
                                         $this->Maccount->add_account_log('Bought GM Status For ' . $this->website->translate_credits($this->config->config_entry('buygm|price_t'), $this->session->userdata(['user' => 'server'])), -$this->config->config_entry('buygm|price'), $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->config->config_entry('buygm|price'), $this->config->config_entry('buygm|price_t'));
-                                        echo json_encode(['success' => __('Character successfully promoted to GameMaster.')]);
+                                        json(['success' => __('Character successfully promoted to GameMaster.')]);
                                     } else{
-                                        echo json_encode(['error' => __('Unable to update character gm status.')]);
+                                        json(['error' => __('Unable to update character gm status.')]);
                                     }
                                 }
                             }
@@ -1516,7 +1516,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1529,23 +1529,23 @@
 
 				if($status != false){
 					if($status['is_skipped'] == 1)
-						echo json_encode(['error' => __('Item requirement already skipped.')]);
+						json(['error' => __('Item requirement already skipped.')]);
 					else{
 						if($status['is_completed'] == 1)
-							echo json_encode(['error' => __('Item requirement already completed.')]);
+							json(['error' => __('Item requirement already completed.')]);
 						else{
 							if($status['skip_price_type'] == 0)
-								echo json_encode(['error' => __('This item cannot be skipped.')]);
+								json(['error' => __('This item cannot be skipped.')]);
 							else{
 								 $statusCr = $this->website->get_user_credits_balance($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $status['skip_price_type'], $this->session->userdata(['user' => 'id']));
 								 if($statusCr['credits'] < $status['skip_price']){
-									echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($status['skip_price_type'], $this->session->userdata(['user' => 'server'])))]);
+									json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($status['skip_price_type'], $this->session->userdata(['user' => 'server'])))]);
 								 }
 								 else{
 									 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $status['skip_price'], $status['skip_price_type']);
 									 $this->website->setSkippedChangeClassItem($id, $char, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $cat);
 									 $this->Mcharacter->add_account_log('Skipped change class req item ' . $this->website->hex2bin($char) . ' for ' . $this->website->translate_credits($status['skip_price_type'], $this->session->userdata(['user' => 'server'])) . '', -$status['skip_price'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                     echo json_encode(['success' => __('Item skipped.')]);   
+                                     json(['success' => __('Item skipped.')]);   
 								 }
 							}								
 						}							
@@ -1553,11 +1553,11 @@
 					
 				}
 				else{
-					echo json_encode(['error' => __('Item not found.')]);
+					json(['error' => __('Item not found.')]);
 				}
 			}
 			else{
-				echo json_encode(['error' => __('Please login into website.')]);
+				json(['error' => __('Please login into website.')]);
 			}  
 		}
 
@@ -1570,10 +1570,10 @@
 
 				if($status != false){
 					if($status['is_skipped'] == 1)
-						echo json_encode(['error' => __('Item requirement already skipped.')]);
+						json(['error' => __('Item requirement already skipped.')]);
 					else{
 						if($status['is_completed'] == 1)
-							echo json_encode(['error' => __('Item requirement already completed.')]);
+							json(['error' => __('Item requirement already completed.')]);
 						else{
 							$itemC = $status['hex'];
 
@@ -1588,7 +1588,7 @@
 								 $this->load->model('warehouse');
 								 $items = $this->Mwarehouse->list_web_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
 								 if(empty($items))
-									echo json_encode(['error' => __('Item not found in web warehouse.')]);
+									json(['error' => __('Item not found in web warehouse.')]);
 								 else{
 									 $this->load->lib('iteminfo');
 									 $found = false;
@@ -1671,29 +1671,29 @@
 										 }
 									 }
 									 if($found == false){
-										 echo json_encode(['error' => __('Item not found in web warehouse.')]);
+										 json(['error' => __('Item not found in web warehouse.')]);
 									 }
 									 else{
 										 $this->Mwarehouse->remove_web_item($found);
 										 
 										 $this->website->setCompletedChangeClassItem($id, $char, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $cat);
-										 echo json_encode(['success' => __('Item found and removed.')]);
+										 json(['success' => __('Item found and removed.')]);
 									 }
 								 }
 							}
 							else{
-								echo json_encode(['error' => __('Item not found in config.')]);
+								json(['error' => __('Item not found in config.')]);
 							}						
 						}							
 					}
 					
 				}
 				else{
-					echo json_encode(['error' => __('Item not found.')]);
+					json(['error' => __('Item not found.')]);
 				}
 			}
 			else{
-				echo json_encode(['error' => __('Please login into website.')]);
+				json(['error' => __('Please login into website.')]);
 			}  
 		}
 
@@ -1706,13 +1706,13 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            echo json_encode(['error' => __('Character not found.')]); 
+                            json(['error' => __('Character not found.')]); 
 						else{
                             if($select = $this->Mcharacter->gen_class_select_field($this->config->values('change_class_config', 'class_list'))){
 								$this->vars['changeclass_config'] = $this->config->values('change_class_config');
@@ -1863,7 +1863,7 @@
 											$html .= '</table></td></tr>';
 										}
 									}
-									echo json_encode(['data' => $select, 'price' => $price, 'price_type' => $price_type, 'items' => $html]);
+									json(['data' => $select, 'price' => $price, 'price_type' => $price_type, 'items' => $html]);
 								}
 								else{
 									if(defined('ELITE_CUSTOM_CHANGE_CLASS') && ELITE_CUSTOM_CHANGE_CLASS == true){
@@ -1880,16 +1880,16 @@
 											$price = 1000;
 										}
 									}
-									echo json_encode(['data' => $select, 'price' => $price, 'price_type' => $price_type]);
+									json(['data' => $select, 'price' => $price, 'price_type' => $price_type]);
 								}
                             } else{
-                                echo json_encode(['error' => __('This character is not allowed to change class.')]);
+                                json(['error' => __('This character is not allowed to change class.')]);
                             }
                         }
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -1903,19 +1903,19 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['character']))
-                        echo json_encode(['error' => __('Invalid Character')]); 
+                        json(['error' => __('Invalid Character')]); 
 					else{
                         if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            echo json_encode(['error' => __('Character not found.')]); 
+                            json(['error' => __('Character not found.')]); 
 						else{
                             if(!isset($this->Mcharacter->vars['class_select']))
-                                echo json_encode(['error' => __('Invalid class selected')]); 
+                                json(['error' => __('Invalid class selected')]); 
 							else{
                                 if($this->Mcharacter->vars['class_select'] == $this->Mcharacter->char_info['Class'])
-                                    echo json_encode(['error' => __('You already have this class.')]); 
+                                    json(['error' => __('You already have this class.')]); 
 								else{
                                     $this->vars['changeclass_config'] = $this->config->values('change_class_config');
                                     $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->vars['changeclass_config']['payment_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
@@ -1938,30 +1938,30 @@
 										}
 									}
                                     if($status < $price){
-                                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['changeclass_config']['payment_type'], $this->session->userdata(['user' => 'server'])))]);
+                                        json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['changeclass_config']['payment_type'], $this->session->userdata(['user' => 'server'])))]);
                                     } else{
 										if(isset($this->vars['changeclass_config']['min_level']) && (int)$this->vars['changeclass_config']['min_level'] > $this->Mcharacter->char_info['cLevel']){
-											 echo json_encode(['error' => sprintf(__('Level too low required %d level'), (int)$this->vars['changeclass_config']['min_level'])]);
+											 json(['error' => sprintf(__('Level too low required %d level'), (int)$this->vars['changeclass_config']['min_level'])]);
 											 exit;
 										}
 										if(isset($this->vars['changeclass_config']['min_mlevel']) && (int)$this->vars['changeclass_config']['min_mlevel'] > $this->Mcharacter->char_info['mlevel']){
-											 echo json_encode(['error' => sprintf(__('MasterLevel too low required %d level'), (int)$this->vars['changeclass_config']['min_mlevel'])]);
+											 json(['error' => sprintf(__('MasterLevel too low required %d level'), (int)$this->vars['changeclass_config']['min_mlevel'])]);
 											 exit;
 										}
 										if(isset($this->vars['changeclass_config']['min_resets']) && (int)$this->vars['changeclass_config']['min_resets'] > $this->Mcharacter->char_info['resets']){
-											 echo json_encode(['error' => sprintf(__('Resets too low required %d resets'), (int)$this->vars['changeclass_config']['min_resets'])]);
+											 json(['error' => sprintf(__('Resets too low required %d resets'), (int)$this->vars['changeclass_config']['min_resets'])]);
 											 exit;
 										}
 										if(isset($this->vars['changeclass_config']['max_resets']) && (int)$this->vars['changeclass_config']['max_resets'] < $this->Mcharacter->char_info['resets']){
-											 echo json_encode(['error' => sprintf(__('Resets too high max %d resets'), (int)$this->vars['changeclass_config']['max_resets'])]);
+											 json(['error' => sprintf(__('Resets too high max %d resets'), (int)$this->vars['changeclass_config']['max_resets'])]);
 											 exit;
 										}
 										if(isset($this->vars['changeclass_config']['min_gresets']) && (int)$this->vars['changeclass_config']['min_gresets'] > $this->Mcharacter->char_info['grand_resets']){
-											 echo json_encode(['error' => sprintf(__('GrandResets too low required %d resets'), (int)$this->vars['changeclass_config']['min_gresets'])]);
+											 json(['error' => sprintf(__('GrandResets too low required %d resets'), (int)$this->vars['changeclass_config']['min_gresets'])]);
 											 exit;
 										}
 										if(isset($this->vars['changeclass_config']['max_gresets']) && (int)$this->vars['changeclass_config']['max_gresets'] < $this->Mcharacter->char_info['grand_resets']){
-											 echo json_encode(['error' => sprintf(__('GrandResets too high max %d resets'), (int)$this->vars['changeclass_config']['max_gresets'])]);
+											 json(['error' => sprintf(__('GrandResets too high max %d resets'), (int)$this->vars['changeclass_config']['max_gresets'])]);
 											 exit;
 										}
 										if(in_array($this->Mcharacter->char_info['Class'], [64,65,66,67,70,78])){
@@ -2020,11 +2020,11 @@
 												}
 											}
 											if($foundPet){
-												echo json_encode(['error' => __('Please unmount horse.')]);
+												json(['error' => __('Please unmount horse.')]);
 												exit;
 											}
 											if($foundRaven){
-												echo json_encode(['error' => __('Please unmount raven.')]);
+												json(['error' => __('Please unmount raven.')]);
 												exit;
 											}
 										}
@@ -2146,12 +2146,12 @@
 												    $changeClassTimes = $this->Mcharacter->count_change_class_times($this->session->userdata(['user' => 'server']), $this->Mcharacter->char_info['id']);
 
 													if(MAX_CLASS_CHANGE <= $changeClassTimes['count']){
-														echo json_encode(['error' => __('Change class limit reached.')]);
+														json(['error' => __('Change class limit reached.')]);
 														exit;
 													}
 												    $countItems = $this->website->checkNotCompletedItemCountChangeClass($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), bin2hex($this->Mcharacter->vars['character']));
 													if($countItems > 0){
-														 echo json_encode(['error' => __('Please complete all required items.')]);
+														 json(['error' => __('Please complete all required items.')]);
 														 exit;
 													}
 													else{
@@ -2197,13 +2197,13 @@
 												
                                                 $this->Maccount->add_account_log('Changed Character ' . $this->Mcharacter->char_info['Name'] . ' class for ' . $this->website->translate_credits($this->vars['changeclass_config']['payment_type'], $this->session->userdata(['user' => 'server'])), -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->vars['changeclass_config']['payment_type']);
-                                                echo json_encode(['success' => __('Character class successfully changed.')]);
+                                                json(['success' => __('Character class successfully changed.')]);
                                             } else{
-                                                echo json_encode(['error' => __('You are not allowed to use this class.')]);
+                                                json(['error' => __('You are not allowed to use this class.')]);
                                             }
                                        } 
 									   else{
-											echo json_encode(['error' => __('Before changing class please remove your equipped items.')]);
+											json(['error' => __('Before changing class please remove your equipped items.')]);
                                        }
                                     }
                                 }
@@ -2212,7 +2212,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -2228,37 +2228,37 @@
 				$old_name = $this->website->hex2bin($this->Mcharacter->vars['old_name']);
 				
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!isset($this->Mcharacter->vars['old_name']) || $this->Mcharacter->vars['old_name'] == ''){
-                        echo json_encode(['error' => __('Old name can not be empty.')]);
+                        json(['error' => __('Old name can not be empty.')]);
                     } else{
                         if(!isset($this->Mcharacter->vars['new_name']) || $this->Mcharacter->vars['new_name'] == ''){
-                            echo json_encode(['error' => __('New name can not be empty.')]);
+                            json(['error' => __('New name can not be empty.')]);
                         } else{
 							//if(!preg_match('/^[\p{L}]+$/u', $this->Mcharacter->vars['new_name'])){
                             if(!preg_match('/^[' . str_replace('/', '\/', $this->config->config_entry('changename|allowed_pattern')) . ']+$/u', $this->Mcharacter->vars['new_name'])){
-                                echo json_encode(['error' => __('You are using forbidden chars in your new name.')]);
+                                json(['error' => __('You are using forbidden chars in your new name.')]);
                             } else{
                                 if(mb_strlen($this->Mcharacter->vars['new_name']) < 4 || mb_strlen($this->Mcharacter->vars['new_name']) > $this->config->config_entry('changename|max_length')){
-                                    echo json_encode(['error' => sprintf(__('Character Name can be 4-%d chars long!'), $this->config->config_entry('changename|max_length'))]);
+                                    json(['error' => sprintf(__('Character Name can be 4-%d chars long!'), $this->config->config_entry('changename|max_length'))]);
                                 } else{
                                     if($this->Mcharacter->vars['new_name'] === $old_name){
-                                        echo json_encode(['error' => __('New name can not be same as old.')]);
+                                        json(['error' => __('New name can not be same as old.')]);
                                     } else{
                                         $old_char_data = $this->Mcharacter->check_if_char_exists($old_name, $this->session->userdata(['user' => 'server']));
                                         $new_char_data = $this->Mcharacter->check_if_char_exists($this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                         if(!$old_char_data){
-                                            echo json_encode(['error' => __('Old character not found on your account.')]);
+                                            json(['error' => __('Old character not found on your account.')]);
                                         } else{
                                             if(strtolower($old_char_data['AccountId']) != strtolower($this->session->userdata(['user' => 'username']))){
-                                                echo json_encode(['error' => __('You are not owner of this character.')]);
+                                                json(['error' => __('You are not owner of this character.')]);
                                             } else{
                                                 if($new_char_data){
-                                                    echo json_encode(['error' => __('Character with this name already exists.')]);
+                                                    json(['error' => __('Character with this name already exists.')]);
                                                 } else{
                                                     if($this->config->config_entry('changename|check_guild') == 1 && $this->Mcharacter->has_guild($old_name, $this->session->userdata(['user' => 'server']))){
-                                                        echo json_encode(['error' => __('You are not allowed to change name while you are in guild.')]);
+                                                        json(['error' => __('You are not allowed to change name while you are in guild.')]);
                                                     } else{
                                                         $restricted_words = explode(',', $this->config->config_entry('changename|forbidden'));
                                                         $restrict = false;
@@ -2269,7 +2269,7 @@
                                                             }
                                                         }
                                                         if($restrict != false){
-                                                            echo json_encode(['error' => __('Found forbidden word in new character name please fix it.')]);
+                                                            json(['error' => __('Found forbidden word in new character name please fix it.')]);
                                                         } else{
                                                             $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->config->config_entry('changename|price_type'), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                                             $price = $this->config->config_entry('changename|price');
@@ -2277,7 +2277,7 @@
                                                                 $price -= ($price / 100) * $this->session->userdata(['vip' => 'change_name_discount']);
                                                             }
                                                             if($status < $price){
-                                                                echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('changename|price_type'), $this->session->userdata(['user' => 'server'])))]);
+                                                                json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('changename|price_type'), $this->session->userdata(['user' => 'server'])))]);
                                                             } else{
                                                                 $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('changename|price_type'));
 																if($this->Mcharacter->update_account_character($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']))){
@@ -2382,7 +2382,7 @@
                                                                     $this->Mcharacter->update_DmN_Votereward_Ranking($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'server']));
                                                                     $this->Maccount->add_account_log('Changed Name To ' . $this->Mcharacter->vars['new_name'] . ' for ' . $this->website->translate_credits($this->config->config_entry('changename|price_type'), $this->session->userdata(['user' => 'server'])), -$price, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                                                     $this->Mcharacter->add_to_change_name_history($old_name, $this->Mcharacter->vars['new_name'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                                    echo json_encode(['success' => __('Character Name Successfully Changed.'), 'new_name' => bin2hex($this->Mcharacter->vars['new_name'])]);
+                                                                    json(['success' => __('Character Name Successfully Changed.'), 'new_name' => bin2hex($this->Mcharacter->vars['new_name'])]);
                                                                 }
                                                             }
                                                         }
@@ -2397,7 +2397,7 @@
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -2410,16 +2410,16 @@
                     $this->Mcharacter->$key = trim($value);
                 }
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                    echo json_encode(['error' => __('Please logout from game.')]); 
+                    json(['error' => __('Please logout from game.')]); 
 				else{
                     if(!preg_match('/^[0-9]+$/', $this->Mcharacter->vars['credits']))
-                        echo json_encode(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); 
+                        json(['error' => sprintf(__('Invalid amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); 
 					else{
                         $this->vars['wcoin_config'] = $this->config->values('wcoin_exchange_config', $this->session->userdata(['user' => 'server']));
                         $this->vars['table_config'] = $this->config->values('table_config', $this->session->userdata(['user' => 'server']));
                         if(isset($this->vars['table_config']['wcoins']) && $this->vars['wcoin_config'] != false && $this->vars['wcoin_config']['active'] == 1){
                             if($this->Mcharacter->vars['credits'] < $this->vars['wcoin_config']['min_rate'])
-                                echo json_encode(['error' => vsprintf(__('Minimal exchange rate is %d %s'), [$this->vars['wcoin_config']['min_rate'], $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server']))])]); 
+                                json(['error' => vsprintf(__('Minimal exchange rate is %d %s'), [$this->vars['wcoin_config']['min_rate'], $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server']))])]); 
 							else{
                                 if($this->vars['wcoin_config']['reward_coin'] < 0)
                                     $total = floor($this->Mcharacter->vars['credits'] * abs($this->vars['wcoin_config']['reward_coin'])); 
@@ -2435,34 +2435,34 @@
                                 exchange_wcoins:
                                 $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), $this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                                 if($status < $this->Mcharacter->vars['credits'])
-                                    echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); 
+                                    json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])))]); 
 								else{
                                     $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->Mcharacter->vars['credits'], $this->vars['wcoin_config']['credits_type']);
                                     $this->Maccount->add_account_log('Exchange ' . $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])) . ' to' . __('WCoins'), -$this->Mcharacter->vars['credits'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                     $this->Mcharacter->add_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $total, $this->vars['table_config']['wcoins']);
-                                    echo json_encode(['success' => __('WCoins successfully exchanged.')]);
+                                    json(['success' => __('WCoins successfully exchanged.')]);
                                 }
                                 exchange_credits:
                                 if($status = $this->Mcharacter->get_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins'], $this->session->userdata(['user' => 'server']))){
                                     if($status < $this->Mcharacter->vars['credits'])
-                                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]); 
+                                        json(['error' => sprintf(__('You have insufficient amount of %s'), __('WCoins'))]); 
 									else{
                                         $this->website->add_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $total, $this->vars['wcoin_config']['credits_type']);
                                         $this->Maccount->add_account_log('Exchange ' . __('WCoins') . ' to ' . $this->website->translate_credits($this->vars['wcoin_config']['credits_type'], $this->session->userdata(['user' => 'server'])), -$this->Mcharacter->vars['credits'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                                         $this->Mcharacter->remove_wcoins($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']), $this->vars['table_config']['wcoins']);
-                                        echo json_encode(['success' => __('WCoins successfully exchanged.')]);
+                                        json(['success' => __('WCoins successfully exchanged.')]);
                                     }
                                 } else{
-                                    echo json_encode(['error' => __('Unable to exchange Wcoins')]);
+                                    json(['error' => __('Unable to exchange Wcoins')]);
                                 }
                             }
                         } else{
-                            echo json_encode(['error' => __('This module has been disabled.')]);
+                            json(['error' => __('This module has been disabled.')]);
                         }
                     }
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -2470,10 +2470,10 @@
         {
             if(isset($_POST['lang'])){
                 setcookie("dmn_language", $this->website->c($_POST['lang']), strtotime('+5 days', time()), "/");
-				echo json_encode(['success' => true]);																								
+				json(['success' => true]);																								
             }
 			else{
-				echo json_encode(['error' => true]); 
+				json(['error' => true]); 
 			}
         }
 		
@@ -2481,9 +2481,9 @@
         {
             if(isset($_POST['theme'])){
                 setcookie("dmn_template", $this->website->c($_POST['theme']), strtotime('+5 days', time()), "/");
-				echo json_encode(['success' => true]);																								
+				json(['success' => true]);																								
             }
-			echo json_encode(['error' => true]); 
+			json(['error' => true]); 
         }
 
 		public function paypal()
@@ -2516,20 +2516,20 @@
 					}
                     if($package_data != false){
                         if($this->Mdonate->insert_paypal_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'], $package_data['currency'], $isBattlePass, $isKeys))
-                            echo json_encode($this->Mdonate->get_paypal_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))); 
+                            json($this->Mdonate->get_paypal_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))); 
 						else
-                            echo json_encode(['error' => __('Unable to checkout please try again.')]);
+                            json(['error' => __('Unable to checkout please try again.')]);
                     } 
 					else{
-                        echo json_encode(['error' => __('Paypal package not found.')]);
+                        json(['error' => __('Paypal package not found.')]);
                     }
                 } 
 				else{
-                    echo json_encode(['error' => __('Unable to checkout please try again.')]);
+                    json(['error' => __('Unable to checkout please try again.')]);
                 }
             } 
 			else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -2540,17 +2540,17 @@
                 if(isset($_POST['proccess_paycall'])){
                     if($package_data = $this->Mdonate->get_paycall_package_data_by_id($_POST['proccess_paycall'], $this->session->userdata(['user' => 'server']))){
                         if($this->Mdonate->insert_paycall_order($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price']))
-                            echo json_encode($this->Mdonate->get_paycall_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'])); 
+                            json($this->Mdonate->get_paycall_data($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $package_data['reward'], $package_data['price'])); 
 						else
-                            echo json_encode(['error' => __('Unable to checkout please try again.')]);
+                            json(['error' => __('Unable to checkout please try again.')]);
                     } else{
-                        echo json_encode(['error' => __('Paycall package not found.')]);
+                        json(['error' => __('Paycall package not found.')]);
                     }
                 } else{
-                    echo json_encode(['error' => __('Unable to checkout please try again.')]);
+                    json(['error' => __('Unable to checkout please try again.')]);
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
@@ -2565,24 +2565,24 @@
                         $price -= ($price / 100) * $this->session->userdata(['vip' => 'hide_info_discount']);
                     }
                     if($status < $price){
-                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('account|hide_char_price_type'), $this->session->userdata(['user' => 'server'])))]);
+                        json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits($this->config->config_entry('account|hide_char_price_type'), $this->session->userdata(['user' => 'server'])))]);
                     } else{
                         $check_hide = $this->Maccount->check_hide_time($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                         if($check_hide == 'None'){
                             $this->Maccount->add_hide($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('account|hide_char_price_type'));
-                            echo json_encode(['success' => __('You have successfully hidden your chars')]);
+                            json(['success' => __('You have successfully hidden your chars')]);
                         } else{   
                             $this->Maccount->extend_hide($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $check_hide, $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, $this->config->config_entry('account|hide_char_price_type'));
-                            echo json_encode(['success' => __('You char hide time has been extended')]); 
+                            json(['success' => __('You char hide time has been extended')]); 
                         }
                     }
                 } else{
-                    echo json_encode(['error' => __('This module has been disabled.')]);
+                    json(['error' => __('This module has been disabled.')]);
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 		
@@ -2594,24 +2594,24 @@
                     $status = $this->Maccount->get_amount_of_credits($this->session->userdata(['user' => 'username']), ELITE_KILLER_HIDE_PRICE_TYPE, $this->session->userdata(['user' => 'server']), $this->session->userdata(['user' => 'id']));
                     $price = ELITE_KILLER_HIDE_PRICE;
                     if($status < $price){
-                        echo json_encode(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(ELITE_KILLER_HIDE_PRICE_TYPE, $this->session->userdata(['user' => 'server'])))]);
+                        json(['error' => sprintf(__('You have insufficient amount of %s'), $this->website->translate_credits(ELITE_KILLER_HIDE_PRICE_TYPE, $this->session->userdata(['user' => 'server'])))]);
                     } else{
                         $check_hide = $this->Maccount->check_hide_time_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                         if($check_hide == 'None'){
                             $this->Maccount->add_hide_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, ELITE_KILLER_HIDE_PRICE_TYPE);
-                            echo json_encode(['success' => __('You have successfully hidden your chars PK stats')]);
+                            json(['success' => __('You have successfully hidden your chars PK stats')]);
                         } else{   
                             $this->Maccount->extend_hide_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $check_hide, $price);
                             $this->website->charge_credits($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $price, ELITE_KILLER_HIDE_PRICE_TYPE);
-                            echo json_encode(['success' => __('You char hide time has been extended')]); 
+                            json(['success' => __('You char hide time has been extended')]); 
                         }
                     }
                 } else{
-                    echo json_encode(['error' => __('This module has been disabled.')]);
+                    json(['error' => __('This module has been disabled.')]);
                 }
             } else{
-                echo json_encode(['error' => __('Please login into website.')]);
+                json(['error' => __('Please login into website.')]);
             }
         }
 
