@@ -9,7 +9,4 @@ I have enought knowledge to try to maintain this and even add new stuff for free
 
 PS: There is also issue tracker where you can add problems or errors you have met. 
 
-PS2: My time is very expensive and i have enough money so don't bother event to ask me.
-
-PS3: I am not salvis or neo or itso
 
