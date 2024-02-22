@@ -28,7 +28,7 @@
         <p><?php echo __('Copyright'); ?> <?php echo date('Y'); ?>
             &copy; <?php echo $this->config->config_entry('main|servername'); ?>
             . <?php echo __('All Rights Reserved.'); ?></p>
-        <p style=""><?php echo __('Powered By'); ?> <a href="https://dmncms.net" target="_blank">DmN MuCMS</a></p>
+        <p style=""><?php echo __('Powered By'); ?> <a href="https://github.com/pulseP1986/free-mu-cms" target="_blank">Free MuCMS</a></p>
     </div>
 </div>
 <div id="loading"><img
