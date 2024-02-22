@@ -24,7 +24,6 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'guides' . DS . 'view.guides', $this->vars);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function search(){
             if(isset($_POST['search']) && $_POST['search'] != ''){
                 $this->vars['guides'] = $this->Mguides->load_guides($_POST['search']);
@@ -35,7 +34,6 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'guides' . DS . 'view.guides', $this->vars);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function category($id){
             if(ctype_digit($id)){
                 $this->vars['guides'] = $this->Mguides->load_guides_by_category($id);
@@ -48,7 +46,6 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'guides' . DS . 'view.guides', $this->vars);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function read($title, $id)
         {
             if(ctype_digit($id)){

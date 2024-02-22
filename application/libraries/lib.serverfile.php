@@ -33,8 +33,7 @@
             $this->info[$key] = $val;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function item_list($cat, $size = 32)
+		public function item_list($cat, $size = 32)
         {
 			if($size == 40){
 				$size = 32;

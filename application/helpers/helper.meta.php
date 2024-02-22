@@ -19,8 +19,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function request_meta_title()
+		public function request_meta_title()
         {
             if(array_key_exists($this->request->get_controller() . '/' . $this->request->get_method(), $this->data)){
                 return str_replace('%server_title%', $this->config->config_entry('main|servername'), $this->data[$this->request->get_controller() . '/' . $this->request->get_method()]['title']);
@@ -33,8 +32,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function request_meta_keywords()
+		public function request_meta_keywords()
         {
             if(array_key_exists($this->request->get_controller() . '/' . $this->request->get_method(), $this->data)){
                 return str_replace('%server_title%', $this->config->config_entry('main|servername'), $this->data[$this->request->get_controller() . '/' . $this->request->get_method()]['keywords']);
@@ -47,8 +45,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function request_meta_description()
+		public function request_meta_description()
         {
             if(array_key_exists($this->request->get_controller() . '/' . $this->request->get_method(), $this->data)){
                 return str_replace('%server_title%', $this->config->config_entry('main|servername'), $this->data[$this->request->get_controller() . '/' . $this->request->get_method()]['description']);

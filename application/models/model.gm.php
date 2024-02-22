@@ -177,7 +177,7 @@
         public function add_gm_log($log, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_GM_Logs (text, date, account, server, ip) VALUES (:text, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 

@@ -3,7 +3,6 @@
 
     class itemimage extends library
     {
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function load($item_id, $cat, $level = 0, $tags = 1, $search_cat = false, $extensions = ['webp', 'gif'])
         {
             if($search_cat == true){

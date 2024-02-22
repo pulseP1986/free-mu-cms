@@ -21,8 +21,7 @@
             return isset($this->vars[$name]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_char_list($account, $server)
+		public function load_char_list($account, $server)
         {
             $stmt = $this->website->db('game', $server)->prepare('SELECT '.$this->website->get_char_id_col($server).' AS id, Name, cLevel, Class FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
@@ -131,8 +130,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_new_item_by_slot($slot, $item = '')
+		public function generate_new_item_by_slot($slot, $item = '')
         {
             $hex = str_split($this->vars['Items'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
             if(isset($hex[$slot])){
@@ -215,14 +213,12 @@
 			]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function count_total_muuns($server)
+		public function count_total_muuns($server)
         {
             $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_market($page, $per_page = 25, $server, $tax = 0)
+		public function load_market($page, $per_page = 25, $server, $tax = 0)
         {
             $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
             $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, add_date, active_till, price, price_type, item, seller, server FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Muun_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
@@ -280,15 +276,13 @@
             return $data;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_sale_set_purchased($id, $buyer, $acc)
+		public function update_sale_set_purchased($id, $buyer, $acc)
         {
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Muun_Market SET sold = 1, buyer = :buyer, buyer_acc = :acc, purchase_date = GETDATE() WHERE id = :id');
             return $stmt->execute([':buyer' => $buyer, ':acc' => $acc, ':id' => $id]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_sale_set_removed($id, $buyer)
+		public function update_sale_set_removed($id, $buyer)
         {
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Muun_Market SET removed = 1, buyer = :buyer WHERE id = :id');
             return $stmt->execute([':buyer' => $buyer, ':id' => $id]);
@@ -312,7 +306,7 @@
         public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 		

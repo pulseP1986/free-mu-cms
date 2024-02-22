@@ -127,7 +127,7 @@
 
 		public function online_by_server($server, $cached_query = 60)
         {
-            $db = $this->get_db_from_serverlist($server);
+            $db = $this->get_db_from_server($server, true);
             if($db != ''){
                 $online = $this->db($db)->cached_query('online_count_by_server_' . $server, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 ' . $this->server_code($this->get_servercode($server)) . '', [], $cached_query);
                 return (int)$online[0]['count'];
@@ -136,9 +136,9 @@
         }
 		
 		public function online_by_subserver($server, $subkey, $cached_query = 60){
-			$db = $this->get_db_from_serverlist($server);
+			$db = $this->get_db_from_server($server, true);
 			if($db != ''){
-                $online = $this->db($db)->cached_query('online_count_by_subserver_' . $server.$subkey, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 AND ServerName = \''.$this->db('web')->escape($subkey).'\'', [], $cached_query);
+                $online = $this->db($db)->cached_query('online_count_by_subserver_' . $server.$subkey, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 AND ServerName = '.$this->db('web')->escape('web').'', [], $cached_query);
                 return (int)$online[0]['count'];
             }
             return 0;
@@ -146,7 +146,7 @@
 
 		public function active_by_server($server, $cached_query = 60)
         {
-            $db = $this->get_db_from_serverlist($server);
+            $db = $this->get_db_from_server($server, true);
             if($db != ''){
                 $online = $this->db($db)->cached_query('active_count_by_server_' . $server, 'SELECT DISTINCT(COUNT(ip)) AS count FROM MEMB_STAT WHERE ConnectTM >= DATEADD(day, -1,CONVERT(datetime, CONVERT(varchar(10), GETDATE(), 101))) ' . $this->server_code($this->get_servercode($server)) . '', [], $cached_query);
                 return (int)$online[0]['count'];
@@ -173,15 +173,15 @@
                 $serv = '';
                 foreach($server_array AS $key => $s){
                     if($key == 0){
-                        $serv .= ($and == true) ? 'AND (ServerName = \'' . $this->db('web')->escape($s) . '\'' : '(ServerName = \'' . $this->db('web')->escape($s) . '\'';
+                        $serv .= ($and == true) ? 'AND (ServerName = ' . $this->db('web')->escape($s) . '' : '(ServerName = ' . $this->db('web')->escape($s) . '';
                     } else if($key == $length - 1){
-                        $serv .= ' OR ServerName = \'' . $this->db('web')->escape($s) . '\')';
+                        $serv .= ' OR ServerName = ' . $this->db('web')->escape($s) . ')';
                     } else{
-                        $serv .= ' OR ServerName = \'' . $this->db('web')->escape($s) . '\'';
+                        $serv .= ' OR ServerName = ' . $this->db('web')->escape($s) . '';
                     }
                 }
             } else{
-                $serv = ($and == true) ? 'AND ServerName = \'' . $this->db('web')->escape($sv) . '\'' : 'ServerName = \'' . $this->db('web')->escape($sv) . '\'';
+                $serv = ($and == true) ? 'AND ServerName = ' . $this->db('web')->escape($sv) . '' : 'ServerName = ' . $this->db('web')->escape($sv) . '';
             }
             return $serv;
         }
@@ -207,12 +207,6 @@
             }
         }
 
-        public function get_db_from_serverlist($server = '', $acc_db = true)
-        {
-            $serverlist = $this->server_list($server);
-            return ($acc_db == true) ? $serverlist['db_acc'] : $serverlist['db'];
-        }
-
         public function get_default_account_database()
         {
             $serverlist = $this->server_list();
@@ -231,64 +225,15 @@
             return (bool)$this->server_list('', true);
         }
 
-		public function count_resets()
-        {
-            return $this->db($this->get_db_from_server($this->registry->session->userdata(['user' => 'server'])))->snumrows('SELECT SUM(' . $this->config->values('table_config', [$this->registry->session->userdata(['user' => 'server']), 'resets', 'column']) . ') AS count FROM Character WHERE AccountId = \'' . $this->registry->session->userdata(['user' => 'username']) . '\'');
-        }
-		
-		public function check_chars(){
-			return $this->db($this->get_db_from_server($this->registry->session->userdata(['user' => 'server'])))->query('SELECT Name FROM Character WHERE AccountId = \''.$this->registry->session->userdata(['user' => 'server']).'\'')->fetch();
-		}
-
 		public function stats($server = '', $cached_query = 60)
         {
             if(!$server)
                 $server = array_keys($this->server_list($server))[0];
-            $db1 = $this->db($this->get_db_from_server($server));
-            $db2 = $this->db($this->get_db_from_serverlist($server));
-            $queries = [
-				'chars' => ['query' => 'SELECT COUNT(*) AS count FROM Character', 'db' => $db1], 
-				'accounts' => ['query' => 'SELECT COUNT(*) AS count FROM MEMB_INFO', 'db' => $db2], 
-				'guilds' => ['query' => 'SELECT COUNT(*) AS count FROM Guild', 'db' => $db1], 
-				'active' => ['query' => 'SELECT DISTINCT(COUNT(ip)) AS count FROM MEMB_STAT WHERE ConnectTM >= DATEADD(day, -1,CONVERT(datetime, CONVERT(varchar(10), GETDATE(), 101))) ' . $this->server_code($this->get_servercode($server)) . '', 'db' => $db2]
-			];
-            $result = [];
-            foreach($queries as $key => $query){
-                $qresult = $queries[$key]['db']->cached_query($key . $server, $queries[$key]['query'], [], $cached_query);
-                $result[$key] = $qresult[0]['count'];
-            }
-            return $result;
+			
+			$this->load->model('stats');
+			
+			return $this->registry->Mstats->server_stats($server, $cached_query);
         }
-		
-		public function getArcanaTopPvpSM($server = false, $cache_time = 120){
-			if(!$server)
-               $server = array_keys($this->server_list())[0];
-			return $this->db('game', $server)->cached_query('arcnana_pvp_sm_'.$server, 'SELECT TOP 1 Name, Class, MataMataSM AS MataMata FROM Character WHERE Class IN (0,1) ORDER BY MataMataSM DESC, Name DESC', $cache_time);	
-		}
-		
-		public function getArcanaTopPvpBK($server = false, $cache_time = 120){
-			if(!$server)
-               $server = array_keys($this->server_list())[0];
-			return $this->db('game', $server)->cached_query('arcnana_pvp_bk_'.$server, 'SELECT TOP 1 Name, Class, MataMataBK AS MataMata FROM Character WHERE Class IN (16,17) ORDER BY MataMataBK DESC, Name DESC', $cache_time);	
-		}
-		
-		public function getArcanaTopPvpME($server = false, $cache_time = 120){
-			if(!$server)
-               $server = array_keys($this->server_list())[0];
-			return $this->db('game', $server)->cached_query('arcnana_pvp_me_'.$server, 'SELECT TOP 1 Name, Class, MataMataELF AS MataMata FROM Character WHERE Class IN (32,33) ORDER BY MataMataELF DESC, Name DESC', $cache_time);	
-		}
-		
-		public function getArcanaTopPvpMG($server = false, $cache_time = 120){
-			if(!$server)
-               $server = array_keys($this->server_list())[0];
-			return $this->db('game', $server)->cached_query('arcnana_pvp_mg_'.$server, 'SELECT TOP 1 Name, Class, MataMataMG AS MataMata FROM Character WHERE Class IN (48) ORDER BY MataMataMG DESC, Name DESC', $cache_time);	
-		}
-		
-		public function getArcanaTopPvpDL($server = false, $cache_time = 120){
-			if(!$server)
-               $server = array_keys($this->server_list())[0];
-			return $this->db('game', $server)->cached_query('arcnana_pvp_dl_'.$server, 'SELECT TOP 1 Name, Class, MataMataDL AS MataMata FROM Character WHERE Class IN (64) ORDER BY MataMataDL DESC, Name DESC', $cache_time);	
-		}
 		
 		public function topByClass($amount, $class, $server = false, $cacheTime = 180, $huntLog = false){
 			if(!$server){
@@ -348,22 +293,22 @@
         {
             switch($type){
                 case 'scf':
-                    return $this->db('game', $server)->query('SELECT SCFGensFamily AS family FROM Character WHERE Name = \''.$this->c($name).'\'')->fetch();
+                    return $this->db('game', $server)->query('SELECT SCFGensFamily AS family FROM Character WHERE Name = '.$this->db('game', $server)->escape($name).'')->fetch();
                     break;
                 case 'muengine':
-                    return $this->db('game', $server)->query('SELECT GensType AS family FROM Character WHERE Name = \''.$this->c($name).'\'')->fetch();
+                    return $this->db('game', $server)->query('SELECT GensType AS family FROM Character WHERE Name = '.$this->db('game', $server)->escape($name).'')->fetch();
                     break;
                 case 'zteam':
-                    return $this->db('game', $server)->query('SELECT memb_clan AS family FROM GensUserInfo WHERE memb_char = \''.$this->c($name).'\'')->fetch();
+                    return $this->db('game', $server)->query('SELECT memb_clan AS family FROM GensUserInfo WHERE memb_char = '.$this->db('game', $server)->escape($name).'')->fetch();
                     break;
                 case 'exteam':
-                    return $this->db('game', $server)->query('SELECT Influence AS family FROM GensMember WHERE Name = \''.$this->c($name).'\'')->fetch();
+                    return $this->db('game', $server)->query('SELECT Influence AS family FROM GensMember WHERE Name = '.$this->db('game', $server)->escape($name).'')->fetch();
                     break;
                 case 'igcn':
-                    return $this->db('game', $server)->query('SELECT Influence AS family FROM IGC_Gens  WHERE Name = \''.$this->c($name).'\'')->fetch();
+                    return $this->db('game', $server)->query('SELECT Influence AS family FROM IGC_Gens  WHERE Name = '.$this->db('game', $server)->escape($name).'')->fetch();
                     break;
                 case 'xteam':
-                    return $this->db('game', $server)->query('SELECT Family AS family FROM Gens_Rank WHERE Name = \''.$this->c($name).'\'')->fetch();
+                    return $this->db('game', $server)->query('SELECT Family AS family FROM Gens_Rank WHERE Name = '.$this->db('game', $server)->escape($name).'')->fetch();
                     break;	
                 default:
                     return [];
@@ -441,43 +386,24 @@
 		public function getAnnouncement(){
 			
 		}
-		
-		public function get_gm_info($level = 1, $server = false){
-			if(!$server)
-                $server = array_keys($this->server_list())[0];
-			
-			$gms = $this->config->values('gmlist_config');
-			foreach($gms AS $key => $gm){
-				$gms[$key]['status'] = $this->check_connect_stat($gms[$key]['acc'], $server);
-				if($level == 2 && $gms[$key]['level'] != 2){
-					unset($gms[$key]);
-				}
-				if($level == 1 && $gms[$key]['level'] != 1){
-					unset($gms[$key]);
-				}
-				
-				
-			}
-			return $gms;
-		}
 
 		public function checkResetItem($user, $server, $name, $range, $cat){
-			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Reset_Required_Items WHERE server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();
+			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Reset_Required_Items WHERE server = '.$this->db('web')->escape($server).' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'')->fetch();
 			return $count;
 		}
 
 		public function checkGResetItem($user, $server, $name, $range, $cat){
-			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_GrandReset_Required_Items WHERE server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();
+			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_GrandReset_Required_Items WHERE server = '.$this->db('web')->escape($server).' AND memb___id = '.$this->db('web')->escape($user).' AND character = '.$this->db('web')->escape($name).' AND range = '.$this->db('web')->escape($range).' AND cat = '.$this->db('web')->escape($cat).'')->fetch();
 			return $count;
 		}
 
 		public function checkClassChangeItem($user, $server, $name, $cat){
-			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Change_Class_Required_Items WHERE server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();
+			$count = $this->db('web')->query('SELECT config_id, hex FROM DmN_Change_Class_Required_Items WHERE server = '.$this->db('web')->escape($server).' AND memb___id = '.$this->db('web')->escape($user).' AND character = '.$this->db('web')->escape($name).' AND cat = '.$this->db('web')->escape($cat).'')->fetch();
 			return $count;
 		}
 
 		public function addResetReqItems($user, $server, $name, $range, $cat, $id, $item){
-			$data = '('. $id .', \''.$this->db('web')->escape($name).'\', \''.$this->db('web')->escape($user).'\', \''.$this->db('web')->escape($server).'\', \''.$this->db('web')->escape($range).'\', \''.$cat.'\', \''.$item['hex'].'\'';
+			$data = '('. $id .', '.$this->db('web')->escape($name).', '.$this->db('web')->escape($user).', '.$this->db('web')->escape($server).', '.$this->db('web')->escape($range).', \''.$cat.'\', \''.$item['hex'].'\'';
 			if(isset($item['priceType']) && $item['priceType'] != 0){
 				$data .= ','.$item['skipPrice'].', '.$item['priceType'].'';
 			}
@@ -489,7 +415,7 @@
 		}
 
 		public function addGResetReqItems($user, $server, $name, $range, $cat, $id, $item){
-			$data = '('. $id .', \''.$this->db('web')->escape($name).'\', \''.$this->db('web')->escape($user).'\', \''.$this->db('web')->escape($server).'\', \''.$this->db('web')->escape($range).'\', \''.$cat.'\', \''.$item['hex'].'\'';
+			$data = '('. $id .', '.$this->db('web')->escape('web').', '.$this->db('web')->escape('web').', '.$this->db('web')->escape('web').', '.$this->db('web')->escape('web').', \''.$cat.'\', \''.$item['hex'].'\'';
 			if(isset($item['priceType']) && $item['priceType'] != 0){
 				$data .= ','.$item['skipPrice'].', '.$item['priceType'].'';
 			}
@@ -501,7 +427,7 @@
 		}
 
 		public function addChangeClassReqItems($user, $server, $name, $cat, $id, $item){
-			$data = '('. $id .', \''.$this->db('web')->escape($name).'\', \''.$this->db('web')->escape($user).'\', \''.$this->db('web')->escape($server).'\', \''.$cat.'\', \''.$item['hex'].'\'';
+			$data = '('. $id .', '.$this->db('web')->escape('web').', '.$this->db('web')->escape('web').', '.$this->db('web')->escape('web').', \''.$cat.'\', \''.$item['hex'].'\'';
 			if(isset($item['priceType']) && $item['priceType'] != 0){
 				$data .= ','.$item['skipPrice'].', '.$item['priceType'].'';
 			}
@@ -513,89 +439,75 @@
 		}
 
 		public function checkCompletedResetItem($user, $server, $name, $id, $range, $cat){
-			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_Reset_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();	
+			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_Reset_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'')->fetch();	
 		}
 
 		public function checkCompletedGResetItem($user, $server, $name, $id, $range, $cat){
-			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_GrandReset_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();	
+			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, range, hex FROM DmN_GrandReset_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'')->fetch();	
 		}
 		
 		public function checkCompletedChangeClassItem($user, $server, $name, $id, $cat){
-			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, hex FROM DmN_Change_Class_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND cat = \''.$this->db('web')->escape($cat).'\'')->fetch();	
+			return $this->db('web')->query('SELECT is_skipped, is_completed, skip_price, skip_price_type, hex FROM DmN_Change_Class_Required_Items WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'')->fetch();	
 		}
 		
 		public function setSkippedResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function setSkippedGResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function setSkippedChangeClassItem($id, $char, $user, $server, $cat){
-			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_skipped = 1, is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function setCompletedResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Reset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function setCompletedGResetItem($id, $char, $user, $server, $range, $cat){
-			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND range = \''.$this->db('web')->escape($range).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_GrandReset_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function setCompletedChangeClassItem($id, $char, $user, $server, $cat){
-			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($char).'\' AND cat = \''.$this->db('web')->escape($cat).'\'');
+			$this->db('web')->query('UPDATE DmN_Change_Class_Required_Items SET is_completed = 1 WHERE config_id = '.$this->db('web')->escape($id).' AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND cat = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function checkNotCompletedItemCount($user, $server, $name, $range){
-			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Reset_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
+			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Reset_Required_Items WHERE is_completed = 0 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').'');
 		}	
 		
 		public function checkNotCompletedItemCountGRes($user, $server, $name, $range){
-			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_GrandReset_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
+			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_GrandReset_Required_Items WHERE is_completed = 0 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function checkNotCompletedItemCountChangeClass($user, $server, $name){
-			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Change_Class_Required_Items WHERE is_completed = 0 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\'');
+			return $this->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Change_Class_Required_Items WHERE is_completed = 0 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function removeResetItems($user, $server, $name, $range){
-			return $this->db('web')->query('DELETE FROM DmN_Reset_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
+			return $this->db('web')->query('DELETE FROM DmN_Reset_Required_Items WHERE is_completed = 1 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function removeGResetItems($user, $server, $name, $range){
-			return $this->db('web')->query('DELETE FROM DmN_GrandReset_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\' AND range = \''.$this->db('web')->escape($range).'\'');
+			return $this->db('web')->query('DELETE FROM DmN_GrandReset_Required_Items WHERE is_completed = 1 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').' AND range = '.$this->db('web')->escape('web').'');
 		}
 		
 		public function removeChangeClassItems($user, $server, $name){
-			return $this->db('web')->query('DELETE FROM DmN_Change_Class_Required_Items WHERE is_completed = 1 AND server = \''.$this->db('web')->escape($server).'\' AND memb___id = \''.$this->db('web')->escape($user).'\' AND character = \''.$this->db('web')->escape($name).'\'');
+			return $this->db('web')->query('DELETE FROM DmN_Change_Class_Required_Items WHERE is_completed = 1 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').'');
 		}
-
-        public function module_disabled($config)
-        {
-            if($this->config->config_entry($config . '|module_status') == 1){
-                return false;
-            } else{
-                if(is_ajax()){
-                    json(['title' => __('Module Disabled'), 'callback' => false, 'template' => 'view_module_disabled.ejs']);
-                } else{
-                    $this->load->view($this->config->config_entry('main|template') . DS . 'view.header');
-                    $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
-                    return true;
-                }
-            }
-        }
 
         public function server_select_box($id = '', $class = '', $show_label = true)
         {
             $this->output = '';
-            if(count($this->server_list()) > 1){
+			$server_list = $this->server_list();
+            if(count($server_list) > 1){
 				if($show_label)
 					$this->output .= '<span style="color: gray;">' . __('Select Server:') . '</span>';
 				$this->output .= '<select name="server" ' . $id . ' ' . $class . '><option value="">' . __('Click To Select') . '</option>' . "\n";
 			
-                foreach($this->server_list() as $key => $value){
+                foreach($server_list as $key => $value){
                     if($value['visible'] == 1){
                         $this->output .= '<option value="' . $key . '">' . $value['title'] . "</option>\n";
                     }
@@ -606,14 +518,27 @@
             return false;
         }
 		
-        public function server_list($sv = '', $check_multi_db_acc = false)
+        public function server_list($serv = '', $check_multi_acc = false)
         {
-            return server_list($sv, $check_multi_db_acc);
-        }
-
-        public function ip()
-        {
-            return ip();
+            $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'serverlist.json');
+			$servers = json_decode($file, true);
+			if(is_array($servers)){
+				if($check_multi_acc == true){
+					return $servers['USE_MULTI_ACCOUNT_DB'];
+				} else{
+					unset($servers['USE_MULTI_ACCOUNT_DB']);
+					if($serv != ''){
+						if(array_key_exists($serv, $servers)){
+							return $servers[$serv];
+						} else{
+							return false;
+						}
+					}
+					return $servers;
+				}
+			} else{
+				throw new Exception('Unable to load server list. Please check configuration file.');
+			}
         }
 		
         public function hex2bin($hexstr)
@@ -838,7 +763,7 @@
             }
         }
 
-        public function get_account_wcoins_balance($server = '')
+        public function get_account_wcoins_balance($server)
         {
             $this->vars['table_config'] = $this->config->values('table_config', $server);
             if(isset($this->vars['table_config']['wcoins'])){
@@ -848,7 +773,7 @@
             return 0;
         }
 		
-		public function get_account_goblinpoint_balance($server = '')
+		public function get_account_goblinpoint_balance($server)
         {
             $this->vars['table_config'] = $this->config->values('table_config', $server);
             if(isset($this->vars['table_config']['goblinpoint'])){
@@ -1019,15 +944,6 @@
         {
             $gallery = $this->db('web')->query('SELECT Top ' . (int)$count . ' id, name FROM DmN_Gallery  WHERE section IN(1,2) ORDER BY NEWID()')->fetch_all();
             return ($gallery) ? $gallery : false;
-        }
-
-        public function load_sidebar_cs_info($server = '')
-        {
-            if($server == ''){
-                $server = array_keys($this->server_list())[0];
-            }
-            $this->load->model('stats');
-            return $this->registry->Mstats->get_cs_info($server);
         }
 
         public function zen_format($zen)
@@ -1382,11 +1298,7 @@
 		public function getPHPExecutablePath(){
 			getPHPExecutablePath();
 		}
-		
-		public function writelog($text, $file){
-			writelog($text, $file);
-		}
-		
+
 		public function checkTwitchStatus($user){
 			$token = $this->authTwitch();
 			$url = 'https://api.twitch.tv/helix/streams/?user_login='. $user;

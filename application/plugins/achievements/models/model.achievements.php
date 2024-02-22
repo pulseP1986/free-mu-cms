@@ -238,8 +238,7 @@
             return '0 AS grand_resets,';
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function char_info($char, $server, $by_id = false)
+		public function char_info($char, $server, $by_id = false)
         {
             $identifier = ($by_id) ? $this->website->get_char_id_col($server) : 'Name';
 			$ruud = ', 0 AS Ruud';
@@ -806,8 +805,7 @@
 			return array_sum($transactions);
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_master_level($char, $server)
+		private function load_master_level($char, $server)
         {
             if($this->config->values('table_config', [$server, 'master_level', 'column']) != false){
                 $stmt = $this->website->db('game', $server)->prepare('SELECT ' . $this->config->values('table_config', [$server, 'master_level', 'column']) . ' AS mlevel FROM ' . $this->config->values('table_config', [$server, 'master_level', 'table']) . ' WHERE ' . $this->config->values('table_config', [$server, 'master_level', 'identifier_column']) . ' = :char');
@@ -820,8 +818,7 @@
             return 0;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function inventory($char, $server)
+		public function inventory($char, $server)
         {
 			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':char' => $char]);
@@ -1014,7 +1011,7 @@
         public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
     }

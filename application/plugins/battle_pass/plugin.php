@@ -215,8 +215,7 @@
          * return mixed
          *
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function user_module()
+		private function user_module()
         {
             //check if visitor has user privilleges
             //if($this->pluginaizer->session->is_user()){
@@ -2466,8 +2465,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function enable()
+		public function enable()
         {
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
@@ -2501,8 +2499,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function about()
+		public function about()
         {
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){

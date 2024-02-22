@@ -50,8 +50,7 @@
         private $wing_additional5_element_lvl;
 		private $mastery_bonus_opt;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
+		public function __construct()
         {
             parent::__construct();
             $this->load->helper('website');
@@ -70,8 +69,7 @@
             $this->load->model('shop');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function index($page = 1)
+		public function index($page = 1)
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
@@ -293,8 +291,7 @@
 			}
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function category($cat = '', $page = 1)
+		public function category($cat = '', $page = 1)
         {
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
@@ -800,8 +797,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function calculate_price()
+		private function calculate_price()
         {
             $this->price = $this->Mshop->discount($this->item_info['price'], $this->session->userdata(['user' => 'server']));
             if($this->item_info['original_item_cat'] == 12 && in_array($this->item_info['item_id'], $this->errtel_ids)){

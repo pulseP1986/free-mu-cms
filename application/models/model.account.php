@@ -228,13 +228,13 @@
         public function insert_referrer($referrer)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Refferals (refferer, refferal, date_reffered, refferal_ip) VALUES (:referrer, :referral, GETDATE(), :ip)');
-            $stmt->execute([':referrer' => $referrer, ':referral' => $this->vars['user'], ':ip' => $this->website->ip()]);
+            $stmt->execute([':referrer' => $referrer, ':referral' => $this->vars['user'], ':ip' => ip()]);
         }
 
         public function check_referral_ip($server)
         {
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE last_login_ip = :ip');
-            $stmt->execute([':ip' => $this->website->ip()]);
+            $stmt->execute([':ip' => ip()]);
             if($stmt->fetch()){
                 return true;
             }
@@ -328,7 +328,7 @@
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'email_confirmation_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
-            $body = str_replace('###IP###', $this->website->ip(), $body);
+            $body = str_replace('###IP###', ip(), $body);
             $body = str_replace('###URL###', $this->config->base_url . 'account-panel/email-confirm/' . $this->activation_code, $body);
             $this->sendmail($this->vars['email'], 'Email Confirmation', $body);
             if($this->error == false){
@@ -1150,7 +1150,7 @@
 		public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 

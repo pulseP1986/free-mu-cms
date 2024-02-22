@@ -164,11 +164,11 @@
 
         public function set_new_stats()
         {
-            $this->vars['new_str'] = $this->show65kStats($this->char_info['Strength']) + $this->vars['str_stat'];
-            $this->vars['new_agi'] = $this->show65kStats($this->char_info['Dexterity']) + $this->vars['agi_stat'];
-            $this->vars['new_ene'] = $this->show65kStats($this->char_info['Energy']) + $this->vars['ene_stat'];
-            $this->vars['new_vit'] = $this->show65kStats($this->char_info['Vitality']) + $this->vars['vit_stat'];
-            $this->vars['new_com'] = in_array($this->char_info['Class'], [64, 65, 66, 67, 70, 78]) ? $this->show65kStats($this->char_info['Leadership']) + $this->vars['com_stat'] : 0;
+            $this->vars['new_str'] = $this->website->show65kStats($this->char_info['Strength']) + $this->vars['str_stat'];
+            $this->vars['new_agi'] = $this->website->show65kStats($this->char_info['Dexterity']) + $this->vars['agi_stat'];
+            $this->vars['new_ene'] = $this->website->show65kStats($this->char_info['Energy']) + $this->vars['ene_stat'];
+            $this->vars['new_vit'] = $this->website->show65kStats($this->char_info['Vitality']) + $this->vars['vit_stat'];
+            $this->vars['new_com'] = in_array($this->char_info['Class'], [64, 65, 66, 67, 70, 78]) ? $this->website->show65kStats($this->char_info['Leadership']) + $this->vars['com_stat'] : 0;
             $this->vars['new_lvlup'] = $this->char_info['LevelUpPoint'] - $this->vars['allstats'];
         }
 
@@ -479,14 +479,14 @@
             } 
 			else{
                 $data = [
-					':str' => $this->show65kStats($this->char_info['Strength']) - round((RES_DECREASE_STATS_PERC / 100) * $this->show65kStats($this->char_info['Strength'])), 
-					':agi' => $this->show65kStats($this->char_info['Dexterity']) - round((RES_DECREASE_STATS_PERC / 100) * $this->show65kStats($this->char_info['Dexterity'])), 
-					':vit' => $this->show65kStats($this->char_info['Vitality']) - round((RES_DECREASE_STATS_PERC / 100) * $this->show65kStats($this->char_info['Vitality'])), 
-					':ene' => $this->show65kStats($this->char_info['Energy']) - round((RES_DECREASE_STATS_PERC / 100) * $this->show65kStats($this->char_info['Energy']))
+					':str' => $this->website->show65kStats($this->char_info['Strength']) - round((RES_DECREASE_STATS_PERC / 100) * $this->website->show65kStats($this->char_info['Strength'])), 
+					':agi' => $this->website->show65kStats($this->char_info['Dexterity']) - round((RES_DECREASE_STATS_PERC / 100) * $this->website->show65kStats($this->char_info['Dexterity'])), 
+					':vit' => $this->website->show65kStats($this->char_info['Vitality']) - round((RES_DECREASE_STATS_PERC / 100) * $this->website->show65kStats($this->char_info['Vitality'])), 
+					':ene' => $this->website->show65kStats($this->char_info['Energy']) - round((RES_DECREASE_STATS_PERC / 100) * $this->website->show65kStats($this->char_info['Energy']))
 				];
                 if(in_array($this->char_info['Class'], [64, 65, 66, 67, 70, 78])){
                     $dl = ', Leadership = :com';
-                    $data[':com'] = $this->show65kStats($this->char_info['Leadership'])/* - round((RES_DECREASE_STATS_PERC / 100) * $this->show65kStats($this->char_info['Leadership']))*/;
+                    $data[':com'] = $this->website->show65kStats($this->char_info['Leadership'])/* - round((RES_DECREASE_STATS_PERC / 100) * $this->website->show65kStats($this->char_info['Leadership']))*/;
                 } 
 				else{
                     $dl = '';
@@ -1174,11 +1174,6 @@
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET '.$ruud.' = '.$ruud.' + :money WHERE AccountId = :account AND '.$this->website->get_char_id_col($server).' = :char');
 			$stmt->execute([':money' => (int)$money, ':account' => $user, ':char' => $char]);
         }
-		
-        private function show65kStats($stat_value)
-        {
-            return ($stat_value < 0) ? $stat_value += 65536 : $stat_value;
-        }
 
 		public function load_character_info($char, $server, $by_id = false)
         {
@@ -1505,7 +1500,7 @@
         public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 		

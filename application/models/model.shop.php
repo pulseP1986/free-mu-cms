@@ -293,7 +293,7 @@
         public function log_purchase($user, $server, $hex, $price, $method)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Shop_Logs (memb___id, server, item_hex, date, price, price_type, ip) VALUES (:user, :server, :hex, GETDATE(), :price, :price_text, :ip)');
-            $stmt->execute([':user' => $user, ':server' => $server, ':hex' => $hex, ':price' => $price, ':price_text' => $method, ':ip' => $this->website->ip()]);
+            $stmt->execute([':user' => $user, ':server' => $server, ':hex' => $hex, ':price' => $price, ':price_text' => $method, ':ip' => ip()]);
         }
 
         private function get_type($cat)

@@ -52,8 +52,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function login()
+		public function login()
         {
             if(count($_POST) > 0){
                 foreach($_POST as $key => $value){
@@ -127,8 +126,7 @@
             header('Location: ' . $this->config->base_url . ACPURL . '');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function manage_settings($type = 'main')
+		public function manage_settings($type = 'main')
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -241,8 +239,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function run_cron_task($task = '')
+		public function run_cron_task($task = '')
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($task != ''){
@@ -272,8 +269,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function change_task_status()
+		public function change_task_status()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $task = isset($_POST['task']) ? $_POST['task'] : '';
@@ -298,8 +294,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_task_schedule()
+		public function edit_task_schedule()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $task = isset($_POST['task']) ? $_POST['task'] : '';
@@ -345,8 +340,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function change_class_allowed_class_list()
+		public function change_class_allowed_class_list()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -418,8 +412,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_ranking_settings()
+		public function load_ranking_settings()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
@@ -445,8 +438,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_table_settings()
+		public function load_table_settings()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
@@ -462,8 +454,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_pre_defined_table_settings()
+		public function load_pre_defined_table_settings()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['team'])){
@@ -4781,8 +4772,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function languages()
+		public function languages()
         {
 			if ($this->session->userdata(array('admin' => 'is_admin'))) {
 				$this->load_header();
@@ -4795,8 +4785,7 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function translate($lang = 'en')
+		public function translate($lang = 'en')
         {
             if($this->session->userdata(array('admin'=>'is_admin'))){
 				$this->load_header();
@@ -4961,8 +4950,7 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function import_language()
+		public function import_language()
         {
 			if ($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->load_header();
@@ -5007,8 +4995,7 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function export_language($lang)
+		public function export_language($lang)
         {
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$languages = $this->config->values('locale_config');
@@ -5087,8 +5074,7 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function delete_language()
+		public function delete_language()
         {
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
@@ -5237,8 +5223,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function del_item()
+		public function del_item()
         {
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
@@ -5282,8 +5267,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_items()
+		public function load_items()
         {
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
@@ -5332,8 +5316,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_wh_item()
+		public function add_wh_item()
         {
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
@@ -5451,8 +5434,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function generate_item()
+		private function generate_item()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->iteminfo->setItemData($this->item_info['item_id'], $this->item_info['original_item_cat'], $this->website->get_value_from_server($_SESSION['vault_server'], 'item_size'));
@@ -5483,8 +5465,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_accounts()
+		public function load_accounts()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['servers'] = $this->website->server_list();
@@ -5563,8 +5544,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function filter_account_list()
+		public function filter_account_list()
         {
             $time = time() + (86400 * 3);
             if($this->session->userdata(['admin' => 'is_admin'])){
@@ -5599,8 +5579,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function filter_account_reset()
+		public function filter_account_reset()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 setcookie("filter_joined", '', time() - 3600, '/');
@@ -5760,8 +5739,7 @@
             }
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function character_manager($page = 1, $server = '')
+		public function character_manager($page = 1, $server = '')
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -5804,8 +5782,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function activate_account($id, $server)
+		public function activate_account($id, $server)
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -5888,8 +5865,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_character($id = -1, $server = '')
+		public function edit_character($id = -1, $server = '')
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -6238,8 +6214,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function support_requests($page = 1)
+		public function support_requests($page = 1)
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -6537,8 +6512,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_reset_settings()
+		public function add_reset_settings()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -6662,8 +6636,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_greset_settings()
+		public function add_greset_settings()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -7093,8 +7066,7 @@
             }
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_reset_settings($key, $server)
+		public function edit_reset_settings($key, $server)
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -7201,8 +7173,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_greset_settings($key, $server)
+		public function edit_greset_settings($key, $server)
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -7553,8 +7524,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_server()
+		public function add_server()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -7719,8 +7689,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_server($server = '')
+		public function edit_server($server = '')
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -7886,8 +7855,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function manage_plugins()
+		public function manage_plugins()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
@@ -7913,8 +7881,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function release_license()
+		public function release_license()
         {
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($this->session->userdata(['admin' => 'username']) == 'demo_admin'){

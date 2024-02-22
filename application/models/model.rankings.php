@@ -30,8 +30,7 @@
             parent::__construct();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_ranking_data($type, $server, $config, $table_config, $top = false, $pageNumber = 1)
+		public function get_ranking_data($type, $server, $config, $table_config, $top = false, $pageNumber = 1)
         {
             switch($type){
                 case 'players':
@@ -106,8 +105,7 @@
 			}
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function check_cache($name, $identifier, $server, $time = 360)
+		private function check_cache($name, $identifier, $server, $time = 360)
         {
             $this->cache_name = ($this->class_filter == true) ? $name . '#' . $server . '#' . $this->c_class . '#' . $this->top : $name . '#' . $server . '#' . $this->top;
             $this->website->check_cache($this->cache_name, $identifier, $time);
@@ -299,8 +297,7 @@
 			return 0;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_found_chars($name, $server)
+		public function load_found_chars($name, $server)
         {
             $status = $this->join_memb_stat(1, 'c.AccountId', ', m.IP,  m.ConnectStat', $server);
             $query = $this->website->db('game', $server)->query('SELECT c.Name, c.AccountId ' . $status[0] . ' FROM Character AS c ' . $status[1] . ' WHERE c.Name LIKE \'%' . $this->website->db('game', $server)->escape($name) . '%\'');
@@ -318,8 +315,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_found_guilds($name, $server)
+		public function load_found_guilds($name, $server)
         {
             $query = $this->website->db('game', $server)->query('SELECT G_Name FROM Guild WHERE G_Name LIKE \'%' . $this->website->db('game', $server)->escape($name) . '%\'');
             if($query){
@@ -336,8 +332,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_guild_rankings($server, $config, $top, $table_config)
+		private function load_guild_rankings($server, $config, $top, $table_config)
         {
             if(!isset($config['guild']))
                 return false;
@@ -468,8 +463,7 @@
             return $this->website->guilds;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_killers_rankings($server, $config, $table_config, $top)
+		private function load_killers_rankings($server, $config, $table_config, $top)
         {
             if(!isset($config['killer']) || $table_config == false)
                 return false;
@@ -528,8 +522,7 @@
             return $this->website->killers;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_vote_rankings($server, $config, $top)
+		private function load_vote_rankings($server, $config, $top)
         {
             if(!isset($config['voter']))
                 return false;
@@ -562,8 +555,7 @@
             return $this->website->voters;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_online_rankings($server, $config, $top)
+		private function load_online_rankings($server, $config, $top)
         {
             if(!isset($config['online']))
                 return false;
@@ -594,8 +586,7 @@
             return $this->website->online;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_gens_rankings($server, $config, $top)
+		private function load_gens_rankings($server, $config, $top)
         {
             if(!isset($config['gens']))
                 return false;
@@ -630,8 +621,7 @@
             return $this->website->gens;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function gens_query($type, $server)
+		private function gens_query($type, $server)
         {
             switch($type){
                 case 'scf':
@@ -670,14 +660,12 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function gens_family_from_id($type)
+		private function gens_family_from_id($type)
         {
             return ($type == 1) ? 'duprian' : 'vanert';
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function gens_data($varent, $duprian)
+		private function gens_data($varent, $duprian)
         {
 			if($varent == 0 && $duprian == 0){
 				$varent = 1;
@@ -686,8 +674,7 @@
             $this->gens_data = ['vanert' => $varent, 'duprian' => $duprian, 'perc_d' => ($duprian / ($varent + $duprian)) * 100];
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function gens_rank($points, $rank)
+		private function gens_rank($points, $rank)
         {
             if($points < 1000)
                 $gens_rank = __('Private'); 
@@ -722,8 +709,7 @@
             return $gens_rank;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_bc_rankings($server, $config, $table_config, $top)
+		private function load_bc_rankings($server, $config, $table_config, $top)
         {
             if(!isset($config['bc']) || ($table_config == false || $table_config['bc']['table'] == ''))
                 return false;
@@ -754,7 +740,7 @@
 					}
 					$joinServer = ' INNER JOIN '.$dbMemb.'.dbo.MEMB_INFO AS mi ON (AccountId Collate Database_Default = mi.memb___id Collate Database_Default)';
 				}
-				$mdb = $this->website->get_db_from_serverlist($server, false);
+				$mdb = $this->website->get_db_from_server($server);
                 $query = $this->website->db($table_config['bc']['db'], $server)->query('SELECT TOP ' . (int)$this->top . ' b.' . $table_config['bc']['identifier_column'] . $addonColumn . ', SUM(' . $table_config['bc']['column'] . ') AS ' . $table_config['bc']['column'] . ', c.Class FROM ' . $table_config['bc']['table'] . ' AS b '.$joinServer.' INNER JOIN '.$mdb.'.dbo.Character AS c ON (b.' . $table_config['bc']['identifier_column'] . ' Collate Database_Default = c.Name Collate Database_Default) ' . $exclude_list . $serverCode . ' GROUP BY b.' . $table_config['bc']['identifier_column'].', c.Class ' . $addonColumn . ' HAVING SUM(' . $table_config['bc']['column'] . ') > 0 ORDER BY SUM(' . $table_config['bc']['column'] . ') DESC');
                 if($query){
                     $i = 0;
@@ -777,8 +763,7 @@
             return $this->website->bc;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_ds_rankings($server, $config, $table_config, $top)
+		private function load_ds_rankings($server, $config, $table_config, $top)
         {
             if(!isset($config['ds']) || ($table_config == false || $table_config['ds']['table'] == ''))
                 return false;
@@ -808,7 +793,7 @@
 					}
 					$joinServer = ' INNER JOIN '.$dbMemb.'.dbo.MEMB_INFO AS mi ON (AccountId Collate Database_Default = mi.memb___id Collate Database_Default)';
 				}
-				$mdb = $this->website->get_db_from_serverlist($server, false);
+				$mdb = $this->website->get_db_from_server($server);
                 $query = $this->website->db($table_config['ds']['db'], $server)->query('SELECT TOP ' . (int)$this->top . ' b.' . $table_config['ds']['identifier_column'] . $addonColumn . ', SUM(' . $table_config['ds']['column'] . ') AS ' . $table_config['ds']['column'] . ', c.Class  FROM ' . $table_config['ds']['table'] . ' AS b '.$joinServer . ' INNER JOIN '.$mdb.'.dbo.Character AS c ON (b.' . $table_config['ds']['identifier_column'] . ' Collate Database_Default = c.Name Collate Database_Default) ' . $exclude_list . $serverCode. ' GROUP BY b.' . $table_config['ds']['identifier_column'] .', c.Class ' . $addonColumn . ' HAVING SUM(' . $table_config['ds']['column'] . ') > 0 ORDER BY SUM(' . $table_config['ds']['column'] . ') DESC');
                 if($query){
                     $i = 0;
@@ -831,8 +816,7 @@
             return $this->website->ds;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_cc_rankings($server, $config, $table_config, $top)
+		private function load_cc_rankings($server, $config, $table_config, $top)
         {
 			
             if(!isset($config['cc']) || ($table_config == false || $table_config['cc']['table'] == ''))
@@ -859,7 +843,7 @@
                     $select .= ', SUM(' . $table_config['cc']['column3'] . ') AS ' . $table_config['cc']['column3'];
                     $order .= ', SUM(' . $table_config['cc']['column3'] . ') DESC';
                 }
-				$mdb = $this->website->get_db_from_serverlist($server, false);
+				$mdb = $this->website->get_db_from_server($server);
                 $query = $this->website->db($table_config['cc']['db'], $server)->query('SELECT TOP ' . (int)$this->top . ' ' . $select . ', c.Class FROM ' . $table_config['cc']['table'] . ' AS b INNER JOIN '.$mdb.'.dbo.Character AS c ON (b.' . $table_config['cc']['identifier_column'] . ' Collate Database_Default = c.Name Collate Database_Default) ' . $exclude_list . ' GROUP BY b.' . $table_config['cc']['identifier_column'] . ', c.Class ' . $order);
                 if($query){
                     $i = 0;
@@ -888,8 +872,7 @@
             return $this->website->cc;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_cs_rankings($server, $config, $table_config, $top)
+		private function load_cs_rankings($server, $config, $table_config, $top)
         {
             if(!isset($config['cs']) || ($table_config == false || $table_config['cs']['table'] == ''))
                 return false;
@@ -969,8 +952,7 @@
             return $this->website->duels;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function duel_ratio($win, $lose)
+		private function duel_ratio($win, $lose)
         {
             for($x = $lose; $x > 1; $x--){
                 if(($win % $x) == 0 && ($lose % $x) == 0){
@@ -981,8 +963,7 @@
             return $win . ':' . $lose;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_online_players($config, $table_config, $server)
+		public function load_online_players($config, $table_config, $server)
         {
             if($table_config != false){
                 $accountDb = ($this->website->is_multiple_accounts() == true) ? $this->website->get_db_from_server($server, true) : $this->website->get_default_account_database();
@@ -1026,14 +1007,12 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function online_time($memb___id, $server)
+		private function online_time($memb___id, $server)
         {
             return $this->website->db('web')->query('SELECT SUM(TotalTime) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = '.$this->website->db('web')->escape($memb___id).' ' . $this->website->server_code($this->website->get_servercode($server)) . '')->fetch();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function join_resets($status, $table_config, $bound = 'a.GameIDC')
+		private function join_resets($status, $table_config, $bound = 'a.GameIDC')
         {
             $sql = ['', ''];
             if($status == 1){
@@ -1044,8 +1023,7 @@
             return $sql;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function join_gresets($status, $table_config, $bound = 'a.GameIDC')
+		private function join_gresets($status, $table_config, $bound = 'a.GameIDC')
         {
             $sql = ['', ''];
             if($status == 1){
@@ -1056,14 +1034,12 @@
             return $sql;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function join_account_character($bound = 'a.GameIDC')
+		private function join_account_character($bound = 'a.GameIDC')
         {
             return [', a.GameIDC', ' FULL JOIN AccountCharacter AS a ON (' . $bound . ' Collate Database_Default = a.GameIDC Collate Database_Default)'];
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function join_master_level($status, $table_config, $bound = 'a.GameIDC')
+		private function join_master_level($status, $table_config, $bound = 'a.GameIDC')
         {
             $sql = ['', ''];
             if($status == 1){
@@ -1074,8 +1050,7 @@
             return $sql;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function join_memb_stat($status, $bound = 'c.AccountId', $columns = ', m.IP,  m.ConnectStat', $server = '', $joinType = 'FULL JOIN')
+		private function join_memb_stat($status, $bound = 'c.AccountId', $columns = ', m.IP,  m.ConnectStat', $server = '', $joinType = 'FULL JOIN')
         {
             $sql = ['', ''];
             if($status == 1){
@@ -1085,8 +1060,7 @@
             return $sql;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function create_order($data = [])
+		private function create_order($data = [])
         {
             $this->order = 'ORDER BY ';
             if(!empty($data)){
@@ -1099,14 +1073,12 @@
             $this->order = substr_replace($this->order, '', -1);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function include_gms($status, $bound = 'c.Ctlcode')
+		private function include_gms($status, $bound = 'c.Ctlcode')
         {
             return ($status == 0) ? $this->exclude_list('8,16,32', $bound, false) : '';
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function exclude_list($list, $bound = 'c.Name', $quote = true, $stmt = 'NOT IN')
+		private function exclude_list($list, $bound = 'c.Name', $quote = true, $stmt = 'NOT IN')
         {
             $data = implode(',', array_map(function($value) use ($quote){
                 return ($quote) ? "'" . $this->website->db('web')->escape($value) . "'" : $this->website->db('web')->escape($value);
@@ -1138,8 +1110,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function get_ban_type($type)
+		private function get_ban_type($type)
         {
             switch($type){
                 default:
@@ -1158,7 +1129,6 @@
             $this->c_class = $class;
         }
 
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function gen_rank_by_class($class, $bound = 'c.Class')
         {
             if($class != ''){

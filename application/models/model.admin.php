@@ -183,7 +183,7 @@
         private function admin_login_attemt($user = '')
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Admin_Logins (memb___id, time, ip) VALUES (:user, GETDATE(), :ip)');
-            $stmt->execute([':user' => $user, ':ip' => $this->website->ip()]);
+            $stmt->execute([':user' => $user, ':ip' => ip()]);
         }
 
         public function load_news()
@@ -1661,8 +1661,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_vip_package($title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load)
+		public function add_vip_package($title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load)
         {
             if($time_type == 1){
                 $time_calculated = ($time * (3600 * 24));
@@ -1702,8 +1701,7 @@
             return $stmt->execute($data);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_vip_package($id, $title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load)
+		public function edit_vip_package($id, $title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load)
         {
             if($time_type == 1){
                 $time_calculated = ($time * (3600 * 24));
@@ -1798,8 +1796,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_item()
+		public function add_item()
         {
             $keys = [];
             $bind_params = [];
@@ -1822,8 +1819,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_item($id)
+		public function edit_item($id)
         {
             if(is_array($this->vars)){
                 $query = [];
@@ -1951,8 +1947,7 @@
             return $categories;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function edit_category_list()
+		public function edit_category_list()
         {
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
             $file = fopen(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', 'w');
@@ -1980,8 +1975,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function create_category_image_folder()
+		public function create_category_image_folder()
         {
             if(!is_dir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id'])){
                 if(!mkdir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id'], 0777)){
@@ -1991,24 +1985,21 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_category()
+		public function add_category()
         {
             $file = fopen(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', 'a');
             fwrite($file, "" . $this->vars['cat_id'] . "|" . htmlspecialchars($this->vars['cat_name']) . "|" . $this->website->seo_string($this->vars['cat_name']) . "|1|\n");
             fclose($file);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function delete_category_image_folder()
+		public function delete_category_image_folder()
         {
             if(is_dir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id'])){
                 rmdir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id']);
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function delete_category()
+		public function delete_category()
         {
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
             $file = fopen(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', 'w');
@@ -2023,8 +2014,7 @@
             fclose($file);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_ancient_list()
+		public function load_ancient_list()
         {
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_anc_opt.dmn');
             $sets = [];
@@ -2043,8 +2033,7 @@
             return $sets;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_ancient_sets()
+		public function update_ancient_sets()
         {
             $typeAB = '';
             if(isset($this->vars['typeA']) && $this->vars['typeA'] != ''){
@@ -2068,8 +2057,7 @@
             fclose($file);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_ancient_set()
+		public function add_ancient_set()
         {
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_anc_opt.dmn');
             $next_line = (count($file_arr) + 1);
@@ -2143,8 +2131,7 @@
             $stmt->execute([':name' => $name, ':price' => $price, ':id' => $id]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function import_shop_items($items, $names, $prices, $slots, $category)
+		public function import_shop_items($items, $names, $prices, $slots, $category)
         {
             foreach($items as $key => $value){
                 switch($slots[$key]){
@@ -2220,7 +2207,7 @@
 		public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 		
@@ -2308,8 +2295,7 @@
                 return 1;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function socket_list($use_sockets = 1, $check_part = 1, $exe_type = 1)
+		public function socket_list($use_sockets = 1, $check_part = 1, $exe_type = 1)
         {
             $exe_type = ($exe_type == 1) ? 1 : 0;
             if($use_sockets == 1){
@@ -2323,8 +2309,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_item_info($id = '', $server = '')
+		public function get_item_info($id = '', $server = '')
         {
             if($id == '')
                 return false;
@@ -2355,8 +2340,7 @@
             return $this->website->db('web')->query('SELECT id, required_lvl, required_res, required_gres, reward, reward_type, server, status FROM DmN_Refferal_Reward_List ORDER BY id ASC')->fetch_all();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_language($lang)
+		public function load_language($lang)
         {
             $file = APP_PATH . DS . 'localization' . DS . $lang . '.json';//$this->config->values('lang_config', 'lang_list');
 			if(file_exists($file)){
@@ -2366,8 +2350,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_language($lang, $data)
+		public function update_language($lang, $data)
         {
             $languages = $this->config->values('lang_config');
             if(array_key_exists($lang, $languages['lang_list'])){
@@ -2378,8 +2361,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_language($data)
+		public function add_language($data)
         {
             $languages = $this->config->values('lang_config');
             if(array_key_exists($data['name'], $languages['lang_list'])){
@@ -2393,8 +2375,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function country_code_to_name($code)
+		public function country_code_to_name($code)
         {
             $countries = ['AF' => 'Afghanistan', 'AX' => 'Aland Islands', 'AL' => 'Albania', 'DZ' => 'Algeria', 'AS' => 'American Samoa', 'AD' => 'Andorra', 'AO' => 'Angola', 'AI' => 'Anguilla', 'AQ' => 'Antarctica', 'AG' => 'Antigua And Barbuda', 'AR' => 'Argentina', 'AM' => 'Armenia', 'AW' => 'Aruba', 'AU' => 'Australia', 'AT' => 'Austria', 'AZ' => 'Azerbaijan', 'BS' => 'Bahamas', 'BH' => 'Bahrain', 'BD' => 'Bangladesh', 'BB' => 'Barbados', 'BY' => 'Belarus', 'BE' => 'Belgium', 'BZ' => 'Belize', 'BJ' => 'Benin', 'BM' => 'Bermuda', 'BT' => 'Bhutan', 'BO' => 'Bolivia', 'BA' => 'Bosnia And Herzegovina', 'BW' => 'Botswana', 'BV' => 'Bouvet Island', 'BR' => 'Brazil', 'IO' => 'British Indian Ocean Territory', 'BN' => 'Brunei Darussalam', 'BG' => 'Bulgaria', 'BF' => 'Burkina Faso', 'BI' => 'Burundi', 'KH' => 'Cambodia', 'CM' => 'Cameroon', 'CA' => 'Canada', 'CV' => 'Cape Verde', 'KY' => 'Cayman Islands', 'CF' => 'Central African Republic', 'TD' => 'Chad', 'CL' => 'Chile', 'CN' => 'China', 'CX' => 'Christmas Island', 'CC' => 'Cocos (Keeling) Islands', 'CO' => 'Colombia', 'KM' => 'Comoros', 'CG' => 'Congo', 'CD' => 'Congo, Democratic Republic', 'CK' => 'Cook Islands', 'CR' => 'Costa Rica', 'CI' => 'Cote D\'Ivoire', 'HR' => 'Croatia', 'CU' => 'Cuba', 'CY' => 'Cyprus', 'CZ' => 'Czech Republic', 'DK' => 'Denmark', 'DJ' => 'Djibouti', 'DM' => 'Dominica', 'DO' => 'Dominican Republic', 'EC' => 'Ecuador', 'EG' => 'Egypt', 'SV' => 'El Salvador', 'GQ' => 'Equatorial Guinea', 'ER' => 'Eritrea', 'EE' => 'Estonia', 'ET' => 'Ethiopia', 'FK' => 'Falkland Islands (Malvinas)', 'FO' => 'Faroe Islands', 'FJ' => 'Fiji', 'FI' => 'Finland', 'FR' => 'France', 'GF' => 'French Guiana', 'PF' => 'French Polynesia', 'TF' => 'French Southern Territories', 'GA' => 'Gabon', 'GM' => 'Gambia', 'GE' => 'Georgia', 'DE' => 'Germany', 'GH' => 'Ghana', 'GI' => 'Gibraltar', 'GR' => 'Greece', 'GL' => 'Greenland', 'GD' => 'Grenada', 'GP' => 'Guadeloupe', 'GU' => 'Guam', 'GT' => 'Guatemala', 'GG' => 'Guernsey', 'GN' => 'Guinea', 'GW' => 'Guinea-Bissau', 'GY' => 'Guyana', 'HT' => 'Haiti', 'HM' => 'Heard Island & Mcdonald Islands', 'VA' => 'Holy See (Vatican City State)', 'HN' => 'Honduras', 'HK' => 'Hong Kong', 'HU' => 'Hungary', 'IS' => 'Iceland', 'IN' => 'India', 'ID' => 'Indonesia', 'IR' => 'Iran, Islamic Republic Of', 'IQ' => 'Iraq', 'IE' => 'Ireland', 'IM' => 'Isle Of Man', 'IL' => 'Israel', 'IT' => 'Italy', 'JM' => 'Jamaica', 'JP' => 'Japan', 'JE' => 'Jersey', 'JO' => 'Jordan', 'KZ' => 'Kazakhstan', 'KE' => 'Kenya', 'KI' => 'Kiribati', 'KR' => 'Korea', 'KW' => 'Kuwait', 'KG' => 'Kyrgyzstan', 'LA' => 'Lao People\'s Democratic Republic', 'LV' => 'Latvia', 'LB' => 'Lebanon', 'LS' => 'Lesotho', 'LR' => 'Liberia', 'LY' => 'Libyan Arab Jamahiriya', 'LI' => 'Liechtenstein', 'LT' => 'Lithuania', 'LU' => 'Luxembourg', 'MO' => 'Macao', 'MK' => 'Macedonia', 'MG' => 'Madagascar', 'MW' => 'Malawi', 'MY' => 'Malaysia', 'MV' => 'Maldives', 'ML' => 'Mali', 'MT' => 'Malta', 'MH' => 'Marshall Islands', 'MQ' => 'Martinique', 'MR' => 'Mauritania', 'MU' => 'Mauritius', 'YT' => 'Mayotte', 'MX' => 'Mexico', 'FM' => 'Micronesia, Federated States Of', 'MD' => 'Moldova', 'MC' => 'Monaco', 'MN' => 'Mongolia', 'ME' => 'Montenegro', 'MS' => 'Montserrat', 'MA' => 'Morocco', 'MZ' => 'Mozambique', 'MM' => 'Myanmar', 'NA' => 'Namibia', 'NR' => 'Nauru', 'NP' => 'Nepal', 'NL' => 'Netherlands', 'AN' => 'Netherlands Antilles', 'NC' => 'New Caledonia', 'NZ' => 'New Zealand', 'NI' => 'Nicaragua', 'NE' => 'Niger', 'NG' => 'Nigeria', 'NU' => 'Niue', 'NF' => 'Norfolk Island', 'MP' => 'Northern Mariana Islands', 'NO' => 'Norway', 'OM' => 'Oman', 'PK' => 'Pakistan', 'PW' => 'Palau', 'PS' => 'Palestinian Territory, Occupied', 'PA' => 'Panama', 'PG' => 'Papua New Guinea', 'PY' => 'Paraguay', 'PE' => 'Peru', 'PH' => 'Philippines', 'PN' => 'Pitcairn', 'PL' => 'Poland', 'PT' => 'Portugal', 'PR' => 'Puerto Rico', 'QA' => 'Qatar', 'RE' => 'Reunion', 'RO' => 'Romania', 'RU' => 'Russian Federation', 'RW' => 'Rwanda', 'BL' => 'Saint Barthelemy', 'SH' => 'Saint Helena', 'KN' => 'Saint Kitts And Nevis', 'LC' => 'Saint Lucia', 'MF' => 'Saint Martin', 'PM' => 'Saint Pierre And Miquelon', 'VC' => 'Saint Vincent And Grenadines', 'WS' => 'Samoa', 'SM' => 'San Marino', 'ST' => 'Sao Tome And Principe', 'SA' => 'Saudi Arabia', 'SN' => 'Senegal', 'RS' => 'Serbia', 'SC' => 'Seychelles', 'SL' => 'Sierra Leone', 'SG' => 'Singapore', 'SK' => 'Slovakia', 'SI' => 'Slovenia', 'SB' => 'Solomon Islands', 'SO' => 'Somalia', 'ZA' => 'South Africa', 'GS' => 'South Georgia And Sandwich Isl.', 'ES' => 'Spain', 'LK' => 'Sri Lanka', 'SD' => 'Sudan', 'SR' => 'Suriname', 'SJ' => 'Svalbard And Jan Mayen', 'SZ' => 'Swaziland', 'SE' => 'Sweden', 'CH' => 'Switzerland', 'SY' => 'Syrian Arab Republic', 'TW' => 'Taiwan', 'TJ' => 'Tajikistan', 'TZ' => 'Tanzania', 'TH' => 'Thailand', 'TL' => 'Timor-Leste', 'TG' => 'Togo', 'TK' => 'Tokelau', 'TO' => 'Tonga', 'TT' => 'Trinidad And Tobago', 'TN' => 'Tunisia', 'TR' => 'Turkey', 'TM' => 'Turkmenistan', 'TC' => 'Turks And Caicos Islands', 'TV' => 'Tuvalu', 'UG' => 'Uganda', 'UA' => 'Ukraine', 'AE' => 'United Arab Emirates', 'GB' => 'United Kingdom', 'US' => 'United States', 'UM' => 'United States Outlying Islands', 'UY' => 'Uruguay', 'UZ' => 'Uzbekistan', 'VU' => 'Vanuatu', 'VE' => 'Venezuela', 'VN' => 'Viet Nam', 'VG' => 'Virgin Islands, British', 'VI' => 'Virgin Islands, U.S.', 'WF' => 'Wallis And Futuna', 'EH' => 'Western Sahara', 'YE' => 'Yemen', 'ZM' => 'Zambia', 'ZW' => 'Zimbabwe',];
             if(isset($countries[strtoupper($code)])){
@@ -2403,8 +2384,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_translations($lg, $page = 1)
+		public function load_translations($lg, $page = 1)
         {
             $this->translation->load_translation($lg);
             $this->translations = $this->translation->lang;
@@ -2412,14 +2392,12 @@
             return array_slice($this->translations, $pos, 25);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function count_translations()
+		public function count_translations()
         {
             return count($this->translations);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function change_language_translation($lg, $key, $val)
+		public function change_language_translation($lg, $key, $val)
         {
             $this->translation->load_translation($lg);
             if(array_key_exists($key, $this->translation->lang)){
@@ -2449,8 +2427,7 @@
                 $this->sql_condition .= ' AND m.appl_days <= \'' . $string . '\'';
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function search_condition_status($data = [])
+		public function search_condition_status($data = [])
         {
             if(!empty($data)){
                 if(in_array('activated', $data)){
@@ -2474,8 +2451,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function search_condition_country($data = [])
+		public function search_condition_country($data = [])
         {
             if(!empty($data)){
                 $list_with_quotes = implode(',', array_map('self::add_quotes', $data));
@@ -2483,14 +2459,12 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function add_quotes($str)
+		private function add_quotes($str)
         {
             return sprintf("'%s'", $str);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_account_list($page = 1, $per_page = 25, $server = '', $order_column = 2, $order_dir = 'desc')
+		public function load_account_list($page = 1, $per_page = 25, $server = '', $order_column = 2, $order_dir = 'desc')
         {
             $dir = ($order_dir == 'desc') ? 'DESC' : 'ASC';
             switch($order_column){
@@ -2554,8 +2528,7 @@
             return $this->accounts;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function search_char_list($name, $server)
+		public function search_char_list($name, $server)
         {
             $stmt = $this->game_db->prepare('SELECT AccountId, Name, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name LIKE :name ORDER BY Name ASC');
             $stmt->execute([':name' => $name . '%']);
@@ -2744,8 +2717,7 @@
             return $stmt->fetch_all();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_account_info($id, $pass, $email, $sno_numb)
+		public function update_account_info($id, $pass, $email, $sno_numb)
         {
             $update_pw = true;
             if(MD5 == 1){
@@ -2943,8 +2915,7 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function generate_priority($pr = 1, $list = false, $style = false)
+		public function generate_priority($pr = 1, $list = false, $style = false)
         {
             $priority = [1 => ['<div class="PriorityZero">' . __('Low') . '</div>', __('Low')], 2 => ['<div class="PriorityOne">' . __('Medium') . '</div>', __('Medium')], 3 => ['<div class="PriorityTwo">' . __('High') . '</div>', __('High')], 4 => ['<div class="PriorityThree">' . __('Urgent') . '</div>', __('Urgent')],];
             if($list){
@@ -2984,8 +2955,7 @@
             return $s;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_support_requests($page, $per_page, $d_filter, $p_filter, $s_filter, $o_filter)
+		public function load_support_requests($page, $per_page, $d_filter, $p_filter, $s_filter, $o_filter)
         {
             $sql_data = [];
             if($d_filter != false){
@@ -3064,8 +3034,7 @@
             return $stmt->execute([':status' => $status]);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_ticket($id)
+		public function check_ticket($id)
         {
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, subject, message, department, priority, create_time, status, creator_account, creator_character, server, attachment FROM DmN_Support_Tickets WHERE id = :id');
             $stmt->execute([':id' => $id]);
@@ -3295,8 +3264,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function save_config_data($array, $file, $ksort = true)
+		public function save_config_data($array, $file, $ksort = true)
         {
             if($ksort){
                 ksort($array);
@@ -3311,8 +3279,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function remove_server_from_config($file, $server)
+		public function remove_server_from_config($file, $server)
         {
             $config = $this->config->values($file);
             if(array_key_exists($server, $config)){
@@ -3321,8 +3288,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function reorder_server_in_config($file, $order)
+		public function reorder_server_in_config($file, $order)
         {
             $config = $this->config->values($file);
             $new_array = [];
@@ -3336,8 +3302,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function copy_settings($file, $new_server)
+		public function copy_settings($file, $new_server)
         {
             $config = $this->config->values($file);
             if($config != false){
@@ -3384,8 +3349,7 @@
             return $this->$db->query('SELECT name FROM syscolumns WHERE id = Object_ID(\'' . $table . '\') AND colstat & 1 = 1')->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_column($column, $table, $info, $db)
+		public function add_column($column, $table, $info, $db)
         {
             $query = 'ALTER TABLE ' . $table . ' ADD ' . $column . ' ' . $info['type'];
             if($info['identity'] == 1){
@@ -3420,8 +3384,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function check_default_constraints($col, $table, $db)
+		private function check_default_constraints($col, $table, $db)
         {
             $constraints = $this->$db->query('SELECT NAME FROM SYS.DEFAULT_CONSTRAINTS WHERE OBJECT_NAME(PARENT_OBJECT_ID) = \'' . $table . '\' AND COL_NAME (PARENT_OBJECT_ID, PARENT_COLUMN_ID) = \'' . $col . '\'')->fetch_all();
             if(!empty($constraints)){
@@ -3484,8 +3447,7 @@
 						END');
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function required_columns()
+		public function required_columns()
         {
             return [
 				'account_db' => [
@@ -3583,8 +3545,7 @@
 			];
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function pin_number_to_text($pos)
+		public function pin_number_to_text($pos)
         {
             switch($pos){
                 case 0:
@@ -3697,8 +3658,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_bulk_mail()
+		public function add_bulk_mail()
         {
             $this->get_recipient_list();
             $this->recipients[0] = call_user_func_array('array_merge', $this->recipients);
@@ -3774,8 +3734,7 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function get_recipient_list($servers = false)
+		private function get_recipient_list($servers = false)
         {
             $this->vars['server'] = ($servers != false) ? unserialize($servers) : $this->vars['server'];
             if(count($this->vars['server']) > 1){
@@ -3799,8 +3758,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function arrayUniqueMulti($array, $preserveKeys = false)
+		private function arrayUniqueMulti($array, $preserveKeys = false)
         {
             $arrayRewrite = [];
             $arrayHashes = [];
@@ -3832,8 +3790,7 @@
             return $plugins;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_task_last_run($task)
+		public function get_task_last_run($task)
         {
             $file = $dir = APP_PATH . DS . 'logs' . DS . 'scheduler.json';
             if(file_exists($file)){
@@ -3848,8 +3805,7 @@
             return 'undefined';
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_last_cron_run()
+		public function get_last_cron_run()
         {
             $file = $dir = APP_PATH . DS . 'logs' . DS . 'scheduler.json';
             if(file_exists($file)){
@@ -3881,8 +3837,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function sendmail($recipients, $subject, $message, $from = [])
+		public function sendmail($recipients, $subject, $message, $from = [])
         {
             $this->vars['email_config'] = $this->config->values('email_config');
             if(!$this->vars['email_config'])

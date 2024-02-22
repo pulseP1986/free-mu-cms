@@ -40,8 +40,7 @@
                 $this->cache_time = (3600 * 24) * $this->cache_days;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function parse_txt($type = ''){
+		public function parse_txt($type = ''){
 			$this->info = [];
 			$file_list = [
 				'exe_common' => 'ExcellentCommonOption.txt', 
@@ -504,8 +503,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function parse_item_txt()
+		public function parse_item_txt()
         {
             $file_data = null;
             $items = [];
@@ -573,8 +571,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_item_attributes($item)
+		private function load_item_attributes($item)
 		{
 			$items = [
 				'id' => $item->getAttribute('Index'), 
@@ -810,8 +807,7 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function parse_all()
+		public function parse_all()
         {
 			$langs = [];
 			$dir = new \DirectoryIterator(APP_PATH . DS . 'data' . DS . 'ServerData');

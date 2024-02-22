@@ -657,8 +657,7 @@
 			return $this->website->db('web')->query('SELECT COUNT(DISTINCT buyer) AS tr FROM DmN_Market_Logs WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).''.$search)->fetch()['tr'];
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function inventory($user, $server)
+		public function inventory($user, $server)
         {
 			$characters = $this->load_char_list($user, $server);
 			
@@ -882,7 +881,7 @@
         public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
     }

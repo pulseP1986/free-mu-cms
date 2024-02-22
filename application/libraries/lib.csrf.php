@@ -14,13 +14,11 @@
             $this->setToken();
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function getToken()
         {
             return $this->setToken();
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function isTokenValid($userToken)
         {
             return ($userToken === $this->setToken());
@@ -77,7 +75,6 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function returnErrorMessage($message = '', $type = 'Exception')
         {
             if($type == 'json'){
@@ -87,7 +84,6 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function setToken()
         {
             $storedToken = $this->readTokenFromStorage();
@@ -99,7 +95,6 @@
             return $storedToken;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function generateToken()
         {
             $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'empty';
@@ -109,7 +104,6 @@
             $this->token = base64_encode($substring_start . time() . $this->randomStr($substring_start) . $extra . $this->randomStr(20));
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function readTokenFromStorage()
         {
             if(isset($_SESSION[$this->tokenName])){
@@ -119,13 +113,11 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function writeTokenToStorage($token)
         {
             $_SESSION[$this->tokenName] = $token;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function randomStr($length)
         {
             $keys = array_merge(range(0, 9), range('a', 'z'));

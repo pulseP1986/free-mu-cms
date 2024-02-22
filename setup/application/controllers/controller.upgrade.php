@@ -930,30 +930,5 @@
 			}
             file_put_contents($file, json_encode($tasks, JSON_PRETTY_PRINT));
         }
-
-        public function download_update($version)
-        {
-            if($this->Msetup->is_admin()){
-                $data = get_autoupdate_file($version . '/' . md5($version) . '.zip');
-                if($data != false){
-                    header('Content-Description: File Transfer');
-                    header('Content-Type: application/octet-stream');
-                    header('Content-Disposition: attachment; filename=' . $version . '.zip');
-                    header('Content-Transfer-Encoding: binary');
-                    header('Expires: 0');
-                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-                    header('Pragma: public');
-                    header('Content-Length: ' . strlen($data));
-                    ob_clean();
-                    flush();
-                    echo $data;
-                    flush();
-                } else{
-                    echo 'File not found';
-                }
-            } else{
-                throw new Exception('Unauthorized user.');
-            }
-        }
     }
 	

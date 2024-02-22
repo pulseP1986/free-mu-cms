@@ -29,8 +29,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function load_char_list($account, $server)
+		public function load_char_list($account, $server)
         {
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, cLevel, Class, ' . $this->reset_column($server) . $this->greset_column($server) . ' Money, LevelUpPoint, CtlCode, PkCount, PkLevel FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
@@ -46,8 +45,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function reset_column($server = '')
+		private function reset_column($server = '')
         {
             $resets = $this->config->values('table_config', [$server, 'resets', 'column']);
             if($resets && $resets != ''){
@@ -65,24 +63,21 @@
             return '0 AS grand_resets,';
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_char($char, $account, $server)
+		public function check_char($char, $account, $server)
         {
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name FROM Character WHERE AccountId = :user AND Name = :char');
             $stmt->execute([':user' => $account, ':char' => $char]);
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_char_without_account($char, $server)
+		public function check_char_without_account($char, $server)
         {
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name FROM Character WHERE Name = :char');
             $stmt->execute([':char' => $char]);
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function char_info($char, $account, $server, $by_id = false)
+		public function char_info($char, $account, $server, $by_id = false)
         {
             $identifier = ($by_id) ? $this->website->get_char_id_col($server) : 'Name';
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, Money, Class, cLevel, ' . $this->reset_column($server) . $this->greset_column($server) . ' LevelUpPoint, Strength, Dexterity, Vitality, Energy, Leadership, PkLevel, PkCount, CtlCode, MagicList, MapNumber, MapPosX, MapPosY, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE AccountId = :user AND ' . $identifier . ' = :char');
@@ -93,8 +88,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function load_master_level($char, $server)
+		private function load_master_level($char, $server)
         {
             if($this->config->values('table_config', [$server, 'master_level', 'column']) != false){
                 $stmt = $this->website->db('game', $server)->prepare('SELECT ' . $this->config->values('table_config', [$server, 'master_level', 'column']) . ' AS mlevel FROM ' . $this->config->values('table_config', [$server, 'master_level', 'table']) . ' WHERE ' . $this->config->values('table_config', [$server, 'master_level', 'identifier_column']) . ' = :char');
@@ -264,8 +258,7 @@
             return $stmt->execute($array_data);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_to_account_character($space, $name, $account, $server)
+		public function add_to_account_character($space, $name, $account, $server)
         {
             $accountCharInfo = $this->account_char_info($account, $server);
 			if($accountCharInfo != false){
@@ -348,8 +341,7 @@
 			return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function account_char_info($account, $server)
+		private function account_char_info($account, $server)
         {
 			$additional_slots = '';
 			if(MU_VERSION >= 9){
@@ -363,8 +355,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_character($id, $account = '', $server)
+		public function update_character($id, $account = '', $server)
         {
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET AccountId = :account WHERE '.$this->website->get_char_id_col($server).' = :id');
             return $stmt->execute([':account' => $account, ':id' => $id]);
@@ -465,8 +456,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_T_PentagramInfo($user = false, $account = '', $server)
+		public function update_T_PentagramInfo($user = false, $account = '', $server)
         {
             if($this->website->db('game', $server)->check_if_table_exists('T_PentagramInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_PentagramInfo SET AccountID = :market_account WHERE Name = :name');
@@ -486,8 +476,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function update_PetWarehouse($user = false, $account = '', $server)
+		public function update_PetWarehouse($user = false, $account = '', $server)
         {
             if($this->website->db('game', $server)->check_if_table_exists('PetWarehouse')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE PetWarehouse SET AccountID = :market_account WHERE Name = :name');
@@ -515,8 +504,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_gens_info($name, $server)
+		public function get_gens_info($name, $server)
         {
             $gens_config = $this->config->values('rankings_config', [$server, 'gens', 'type']);
             if($gens_config != false){
@@ -562,8 +550,7 @@
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function check_free_slot($account, $server)
+		public function check_free_slot($account, $server)
         {
             $accountCharInfo = $this->account_char_info($account, $server);
             if($accountCharInfo['GameID1'] == null)
@@ -607,8 +594,7 @@
             return $info['Name'];
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function get_char_id_by_name($name, $server)
+		private function get_char_id_by_name($name, $server)
         {
             $stmt = $this->website->db('game', $server)->prepare('SELECT '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name = :name');
             $stmt->execute([':name' => $name]);
@@ -645,7 +631,7 @@
         public function add_account_log($log, $credits, $acc, $server)
         {
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
-            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => $this->website->ip()]);
+            $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
     }

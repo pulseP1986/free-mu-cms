@@ -12,7 +12,6 @@
         private $sandbox = true;
         private $version = "93";
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function __construct($credentials = [])
         {
             if(isset($credentials['version'])){
@@ -36,7 +35,6 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function setExpressCheckout($ec_data = [], $custom_data = false)
         {
             $nvpstr = '';
@@ -124,7 +122,6 @@
             return false;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function getExpressCheckoutDetails($token)
         {
             $nvpstr = "&TOKEN=" . $token;
@@ -141,7 +138,6 @@
             return false;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function doExpressCheckoutPayment($ec_details = ['token' => '', 'payer_id' => '', 'currency' => '', 'amount' => '', 'IPN_URL' => '', 'type' => 'Sale'])
         {
             $nvpstr = '';
@@ -174,7 +170,6 @@
             return $result;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function callPaypal($methodName, $nvpStr)
         {
             $nvpreq = "METHOD=" . urlencode($methodName);
@@ -216,7 +211,6 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         public function redirectToPaypal($token)
         {
             $this->load->lib('mobile');
@@ -226,7 +220,6 @@
             exit;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
         private function deformatNvp($nvpstr)
         {
             $intial = 0;
