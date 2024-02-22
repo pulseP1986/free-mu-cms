@@ -7,6 +7,6 @@ Discord channel: https://discord.gg/rgqy7AjM
 
 I have enought knowledge to try to maintain this and even add new stuff for free as much as my time allows me.
 
-PS: There is also issue tracker where you can add problems or errors you have met. 
+PS: There is also issue tracker where you can add problems or errors you have met or request for new features. 
 
 
