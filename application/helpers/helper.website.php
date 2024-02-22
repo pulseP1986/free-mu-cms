@@ -497,6 +497,21 @@
 		public function removeChangeClassItems($user, $server, $name){
 			return $this->db('web')->query('DELETE FROM DmN_Change_Class_Required_Items WHERE is_completed = 1 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').'');
 		}
+		
+		public function module_disabled($config)
+        {
+            if($this->config->config_entry($config . '|module_status') == 1){
+                return false;
+            } else{
+                if(is_ajax()){
+                    json(['title' => __('Module Disabled'), 'callback' => false, 'template' => 'view_module_disabled.ejs']);
+                } else{
+                    $this->load->view($this->config->config_entry('main|template') . DS . 'view.header');
+                    $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
+                    return true;
+                }
+            }
+        }
 
         public function server_select_box($id = '', $class = '', $show_label = true)
         {
