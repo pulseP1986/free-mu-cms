@@ -458,12 +458,14 @@
 				
 				if($this->Msetup->check_if_column_exists('HWID', 'MEMB_STAT', 'account') != false){
 					$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . $_SESSION['db']['web_db'] . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), 'account');
+                    $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . $_SESSION['db']['web_db'] . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), 'account');
 				}
 				else{
 					$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . $_SESSION['db']['web_db'] . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), 'account');
-				}
-                $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . $_SESSION['db']['web_db'] . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), 'account');
-				if($this->vars['md5']){
+                    $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . $_SESSION['db']['web_db'] . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), 'account');
+                }
+                
+                if($this->vars['md5']){
 					$this->Msetup->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], 'account');
 				}
             }

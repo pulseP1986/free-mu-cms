@@ -463,11 +463,13 @@
 							}
 							if($this->Msetup->check_if_column_exists('HWID', 'MEMB_STAT', 'account') != false){
 								$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), 'account');
+								$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), 'account');
 							}
 							else{
 								$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), 'account');
+								$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), 'account');
 							}
-                            $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), 'account');
+
                             if(defined('MD5') && MD5 == 1){
 								$this->Msetup->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], 'account');
 							}
@@ -488,11 +490,13 @@
 								}
 								if($this->Msetup->check_if_column_exists('HWID', 'MEMB_STAT', 'account') != false){
 									$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), 'account');
+									$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), 'account');
 								}
 								else{
 									$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), 'account');
+									$this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), 'account');
 								}
-                                $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), 'account');
+                                
 								if(defined('MD5') && MD5 == 1){
 									$this->Msetup->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], 'account');
 								}

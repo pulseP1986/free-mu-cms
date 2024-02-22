@@ -7611,11 +7611,13 @@
 																			}
 																			if($this->Madmin->check_if_column_exists('HWID', 'MEMB_STAT', $account_db) != false){
 																				$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), $account_db);
-																			}
+                                                                                $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), $account_db);
+                                                                            }
 																			else{
 																				$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), $account_db);
-																			}
-                                                                            $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
+                                                                                $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
+                                                                            }
+                                                                            
                                                                             if(MD5 == 1){
 																				$this->Madmin->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], $account_db);
 																			}
@@ -7786,11 +7788,13 @@
 																	}
 																	if($this->Madmin->check_if_column_exists('HWID', 'MEMB_STAT', $account_db) != false){
 																		$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), $account_db);
-																	}
+                                                                        $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), $account_db);
+                                                                    }
 																	else{
 																		$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), $account_db);
+                                                                        $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
 																	}
-                                                                    $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
+                                                                    
                                                                     if(MD5 == 1){
 																		$this->Madmin->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], $account_db);
 																	}
