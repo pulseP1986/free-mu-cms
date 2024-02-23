@@ -6,41 +6,34 @@
         public $error = false, $vars = [], $gm_info = [], $vote_link_info = [], $total_items, $items_sql = [], $count_items = 0, $gm_system_type = 1;
         private $items = [], $logs = [], $vault_items, $inventory_items, $new_hex, $item, $translations, $accounts = [], $chars = [], $bans = [], $times = [], $replies = [], $pos = 1, $recipients = [], $gm_list = [], $sql_condition = '';
 
-        public static function valid_username($name, $symbols = '\w\W+', $len = [3, 30])
-        {
+        public static function valid_username($name, $symbols = '\w\W+', $len = [3, 30]){
             return preg_match('/^[' . $symbols . ']{' . $len[0] . ',' . $len[1] . '}+$/', $name);
         }
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 		
-		public function get_current_version()
-        {			
+		public function get_current_version(){			
 			if(is_readable($path = BASEDIR . 'application' . DS . 'config' . DS . 'cms_config.json')){
 				return json_decode(file_get_contents($path), true)['version'];
 			}
 			return '';
         }
 		
-		public function get_cms_upgradable_version()
-        {
+		public function get_cms_upgradable_version(){
             return json_decode(file_get_contents(BASEDIR . 'setup' . DS . 'data' . DS . 'version_control.json'), true)['current_version']['version'];
         }
 
-        public function load_statistics()
-        {
+        public function load_statistics(){
             $queries = [];
 			$queries2 = [];
 			
@@ -112,13 +105,11 @@
             return $result;
         }
 
-        public function load_last_admin_login_attemts()
-        {
+        public function load_last_admin_login_attemts(){
             return $this->website->db('web')->query('SELECT TOP 5 memb___id, time, ip FROM DmN_Admin_Logins ORDER BY time DESC')->fetch_all();
         }
 
-        public function total_accounts()
-        {
+        public function total_accounts(){
             $total = 0;
             if($this->website->is_multiple_accounts() == true){
                 foreach($this->website->server_list() AS $key => $server){
@@ -132,8 +123,7 @@
             return $total;
         }
 
-        public function total_online()
-        {
+        public function total_online(){
             $total = 0;
             if($this->website->is_multiple_accounts() == true){
                 foreach($this->website->server_list() AS $key => $server){
@@ -147,8 +137,7 @@
             return $total;
         }
 
-        public function total_characters()
-        {
+        public function total_characters(){
             $total = 0;
             foreach($this->website->server_list() AS $key => $server){
                 $query = $this->website->db('game', $key)->snumrows('SELECT COUNT(Name) AS count FROM Character');
@@ -157,8 +146,7 @@
             return $total;
         }
 
-        public function total_guilds()
-        {
+        public function total_guilds(){
             $total = 0;
             foreach($this->website->server_list() AS $key => $server){
                 $query = $this->website->db('game', $key)->snumrows('SELECT COUNT(G_Name) AS count FROM Guild');
@@ -167,8 +155,7 @@
             return $total;
         }
 
-        public function login_admin()
-        {
+        public function login_admin(){
             if($this->vars['username'] === USERNAME && md5($this->vars['password'] . SECURITY_SALT) === md5(PASSWORD . SECURITY_SALT)){
                 $this->session->register('admin', ['username' => $this->vars['username'], 'is_admin' => true]);
                 if(defined('PINCODE') && PINCODE != ''){
@@ -180,14 +167,12 @@
             return false;
         }
 
-        private function admin_login_attemt($user = '')
-        {
+        private function admin_login_attemt($user = ''){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Admin_Logins (memb___id, time, ip) VALUES (:user, GETDATE(), :ip)');
             $stmt->execute([':user' => $user, ':ip' => ip()]);
         }
 
-        public function load_news()
-        {
+        public function load_news(){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
             if(is_array($json)){
@@ -207,8 +192,7 @@
             }
         }
 
-        public function add_news()
-        {
+        public function add_news(){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
             if(is_array($json)){
@@ -241,8 +225,7 @@
             }
         }
 
-        private function write_news($data)
-        {
+        private function write_news($data){
             if(empty($data)){
                 $data = '';
             } else{
@@ -251,8 +234,7 @@
             file_put_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json', $data);
         }
 
-        public function edit_news($id)
-        {
+        public function edit_news($id){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
             if(is_array($json)){
@@ -273,8 +255,7 @@
             return false;
         }
 
-        public function check_news($id)
-        {
+        public function check_news($id){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
             if(is_array($json)){
@@ -285,8 +266,7 @@
             return false;
         }
 
-        public function delete_news($id)
-        {
+        public function delete_news($id){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
             if(is_array($json)){
@@ -299,80 +279,67 @@
             return false;
         }
 
-        public function add_guide()
-        {
+        public function add_guide(){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Guides (title, text, lang, date, category) VALUES (:title, :text, :lang, GETDATE(), :category)');
             $stmt->execute([':title' => bin2hex($this->vars['title']), ':text' => bin2hex($this->vars['guide']), ':lang' => $this->vars['lang'], ':category' => $this->vars['category']]);
         }
 		
-		public function add_drop()
-        {
+		public function add_drop(){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Drops (title, text, lang, date, cat) VALUES (:title, :text, :lang, GETDATE(), :cat)');
             $stmt->execute([':title' => $this->vars['title'], ':text' => $this->vars['guide'], ':lang' => $this->vars['lang'], ':cat' => $this->vars['cat']]);
         }
 
-        public function list_guides()
-        {
+        public function list_guides(){
             return $this->website->db('web')->query('SELECT id, title, lang, date, category FROM DmN_Guides ORDER BY date DESC')->fetch_all();
         }
 		
-		public function list_drops()
-        {
+		public function list_drops(){
             return $this->website->db('web')->query('SELECT id, title, lang, date, cat FROM DmN_Drops ORDER BY date DESC')->fetch_all();
         }
 
-        public function check_guide($id)
-        {
+        public function check_guide($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, title, text, date, lang, category FROM DmN_Guides WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 		
-		public function check_drop($id)
-        {
+		public function check_drop($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, title, text, date, lang, cat FROM DmN_Drops WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function delete_guide($id)
-        {
+        public function delete_guide($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Guides WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 		
-		public function delete_drop($id)
-        {
+		public function delete_drop($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Drops WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function edit_guide($id)
-        {
+        public function edit_guide($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Guides SET title = :title, lang = :lang, text = :text, category = :category WHERE id = :id');
             return $stmt->execute([':title' => bin2hex($this->vars['title']), ':lang' => $this->vars['lang'], ':text' => bin2hex($this->vars['guide']), ':category' => $this->vars['category'], ':id' => $id]);
         }
 		
-		public function edit_drop($id)
-        {
+		public function edit_drop($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Drops SET title = :title, lang = :lang, text = :text, cat = :cat WHERE id = :id');
             return $stmt->execute([':title' => $this->vars['title'], ':lang' => $this->vars['lang'], ':text' => $this->vars['guide'], ':cat' => $this->vars['cat'], ':id' => $id]);
         }
 
-        public function load_gallery()
-        {
+        public function load_gallery(){
             $gallery = $this->website->db('web')->query('SELECT id, name, section FROM DmN_Gallery ORDER BY add_date DESC')->fetch_all();
             return ($gallery) ? $gallery : false;
         }
 
-        public function add_gallery_image($name, $section)
-        {
+        public function add_gallery_image($name, $section){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Gallery (name, section, add_date) VALUES (:name, :section, :time)');
             $stmt->execute([':name' => $name, ':section' => $section, ':time' => time()]);
         }
 
-        public function upload_image($image, $name, $thumbnail = true, $directory = '')
-        {
+        public function upload_image($image, $name, $thumbnail = true, $directory = ''){
             $image_size = @getimagesize($image);
 			
 			switch($image_size['mime']){
@@ -415,8 +382,7 @@
             }
         }
 
-        private function create_thumbnail($size, $image)
-        {
+        private function create_thumbnail($size, $image){
             if(file_exists($image)){
                 $image_size = @getimagesize($image);
                 $image_width = $image_size[0];
@@ -468,53 +434,45 @@
             }
         }
 
-        public function delete_gallery_image($id)
-        {
+        public function delete_gallery_image($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Gallery WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function check_gallery_image($id)
-        {
+        public function check_gallery_image($id){
             $stmt = $this->website->db('web')->prepare('SELECT name FROM DmN_Gallery WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function add_file()
-        {
+        public function add_file(){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_Downloads')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Downloads (link_name, link_desc, link_size, link_type, link_url, orders) VALUES (:link_name, :link_desc, :link_size, :link_type, :link_url, :orders)');
             return $stmt->execute([':link_name' => htmlspecialchars($this->vars['link_name']), ':link_desc' => htmlspecialchars($this->vars['link_desc']), ':link_size' => htmlspecialchars($this->vars['link_size']), ':link_type' => htmlspecialchars($this->vars['link_type']), ':link_url' => htmlspecialchars($this->vars['link_url']), ':orders' => $max_orders['max_orders']]);
         }
 
-        public function edit_file($id)
-        {
+        public function edit_file($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Downloads SET link_name = :link_name, link_desc = :link_desc, link_size = :link_size, link_type = :link_type, link_url = :link_url WHERE id = :id');
             return $stmt->execute([':link_name' => htmlspecialchars($this->vars['link_name']), ':link_desc' => htmlspecialchars($this->vars['link_desc']), ':link_size' => htmlspecialchars($this->vars['link_size']), ':link_type' => htmlspecialchars($this->vars['link_type']), ':link_url' => htmlspecialchars($this->vars['link_url']), ':id' => (int)$id]);
         }
 
-        public function load_files()
-        {
+        public function load_files(){
             $files = $this->website->db('web')->query('SELECT id, link_name, link_url, link_type FROM DmN_Downloads ORDER BY orders ASC')->fetch_all();
             return ($files) ? $files : false;
         }
 
-        public function check_file($id)
-        {
+        public function check_file($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, link_name, link_desc, link_size, link_type, link_url, type FROM DmN_Downloads WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return ($info = $stmt->fetch()) ? $info : false;
         }
 
-        public function delete_file($id)
-        {
+        public function delete_file($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Downloads WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function save_downloads_order($orders)
-        {
+        public function save_downloads_order($orders){
             foreach($orders as $key => $value){
                 pre($key);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Downloads SET orders = :order WHERE id = :id');
@@ -522,23 +480,20 @@
             }
         }
 
-        public function check_gm_char($name = '')
-        {
+        public function check_gm_char($name = ''){
             $name = ($name != '') ? $name : $this->vars['name'];
             $stmt = $this->game_db->prepare('SELECT AccountId, CtlCode FROM Character WHERE Name = :name');
             $stmt->execute([':name' => $name]);
             return ($this->gm_info = $stmt->fetch()) ? true : false;
         }
 
-        public function set_ctlcode($code = 32, $name = '')
-        {
+        public function set_ctlcode($code = 32, $name = ''){
             $name = ($name != '') ? $name : $this->vars['name'];
             $stmt = $this->game_db->prepare('UPDATE Character SET CtlCode = :code WHERE Name = :name');
             $stmt->execute([':code' => $code, ':name' => $name]);
         }
 
-        public function add_igcn_autority($authorityMask = 0, $valid_until = '', $name = '')
-        {
+        public function add_igcn_autority($authorityMask = 0, $valid_until = '', $name = ''){
             $name = ($name != '') ? $name : $this->vars['name'];
             $stmt = $this->game_db->prepare('SELECT Name FROM T_GMSystem WHERE Name = :name');
             $stmt->execute([':name' => $name]);
@@ -549,20 +504,17 @@
             }
         }
 
-        private function update_icgn_authority($name, $authorityMask, $valid_until)
-        {
+        private function update_icgn_authority($name, $authorityMask, $valid_until){
             $stmt = $this->game_db->prepare('UPDATE T_GMSystem SET AuthorityMask = :authmask, Expiry = :expiry WHERE Name = :name');
             return $stmt->execute([':authmask' => $authorityMask, ':expiry' => date(DATETIME_FORMAT, strtotime($valid_until)), ':name' => $name]);
         }
 
-        private function insert_icgn_authority($name, $authorityMask, $valid_until)
-        {
+        private function insert_icgn_authority($name, $authorityMask, $valid_until){
             $stmt = $this->game_db->prepare('INSERT INTO T_GMSystem (Name, AuthorityMask, Expiry) VALUES(:name, :authmask, :expiry)');
             return $stmt->execute([':name' => $name, ':authmask' => $authorityMask, ':expiry' => date(DATETIME_FORMAT, strtotime($valid_until))]);
         }
 
-        public function add_to_gmlist()
-        {
+        public function add_to_gmlist(){
             $this->vars['ban_acc'] = isset($this->vars['ban_acc']) ? 1 : 0;
             $this->vars['ban_char'] = isset($this->vars['ban_char']) ? 1 : 0;
             $this->vars['search_acc'] = isset($this->vars['search_acc']) ? 1 : 0;
@@ -576,8 +528,7 @@
             }
         }
 
-        private function check_gm_list()
-        {
+        private function check_gm_list(){
             $stmt = $this->website->db('web')->prepare('SELECT account, system_type FROM DmN_Gm_List WHERE account = :account AND server = :server');
             $stmt->execute([':account' => $this->gm_info['AccountId'], ':server' => $this->vars['server']]);
             $info = $stmt->fetch();
@@ -588,8 +539,7 @@
             return false;
         }
 
-        public function edit_gm($name, $server)
-        {
+        public function edit_gm($name, $server){
             $this->vars['ban_acc'] = isset($this->vars['ban_acc']) ? 1 : 0;
             $this->vars['ban_char'] = isset($this->vars['ban_char']) ? 1 : 0;
             $this->vars['search_acc'] = isset($this->vars['search_acc']) ? 1 : 0;
@@ -599,20 +549,17 @@
             $stmt->execute([':can_ban_acc' => $this->vars['ban_acc'], ':can_ban_char' => $this->vars['ban_char'], ':can_search_acc' => $this->vars['search_acc'], ':can_view_acc_details' => $this->vars['acc_details'], ':credits_limit' => $this->vars['credits_limit'], ':system_type' => (int)$this->vars['system_type'], ':contact' => $this->vars['contact'], ':character' => $name, ':server' => $server]);
         }
 
-        public function remove_gm_from_list($name, $server)
-        {
+        public function remove_gm_from_list($name, $server){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Gm_List WHERE character = :character AND server = :server');
             $stmt->execute([':character' => $name, ':server' => $server]);
         }
 
-        public function remove_from_igcn_gm_system($name)
-        {
+        public function remove_from_igcn_gm_system($name){
             $stmt = $this->game_db->prepare('DELETE FROM T_GMSystem WHERE Name = :character');
             $stmt->execute([':character' => $name]);
         }
 
-        public function check_gm_type($name, $server)
-        {
+        public function check_gm_type($name, $server){
             $stmt = $this->website->db('web')->prepare('SELECT system_type FROM DmN_Gm_List WHERE character = :name AND server = :server');
             $stmt->execute([':name' => $name, ':server' => $server]);
             $info = $stmt->fetch();
@@ -623,43 +570,37 @@
             return false;
         }
 
-        public function load_gm_list()
-        {
+        public function load_gm_list(){
             return $this->website->db('web')->query('SELECT account, character, server, can_ban_acc, can_ban_char, can_search_acc, can_view_acc_details FROM DmN_Gm_List ORDER BY server DESC')->fetch_all();
         }
 
-        public function load_gm_info($name, $server)
-        {
+        public function load_gm_info($name, $server){
             $stmt = $this->website->db('web')->prepare('SELECT account, character, server, can_ban_acc, can_ban_char, can_search_acc, can_view_acc_details, limit_reward_credits, system_type, contact FROM DmN_Gm_List WHERE character = :character AND server = :server');
             $stmt->execute([':character' => $name, ':server' => $server]);
             return $stmt->fetch();
         }
 
-        public function get_gm_authority_mask($name)
-        {
+        public function get_gm_authority_mask($name){
             $stmt = $this->game_db->prepare('SELECT AuthorityMask, Expiry FROM T_GMSystem WHERE Name = :character');
             $stmt->execute([':character' => $name]);
             return $stmt->fetch();
         }
 
-        public function load_announcement()
-        {
+        public function load_announcement(){
             return $this->website->db('web')->query('SELECT TOP 1 announcement FROM DmN_GM_Announcement ORDER BY time DESC')->fetch();
         }
 
-        public function add_anouncement($text)
-        {
+        public function add_anouncement($text){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_GM_Announcement (announcement, time) VALUES (:announcement, :time)');
             $stmt->execute([':announcement' => $text, ':time' => time()]);
         }
 		
-		public function load_partner_logs($page = 1, $per_page = 25, $coupon = '')
-        {
+		public function load_partner_logs($page = 1, $per_page = 25, $coupon = ''){
             if($coupon == '' || $coupon == '-')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Partner_Used_Coupons ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if($coupon != '' && $coupon != '-')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' ORDER BY id DESC) ORDER BY id DESC'); 
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' ORDER BY id DESC) ORDER BY id DESC'); 
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -675,15 +616,14 @@
             return $this->items;
         }
 
-        public function load_shop_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = '')
-        {
+        public function load_shop_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = ''){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Shop_Logs ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); 
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); 
 				else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' memb___id, server, item_hex, date, price, price_type, ip FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Shop_Logs WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -706,13 +646,12 @@
             return $this->items;
         }
 
-        public function load_paypal_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_paypal_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, status, payer_email, country FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date']), 'status' => $value['status'], 'payer_email' => $value['payer_email'], 'country' => $this->website->codeToCountryName($value['country'])];
@@ -720,13 +659,12 @@
             return $this->logs;
         }
 
-        public function load_pagseguro_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_pagseguro_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_PagSeguro_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_PagSeguro_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -734,13 +672,12 @@
             return $this->logs;
         }
 
-        public function load_interkassa_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_interkassa_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Interkassa_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Interkassa_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -748,13 +685,12 @@
             return $this->logs;
         }
 
-        public function load_cuenta_digital_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_cuenta_digital_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_CuentaDigital_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' amount, currency, acc, server, credits, order_date FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_CuentaDigital_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -762,13 +698,12 @@
             return $this->logs;
         }
 
-        public function load_twocheckout_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_twocheckout_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_2CheckOut_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date, payer_email FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_2CheckOut_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'currency' => $value['currency'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date']), 'payer_email' => $value['payer_email']];
@@ -776,13 +711,12 @@
             return $this->logs;
         }
 
-        public function load_pw_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_pw_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' uid, server, currency, type, ref, reason, order_date FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 switch($value['type']){
@@ -801,13 +735,12 @@
             return $this->logs;
         }
 
-        public function load_fortumo_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_fortumo_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Fortumo ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' payment_id, sender, account, server, credits FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_Fortumo WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['payment_id'], 'sender' => $value['sender'], 'acc' => htmlspecialchars($value['account']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits']];
@@ -815,13 +748,12 @@
             return $this->logs;
         }
 
-        public function load_paygol_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_paygol_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_PayGoal_Log ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' message_id, sender, country, currency, price, acc, server FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_PayGoal_Log WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['message_id'], 'sender' => $value['sender'], 'country' => $value['country'], 'currency' => $value['currency'], 'price' => $value['price'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server'])];
@@ -829,13 +761,12 @@
             return $this->logs;
         }
 
-        public function load_paycall_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_paycall_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_PayCall_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_PayCall_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' transaction_id, amount, acc, server, credits, order_date FROM DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id DmN_Donate_PayCall_Transactions WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = ['transaction' => $value['transaction_id'], 'amount' => $value['amount'], 'acc' => htmlspecialchars($value['acc']), 'server' => htmlspecialchars($value['server']), 'credits' => $value['credits'], 'order_date' => date(DATETIME_FORMAT, $value['order_date'])];
@@ -843,13 +774,12 @@
             return $this->logs;
         }
 
-        public function load_market_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = '')
-        {
+        public function load_market_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = ''){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Market_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' seller, buyer, price, price_type, sold_date, item, server FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Market_Logs WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND sold_date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -875,8 +805,7 @@
 				$this->sql_condition .= ' AND text LIKE \'%' . $string . '%\'';
 		}
 
-        public function load_account_logs($page = 1, $per_page = 25, $order_column = 3, $order_dir = 'desc')
-        {
+        public function load_account_logs($page = 1, $per_page = 25, $order_column = 3, $order_dir = 'desc'){
 			$dir = ($order_dir == 'desc') ? 'DESC' : 'ASC';
 			switch($order_column){
 				case 0:
@@ -915,13 +844,12 @@
             return $this->items;
         }
 
-        public function load_gm_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = '')
-        {
+        public function load_gm_logs($page = 1, $per_page = 25, $acc = '', $server = 'All', $date_from = '', $date_to = ''){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, date, account, server, ip FROM DmN_GM_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' text, date, account, server, ip FROM DmN_GM_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_GM_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' text, date, account,server, ip FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_GM_Logs WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND date BETWEEN '.$this->website->db('web')->escape($date_from).' AND '.$this->website->db('web')->escape($date_to).' ORDER BY id DESC) ORDER BY id DESC');
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
@@ -931,8 +859,7 @@
             return $this->items;
         }
 		
-		public function count_total_partner_logs($coupon = '')
-        {
+		public function count_total_partner_logs($coupon = ''){
             $sql = '';
             if($coupon != '' && $coupon != '-'){
                 $sql .= 'WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\'';
@@ -941,8 +868,7 @@
             return $count;
         }
 
-        public function count_total_shop_logs($acc = '', $server = 'All', $from = '', $to = '')
-        {
+        public function count_total_shop_logs($acc = '', $server = 'All', $from = '', $to = ''){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -957,8 +883,7 @@
             return $count;
         }
 
-        public function count_total_paypal_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_paypal_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -970,8 +895,7 @@
             return $count;
         }
 
-        public function count_total_pagseguro_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_pagseguro_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -983,8 +907,7 @@
             return $count;
         }
 
-        public function count_total_interkassa_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_interkassa_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -996,8 +919,7 @@
             return $count;
         }
 
-        public function count_total_cuenta_digital_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_cuenta_digital_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1009,8 +931,7 @@
             return $count;
         }
 
-        public function count_total_twocheckout_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_twocheckout_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1022,8 +943,7 @@
             return $count;
         }
 
-        public function count_total_pw_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_pw_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE uid like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1035,8 +955,7 @@
             return $count;
         }
 
-        public function count_total_fortumo_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_fortumo_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1048,8 +967,7 @@
             return $count;
         }
 
-        public function count_total_paygol_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_paygol_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1061,8 +979,7 @@
             return $count;
         }
 
-        public function count_total_paycall_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_paycall_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1074,8 +991,7 @@
             return $count;
         }
 
-        public function count_total_market_logs($acc = '', $server = 'All', $from = '', $to = '')
-        {
+        public function count_total_market_logs($acc = '', $server = 'All', $from = '', $to = ''){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE seller like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1090,8 +1006,7 @@
             return $count;
         }
 
-        public function count_total_account_logs($filtered = false)
-        {
+        public function count_total_account_logs($filtered = false){
 			$condition2 = '';
 			if($this->sql_condition != '' && $filtered == true){
 				$condition2 = 'WHERE ' . substr($this->sql_condition, 5);
@@ -1100,8 +1015,7 @@
             return $count;
         }
 
-        public function count_total_gm_logs($acc = '', $server = 'All', $from = '', $to = '')
-        {
+        public function count_total_gm_logs($acc = '', $server = 'All', $from = '', $to = ''){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE  account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -1116,18 +1030,15 @@
             return $count;
         }
 
-        public function search_char_inventory($serial)
-        {
+        public function search_char_inventory($serial){
             return $this->game_db->query('SELECT Name FROM Character WHERE (charindex (0x' . $this->game_db->escape($serial) . ', Inventory) %16=4)')->fetch();
         }
 
-        public function search_warehouse($serial)
-        {
+        public function search_warehouse($serial){
             return $this->game_db->query('SELECT AccountId FROM Warehouse WHERE (charindex (0x' . $this->game_db->escape($serial) . ', Items) %16=4)')->fetch();
         }
 
-        public function get_vault_content($user, $server)
-        {
+        public function get_vault_content($user, $server){
 			$stmt = $this->game_db->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){
@@ -1139,15 +1050,13 @@
 			}         
         }
 
-        public function create_vault($acc, $server)
-        {
+        public function create_vault($acc, $server){
             $stmt = $this->game_db->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff), ' . $this->website->get_value_from_server($server, 'wh_size') . ') AS VARBINARY(' . $this->website->get_value_from_server($server, 'wh_size') . ')), 0, getdate())');
             $this->vault_items['Items'] = str_pad("F", $this->website->get_value_from_server($server, 'wh_size'), "F");
             return $stmt->execute([':user' => $acc]);
         }
 
-        public function load_items($server)
-        {
+        public function load_items($server){
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $items = [];
             $i = 0;
@@ -1181,13 +1090,11 @@
             return $items;
         }
 
-        private function set_total_items($count = 120)
-        {
+        private function set_total_items($count = 120){
             $this->total_items = $count;
         }
 
-        public function find_item_by_slot($slot, $server)
-        {
+        public function find_item_by_slot($slot, $server){
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $i = 0;
             $found = false;
@@ -1204,8 +1111,7 @@
             return $found;
         }
 
-        public function generate_new_item_by_slot($slot, $server)
-        {
+        public function generate_new_item_by_slot($slot, $server){
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $new_items = [];
             $i = 0;
@@ -1220,20 +1126,17 @@
             $this->new_hex = implode('', $new_items);
         }
 
-        public function update_warehouse($user = '')
-        {
+        public function update_warehouse($user = ''){
             $stmt = $this->game_db->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_hex . ' WHERE AccountId = :user');
             $stmt->execute([':user' => $user]);
         }
 
-        public function log_deleted_item($user = '', $server = '', $by_admin = 0)
-        {
+        public function log_deleted_item($user = '', $server = '', $by_admin = 0){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Warehouse_Delete_Log (account, server, item, date, deleted_by_admin) VALUES (:account, :server, :item, GETDATE(), :by_admin)');
             $stmt->execute([':account' => $user, ':server' => $server, ':item' => $this->item, ':by_admin' => $by_admin]);
         }
 
-        public function get_inventory_content($char, $server)
-        {
+        public function get_inventory_content($char, $server){
 			$stmt = $this->game_db->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
 			$stmt->execute([':char' => $char]);
 			if($this->inventory_items = $stmt->fetch()){
@@ -1242,8 +1145,7 @@
 			}       
         }
 
-        public function remove_vault_item_by_serial($acc, $serial, $server)
-        {
+        public function remove_vault_item_by_serial($acc, $serial, $server){
             $found = false;
             $items_array = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             foreach($items_array as $key => $value){
@@ -1260,8 +1162,7 @@
             return false;
         }
 
-        public function remove_inventory_item_by_serial($char, $serial, $server)
-        {
+        public function remove_inventory_item_by_serial($char, $serial, $server){
             $found = false;
             $items_array = str_split($this->inventory_items['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             foreach($items_array as $key => $value){
@@ -1278,64 +1179,54 @@
             return false;
         }
 
-        public function load_paypal_packages()
-        {
+        public function load_paypal_packages(){
             return $this->website->db('web')->query('SELECT id, package, reward, price, currency, orders, status, server FROM DmN_Donate_Packages ORDER BY orders ASC')->fetch_all();
         }
 
-        public function save_paypal_order($orders)
-        {
+        public function save_paypal_order($orders){
             foreach($orders as $key => $value){
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_Packages SET orders = :order WHERE id = :id');
                 $stmt->execute([':order' => $key, ':id' => $value]);
             }
         }
 
-        public function check_paypal_package($id)
-        {
+        public function check_paypal_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Donate_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function edit_paypal_package($id, $title, $price, $currency, $reward, $server)
-        {
+        public function edit_paypal_package($id, $title, $price, $currency, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_Packages SET package = :title, reward = :reward, price = :price, currency = :currency, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':server' => $server, ':id' => $id]);
         }
 
-        public function delete_paypal_package($id)
-        {
+        public function delete_paypal_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Donate_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function change_paypal_status($id, $status)
-        {
+        public function change_paypal_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function add_paypal_package($title, $price, $currency, $reward, $server)
-        {
+        public function add_paypal_package($title, $price, $currency, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_Donate_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_Packages (package, reward, price, currency, orders, status, server) VALUES (:title, :reward, :price, :currency, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':count' => $max_orders['max_orders'], ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function load_twocheckout_packages()
-        {
+        public function load_twocheckout_packages(){
             return $this->website->db('web')->query('SELECT id, package, reward, price, currency, orders, status, server FROM DmN_2CheckOut_Packages ORDER BY orders ASC')->fetch_all();
         }
 
-        public function load_pagseguro_packages()
-        {
+        public function load_pagseguro_packages(){
             return $this->website->db('web')->query('SELECT id, package, reward, price, currency, orders, status, server FROM DmN_PagSeguro_Packages ORDER BY orders ASC')->fetch_all();
         }
 
-        public function save_twocheckout_order($orders)
-        {
+        public function save_twocheckout_order($orders){
             foreach($orders as $key => $value){
                 $id = explode('_', $value);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_2CheckOut_Packages SET orders = :order WHERE id = :id');
@@ -1343,8 +1234,7 @@
             }
         }
 
-        public function save_pagseguro_order($orders)
-        {
+        public function save_pagseguro_order($orders){
             foreach($orders as $key => $value){
                 $id = explode('_', $value);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_PagSeguro_Packages SET orders = :order WHERE id = :id');
@@ -1352,8 +1242,7 @@
             }
         }
 
-        public function save_paycall_order($orders)
-        {
+        public function save_paycall_order($orders){
             foreach($orders as $key => $value){
                 $id = explode('_', $value);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_PayCall_Packages SET orders = :order WHERE id = :id');
@@ -1361,8 +1250,7 @@
             }
         }
 
-        public function save_interkassa_order($orders)
-        {
+        public function save_interkassa_order($orders){
             foreach($orders as $key => $value){
                 $id = explode('_', $value);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_Interkassa_Packages SET orders = :order WHERE id = :id');
@@ -1370,8 +1258,7 @@
             }
         }
 
-        public function save_cuenta_digital_order($orders)
-        {
+        public function save_cuenta_digital_order($orders){
             foreach($orders as $key => $value){
                 $id = explode('_', $value);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_CuentaDigital_Packages SET orders = :order WHERE id = :id');
@@ -1379,226 +1266,191 @@
             }
         }
 
-        public function check_twocheckout_package($id)
-        {
+        public function check_twocheckout_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_2CheckOut_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_pagseguro_package($id)
-        {
+        public function check_pagseguro_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_PagSeguro_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_paycall_package($id)
-        {
+        public function check_paycall_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Donate_PayCall_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_interkassa_package($id)
-        {
+        public function check_interkassa_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Donate_Interkassa_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_cuenta_digital_package($id)
-        {
+        public function check_cuenta_digital_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Donate_CuentaDigital_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function edit_twocheckout_package($id, $title, $price, $currency, $reward, $server)
-        {
+        public function edit_twocheckout_package($id, $title, $price, $currency, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_2CheckOut_Packages SET package = :title, reward = :reward, price = :price, currency = :currency, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':server' => $server, ':id' => $id]);
         }
 
-        public function edit_pagseguro_package($id, $title, $price, $currency, $reward, $server)
-        {
+        public function edit_pagseguro_package($id, $title, $price, $currency, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_PagSeguro_Packages SET package = :title, reward = :reward, price = :price, currency = :currency, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':server' => $server, ':id' => $id]);
         }
 
-        public function edit_paycall_package($id, $title, $price, $reward, $server)
-        {
+        public function edit_paycall_package($id, $title, $price, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_PayCall_Packages SET package = :title, reward = :reward, price = :price, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':server' => $server, ':id' => $id]);
         }
 
-        public function edit_interkassa_package($id, $title, $price, $currency, $reward, $server)
-        {
+        public function edit_interkassa_package($id, $title, $price, $currency, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_Interkassa_Packages SET package = :title, reward = :reward, price = :price, currency = :currency, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':server' => $server, ':id' => $id]);
         }
 
-        public function edit_cuenta_digital_package($id, $title, $price, $currency, $reward, $server)
-        {
+        public function edit_cuenta_digital_package($id, $title, $price, $currency, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_CuentaDigital_Packages SET package = :title, reward = :reward, price = :price, currency = :currency, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':server' => $server, ':id' => $id]);
         }
 
-        public function delete_twocheckout_package($id)
-        {
+        public function delete_twocheckout_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_2CheckOut_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function delete_pagseguro_package($id)
-        {
+        public function delete_pagseguro_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_PagSeguro_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function delete_paycall_package($id)
-        {
+        public function delete_paycall_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Donate_PayCall_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function delete_interkassa_package($id)
-        {
+        public function delete_interkassa_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Donate_Interkassa_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function delete_cuenta_digital_package($id)
-        {
+        public function delete_cuenta_digital_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Donate_CuentaDigital_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function change_twocheckout_status($id, $status)
-        {
+        public function change_twocheckout_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_2CheckOut_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function change_pagseguro_status($id, $status)
-        {
+        public function change_pagseguro_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_PagSeguro_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function change_paycall_status($id, $status)
-        {
+        public function change_paycall_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_PayCall_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function change_interkassa_status($id, $status)
-        {
+        public function change_interkassa_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_Interkassa_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function change_cuenta_digital_status($id, $status)
-        {
+        public function change_cuenta_digital_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_CuentaDigital_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function add_twocheckout_package($title, $price, $currency, $reward, $server)
-        {
+        public function add_twocheckout_package($title, $price, $currency, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_2CheckOut_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_2CheckOut_Packages (package, reward, price, currency, orders, status, server) VALUES (:title, :reward, :price, :currency, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':count' => $max_orders['max_orders'], ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function add_pagseguro_package($title, $price, $currency, $reward, $server)
-        {
+        public function add_pagseguro_package($title, $price, $currency, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_PagSeguro_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_PagSeguro_Packages (package, reward, price, currency, orders, status, server) VALUES (:title, :reward, :price, :currency, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':count' => $max_orders['max_orders'], ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function add_paycall_package($title, $price, $reward, $server)
-        {
+        public function add_paycall_package($title, $price, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_Donate_PayCall_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_PayCall_Packages (package, reward, price, orders, status, server) VALUES (:title, :reward, :price, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':count' => $max_orders['max_orders'], ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function add_interkassa_package($title, $price, $currency, $reward, $server)
-        {
+        public function add_interkassa_package($title, $price, $currency, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_Donate_Interkassa_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_Interkassa_Packages (package, reward, price, currency, orders, status, server) VALUES (:title, :reward, :price, :currency, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':count' => $max_orders['max_orders'], ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function add_cuenta_digital_package($title, $price, $currency, $reward, $server)
-        {
+        public function add_cuenta_digital_package($title, $price, $currency, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_Donate_CuentaDigital_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_CuentaDigital_Packages (package, reward, price, currency, orders, status, server) VALUES (:title, :reward, :price, :currency, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':count' => $max_orders['max_orders'], ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function load_paycall_packages()
-        {
+        public function load_paycall_packages(){
             return $this->website->db('web')->query('SELECT id, package, reward, price, orders, status, server FROM DmN_Donate_PayCall_Packages ORDER BY orders ASC')->fetch_all();
         }
 
-        public function load_interkassa_packages()
-        {
+        public function load_interkassa_packages(){
             return $this->website->db('web')->query('SELECT id, package, reward, price, currency, orders, status, server FROM DmN_Donate_Interkassa_Packages ORDER BY orders ASC')->fetch_all();
         }
 
-        public function load_cuenta_digital_packages()
-        {
+        public function load_cuenta_digital_packages(){
             return $this->website->db('web')->query('SELECT id, package, reward, price, currency, orders, status, server FROM DmN_Donate_CuentaDigital_Packages ORDER BY orders ASC')->fetch_all();
         }
 
-        public function check_referral_reward($req_lvl, $req_res, $req_gres, $reward_type, $server)
-        {
+        public function check_referral_reward($req_lvl, $req_res, $req_gres, $reward_type, $server){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Refferal_Reward_List WHERE required_lvl = :required_lvl AND required_res = :required_res AND required_gres = :required_gres AND reward_type = :reward_type AND server = :server');
             $stmt->execute([':required_lvl' => $req_lvl, ':required_res' => $req_res, ':required_gres' => $req_gres, ':reward_type' => $reward_type, ':server' => $server]);
             return $stmt->fetch();
         }
 
-        public function add_referral_reward($req_lvl, $req_res, $req_gres, $reward, $reward_type, $server)
-        {
+        public function add_referral_reward($req_lvl, $req_res, $req_gres, $reward, $reward_type, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Refferal_Reward_List (required_lvl, required_res, required_gres, reward, reward_type, server, status) VALUES (:required_lvl, :required_res, :required_gres, :reward, :reward_type, :server, 1)');
             $stmt->execute([':required_lvl' => $req_lvl, ':required_res' => $req_res, ':required_gres' => $req_gres, ':reward' => $reward, ':reward_type' => $reward_type, ':server' => $server]);
             return $this->website->db('web')->last_insert_id();
         }
 
-        public function check_referral_reward_status($id)
-        {
+        public function check_referral_reward_status($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Refferal_Reward_List WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function delete_referral_reward($id)
-        {
+        public function delete_referral_reward($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Refferal_Reward_List WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function change_referral_reward_status($id, $status)
-        {
+        public function change_referral_reward_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Refferal_Reward_List SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function load_vip_packages()
-        {
+        public function load_vip_packages(){
             return $this->website->db('web')->query('SELECT id, package_title, price, payment_type, server, status, vip_time, is_registration_package FROM DmN_Vip_Packages ORDER BY id ASC')->fetch_all();
         }
 
-        public function check_vip_status($id)
-        {
+        public function check_vip_status($id){
             $stmt = $this->website->db('web')->prepare('SELECT [id]
                                               ,[package_title]
                                               ,[price]
@@ -1629,40 +1481,34 @@
             return $stmt->fetch();
         }
 
-        public function remove_old_vip_registration_package($server)
-        {
+        public function remove_old_vip_registration_package($server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Vip_Packages SET is_registration_package = 0 WHERE server = :server');
             $stmt->execute([':server' => $server]);
         }
 
-        public function remove_vip_registration_package($id, $server)
-        {
+        public function remove_vip_registration_package($id, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Vip_Packages SET is_registration_package = 0 WHERE id = :id AND server = :server');
             $stmt->execute([':id' => $id, ':server' => $server]);
         }
 
-        public function add_new_vip_registration_package($id, $server)
-        {
+        public function add_new_vip_registration_package($id, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Vip_Packages SET is_registration_package = 1 WHERE id = :id AND server = :server');
             $stmt->execute([':id' => $id, ':server' => $server]);
         }
 
-        public function check_vip_package_title($title)
-        {
+        public function check_vip_package_title($title){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Vip_Packages WHERE package_title = :title');
             $stmt->execute([':title' => $title]);
             return $stmt->fetch();
         }
 
-        public function check_vip_package_title_for_edit($title, $id)
-        {
+        public function check_vip_package_title_for_edit($title, $id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Vip_Packages WHERE id != :id AND package_title = :title');
             $stmt->execute([':id' => $id, ':title' => $title]);
             return $stmt->fetch();
         }
 
-		public function add_vip_package($title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load)
-        {
+		public function add_vip_package($title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load){
             if($time_type == 1){
                 $time_calculated = ($time * (3600 * 24));
             }
@@ -1701,8 +1547,7 @@
             return $stmt->execute($data);
         }
 
-		public function edit_vip_package($id, $title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load)
-        {
+		public function edit_vip_package($id, $title, $price, $payment_type, $server, $time, $time_type, $allow_extend, $reset_price_decrease, $reset_level_decrease, $reset_bonus_points, $grand_reset_bonus_credits, $grand_reset_bonus_gcredits, $hide_info_discount, $pk_clear_discount, $clear_skilltree_discount, $online_hour_exchange_bonus, $change_name_discount, $change_class_discount, $bonus_credits_for_donate, $shop_discount, $wcoins, $server_vip_package, $server_bonus_info, $connect_member_load){
             if($time_type == 1){
                 $time_calculated = ($time * (3600 * 24));
             }
@@ -1744,20 +1589,17 @@
             return $stmt->execute($data);
         }
 
-        public function delete_vip_package($id)
-        {
+        public function delete_vip_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Vip_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function change_vip_status($id, $status)
-        {
+        public function change_vip_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Vip_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function xtremetop100_autoload_links($server)
-        {
+        public function xtremetop100_autoload_links($server){
             $query = $this->website->db('web')->query('SELECT id, votelink FROM DmN_Votereward WHERE server = '.$this->website->db('web')->escape($server).' ORDER BY id ASC');
             $links = '';
             while($row = $query->fetch()){
@@ -1768,8 +1610,7 @@
             return substr($links, 1);
         }
 
-        public function check_status($acc, $search_acc = false)
-        {
+        public function check_status($acc, $search_acc = false){
             if($search_acc){
                 $stmt = $this->game_db->prepare('SELECT AccountId FROM Character WHERE Name = :name');
                 $stmt->execute([':name' => $acc]);
@@ -1789,15 +1630,13 @@
             return true;
         }
 
-        public function check_item_exists()
-        {
+        public function check_item_exists(){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Shopp WHERE item_id = :id AND item_cat = :cat AND stick_level = :level');
             $stmt->execute([':id' => $this->vars['item_id'], ':cat' => $this->vars['item_cat'], ':level' => $this->vars['stick_level']]);
             return $stmt->fetch();
         }
 
-		public function add_item()
-        {
+		public function add_item(){
             $keys = [];
             $bind_params = [];
             $values = [];
@@ -1819,8 +1658,7 @@
             }
         }
 
-		public function edit_item($id)
-        {
+		public function edit_item($id){
             if(is_array($this->vars)){
                 $query = [];
                 $values = [];
@@ -1841,8 +1679,7 @@
             }
         }
 
-        public function load_item_list($page = 1, $per_page = 25, $category = '')
-        {
+        public function load_item_list($page = 1, $per_page = 25, $category = ''){
             $category = ($category != '') ? 'WHERE item_cat = ' . $this->website->db('web')->escape((int)$category) : '';
             $items = $this->website->db('web')->query('SELECT id, item_id, original_item_cat, item_cat, name, price, stick_level FROM DmN_Shopp ' . $category . ' ORDER BY  item_cat ASC, item_id ASC')->fetch_all();
             $this->count_items = count($items);
@@ -1853,27 +1690,23 @@
             return $this->items;
         }
 
-        public function check_item($id)
-        {
+        public function check_item($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, item_id, item_cat, max_item_lvl, max_item_opt, exetype, name, price, luck, use_sockets, use_harmony, use_refinary, payment_type, original_item_cat, stick_level, allow_upgrade, upgrade_price FROM DmN_Shopp WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function set_item_price($id, $price)
-        {
+        public function set_item_price($id, $price){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shopp SET price = :price WHERE id = :id');
             return $stmt->execute([':price' => $price, ':id' => $id]);
         }
 
-        public function delete_item($id)
-        {
+        public function delete_item($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Shopp WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function load_custom_price_list()
-        {
+        public function load_custom_price_list(){
             $items = $this->website->db('web')->query('SELECT id, item_id, item_cat FROM DmN_Shop_Custom_Price_List')->fetch_all();
             foreach($items AS $item){
                 $this->items[] = ['iid' => $item['id'], 'name' => $this->get_item_name($item['item_id'], $item['item_cat']), 'id' => $this->get_item_id($item['item_id'], $item['item_cat'])];
@@ -1881,24 +1714,21 @@
             return $this->items;
         }
 
-        private function get_item_name($id, $cat)
-        {
+        private function get_item_name($id, $cat){
             $stmt = $this->website->db('web')->prepare('SELECT name FROM DmN_Shopp WHERE item_id = :id AND original_item_cat = :cat');
             $stmt->execute([':id' => $id, ':cat' => $cat]);
             $info = $stmt->fetch();
             return $info['name'];
         }
 
-        private function get_item_id($id, $cat)
-        {
+        private function get_item_id($id, $cat){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Shopp WHERE item_id = :id AND original_item_cat = :cat');
             $stmt->execute([':id' => $id, ':cat' => $cat]);
             $info = $stmt->fetch();
             return $info['id'];
         }
 
-        public function load_custom_item_price($id, $cat)
-        {
+        public function load_custom_item_price($id, $cat){
             $stmt = $this->website->db('web')->prepare('SELECT price FROM DmN_Shop_Custom_Price_List WHERE item_id = :id AND item_cat = :cat');
             $stmt->execute([':id' => $id, ':cat' => $cat]);
             $info = $stmt->fetch();
@@ -1911,8 +1741,7 @@
             return false;
         }
 
-        public function set_cutom_item_price($id, $cat, $prices, $price_info)
-        {
+        public function set_cutom_item_price($id, $cat, $prices, $price_info){
             if(!$price_info){
                 return $this->add_to_price_list($id, $cat, $prices);
             } else{
@@ -1920,24 +1749,20 @@
             }
         }
 
-        private function add_to_price_list($id, $cat, $prices)
-        {
+        private function add_to_price_list($id, $cat, $prices){
             return $this->website->db('web')->query('INSERT INTO DmN_Shop_Custom_Price_List (item_id, item_cat, price) VALUES (' . $this->website->db('web')->escape($id) . ', ' . $this->website->db('web')->escape($cat) . ', '.$this->website->db('web')->escape($prices).')');
         }
 
-        private function update_price_list($id, $cat, $prices)
-        {
+        private function update_price_list($id, $cat, $prices){
             return $this->website->db('web')->query('UPDATE DmN_Shop_Custom_Price_List SET price = '.$this->website->db('web')->escape($prices).' WHERE item_id = ' . $this->website->db('web')->escape($id) . ' AND item_cat = ' . $this->website->db('web')->escape($cat) . '');
         }
 
-        public function delete_from_price_list($id)
-        {
+        public function delete_from_price_list($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Shop_Custom_Price_List WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function load_category_list()
-        {
+        public function load_category_list(){
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
             $categories = [];
             foreach($file_arr as $line){
@@ -1947,8 +1772,7 @@
             return $categories;
         }
 
-		public function edit_category_list()
-        {
+		public function edit_category_list(){
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
             $file = fopen(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', 'w');
             foreach($file_arr as $line){
@@ -1962,8 +1786,7 @@
             fclose($file);
         }
 
-        public function cat_not_exists()
-        {
+        public function cat_not_exists(){
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
             foreach($file_arr as $line){
                 $cats = explode('|', $line);
@@ -1975,8 +1798,7 @@
             return true;
         }
 
-		public function create_category_image_folder()
-        {
+		public function create_category_image_folder(){
             if(!is_dir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id'])){
                 if(!mkdir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id'], 0777)){
                     return false;
@@ -1985,22 +1807,19 @@
             return true;
         }
 
-		public function add_category()
-        {
+		public function add_category(){
             $file = fopen(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', 'a');
             fwrite($file, "" . $this->vars['cat_id'] . "|" . htmlspecialchars($this->vars['cat_name']) . "|" . $this->website->seo_string($this->vars['cat_name']) . "|1|\n");
             fclose($file);
         }
 
-		public function delete_category_image_folder()
-        {
+		public function delete_category_image_folder(){
             if(is_dir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id'])){
                 rmdir(BASEDIR . 'assets' . DS . 'item_images' . DS . $this->vars['cat_id']);
             }
         }
 
-		public function delete_category()
-        {
+		public function delete_category(){
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn');
             $file = fopen(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', 'w');
             foreach($file_arr as $line){
@@ -2014,8 +1833,7 @@
             fclose($file);
         }
 
-		public function load_ancient_list()
-        {
+		public function load_ancient_list(){
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_anc_opt.dmn');
             $sets = [];
             foreach($file_arr as $line){
@@ -2033,8 +1851,7 @@
             return $sets;
         }
 
-		public function update_ancient_sets()
-        {
+		public function update_ancient_sets(){
             $typeAB = '';
             if(isset($this->vars['typeA']) && $this->vars['typeA'] != ''){
                 $typeAB .= $this->vars['typeA'];
@@ -2057,8 +1874,7 @@
             fclose($file);
         }
 
-		public function add_ancient_set()
-        {
+		public function add_ancient_set(){
             $file_arr = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_anc_opt.dmn');
             $next_line = (count($file_arr) + 1);
             $typeAB = '';
@@ -2075,64 +1891,54 @@
             fclose($file);
         }
 
-        public function load_socket_list()
-        {
+        public function load_socket_list(){
             return $this->website->db('web')->query('SELECT id, socket_id, socket_name, socket_price, status, orders, socket_part_type FROM DmN_Shop_Sockets ORDER BY orders ASC')->fetch_all();
         }
 
-        public function save_socket_order($orders)
-        {
+        public function save_socket_order($orders){
             foreach($orders as $key => $value){
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Sockets SET orders = :order WHERE id = :id');
                 $stmt->execute([':order' => $key, ':id' => $value]);
             }
         }
 
-        public function check_socket($id)
-        {
+        public function check_socket($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Shop_Sockets WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function change_socket_status($id, $status)
-        {
+        public function change_socket_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Sockets SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function edit_socket($id, $name, $price, $part_type)
-        {
+        public function edit_socket($id, $name, $price, $part_type){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Sockets SET socket_name = :name, socket_price = :price, socket_part_type = :type WHERE id = :id');
             $stmt->execute([':name' => $name, ':price' => $price, ':type' => $part_type, ':id' => $id]);
         }
 
-        public function load_harmony_list()
-        {
+        public function load_harmony_list(){
             return $this->website->db('web')->query('SELECT id, hname, price, status FROM DmN_Shop_Harmony ORDER BY hoption ASC')->fetch_all();
         }
 
-        public function check_harmony($id)
-        {
+        public function check_harmony($id){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Shop_Harmony WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function change_harmony_status($id, $status)
-        {
+        public function change_harmony_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Harmony SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function edit_harmony($id, $name, $price)
-        {
+        public function edit_harmony($id, $name, $price){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Harmony SET hname = :name, price = :price WHERE id = :id');
             $stmt->execute([':name' => $name, ':price' => $price, ':id' => $id]);
         }
 
-		public function import_shop_items($items, $names, $prices, $slots, $category)
-        {
+		public function import_shop_items($items, $names, $prices, $slots, $category){
             foreach($items as $key => $value){
                 switch($slots[$key]){
                     case -1:
@@ -2190,28 +1996,25 @@
             }
         }
 
-        private function check_item_in_db($id, $cat)
-        {
+        private function check_item_in_db($id, $cat){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Shopp WHERE item_id = :id AND original_item_cat = :cat');
             $stmt->execute([':id' => $id, ':cat' => $cat]);
             return $stmt->fetch();
         }
 
-        public function acc_exists($user = '')
-        {
+        public function acc_exists($user = ''){
             $stmt = $this->account_db->prepare('SELECT memb_guid, memb___id FROM MEMB_INFO WHERE memb___id = :user');
             $stmt->execute([':user' => $user]);
             return $stmt->fetch();
         }
 
-		public function add_account_log($log, $credits, $acc, $server)
-        {
+		public function add_account_log($log, $credits, $acc, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function add_total_recharge($account, $server, $credits)
 		{
 			if($this->website->db('web')->check_if_table_exists('DmN_Total_Recharge')){
@@ -2219,73 +2022,62 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function insert_recharge($account, $server, $credits)
-        {
+		
+		private function insert_recharge($account, $server, $credits){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Total_Recharge (account, server, points, date) VALUES (:account, :server, :points, GETDATE())');
             $stmt->execute([':account' => $account, ':server' => $server, ':points' => $credits]);
         }
 		
-        public function search_similar_accounts($user = '')
-        {
+        public function search_similar_accounts($user = ''){
             $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE memb___id LIKE :user');
             $stmt->execute([':user' => '%' . $user . '%']);
             return $stmt->fetch_all();
         }
 
-        public function add_vote_link()
-        {
+        public function add_vote_link(){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Votereward (votelink, name, img_url, hours, reward, reward_type, mmotop_stats_url, mmotop_reward_sms, api, server) VALUES (:votelink, :name, :img_url, :hours, :reward, :reward_type, :mmotop_stats_url, :mmotop_reward_sms, :api, :server)');
             $stmt->execute([':votelink' => $this->vars['votelink'], ':name' => $this->vars['name'], ':img_url' => $this->vars['img_url'], ':hours' => $this->vars['hours'], ':reward' => $this->vars['reward'], ':reward_type' => $this->vars['reward_type'], ':mmotop_stats_url' => (isset($this->vars['mmotop_stats_url']) && $this->vars['mmotop_stats_url'] != '') ? $this->vars['mmotop_stats_url'] : '', ':mmotop_reward_sms' => (isset($this->vars['mmotop_reward_sms']) && $this->vars['mmotop_reward_sms'] != '') ? $this->vars['mmotop_reward_sms'] : 0, ':api' => $this->vars['voting_api'], ':server' => $this->vars['server']]);
         }
 
-        public function edit_vote_link($id)
-        {
+        public function edit_vote_link($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Votereward SET votelink = :votelink, name = :name, img_url = :img_url, hours = :hours, reward = :reward, reward_type = :reward_type, mmotop_stats_url = :mmotop_stats_url, mmotop_reward_sms = :mmotop_reward_sms, api = :api, server = :server WHERE id = :id');
             $stmt->execute([':votelink' => $this->vars['votelink'], ':name' => $this->vars['name'], ':img_url' => $this->vars['img_url'], ':hours' => $this->vars['hours'], ':reward' => $this->vars['reward'], ':reward_type' => $this->vars['reward_type'], ':mmotop_stats_url' => (isset($this->vars['mmotop_stats_url']) && $this->vars['mmotop_stats_url'] != '') ? $this->vars['mmotop_stats_url'] : '', ':mmotop_reward_sms' => (isset($this->vars['mmotop_reward_sms']) && $this->vars['mmotop_reward_sms'] != '') ? $this->vars['mmotop_reward_sms'] : 0, ':api' => $this->vars['voting_api'], ':server' => $this->vars['server'], ':id' => $id]);
         }
 
-        public function load_vote_links()
-        {
+        public function load_vote_links(){
             $stmt = $this->website->db('web')->prepare('SELECT id, votelink, name, img_url, hours, reward, reward_type, mmotop_stats_url, mmotop_reward_sms, api, server FROM DmN_Votereward');
             $stmt->execute();
             return $stmt->fetch_all();
         }
 
-        public function voting_link_exists($id)
-        {
+        public function voting_link_exists($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, votelink, name, img_url, hours, reward, reward_type, mmotop_stats_url, mmotop_reward_sms, api, server FROM DmN_Votereward WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return ($this->vote_link_info = $stmt->fetch()) ? true : false;
         }
 
-        public function delete_voting_link($id)
-        {
+        public function delete_voting_link($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Votereward WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function load_items_for_select($cat = '')
-        {
+        public function load_items_for_select($cat = ''){
             $stmt = $this->website->db('web')->prepare('SELECT id, name FROM DmN_Shopp WHERE item_cat = :cat ORDER BY item_id ASC');
             $stmt->execute([':cat' => $cat]);
             return $stmt->fetch_all();
         }
 
-        public function load_items_data($id = '')
-        {
+        public function load_items_data($id = ''){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 exetype, use_sockets FROM DmN_Shopp WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function load_harmony_values($cat = 0, $hopt = 0)
-        {
+        public function load_harmony_values($cat = 0, $hopt = 0){
             return $this->website->db('web')->query('SELECT hvalue, hname FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->escape($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->escape($hopt) . ' AND status = 1')->fetch_all();
         }
 
-        private function get_type($cat)
-        {
+        private function get_type($cat){
             if($cat < 5)
                 return 1; else if($cat == 5)
                 return 2;
@@ -2295,8 +2087,7 @@
                 return 1;
         }
 
-		public function socket_list($use_sockets = 1, $check_part = 1, $exe_type = 1)
-        {
+		public function socket_list($use_sockets = 1, $check_part = 1, $exe_type = 1){
             $exe_type = ($exe_type == 1) ? 1 : 0;
             if($use_sockets == 1){
                 if($check_part == 1){
@@ -2309,8 +2100,7 @@
             return false;
         }
 
-		public function get_item_info($id = '', $server = '')
-        {
+		public function get_item_info($id = '', $server = ''){
             if($id == '')
                 return false;
             $item = $this->website->db('web')->query('SELECT item_id, item_cat, exetype, name, luck, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, original_item_cat, total_bought, stick_level FROM DmN_Shopp WHERE id = ' . $this->website->db('web')->escape($id))->fetch();
@@ -2322,8 +2112,7 @@
             return false;
         }
 
-        public function check_harmony_data($use = 0, $harmony = [])
-        {
+        public function check_harmony_data($use = 0, $harmony = []){
             if($use == 1){
                 if(count($harmony) == 2){
                     $check_harmony = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Shop_Harmony WHERE hoption = ' . $this->website->db('web')->escape($harmony[0]) . ' AND hvalue = ' . $this->website->db('web')->escape($harmony[1]) . ' AND status = 1');
@@ -2335,13 +2124,11 @@
             return [];
         }
 
-        public function load_refferal_reward_list()
-        {
+        public function load_refferal_reward_list(){
             return $this->website->db('web')->query('SELECT id, required_lvl, required_res, required_gres, reward, reward_type, server, status FROM DmN_Refferal_Reward_List ORDER BY id ASC')->fetch_all();
         }
 
-		public function load_language($lang)
-        {
+		public function load_language($lang){
             $file = APP_PATH . DS . 'localization' . DS . $lang . '.json';//$this->config->values('lang_config', 'lang_list');
 			if(file_exists($file)){
 				$strings = json_decode(file_get_contents($file), true);
@@ -2350,8 +2137,7 @@
             return false;
         }
 
-		public function update_language($lang, $data)
-        {
+		public function update_language($lang, $data){
             $languages = $this->config->values('lang_config');
             if(array_key_exists($lang, $languages['lang_list'])){
                 $languages['lang_list'][$lang] = ['title' => $data['title'], 'flag' => $data['flag'], 'active' => $data['active']];
@@ -2361,8 +2147,7 @@
             return false;
         }
 
-		public function add_language($data)
-        {
+		public function add_language($data){
             $languages = $this->config->values('lang_config');
             if(array_key_exists($data['name'], $languages['lang_list'])){
                 $this->error = 'Language with this name already exists';
@@ -2375,8 +2160,7 @@
             }
         }
 
-		public function country_code_to_name($code)
-        {
+		public function country_code_to_name($code){
             $countries = ['AF' => 'Afghanistan', 'AX' => 'Aland Islands', 'AL' => 'Albania', 'DZ' => 'Algeria', 'AS' => 'American Samoa', 'AD' => 'Andorra', 'AO' => 'Angola', 'AI' => 'Anguilla', 'AQ' => 'Antarctica', 'AG' => 'Antigua And Barbuda', 'AR' => 'Argentina', 'AM' => 'Armenia', 'AW' => 'Aruba', 'AU' => 'Australia', 'AT' => 'Austria', 'AZ' => 'Azerbaijan', 'BS' => 'Bahamas', 'BH' => 'Bahrain', 'BD' => 'Bangladesh', 'BB' => 'Barbados', 'BY' => 'Belarus', 'BE' => 'Belgium', 'BZ' => 'Belize', 'BJ' => 'Benin', 'BM' => 'Bermuda', 'BT' => 'Bhutan', 'BO' => 'Bolivia', 'BA' => 'Bosnia And Herzegovina', 'BW' => 'Botswana', 'BV' => 'Bouvet Island', 'BR' => 'Brazil', 'IO' => 'British Indian Ocean Territory', 'BN' => 'Brunei Darussalam', 'BG' => 'Bulgaria', 'BF' => 'Burkina Faso', 'BI' => 'Burundi', 'KH' => 'Cambodia', 'CM' => 'Cameroon', 'CA' => 'Canada', 'CV' => 'Cape Verde', 'KY' => 'Cayman Islands', 'CF' => 'Central African Republic', 'TD' => 'Chad', 'CL' => 'Chile', 'CN' => 'China', 'CX' => 'Christmas Island', 'CC' => 'Cocos (Keeling) Islands', 'CO' => 'Colombia', 'KM' => 'Comoros', 'CG' => 'Congo', 'CD' => 'Congo, Democratic Republic', 'CK' => 'Cook Islands', 'CR' => 'Costa Rica', 'CI' => 'Cote D\'Ivoire', 'HR' => 'Croatia', 'CU' => 'Cuba', 'CY' => 'Cyprus', 'CZ' => 'Czech Republic', 'DK' => 'Denmark', 'DJ' => 'Djibouti', 'DM' => 'Dominica', 'DO' => 'Dominican Republic', 'EC' => 'Ecuador', 'EG' => 'Egypt', 'SV' => 'El Salvador', 'GQ' => 'Equatorial Guinea', 'ER' => 'Eritrea', 'EE' => 'Estonia', 'ET' => 'Ethiopia', 'FK' => 'Falkland Islands (Malvinas)', 'FO' => 'Faroe Islands', 'FJ' => 'Fiji', 'FI' => 'Finland', 'FR' => 'France', 'GF' => 'French Guiana', 'PF' => 'French Polynesia', 'TF' => 'French Southern Territories', 'GA' => 'Gabon', 'GM' => 'Gambia', 'GE' => 'Georgia', 'DE' => 'Germany', 'GH' => 'Ghana', 'GI' => 'Gibraltar', 'GR' => 'Greece', 'GL' => 'Greenland', 'GD' => 'Grenada', 'GP' => 'Guadeloupe', 'GU' => 'Guam', 'GT' => 'Guatemala', 'GG' => 'Guernsey', 'GN' => 'Guinea', 'GW' => 'Guinea-Bissau', 'GY' => 'Guyana', 'HT' => 'Haiti', 'HM' => 'Heard Island & Mcdonald Islands', 'VA' => 'Holy See (Vatican City State)', 'HN' => 'Honduras', 'HK' => 'Hong Kong', 'HU' => 'Hungary', 'IS' => 'Iceland', 'IN' => 'India', 'ID' => 'Indonesia', 'IR' => 'Iran, Islamic Republic Of', 'IQ' => 'Iraq', 'IE' => 'Ireland', 'IM' => 'Isle Of Man', 'IL' => 'Israel', 'IT' => 'Italy', 'JM' => 'Jamaica', 'JP' => 'Japan', 'JE' => 'Jersey', 'JO' => 'Jordan', 'KZ' => 'Kazakhstan', 'KE' => 'Kenya', 'KI' => 'Kiribati', 'KR' => 'Korea', 'KW' => 'Kuwait', 'KG' => 'Kyrgyzstan', 'LA' => 'Lao People\'s Democratic Republic', 'LV' => 'Latvia', 'LB' => 'Lebanon', 'LS' => 'Lesotho', 'LR' => 'Liberia', 'LY' => 'Libyan Arab Jamahiriya', 'LI' => 'Liechtenstein', 'LT' => 'Lithuania', 'LU' => 'Luxembourg', 'MO' => 'Macao', 'MK' => 'Macedonia', 'MG' => 'Madagascar', 'MW' => 'Malawi', 'MY' => 'Malaysia', 'MV' => 'Maldives', 'ML' => 'Mali', 'MT' => 'Malta', 'MH' => 'Marshall Islands', 'MQ' => 'Martinique', 'MR' => 'Mauritania', 'MU' => 'Mauritius', 'YT' => 'Mayotte', 'MX' => 'Mexico', 'FM' => 'Micronesia, Federated States Of', 'MD' => 'Moldova', 'MC' => 'Monaco', 'MN' => 'Mongolia', 'ME' => 'Montenegro', 'MS' => 'Montserrat', 'MA' => 'Morocco', 'MZ' => 'Mozambique', 'MM' => 'Myanmar', 'NA' => 'Namibia', 'NR' => 'Nauru', 'NP' => 'Nepal', 'NL' => 'Netherlands', 'AN' => 'Netherlands Antilles', 'NC' => 'New Caledonia', 'NZ' => 'New Zealand', 'NI' => 'Nicaragua', 'NE' => 'Niger', 'NG' => 'Nigeria', 'NU' => 'Niue', 'NF' => 'Norfolk Island', 'MP' => 'Northern Mariana Islands', 'NO' => 'Norway', 'OM' => 'Oman', 'PK' => 'Pakistan', 'PW' => 'Palau', 'PS' => 'Palestinian Territory, Occupied', 'PA' => 'Panama', 'PG' => 'Papua New Guinea', 'PY' => 'Paraguay', 'PE' => 'Peru', 'PH' => 'Philippines', 'PN' => 'Pitcairn', 'PL' => 'Poland', 'PT' => 'Portugal', 'PR' => 'Puerto Rico', 'QA' => 'Qatar', 'RE' => 'Reunion', 'RO' => 'Romania', 'RU' => 'Russian Federation', 'RW' => 'Rwanda', 'BL' => 'Saint Barthelemy', 'SH' => 'Saint Helena', 'KN' => 'Saint Kitts And Nevis', 'LC' => 'Saint Lucia', 'MF' => 'Saint Martin', 'PM' => 'Saint Pierre And Miquelon', 'VC' => 'Saint Vincent And Grenadines', 'WS' => 'Samoa', 'SM' => 'San Marino', 'ST' => 'Sao Tome And Principe', 'SA' => 'Saudi Arabia', 'SN' => 'Senegal', 'RS' => 'Serbia', 'SC' => 'Seychelles', 'SL' => 'Sierra Leone', 'SG' => 'Singapore', 'SK' => 'Slovakia', 'SI' => 'Slovenia', 'SB' => 'Solomon Islands', 'SO' => 'Somalia', 'ZA' => 'South Africa', 'GS' => 'South Georgia And Sandwich Isl.', 'ES' => 'Spain', 'LK' => 'Sri Lanka', 'SD' => 'Sudan', 'SR' => 'Suriname', 'SJ' => 'Svalbard And Jan Mayen', 'SZ' => 'Swaziland', 'SE' => 'Sweden', 'CH' => 'Switzerland', 'SY' => 'Syrian Arab Republic', 'TW' => 'Taiwan', 'TJ' => 'Tajikistan', 'TZ' => 'Tanzania', 'TH' => 'Thailand', 'TL' => 'Timor-Leste', 'TG' => 'Togo', 'TK' => 'Tokelau', 'TO' => 'Tonga', 'TT' => 'Trinidad And Tobago', 'TN' => 'Tunisia', 'TR' => 'Turkey', 'TM' => 'Turkmenistan', 'TC' => 'Turks And Caicos Islands', 'TV' => 'Tuvalu', 'UG' => 'Uganda', 'UA' => 'Ukraine', 'AE' => 'United Arab Emirates', 'GB' => 'United Kingdom', 'US' => 'United States', 'UM' => 'United States Outlying Islands', 'UY' => 'Uruguay', 'UZ' => 'Uzbekistan', 'VU' => 'Vanuatu', 'VE' => 'Venezuela', 'VN' => 'Viet Nam', 'VG' => 'Virgin Islands, British', 'VI' => 'Virgin Islands, U.S.', 'WF' => 'Wallis And Futuna', 'EH' => 'Western Sahara', 'YE' => 'Yemen', 'ZM' => 'Zambia', 'ZW' => 'Zimbabwe',];
             if(isset($countries[strtoupper($code)])){
                 return $countries[strtoupper($code)];
@@ -2384,21 +2168,18 @@
             return false;
         }
 
-		public function load_translations($lg, $page = 1)
-        {
+		public function load_translations($lg, $page = 1){
             $this->translation->load_translation($lg);
             $this->translations = $this->translation->lang;
             $pos = (int)(($page - 1) * 25);
             return array_slice($this->translations, $pos, 25);
         }
 
-		public function count_translations()
-        {
+		public function count_translations(){
             return count($this->translations);
         }
 
-		public function change_language_translation($lg, $key, $val)
-        {
+		public function change_language_translation($lg, $key, $val){
             $this->translation->load_translation($lg);
             if(array_key_exists($key, $this->translation->lang)){
                 $this->translation->lang[$key] = $val;
@@ -2408,27 +2189,23 @@
             return false;
         }
 
-        public function search_condition_account($string = '')
-        {
+        public function search_condition_account($string = ''){
             if($string != '')
                 $this->sql_condition .= ' AND m.memb___id LIKE \'' . $string . '%\'';
         }
 
-        public function search_condition_date_start($string = '')
-        {
+        public function search_condition_date_start($string = ''){
             if($string != ''){
                 $this->sql_condition .= ' AND m.appl_days >= \'' . $string . '\'';
             }
         }
 
-        public function search_condition_date_end($string = '')
-        {
+        public function search_condition_date_end($string = ''){
             if($string != '')
                 $this->sql_condition .= ' AND m.appl_days <= \'' . $string . '\'';
         }
 
-		public function search_condition_status($data = [])
-        {
+		public function search_condition_status($data = []){
             if(!empty($data)){
                 if(in_array('activated', $data)){
                     $this->sql_condition .= ' AND m.activated = 1';
@@ -2451,21 +2228,18 @@
             }
         }
 
-		public function search_condition_country($data = [])
-        {
+		public function search_condition_country($data = []){
             if(!empty($data)){
                 $list_with_quotes = implode(',', array_map('self::add_quotes', $data));
                 $this->sql_condition .= ' AND m.dmn_country IN (' . $list_with_quotes . ')';
             }
         }
 
-		private function add_quotes($str)
-        {
+		private function add_quotes($str){
             return sprintf("'%s'", $str);
         }
 
-		public function load_account_list($page = 1, $per_page = 25, $server = '', $order_column = 2, $order_dir = 'desc')
-        {
+		public function load_account_list($page = 1, $per_page = 25, $server = '', $order_column = 2, $order_dir = 'desc'){
             $dir = ($order_dir == 'desc') ? 'DESC' : 'ASC';
             switch($order_column){
                 case 0:
@@ -2500,15 +2274,14 @@
 					}
 				}
 			}		
-            $accounts = $this->account_db->query('SELECT TOP ' . $per_page . ' m.memb_guid, m.memb___id, m.appl_days, m.dmn_country, m.activated, '.$partner.' d.viptime FROM MEMB_INFO AS m LEFT JOIN ['.WEB_DB.'].dbo.DmN_Vip_Users AS d ON(m.memb___id Collate Database_Default = d.memb___id Collate Database_Default) WHERE memb_guid NOT IN (SELECT Top ' . $this->website->db('web')->escape($page) . ' memb_guid FROM MEMB_INFO ' . $condition2 . ' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . '');
+            $accounts = $this->account_db->query('SELECT TOP ' . $per_page . ' m.memb_guid, m.memb___id, m.appl_days, m.dmn_country, m.activated, '.$partner.' d.viptime FROM MEMB_INFO AS m LEFT JOIN ['.WEB_DB.'].dbo.DmN_Vip_Users AS d ON(m.memb___id Collate Database_Default = d.memb___id Collate Database_Default) WHERE memb_guid NOT IN (SELECT Top ' . $this->website->db('web')->escape((int)$page) . ' memb_guid FROM MEMB_INFO ' . $condition2 . ' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . '');
             foreach($accounts->fetch_all() as $row){
                 $this->accounts[] = ['id' => $row['memb_guid'], 'memb___id' => htmlspecialchars($row['memb___id']), 'reg_date' => $row['appl_days'], 'country' => $this->website->codeToCountryName($row['dmn_country']), 'server' => $server, 'activated' => $row['activated']];
             }
             return $this->accounts;
         }
 
-        public function load_char_list($page, $per_page, $server)
-        {
+        public function load_char_list($page, $per_page, $server){
 																			 
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             $accounts = $this->game_db->query('SELECT TOP ' . $per_page . ' AccountId, Name, '.$this->website->get_char_id_col($server).' FROM Character WHERE '.$this->website->get_char_id_col($server).' NOT IN (SELECT Top ' . $this->website->db('web')->escape($pos) . ' '.$this->website->get_char_id_col($server).' FROM Character ORDER BY Name ASC)  ORDER BY Name ASC');
@@ -2519,8 +2292,7 @@
             return $this->chars;
         }
 
-        public function search_account_list($account)
-        {
+        public function search_account_list($account){
             $stmt = $this->account_db->query('SELECT memb_guid, memb___id, appl_days FROM MEMB_INFO WHERE memb___id LIKE \'' . $this->account_db->escape($account) . '%\' ORDER BY appl_days DESC');
             foreach($stmt->fetch_all() as $row){
                 $this->accounts[] = ['id' => (int)$row['memb_guid'], 'memb___id' => htmlspecialchars($row['memb___id']), 'reg_date' => $row['appl_days']];
@@ -2528,8 +2300,7 @@
             return $this->accounts;
         }
 
-		public function search_char_list($name, $server)
-        {
+		public function search_char_list($name, $server){
             $stmt = $this->game_db->prepare('SELECT AccountId, Name, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name LIKE :name ORDER BY Name ASC');
             $stmt->execute([':name' => $name . '%']);
             foreach($stmt->fetch_all() as $row){
@@ -2556,8 +2327,7 @@
             return $this->chars;
         }
 		
-		private function checkStatus($acc, $server)
-        {
+		private function checkStatus($acc, $server){
 			$stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat, IP, ServerName FROM MEMB_STAT WHERE memb___id = :user');
 			$stmt->execute([':user' => $acc]);
 			if($status = $stmt->fetch()){
@@ -2566,8 +2336,7 @@
 			return false;
         }
 
-        public function count_total_accounts($filtered = false)
-        {
+        public function count_total_accounts($filtered = false){
             $condition = '';
             if($this->sql_condition != '' && $filtered == true){
                 $condition = 'WHERE ' . substr($this->sql_condition, 4);
@@ -2576,21 +2345,18 @@
             return $count;
         }
 
-        public function count_total_chars()
-        {
+        public function count_total_chars(){
             $count = $this->game_db->snumrows('SELECT COUNT(Name) AS count FROM Character');
             return $count;
         }
 
-        public function get_account_data($id)
-        {
+        public function get_account_data($id){
             $stmt = $this->account_db->prepare('SELECT memb___id, memb__pwd, sno__numb, mail_addr, bloc_code, activated FROM MEMB_INFO WHERE memb_guid = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 		
-		public function get_account_data_by_username($acc)
-        {
+		public function get_account_data_by_username($acc){
             $stmt = $this->account_db->prepare('SELECT memb___id, memb__pwd, sno__numb, mail_addr, bloc_code, activated FROM MEMB_INFO WHERE memb___id = :acc');
             $stmt->execute([':acc' => $acc]);
             return $stmt->fetch();
@@ -2616,14 +2382,13 @@
 			return $this->website->db('web')->query('SELECT TOP 10 SUM(stream_time) AS time, day FROM DmN_Partner_Stream_Log  WHERE username = '.$this->website->db('web')->escape($account).' GROUP BY [day] ORDER By day DESC')->fetch_all();
 		}
 		
-		public function get_account_data_for_partner($acc)
-        {
+		public function get_account_data_for_partner($acc){
             $stmt = $this->account_db->prepare('SELECT dmn_partner, dmn_twitch_link, dmn_twitch_tags, dmn_youtube_link, dmn_daily_coins, dmn_daily_coins_type, dmn_purchases_share, dmn_share_url, dmn_current_share FROM MEMB_INFO WHERE memb___id = :acc');
             $stmt->execute([':acc' => $acc]);
             return $stmt->fetch();
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function update_partner_data($account, $partner, $twitch, $ttags, $youtube, $daily_coins, $daily_coins_type, $purchase_share, $share_url){
 			$stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET dmn_partner = :partner, dmn_twitch_link = :twitch, dmn_twitch_tags = :ttags, dmn_youtube_link = :youtube, dmn_daily_coins = :daily_coins, dmn_daily_coins_type = :coins_type, dmn_purchases_share = :purchase_share, dmn_share_url = :share_url WHERE memb___id = :acc');
 			$stmt->execute([
@@ -2639,14 +2404,12 @@
 			]);
 		}
 
-        public function activate_account($id)
-        {
+        public function activate_account($id){
             $stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET activated = 1  WHERE memb_guid = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function get_character_data($id, $server)
-        {
+        public function get_character_data($id, $server){
             $res = ', ' . $this->config->values('table_config', [$server, 'resets', 'column']);
             $gr = ', ' . $this->config->values('table_config', [$server, 'grand_resets', 'column']);
             $leadership = (MU_VERSION < 1) ? '0 AS Leadership' : 'Leadership';
@@ -2656,8 +2419,7 @@
         }
 
 
-        private function reset_column($server = '', $for_update = false)
-        {
+        private function reset_column($server = '', $for_update = false){
             $resets = $this->config->values('table_config', [$server, 'resets', 'column']);
             if($for_update){
                 if($resets && $resets != ''){
@@ -2672,8 +2434,7 @@
             }
         }
 
-        private function greset_column($server = '', $for_update = false)
-        {
+        private function greset_column($server = '', $for_update = false){
             $grand_resets = $this->config->values('table_config', [$server, 'grand_resets', 'column']);
             if($for_update){
                 if($grand_resets && $grand_resets != ''){
@@ -2688,8 +2449,7 @@
             }
         }
 
-        public function update_character($id, $server)
-        {
+        public function update_character($id, $server){
             $res = $this->reset_column($server, true);
             $gres = $this->greset_column($server, true);
             $stmt = $this->game_db->prepare('UPDATE Character SET cLevel = :clevel, LevelUpPoint = :leveluppoint, Class = :class, Experience = :experience, Strength = :strength, Dexterity = :dexterity, Vitality = :vitality, Energy = :energy, Money = :money,  MapNumber = :mapnumber, MapPosX = :mapposx, MapPosY = :mapposy, PkCount = :pkcount, PkLevel = :pklevel, PkTime = :pktime, CtlCode = :ctlcode, Leadership = :leadership' . $res . $gres . ' WHERE '.$this->website->get_char_id_col($server).' = :id');
@@ -2702,23 +2462,20 @@
             return $stmt->execute($data);
         }
 
-        public function get_ip_logs($account)
-        {
+        public function get_ip_logs($account){
             $stmt = $this->website->db('web')->prepare('SELECT ip, last_connected, login_type FROM DmN_IP_Log WHERE account = :account ORDER BY last_connected DESC');
             $stmt->execute([':account' => $account]);
             return $stmt->fetch_all();
         }
 
-        public function get_char_list($account, $id = -1, $server = null)
-        {
+        public function get_char_list($account, $id = -1, $server = null){
             $sql = ($id != -1) ? [' AND '.$this->website->get_char_id_col($server).' != :id', [':account' => $account, ':id' => $id]] : ['', [':account' => $account]];
             $stmt = $this->game_db->prepare('SELECT '.$this->website->get_char_id_col($server).' AS id, Name FROM Character WHERE AccountId = :account' . $sql[0] . '');
             $stmt->execute($sql[1]);
             return $stmt->fetch_all();
         }
 
-		public function update_account_info($id, $pass, $email, $sno_numb)
-        {
+		public function update_account_info($id, $pass, $email, $sno_numb){
             $update_pw = true;
             if(MD5 == 1){
                 if($pass != ''){
@@ -2753,51 +2510,44 @@
             return $stmt->execute([':mail' => $email, ':numb' => $sno_numb, ':id' => $id]);
         }
 
-        private function get_account_username($id)
-        {
+        private function get_account_username($id){
             $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE memb_guid = :id');
             $stmt->execute([':id' => $id]);
             $user = $stmt->fetch();
             return $user['memb___id'];
         }
 
-        public function get_account_by_ip($ip)
-        {
+        public function get_account_by_ip($ip){
             $stmt = $this->website->db('web')->prepare('SELECT DISTINCT account, last_connected, login_type FROM DmN_IP_Log WHERE ip = :ip');
             $stmt->execute([':ip' => $ip]);
             return $stmt->fetch_all();
         }
 
-        public function check_account($id)
-        {
+        public function check_account($id){
             $stmt = $this->account_db->prepare('SELECT memb___id, bloc_code FROM MEMB_INFO WHERE memb_guid = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_char($id, $server)
-        {
+        public function check_char($id, $server){
             $stmt = $this->game_db->prepare('SELECT Name, CtlCode FROM Character WHERE '.$this->website->get_char_id_col($server).' = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_banned_account($account)
-        {
+        public function check_banned_account($account){
             $stmt = $this->account_db->prepare('SELECT memb___id FROM MEMB_INFO WHERE memb___id = :account AND bloc_code = 1');
             $stmt->execute([':account' => $account]);
             return $stmt->fetch();
         }
 
-        public function check_banned_char($char)
-        {
+        public function check_banned_char($char){
             $stmt = $this->game_db->prepare('SELECT Name FROM Character WHERE name = :char AND CtlCode = 1');
             $stmt->execute([':char' => $char]);
             return $stmt->fetch();
         }
 
-        public function unban($name, $type, $server)
-        {
+        public function unban($name, $type, $server){
             if($type == 1){
                 $this->set_bloc_code($name, 0);
                 $this->remove_from_ban_list($name, 1, $server);
@@ -2807,45 +2557,38 @@
             }
         }
 
-        private function set_bloc_code($name, $code)
-        {
+        private function set_bloc_code($name, $code){
             $stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET bloc_code = :code WHERE memb___id = :account');
             return $stmt->execute([':code' => $code, ':account' => $name]);
         }
 
-        private function remove_from_ban_list($name, $type, $server)
-        {
+        private function remove_from_ban_list($name, $type, $server){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Ban_List WHERE name = :name AND type = :type AND server = :server');
             return $stmt->execute([':name' => $name, ':type' => $type, ':server' => $server]);
         }
 
-        private function set_ctl_code($name, $code)
-        {
+        private function set_ctl_code($name, $code){
             $stmt = $this->game_db->prepare('UPDATE Character SET CtlCode = :code WHERE Name = :name');
             return $stmt->execute([':code' => $code, ':name' => $name]);
         }
 
-        public function delete_account($account)
-        {
+        public function delete_account($account){
             $stmt = $this->account_db->prepare('DELETE FROM MEMB_INFO WHERE memb___id = :account');
             return $stmt->execute([':account' => $account]);
         }
 
-        public function get_character_list($account)
-        {
+        public function get_character_list($account){
             $stmt = $this->game_db->prepare('SELECT Name FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
             return $stmt->fetch_all();
         }
 
-        public function delete_account_character($account)
-        {
+        public function delete_account_character($account){
             $stmt = $this->game_db->prepare('DELETE FROM AccountCharacter WHERE Id = :account');
             return $stmt->execute([':account' => $account]);
         }
 
-        public function delete_characters($account, $chars)
-        {
+        public function delete_characters($account, $chars){
             $c = '';
             foreach($chars as $char){
                 $c .= ',\'' . $char['Name'] . '\'';
@@ -2853,44 +2596,37 @@
             return $stmt = $this->game_db->query('DELETE FROM Character WHERE AccountId = \'' . $this->game_db->escape($account) . '\' AND Name IN (' . substr($c, 1, strlen($c)) . ')');
         }
 
-        public function delete_account_log($account, $server)
-        {
+        public function delete_account_log($account, $server){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Account_Logs WHERE account = :account AND server = :server');
             return $stmt->execute([':account' => $account, ':server' => $server]);
         }
 
-        public function delete_account_credits($account, $server)
-        {
+        public function delete_account_credits($account, $server){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Shop_Credits WHERE memb___id = :account AND server = :server');
             return $stmt->execute([':account' => $account, ':server' => $server]);
         }
 
-        public function delete_ban_list($account, $server)
-        {
+        public function delete_ban_list($account, $server){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Ban_List WHERE name = :account AND server = :server AND type = 1');
             return $stmt->execute([':account' => $account, ':server' => $server]);
         }
 
-        public function ban_account()
-        {
+        public function ban_account(){
             $stmt = $this->account_db->prepare('UPDATE MEMB_INFO SET bloc_code = 1 WHERE memb___id = :account');
             $stmt->execute([':account' => $this->vars['name']]);
         }
 
-        public function ban_char()
-        {
+        public function ban_char(){
             $stmt = $this->game_db->prepare('UPDATE Character SET CtlCode = 1 WHERE Name = :name');
             $stmt->execute([':name' => $this->vars['name']]);
         }
 
-        public function add_to_banlist($type = 1, $server = '')
-        {
+        public function add_to_banlist($type = 1, $server = ''){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Ban_List (name, type, server, time, is_permanent, reason) VALUES (:name, :type, :server, :time, :is_permanent, :reason)');
             $stmt->execute([':name' => $this->vars['name'], ':type' => $type, ':server' => $server, ':time' => (isset($this->vars['time']) && $this->vars['time'] != '') ? strtotime($this->vars['time']) : 0, ':is_permanent' => isset($this->vars['permanent_ban']) ? 1 : 0, ':reason' => $this->vars['reason']]);
         }
 
-        public function load_ban_list($type)
-        {
+        public function load_ban_list($type){
             $query = $this->website->db('web')->query('SELECT name, server, time, type, is_permanent, reason FROM DmN_Ban_List WHERE type = ' . $this->website->db('web')->escape($type) . ' ORDER BY time ASC, is_permanent ASC');
             while($row = $query->fetch()){
                 $this->bans[] = ['name' => htmlspecialchars($row['name']), 'type' => ($row['type'] == 1) ? 'Account' : 'Character', 'time' => ($row['is_permanent'] == 0) ? (($row['time'] < time()) ? 'Ban Expired' : date(DATETIME_FORMAT, $row['time'])) : 'Permanent Ban', 'reason' => $row['reason']];
@@ -2898,8 +2634,7 @@
             return $this->bans;
         }
 
-        public function load_department_list()
-        {
+        public function load_department_list(){
             $data = $this->website->db('web')->query('SELECT id, department_name, server, is_active FROM DmN_Support_Departments ORDER BY id DESC');
 			$departments = $data->fetch_all();
 			if(!empty($departments)){
@@ -2915,8 +2650,7 @@
 			}
         }
 
-		public function generate_priority($pr = 1, $list = false, $style = false)
-        {
+		public function generate_priority($pr = 1, $list = false, $style = false){
             $priority = [1 => ['<div class="PriorityZero">' . __('Low') . '</div>', __('Low')], 2 => ['<div class="PriorityOne">' . __('Medium') . '</div>', __('Medium')], 3 => ['<div class="PriorityTwo">' . __('High') . '</div>', __('High')], 4 => ['<div class="PriorityThree">' . __('Urgent') . '</div>', __('Urgent')],];
             if($list){
                 return $priority;
@@ -2929,8 +2663,7 @@
             }
         }
 
-        public function readable_status($status)
-        {
+        public function readable_status($status){
             switch($status){
                 default:
                 case 0:
@@ -2955,8 +2688,7 @@
             return $s;
         }
 
-		public function load_support_requests($page, $per_page, $d_filter, $p_filter, $s_filter, $o_filter)
-        {
+		public function load_support_requests($page, $per_page, $d_filter, $p_filter, $s_filter, $o_filter){
             $sql_data = [];
             if($d_filter != false){
                 $sql_data[] = 'department IN(' . implode(',', $d_filter) . ')';
@@ -2980,7 +2712,7 @@
             } else{
                 $order_by2 = ' DESC';
             }
-            $query = $this->website->db('web')->query('SELECT TOP ' . $this->website->db('web')->escape($per_page) . ' id, subject, create_time, creator_account, status, department FROM DmN_Support_Tickets WHERE id NOT IN (SELECT TOP ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Support_Tickets ORDER BY id DESC) ' . $and . ' ORDER BY ' . $order_by . $order_by2 . '');
+            $query = $this->website->db('web')->query('SELECT TOP ' . $this->website->db('web')->escape((int)$per_page) . ' id, subject, create_time, creator_account, status, department FROM DmN_Support_Tickets WHERE id NOT IN (SELECT TOP ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Support_Tickets ORDER BY id DESC) ' . $and . ' ORDER BY ' . $order_by . $order_by2 . '');
             foreach($query->fetch_all() as $value){
                 $this->items[] = [
 					'id' => $value['id'], 
@@ -2995,8 +2727,7 @@
             return $this->items;
         }
 		
-		public function get_department_name($id)
-        {
+		public function get_department_name($id){
             $stmt = $this->website->db('web')->prepare('SELECT department_name FROM DmN_Support_Departments WHERE id = :id');
             $stmt->execute([':id' => $id]);
             if($name = $stmt->fetch()){
@@ -3005,13 +2736,11 @@
             return 'Unknown';
         }
 
-        private function reply_count($id)
-        {
+        private function reply_count($id){
             return $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Support_Replies WHERE ticket_id = ' . $this->website->db('web')->escape($id) . '');
         }
 
-        public function count_total_tickets($d_filter, $p_filter, $s_filter)
-        {
+        public function count_total_tickets($d_filter, $p_filter, $s_filter){
             $sql_data = [];
             if($d_filter != false){
                 $sql_data[] = 'department IN(' . implode(',', $d_filter) . ')';
@@ -3027,15 +2756,13 @@
             return $count;
         }
 
-        public function change_ticket_status($ids, $status)
-        {
+        public function change_ticket_status($ids, $status){
             $in = implode(", ", array_keys($ids));
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET status = :status WHERE id IN(' . $this->website->db('web')->escape($in) . ')');
             return $stmt->execute([':status' => $status]);
         }
 
-		public function check_ticket($id)
-        {
+		public function check_ticket($id){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, subject, message, department, priority, create_time, status, creator_account, creator_character, server, attachment FROM DmN_Support_Tickets WHERE id = :id');
             $stmt->execute([':id' => $id]);
             $ticket = $stmt->fetch();
@@ -3051,44 +2778,37 @@
 			return false;
         }
 
-        public function change_department($id, $department)
-        {
+        public function change_department($id, $department){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET department = :dept WHERE id = :id');
             return $stmt->execute([':dept' => $department, ':id' => $id]);
         }
 
-        public function change_status($id, $status)
-        {
+        public function change_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET status = :status WHERE id = :id');
             return $stmt->execute([':status' => $status, ':id' => $id]);
         }
 
-        public function add_reply($id, $text, $user = 'Administrator')
-        {
+        public function add_reply($id, $text, $user = 'Administrator'){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Support_Replies(ticket_id, reply, reply_time, reply_by) VALUES (:id, :reply, :time, :account)');
             return $stmt->execute([':id' => $id, ':reply' => bin2hex($text), ':time' => time(), ':account' => $user]);
         }
 
-        public function log_reply_time($id)
-        {
+        public function log_reply_time($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET last_reply_time = :time WHERE id = :id');
             return $stmt->execute([':time' => time(), ':id' => $id]);
         }
 
-        public function set_replied_by_admin($id)
-        {
+        public function set_replied_by_admin($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET replied_by_admin = 1, replied_by_user = 0 WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function set_replied_by_admin_and_user($id)
-        {
+        public function set_replied_by_admin_and_user($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET replied_by_admin = 1, replied_by_user = 1 WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function load_ticket_replies($id)
-        {
+        public function load_ticket_replies($id){
             $ticket_create_date = $this->get_ticket_create_time($id);
             $stmt = $this->website->db('web')->prepare('SELECT id, ticket_id, reply, reply_time, reply_by FROM DmN_Support_Replies WHERE ticket_id = :id ORDER BY reply_time ASC');
             $stmt->execute([':id' => $id]);
@@ -3100,8 +2820,7 @@
             return $this->replies;
         }
 
-        public function get_ticket_create_time($id)
-        {
+        public function get_ticket_create_time($id){
             $stmt = $this->website->db('web')->prepare('SELECT create_time FROM DmN_Support_Tickets WHERE id = :id');
             $stmt->execute([':id' => $id]);
             if($time = $stmt->fetch()){
@@ -3110,79 +2829,67 @@
             return 0;
         } 
 
-        public function get_last_reply_time($id)
-        {
+        public function get_last_reply_time($id){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 reply_time FROM DmN_Support_Replies WHERE ticket_id = :id ORDER BY reply_time DESC');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function check_unreplied_tickets()
-        {
+        public function check_unreplied_tickets(){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Support_Tickets WHERE replied_by_admin = 0 AND status NOT IN(1,3,4)');
             $stmt->execute([]);
             return $stmt->fetch_all();
         }
 
-        public function load_support_filter()
-        {
+        public function load_support_filter(){
             return ['filter_department' => isset($_COOKIE['dmn_support_department']) ? unserialize($_COOKIE['dmn_support_department']) : false, 'filter_priority' => isset($_COOKIE['dmn_support_priorities']) ? unserialize($_COOKIE['dmn_support_priorities']) : false, 'filter_status' => isset($_COOKIE['dmn_support_status']) ? unserialize($_COOKIE['dmn_support_status']) : false, 'sort_by' => isset($_COOKIE['dmn_support_order']) ? unserialize($_COOKIE['dmn_support_order']) : [0 => 1, 1 => 2]];
         }
 
-        public function serialize_departments($department)
-        {
+        public function serialize_departments($department){
             setcookie("dmn_support_department", serialize($department), strtotime('+30 days', time()), "/");
         }
 
-        public function serialize_priorities($priority)
-        {
+        public function serialize_priorities($priority){
             setcookie("dmn_support_priorities", serialize($priority), strtotime('+30 days', time()), "/");
         }
 
-        public function serialize_status($status)
-        {
+        public function serialize_status($status){
             setcookie("dmn_support_status", serialize($status), strtotime('+30 days', time()), "/");
         }
 
-        public function serialize_order($order)
-        {
+        public function serialize_order($order){
             setcookie("dmn_support_order", serialize($order), strtotime('+30 days', time()), "/");
         }
 
-        public function unset_departments()
-        {
+        public function unset_departments(){
             if(isset($_COOKIE['dmn_support_department'])){
                 unset($_COOKIE['dmn_support_department']);
                 setcookie("dmn_support_department", "", time() - 3600, '/');
             }
         }
 
-        public function unset_priorities()
-        {
+        public function unset_priorities(){
             if(isset($_COOKIE['dmn_support_priorities'])){
                 unset($_COOKIE['dmn_support_priorities']);
                 setcookie("dmn_support_priorities", "", time() - 3600, '/');
             }
         }
 
-        public function unset_status()
-        {
+        public function unset_status(){
             if(isset($_COOKIE['dmn_support_status'])){
                 unset($_COOKIE['dmn_support_status']);
                 setcookie("dmn_support_status", "", time() - 3600, '/');
             }
         }
 
-        public function unset_order()
-        {
+        public function unset_order(){
             if(isset($_COOKIE['dmn_support_order'])){
                 unset($_COOKIE['dmn_support_order']);
                 setcookie("dmn_support_order", "", time() - 3600, '/');
             }
         }
 
-        public function check_existing_department($title, $server, $id = false)
-        {
+        public function check_existing_department($title, $server, $id = false){
             $sql = '';
             $data = [':name' => bin2hex($title), ':server' => $server];
             if($id != false){
@@ -3194,8 +2901,7 @@
             return $stmt->fetch();
         }
 
-        public function add_department($title, $server, $pay, $ptype, $status)
-        {
+        public function add_department($title, $server, $pay, $ptype, $status){
             $sql = ['', ''];
             $sql2 = ['', ''];
             $data = [':name' => bin2hex($title), ':server' => $server];
@@ -3212,8 +2918,7 @@
             return $stmt->execute($data);
         }
 
-        public function edit_department($title, $server, $pay, $ptype, $status, $id)
-        {
+        public function edit_department($title, $server, $pay, $ptype, $status, $id){
             $sql = '';
             $sql2 = '';
             $data = [':name' => bin2hex($title), ':server' => $server];
@@ -3231,8 +2936,7 @@
             return $stmt->execute($data);
         }
 
-        public function check_department($id)
-        {
+        public function check_department($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, department_name, server, pay_per_incident, payment_type, is_active FROM DmN_Support_Departments WHERE id = :id');
             $stmt->execute([':id' => $id]);
             $data = $stmt->fetch();
@@ -3243,14 +2947,12 @@
 			return false;
         }
 
-        public function delete_department($id)
-        {
+        public function delete_department($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Support_Departments WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function save_server_data($array, $ksort = true)
-        {
+        public function save_server_data($array, $ksort = true){
             if($ksort){
                 ksort($array);
             }
@@ -3264,8 +2966,7 @@
             return false;
         }
 
-		public function save_config_data($array, $file, $ksort = true)
-        {
+		public function save_config_data($array, $file, $ksort = true){
             if($ksort){
                 ksort($array);
             }
@@ -3279,8 +2980,7 @@
             return false;
         }
 
-		public function remove_server_from_config($file, $server)
-        {
+		public function remove_server_from_config($file, $server){
             $config = $this->config->values($file);
             if(array_key_exists($server, $config)){
                 unset($config[$server]);
@@ -3288,8 +2988,7 @@
             }
         }
 
-		public function reorder_server_in_config($file, $order)
-        {
+		public function reorder_server_in_config($file, $order){
             $config = $this->config->values($file);
             $new_array = [];
             foreach($order AS $value){
@@ -3302,8 +3001,7 @@
             }
         }
 
-		public function copy_settings($file, $new_server)
-        {
+		public function copy_settings($file, $new_server){
             $config = $this->config->values($file);
             if($config != false){
                 if(!array_key_exists($new_server, $config)){
@@ -3314,43 +3012,35 @@
             }
         }
 
-        public function list_databases()
-        {
+        public function list_databases(){
             return $this->website->db('web')->query('SELECT name FROM master.dbo.sysdatabases WHERE dbid > 4')->fetch_all();
         }
 
-        public function check_memb_info($db)
-        {
+        public function check_memb_info($db){
             return $this->$db->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'MEMB_INFO\'')->fetch();
         }
 
-        public function check_character($db)
-        {
+        public function check_character($db){
             return $this->$db->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N\'Character\'')->fetch();
         }
 
-        public function get_wh_size($db)
-        {
+        public function get_wh_size($db){
             return $this->$db->query('SELECT character_maximum_length as length FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = \'Warehouse\' AND column_name = \'Items\'')->fetch();
         }
 
-        public function get_inv_size($db)
-        {
+        public function get_inv_size($db){
             return $this->$db->query('SELECT character_maximum_length as length FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = \'Character\' AND column_name = \'Inventory\'')->fetch();
         }
 
-        public function check_if_column_exists($column, $table, $db)
-        {
+        public function check_if_column_exists($column, $table, $db){
             return $this->$db->query('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $table . '\'  AND COLUMN_NAME = \'' . $column . '\'')->fetch();
         }
 		
-		public function get_identity_column($table, $db)
-        {
+		public function get_identity_column($table, $db){
             return $this->$db->query('SELECT name FROM syscolumns WHERE id = Object_ID(\'' . $table . '\') AND colstat & 1 = 1')->fetch();
         }
 
-		public function add_column($column, $table, $info, $db)
-        {
+		public function add_column($column, $table, $info, $db){
             $query = 'ALTER TABLE ' . $table . ' ADD ' . $column . ' ' . $info['type'];
             if($info['identity'] == 1){
                 $query .= ' IDENTITY(1,1)';
@@ -3365,17 +3055,15 @@
             return $this->$db->query($query);
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function drop_column($col, $table, $db)
-        {
+				
+		public function drop_column($col, $table, $db){
             $this->check_constraints_column($col, $table, $db);
             $this->check_default_constraints($col, $table, $db);
             return $this->$db->query('ALTER TABLE ' . $table . ' DROP COLUMN ' . $col . '');
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function check_constraints_column($col, $table, $db)
-        {
+				
+		private function check_constraints_column($col, $table, $db){
             $constraints = $this->$db->query('SELECT cu.CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE cu WHERE EXISTS (SELECT tc.* FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc WHERE tc.TABLE_NAME = \'' . $table . '\' AND cu.COLUMN_NAME = \'' . $col . '\' AND tc.CONSTRAINT_NAME = cu.CONSTRAINT_NAME)')->fetch_all();
             if(!empty($constraints)){
                 foreach($constraints AS $const){
@@ -3384,8 +3072,7 @@
             }
         }
 
-		private function check_default_constraints($col, $table, $db)
-        {
+		private function check_default_constraints($col, $table, $db){
             $constraints = $this->$db->query('SELECT NAME FROM SYS.DEFAULT_CONSTRAINTS WHERE OBJECT_NAME(PARENT_OBJECT_ID) = \'' . $table . '\' AND COL_NAME (PARENT_OBJECT_ID, PARENT_COLUMN_ID) = \'' . $col . '\'')->fetch_all();
             if(!empty($constraints)){
                 foreach($constraints AS $const){
@@ -3394,35 +3081,31 @@
             }
         }
 		
-		private function drop_constraint($name, $table, $db)
-        {
+		private function drop_constraint($name, $table, $db){
             $this->$db->query('ALTER TABLE ' . $table . ' DROP CONSTRAINT ' . $name . '');
         }
 
-        public function check_procedure($proc, $db)
-        {
+        public function check_procedure($proc, $db){
             return $this->$db->query('SELECT * FROM sysobjects WHERE type = \'P\' AND name = \'' . $proc . '\'')->fetch();
         }
 
-        public function drop_procedure($proc, $db)
-        {
+        public function drop_procedure($proc, $db){
             return $this->$db->query('DROP PROCEDURE ' . $proc . '');
         }
 
-        public function insert_sql_data($sql, $db)
-        {
+        public function insert_sql_data($sql, $db){
             $query = $this->$db->query($sql);
             $query->close_cursor();
             return $query;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function dropTriggerPKCount($db){
 			$this->$db->query('IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N\'[dbo].[DmN_Update_Killer_Ranking]\'))
 				DROP TRIGGER [dbo].[DmN_Update_Killer_Ranking]');
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function createTriggerPKCount($db){
 			$this->$db->query('CREATE TRIGGER [dbo].[DmN_Update_Killer_Ranking] ON [dbo].[Character]
 						   AFTER UPDATE
@@ -3447,8 +3130,7 @@
 						END');
 		}
 
-		public function required_columns()
-        {
+		public function required_columns(){
             return [
 				'account_db' => [
 					'MEMB_INFO' => [
@@ -3545,8 +3227,7 @@
 			];
         }
 
-		public function pin_number_to_text($pos)
-        {
+		public function pin_number_to_text($pos){
             switch($pos){
                 case 0:
                     return '1st';
@@ -3565,21 +3246,18 @@
             }
         }
 
-        public function check_if_bulk_email_exists($subject)
-        {
+        public function check_if_bulk_email_exists($subject){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, subject, body, recipient_list, server, sending_started, sending_finished, sent_to, failed, is_finished, exclude FROM DmN_Bulk_Emails WHERE seo_subject = :seo_subject');
             $stmt->execute([':seo_subject' => $subject]);
             $data = $stmt->fetch();
             return ($data != false) ? $data : false;
         }
 
-        public function load_bulk_emails()
-        {
+        public function load_bulk_emails(){
             return $this->website->db('web')->query('SELECT id, subject, body, sending_started, sending_finished, sent_to, failed, seo_subject, is_finished, exclude FROM DmN_Bulk_Emails ORDER BY sending_started DESC, id DESC')->fetch_all();
         }
 
-        private function remove_not_activated($list)
-        {
+        private function remove_not_activated($list){
             $new_list = [];
             foreach($list AS $key => $emails){
                 if($emails['activated'] != 0){
@@ -3589,8 +3267,7 @@
             return $new_list;
         }
 
-        private function remove_blocked($list)
-        {
+        private function remove_blocked($list){
             $new_list = [];
             foreach($list AS $key => $emails){
                 if($emails['bloc_code'] != 1){
@@ -3600,8 +3277,7 @@
             return $new_list;
         }
 
-        private function remove_vip_users($list)
-        {
+        private function remove_vip_users($list){
             $new_list = [];
             $vip_users = $this->website->db('web')->query('SELECT memb___id FROM DmN_Vip_Users WHERE viptime > ' . time() . '')->fetch_all();
             if(!empty($vip_users)){
@@ -3617,8 +3293,7 @@
             return $new_list;
         }
 
-        private function remove_gm_users($list, $servers = false)
-        {
+        private function remove_gm_users($list, $servers = false){
             $new_list = [];
             $this->vars['server'] = ($servers != false) ? unserialize($servers) : $this->vars['server'];
             if(count($this->vars['server']) > 1){
@@ -3650,16 +3325,14 @@
             return $new_list;
         }
 
-        private function list_gms($server)
-        {
+        private function list_gms($server){
             $list = $this->website->db('game', $server)->query('SELECT DISTINCT AccountId FROM Character WHERE CtlCode IN(8, 32)')->fetch_all();
             if(!empty($list)){
                 $this->gm_list[] = $list;
             }
         }
 
-		public function add_bulk_mail()
-        {
+		public function add_bulk_mail(){
             $this->get_recipient_list();
             $this->recipients[0] = call_user_func_array('array_merge', $this->recipients);
             $recipient_list = $this->arrayUniqueMulti($this->recipients[0], true);
@@ -3689,8 +3362,7 @@
             return null;
         }
 
-        private function create_recipient_list($recipient_list, $subject)
-        {
+        private function create_recipient_list($recipient_list, $subject){
             $file = APP_PATH . DS . 'data' . DS . 'bulk_email_recipient_list' . DS . $this->website->seo_string($subject) . '.txt';
             $add_recipient_list = @file_put_contents($file, serialize($recipient_list));
             if($add_recipient_list != false){
@@ -3699,8 +3371,7 @@
             return false;
         }
 
-        public function get_recipient_list_from_file($subject)
-        {
+        public function get_recipient_list_from_file($subject){
             $file = APP_PATH . DS . 'data' . DS . 'bulk_email_recipient_list' . DS . $subject . '.txt';
             if(file_exists($file)){
                 return file_get_contents($file);
@@ -3708,14 +3379,12 @@
             return serialize([]);
         }
 
-        public function edit_bulk_mail($id)
-        {
+        public function edit_bulk_mail($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Bulk_Emails SET subject = :subject, body = :body, server = :server, seo_subject = :seo_subject WHERE id = :id');
             return $stmt->execute([':subject' => $this->vars['new_subject'], ':body' => $this->vars['body'], ':server' => serialize($this->vars['server']), ':seo_subject' => $this->website->seo_string($this->vars['new_subject']), ':id' => $id]);
         }
 
-        public function remove_bulk_email($subject)
-        {
+        public function remove_bulk_email($subject){
             $file = APP_PATH . DS . 'data' . DS . 'bulk_email_recipient_list' . DS . $subject . '.txt';
             if(file_exists($file)){
                 unlink($file);
@@ -3724,8 +3393,7 @@
             return $stmt->execute([':subject' => $subject]);
         }
 
-        public function resend_bulk_email($subject, $servers)
-        {
+        public function resend_bulk_email($subject, $servers){
             $this->get_recipient_list($servers);
             $this->recipients[0] = call_user_func_array('array_merge', $this->recipients);
             if($this->create_recipient_list($this->arrayUniqueMulti($this->recipients[0], true), $subject)){
@@ -3734,8 +3402,7 @@
             return false;
         }
 
-		private function get_recipient_list($servers = false)
-        {
+		private function get_recipient_list($servers = false){
             $this->vars['server'] = ($servers != false) ? unserialize($servers) : $this->vars['server'];
             if(count($this->vars['server']) > 1){
                 if($this->website->is_multiple_accounts() == true){
@@ -3750,16 +3417,14 @@
             }
         }
 
-        private function list_recipients($server)
-        {
+        private function list_recipients($server){
             $list = $this->website->db('account', $server)->query('SELECT memb___id, mail_addr, activated, bloc_code FROM MEMB_INFO')->fetch_all();
             if(!empty($list)){
                 $this->recipients[] = $list;
             }
         }
 
-		private function arrayUniqueMulti($array, $preserveKeys = false)
-        {
+		private function arrayUniqueMulti($array, $preserveKeys = false){
             $arrayRewrite = [];
             $arrayHashes = [];
             foreach($array as $key => $item){
@@ -3776,8 +3441,7 @@
             return $arrayRewrite;
         }
 
-        public function get_plugin_list()
-        {
+        public function get_plugin_list(){
             $plugins = [];
             $dir = scandir(APP_PATH . DS . 'plugins');
             foreach($dir as $folders){
@@ -3790,8 +3454,7 @@
             return $plugins;
         }
 
-		public function get_task_last_run($task)
-        {
+		public function get_task_last_run($task){
             $file = $dir = APP_PATH . DS . 'logs' . DS . 'scheduler.json';
             if(file_exists($file)){
                 $data = file_get_contents($file);
@@ -3805,8 +3468,7 @@
             return 'undefined';
         }
 
-		public function get_last_cron_run()
-        {
+		public function get_last_cron_run(){
             $file = $dir = APP_PATH . DS . 'logs' . DS . 'scheduler.json';
             if(file_exists($file)){
                 $data = file_get_contents($file);
@@ -3820,8 +3482,7 @@
             return false;
         }
 		
-		public function sent_ticket_reply_email_user($user, $server, $uemail, $subject, $id)
-        {
+		public function sent_ticket_reply_email_user($user, $server, $uemail, $subject, $id){
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'support_email_reply_user_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
@@ -3837,8 +3498,7 @@
             }
         }
 
-		public function sendmail($recipients, $subject, $message, $from = [])
-        {
+		public function sendmail($recipients, $subject, $message, $from = []){
             $this->vars['email_config'] = $this->config->values('email_config');
             if(!$this->vars['email_config'])
                 throw new Exception('Email settings not configured.');
