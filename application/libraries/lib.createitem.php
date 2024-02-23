@@ -62,7 +62,6 @@
          *
          * @return void
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function muVersion($version)
         {
             try{
@@ -83,7 +82,6 @@
          *
          * @return void
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function setItemData($data = [])
         {
             try{
@@ -102,7 +100,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function id($id)
         {
             try{
@@ -122,8 +119,7 @@
          *
          * @return createitem object
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function cat($cat)
+		public function cat($cat)
         {
             try{
                 if(!is_numeric($cat))
@@ -151,7 +147,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function refinery($ref = false)
         {
             try{
@@ -169,7 +164,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function expirable()
         {
             $this->ref = 2;
@@ -183,7 +177,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function harmony($hoption = [])
         {
             try{
@@ -203,7 +196,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function dur($dur)
         {
             try{
@@ -235,7 +227,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function serial($serial)
         {
             try{
@@ -255,7 +246,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function serial2($serial = false)
         {
             try{
@@ -275,7 +265,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function lvl($lvl)
         {
             try{
@@ -295,7 +284,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function stickLvl($lvl)
         {
             try{
@@ -315,7 +303,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function skill($skill)
         {
             try{
@@ -335,7 +322,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function luck($luck)
         {
             try{
@@ -355,7 +341,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function opt($option)
         {
             try{
@@ -375,7 +360,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function exe($exe = [])
         {
             try{
@@ -395,7 +379,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function addStaticExe($exe)
         {
             try{
@@ -416,7 +399,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function addExe($exe)
         {
             try{
@@ -429,7 +411,6 @@
             return $this;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function removeExe($exe)
         {
             try{
@@ -449,7 +430,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function fenrir($fenrir)
         {
             try{
@@ -469,7 +449,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function ancient($ancient)
         {
             try{
@@ -489,7 +468,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function addAncient($ancient)
         {
             try{
@@ -509,7 +487,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         public function socket($sockets = [])
         {
             try{
@@ -529,7 +506,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function elementType($element = false)
         {
             try{
@@ -549,7 +525,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function elementRanks($ranks = [])
         {
             try{
@@ -569,7 +544,6 @@
          *
          * @return void
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function elementCount($count = 1)
         {
             try{
@@ -588,7 +562,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function elementLevels($levels = [])
         {
             try{
@@ -623,7 +596,6 @@
          *
          * @return createitem object
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function make($id, $cat, $ref = false, $hoption = [], $dur = 0, $serial = 0, $serial2 = false, $lvl = 0, $skill = false, $luck = false, $option = 0, $exellent = [], $fenrir = 0, $ancient = 0, $sockets = [], $element_type = false, $element_ranks = [], $element_levels = [])
         {
             $this->id($id)->cat($cat)->refinery($ref)->harmony($hoption)->dur($dur)->serial($serial)->serial2($serial2)->lvl($lvl)->skill($skill)->luck($luck)->opt($option)->exe($exellent)->fenrir($fenrir)->ancient($ancient)->socket($sockets)->elementType($element_type)->elementRanks($element_ranks)->elementLevels($element_levels);
@@ -635,8 +607,7 @@
          *
          * @return string
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        private function setId()
+		private function setId()
         {
             $id = $this->id;
             if(in_array($this->version, [0, 1]))
@@ -654,7 +625,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
         private function setCategory()
         {
             if(in_array($this->version, [0, 1]))
@@ -667,7 +637,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setOptions()
         {
             $opt = 0;
@@ -693,7 +662,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setDurability()
         {
 			
@@ -765,7 +733,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function setSerial()
         {
             if($this->serials_from_hex == true){
@@ -787,7 +754,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setSerial2()
         {
             if($this->serials_from_hex == true){
@@ -809,8 +775,7 @@
          *
          * @return string
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        private function setExe()
+		private function setExe()
         {	
             if($this->is_socket_exe){
                 if($this->opt >= 4){
@@ -857,7 +822,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setAncient()
         {
             if($this->version == 0)
@@ -876,7 +840,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setRefinery()
         {
             if(in_array($this->version, [0, 1]))
@@ -906,8 +869,7 @@
          *
          * @return string
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        private function setHarmony()
+		private function setHarmony()
         {
             if(in_array($this->version, [0, 1]))
                 return ''; 
@@ -927,7 +889,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setElementOnHarmony()
         {
             if($this->element_ranks['rank1'] != 0)
@@ -948,7 +909,6 @@
          *
          * @return string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         private function setSocket()
         {
             if(in_array($this->version, [0, 1]))
@@ -1007,15 +967,26 @@
          *
          * @return string
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        private function setEmpty()
+		private function setEmpty()
         {
             if($this->serials_from_hex == true){
                 if(isset($this->hex_serial[1])){
                     return str_repeat('F', 24);
                 }
+				else{
+					if($this->item_size == 58){
+						return str_repeat('F', 26);
+					}
+					if($this->item_size == 50){
+						return str_repeat('F', 18);
+					}
+					if($this->item_size == 40){
+						return str_repeat('F', 8);
+					}
+				}
             } 
 			else{
+				
                 if($this->serial2 != false){
                     return str_repeat('F', 24);
                 }
@@ -1039,7 +1010,6 @@
          *
          * @return hex string
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
         public function to_hex()
         {
             return $this->setId() . $this->setOptions() . $this->setDurability() . $this->setSerial() . $this->setExe() . $this->setAncient() . $this->setCategory() . $this->setRefinery() . $this->setHarmony() . $this->setSocket() . $this->setSerial2() . $this->setEmpty();
