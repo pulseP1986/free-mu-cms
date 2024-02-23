@@ -260,18 +260,18 @@
 
 		public function count_total_chars($server)
         {
-            $this->total_characters = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1 AND removed != 1 AND server = \'' . $this->web_db->escape($server) . '\'');
+            $this->total_characters = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'');
         }
 
 		public function load_market_chars($page, $per_page = 25, $server, $tax = 0)
         {
             $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
-            $this->chars = $this->website->db('web')->query('SELECT Top ' . $this->web_db->escape($per_page) . ' id, mu_id, start_date, end_date, price, price_type, seller, class FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = \'' . $this->web_db->escape($server) . '\' AND id Not IN (SELECT Top ' . $this->web_db->escape($this->per_page) . ' id FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = \'' . $this->web_db->escape($server) . '\' ORDER BY id DESC) ORDER BY id DESC');
+            $this->chars = $this->website->db('web')->query('SELECT Top ' . $this->web_db->escape($per_page) . ' id, mu_id, start_date, end_date, price, price_type, seller, class FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->web_db->escape($this->per_page) . ' id FROM DmN_CharacterMarket WHERE end_date > ' . time() . ' AND is_sold != 1  AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($this->chars->fetch_all() as $value){
 				$info = $this->get_char_name_by_id($value['mu_id'], $server);
                 $this->char_list[] = [
-					'icon' => (date("F j, Y", strtotime($value['start_date'])) == date("F j, Y", time())) ? '<img src="' . $this->config->base_url . 'assets/' . $this->config->config_entry('main|template') . '/images/new.png" />' : $this->pos, 
+					'icon' => (date("F j, Y", strtotime($value['start_date'])) == date("F j, Y", time())) ? '<img src="' . $this->config->base_url . 'assets/' . $this->config->entry('main.template') . '/images/new.png" />' : $this->pos, 
 					'price' => round(($value['price'] / 100) * $tax + $value['price']) . ' ' . $this->website->translate_credits($value['price_type'], $server), 
 					'id' => $value['id'], 'mu_id' => $value['mu_id'], 
 					'name' => $info['Name'], 
@@ -289,7 +289,7 @@
 
         public function load_market_history_chars($account, $server)
         {
-            return $this->website->db('web')->query('SELECT id, mu_id, start_date, end_date, price, price_type, seller, class, is_sold, removed FROM DmN_CharacterMarket WHERE server = \'' . $this->web_db->escape($server) . '\' AND seller_acc = \'' . $this->web_db->escape($account) . '\' ORDER BY id DESC')->fetch_all();
+            return $this->website->db('web')->query('SELECT id, mu_id, start_date, end_date, price, price_type, seller, class, is_sold, removed FROM DmN_CharacterMarket WHERE server = '.$this->website->db('web')->escape($server).' AND seller_acc = '.$this->website->db('web')->escape($account).' ORDER BY id DESC')->fetch_all();
         }
 
         public function insert_new_sale($id, $class, $account, $server)

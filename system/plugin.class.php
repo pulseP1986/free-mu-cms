@@ -22,8 +22,8 @@
             $this->registry = controller::get_instance();
             $this->config = load_class('config');
             $this->load = load_class('load');
-            $this->server_list = server_list();
             $this->load->helper('website');
+            $this->server_list = $this->website->server_list();
             $this->load->lib('session', ['DmNCMS']);
 			$this->session->checkSession();
             $this->load->lib('csrf');
@@ -237,7 +237,7 @@
                         $this->plugin_config = $this->config->values($this->plugin_class);
                         if(empty($this->plugin_config)){
                             $this->data();
-                            if($this->plugin_data[$this->plugin_class]['is_multi_server']){
+                            if(isset($this->plugin_data[$this->plugin_class]['is_multi_server']) && $this->plugin_data[$this->plugin_class]['is_multi_server']){
                                 foreach($this->server_list AS $key => $value){
                                     $this->plugin_config[$key] = $data;
                                 }

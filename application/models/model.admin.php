@@ -895,7 +895,7 @@
 				$condition2 = 'WHERE ' . substr($this->sql_condition, 5);
 			}
 			
-			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' text, amount, date, account, server, ip FROM DmN_Account_Logs WHERE id Not IN (SELECT Top ' . $page . ' id FROM DmN_Account_Logs '.$condition2.' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . ''); 
+			$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' text, amount, date, account, server, ip FROM DmN_Account_Logs WHERE id Not IN (SELECT Top ' . $page . ' id FROM DmN_Account_Logs '.$condition2.' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . ''); 
             foreach($items->fetch_all() as $value){
 				if($value['date'] instanceof \DateTime) {
 					$date = $value['date']->format(DATETIME_FORMAT);
