@@ -76,7 +76,6 @@
             $stmt->execute([':user' => $account, ':char' => $char]);
             if($this->char_info = $stmt->fetch()){
                 $this->char_info['mlevel'] = $this->load_master_level($this->char_info['Name'], $server);
-				$this->char_info['huntpoint'] = $this->load_hunt_point($this->char_info['Name'], $server);
                 $this->inventory($this->char_info['Name'], $server);
             }
         }
@@ -92,20 +91,6 @@
                     return $mlevel['mlevel'];
                 }
             }
-            return 0;
-        }
-		
-		private function load_hunt_point($char, $server)
-        {
-            //if($this->config->values('table_config', [$server, 'master_level', 'column']) != false){
-                $stmt = $this->website->db('game', $server)->prepare('SELECT HuntPoint FROM IGC_HuntPoint WHERE Name = :char');
-                $stmt->execute([':char' => $char]);
-                $hp = $stmt->fetch();
-                //$stmt->close_cursor();
-                if($hp){
-                    return $hp['HuntPoint'];
-                }
-            //}
             return 0;
         }
 
