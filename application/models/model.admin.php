@@ -600,7 +600,7 @@
                 $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Partner_Used_Coupons ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if($coupon != '' && $coupon != '-')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1)) . ' id FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' ORDER BY id DESC) ORDER BY id DESC'); 
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' coupon, username, date_used, generated_by FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Partner_Used_Coupons WHERE coupon like \'%' . $this->website->db('web')->escape($coupon) . '%\' ORDER BY id DESC) ORDER BY id DESC'); 
             }
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
             foreach($items->fetch_all() as $value){
