@@ -5709,20 +5709,20 @@
 								  $this->vars['existing_vip'] =  $this->Mshop->check_existing_vip_package($account, $this->vars['firstKey']); 
 								  if($this->vars['existing_vip'] != NULL){
 									  $this->Mshop->update_vip_package($package, strtotime($time), $account, $this->vars['firstKey']);
-									  $this->Mshop->add_server_vip(strtotime($time), $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $this->vars['vip_query_config'], $account);
+									  $this->Mshop->add_server_vip(strtotime($time), $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $this->vars['vip_query_config'], $account, $this->vars['firstKey']);
 									  $this->Maccount->add_account_log('Admin updated vip ' . $this->vars['vip_data']['package_title'] . ' package until '.$time.'', 0, $account, $this->vars['firstKey']);                
 									  $this->vars['success'] = 'Vip updated.';
 								  }
 								  else{
 									 $this->Mshop->insert_vip_package($package, strtotime($time), $account, $this->vars['firstKey']);
-									 $this->Mshop->add_server_vip(strtotime($time), $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $this->vars['vip_query_config'], $account);
+									 $this->Mshop->add_server_vip(strtotime($time), $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $this->vars['vip_query_config'], $account, $this->vars['firstKey']);
 									 $this->Maccount->add_account_log('Admin added vip ' . $this->vars['vip_data']['package_title'] . ' package until '.$time.'', 0, $account, $this->vars['firstKey']);        
 									 $this->vars['success'] = 'Vip added.';
 								  }
 							 }
 							 else{
 								 $this->Mshop->remove_vip_package($account, $this->vars['firstKey']);
-								 $this->Mshop->add_server_vip((time - (86400*7)), $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $this->vars['vip_query_config'], $account);
+								 $this->Mshop->add_server_vip((time - (86400*7)), $this->vars['vip_data']['server_vip_package'], $this->vars['vip_data']['connect_member_load'], $this->vars['vip_query_config'], $account, $this->vars['firstKey']);
 								 $this->Maccount->add_account_log('Admin removed vip', 0, $account, $this->vars['firstKey']);                
 							    $this->vars['success'] = 'Vip updated.';
 							 }
