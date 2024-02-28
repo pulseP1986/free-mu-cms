@@ -5000,12 +5000,12 @@
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$languages = $this->config->values('locale_config');
 				if(array_key_exists($lang, $languages['localizations'])){
-					$file = APP_PATH . DS . 'localization' . DS . htmspecialchars($lang) . '.json';
+					$file = APP_PATH . DS . 'localization' . DS . htmlspecialchars($lang) . '.json';
 					if(is_file($file)){
 						$file_data = json_decode(file_get_contents($file));
 						$file_data = json_encode($file_data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 						header("Content-type: application/javascript");
-						header("Content-Disposition: attachment; filename=dmnmucms_language_export_" . htmspecialchars($lang) . ".json");
+						header("Content-Disposition: attachment; filename=dmnmucms_language_export_" . htmlspecialchars($lang) . ".json");
 						echo $file_data;
 						exit;
 					}
@@ -5032,7 +5032,7 @@
 				$languages = $this->config->values('locale_config');
 				
 				if(array_key_exists($lang, $languages['localizations'])){
-					$file = APP_PATH . DS . 'localization' . DS . htmspecialchars($lang) . '.json';
+					$file = APP_PATH . DS . 'localization' . DS . htmlspecialchars($lang) . '.json';
 					$fileDeault = APP_PATH . DS . 'localization' . DS . 'en.json';
 					if(is_file($file)){
 						if(is_file($fileDeault)){
@@ -5047,7 +5047,7 @@
 							
 							$data = json_encode($translations, JSON_PRETTY_PRINT);
 							if(is_writable(APP_PATH . DS . 'localization')){
-								$fp = @fopen(APP_PATH . DS . 'localization' . DS . htmspecialchars($lang) . '.json', 'w');
+								$fp = @fopen(APP_PATH . DS . 'localization' . DS . htmlspecialchars($lang) . '.json', 'w');
 								@fwrite($fp, $data);
 								@fclose($fp);
 								$this->vars['success'] = 'Missing strings imported.';
@@ -5078,7 +5078,7 @@
         {
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
-				$this->vars['lang'] = htmspecialchars($_POST['id']);
+				$this->vars['lang'] = htmlspecialchars($_POST['id']);
 				
 				$file = APP_PATH. DS . 'localization' . DS . $this->vars['lang'] . '.json';
 				if(is_file($file)){
@@ -5114,7 +5114,7 @@
 		public function disable_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
-				$this->vars['lang'] = htmspecialchars($lang);
+				$this->vars['lang'] = htmlspecialchars($lang);
 				
 				if(isset($this->vars['languages']['localizations'][$this->vars['lang']])){
 					$this->vars['languages']['localizations'][$this->vars['lang']] = 0;
@@ -5131,7 +5131,7 @@
 		public function enable_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
-				$this->vars['lang'] = htmspecialchars($lang);
+				$this->vars['lang'] = htmlspecialchars($lang);
 				
 				if(isset($this->vars['languages']['localizations'][$this->vars['lang']])){
 					$this->vars['languages']['localizations'][$this->vars['lang']] = 1;
@@ -5148,7 +5148,7 @@
 		public function set_default_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
-				$this->vars['lang'] = htmspecialchars($lang);
+				$this->vars['lang'] = htmlspecialchars($lang);
 				
 				if(isset($this->vars['languages']['localizations'][$this->vars['lang']])){
 					$this->vars['languages']['default_localization'] = $this->vars['lang'];
