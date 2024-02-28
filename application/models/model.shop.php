@@ -30,7 +30,7 @@
                         $cat_list .= $category_data[0] . ',';
                     }
                 }
-                $this->category = 'AND item_cat IN (' . $this->website->db('web')->escape(substr($cat_list, 0, -1)) . ')';
+                $this->category = 'AND item_cat IN (' . $this->website->db('web')->sanitize_var(substr($cat_list, 0, -1)) . ')';
             }
             $items = $this->website->db('web')->query('SELECT id, item_id, item_cat, name, original_item_cat, stick_level, price FROM DmN_Shopp WHERE price >= 1 ' . $this->category . ' ORDER BY  item_cat ASC, item_id ASC')->fetch_all();
             $this->count_items = count($items);
