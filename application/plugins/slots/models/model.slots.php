@@ -292,10 +292,9 @@
         {
         }
 
-        public function log_spin($userID, $account, $server, $windowID, $action, $bet = null, $reel1 = null, $reel2 = null, $reel3 = null, $prizeID = null, $payoutCredits = null, $payoutWinnings = null)
-        {
+        public function log_spin($userID, $account, $server, $windowID, $action, $bet = null, $reel1 = null, $reel2 = null, $reel3 = null, $prizeID = null, $payoutCredits = null, $payoutWinnings = null){
             $fields = "date, user_id, memb___id, server, window_id, action";
-            $values = "GETDATE(), " . $userID . ", '" . $this->website->db('web')->escape($account) . "', '" . $this->website->db('web')->escape($server) . "', '" . $this->website->db('web')->escape($windowID) . "', '" . $this->website->db('web')->escape($action) . "'";
+            $values = "GETDATE(), " . $userID . ", " . $this->website->db('web')->escape($account) . ", " . $this->website->db('web')->escape($server) . ", " . $this->website->db('web')->escape($windowID) . ", " . $this->website->db('web')->escape($action) . "";
             if($bet != null){
                 $fields .= ", bet, reel1, reel2, reel3";
                 $values .= ", " . $bet . ", " . $reel1 . ", " . $reel2 . ", " . $reel3;
@@ -318,13 +317,12 @@
          *
          *
          */
-        public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, date, memb___id, server, bet, prize_id, payout_credits FROM DmN_Slots_Spins WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Slots_Spins ORDER BY id DESC) ORDER BY id DESC'); else{
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, date, memb___id, server, bet, prize_id, payout_credits FROM DmN_Slots_Spins WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Slots_Spins ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, date, memb___id, server, bet, prize_id, payout_credits FROM DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, date, memb___id, server, bet, prize_id, payout_credits FROM DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, date, memb___id, server, bet, prize_id, payout_credits FROM DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' ORDER BY id DESC) ORDER BY id DESC'); else
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, date, memb___id, server, bet, prize_id, payout_credits FROM DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id DmN_Slots_Spins WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
             foreach($items->fetch_all() as $value){
                 $this->logs[] = [
