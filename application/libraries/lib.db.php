@@ -266,12 +266,12 @@
         }
 		
 		public function check_if_table_exists($table){
-            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N' . $this->sanitize_var($table) . '')->fetch();
+            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N' . $this->escape($table) . '')->fetch();
 			return ($data != false) ? true : false;
         }
 		
 		public function check_if_column_exists($column, $table){
-            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->sanitize_var($table) . '  AND COLUMN_NAME = ' . $this->sanitize_var($column) . '')->fetch();
+            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->escape($table) . '  AND COLUMN_NAME = ' . $this->escape($column) . '')->fetch();
 			return ($data != false) ? true : false;
 		}
 		
@@ -605,12 +605,12 @@
         }
 		
 		public function check_if_table_exists($table){
-            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N' . $this->sanitize_var($table) . '')->fetch();
+            $data = $this->query('SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N' . $this->escape($table) . '')->fetch();
 			return ($data != false) ? true : false;
         }
 		
 		public function check_if_column_exists($column, $table){
-            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->sanitize_var($table) . '  AND COLUMN_NAME = ' . $this->sanitize_var($column) . '')->fetch();
+            $data = $this->query('SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->escape($table) . '  AND COLUMN_NAME = ' . $this->escape($column) . '')->fetch();
 			return ($data != false) ? true : false;
 		}
 		
