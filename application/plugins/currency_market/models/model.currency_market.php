@@ -60,7 +60,7 @@
 
         public function load_market_zen($page, $per_page = 25, $server, $tax = 0)
         {
-            $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
+            $this->per_page = ($page <= 1) ? 0 : (int)($per_page * ($page - 1));
 			$order = 'id DESC';
 			if(isset($_SESSION['zen_filder']) && $_SESSION['zen_filder'] == 1){
 				$order = 'reward DESC';
@@ -68,7 +68,7 @@
 			if(isset($_SESSION['zen_filder']) && $_SESSION['zen_filder'] == 0){
 				$order = 'reward ASC';
 			}
-            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY '.$order.'');
+            $this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY '.$order.'');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
 			$data = [];
             foreach($this->items->fetch_all() as $value){
@@ -89,7 +89,7 @@
 		
 		public function load_market_credits($page, $per_page = 25, $server, $tax = 0)
         {
-            $this->per_page = ($page <= 1) ? 0 : $per_page * ($page - 1);
+            $this->per_page = ($page <= 1) ? 0 : (int)($per_page * ($page - 1));
             $order = 'id DESC';
 			if(isset($_SESSION['credits_filder']) && $_SESSION['credits_filder'] == 1){
 				$order = 'reward DESC';
@@ -101,7 +101,7 @@
 			if(isset($_SESSION['filters'])){
 				$rewardType = 'reward_type IN ('.$this->website->db('web')->escape($_SESSION['filters']).') AND ';
 			}
-			$this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY '.$order.'');
+			$this->items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, add_date, active_till, price, price_type, reward, reward_type, seller FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($this->per_page) . ' id FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1  AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY '.$order.'');
             $this->pos = ($page == 1) ? 1 : (int)(($page - 1) * $per_page) + 1;
 			$data = [];
             foreach($this->items->fetch_all() as $value){
@@ -192,11 +192,11 @@
 		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
         {
             if(($acc == '' || $acc == '-') && $server == 'All')
-                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Currency_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
+                $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . '  id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Currency_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
-                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') ORDER BY id DESC) ORDER BY id DESC'); else
-				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1  AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
+                    $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') ORDER BY id DESC) ORDER BY id DESC'); else
+				$items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . ' id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1  AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id DmN_Currency_Market WHERE sold = 1 AND (seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\') AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             }
 			$logs = [];
             foreach($items->fetch_all() as $value){
