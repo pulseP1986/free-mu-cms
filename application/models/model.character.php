@@ -1015,13 +1015,17 @@
         }
 		
 		private function skill_index($hex){
+			$len = strlen($hex);
             $id = hexdec(substr($hex, 0, 2));
-            $id2 = hexdec(substr($hex, 2, 2));
-            $id3 = hexdec(substr($hex, 4, 2));
-            if(($id2 & 7) > 0){
-                $id = $id * ($id2 & 7) + $id3;
-            }
-            return $id;
+			$id2 = hexdec(substr($hex, 2, 2));
+			$id3 = hexdec(substr($hex, 4, 2));
+			if($len == 10){
+				$id4 = hexdec(substr($hex, 6, 2));
+				$id5 = hexdec(substr($hex, 8, 2));
+			}
+			
+			$idx = ($id2 & 255) | ($id & 255) << 8;
+            return $idx;
         }
 
 		private function get_skill_list($user, $server){
