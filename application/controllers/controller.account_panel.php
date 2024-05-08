@@ -882,7 +882,7 @@
                         $this->vars['has_char'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                     }
                     if(!isset($this->vars['has_char']) || $this->vars['has_char'] != false){
-                        $votelinks = $this->Maccount->load_vote_links();
+                        $votelinks = $this->Maccount->load_vote_links($this->session->userdata(['user' => 'server']));
                         $this->vars['content'] = [];
                         foreach($votelinks as $links){
                             if($links['api'] == 1){
