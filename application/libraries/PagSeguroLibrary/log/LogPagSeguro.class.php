@@ -30,21 +30,18 @@
         private static $active;
         private static $fileLocation;
 
-        private function __construct()
-        {
+        private function __construct(){
             self::reLoad();
         }
 
-        public static function init()
-        {
+        public static function init(){
             if(self::$log == null){
                 self::$log = new LogPagSeguro();
             }
             return self::$log;
         }
 
-        public static function reLoad()
-        {
+        public static function reLoad(){
             self::$active = PagSeguroConfig::logIsActive();
             if(self::$active){
                 $logFile = PagSeguroConfig::getLogFileLocation();
@@ -61,8 +58,7 @@
          * @throws Exception
          * @return boolean
          */
-        public static function createFile($logFile = false)
-        {
+        public static function createFile($logFile = false){
             if(!self::$active){
                 return false;
             }
@@ -86,8 +82,7 @@
          * Prints a info message in the log file
          * @param String $message
          */
-        public static function info($message)
-        {
+        public static function info($message){
             self::logMessage($message, 'info');
         }
 
@@ -95,8 +90,7 @@
          * Prints a warning message in the log file
          * @param String $message
          */
-        public static function warning($message)
-        {
+        public static function warning($message){
             self::logMessage($message, 'warning');
         }
 
@@ -104,8 +98,7 @@
          * Prints an error message in the log file
          * @param String $message
          */
-        public static function error($message)
-        {
+        public static function error($message){
             self::logMessage($message, 'error');
         }
 
@@ -113,8 +106,7 @@
          * Prints a debug message in the log file
          * @param String $message
          */
-        public static function debug($message)
-        {
+        public static function debug($message){
             self::logMessage($message, 'debug');
         }
 
@@ -125,8 +117,7 @@
          * @throws Exception
          * @return void|boolean
          */
-        private static function logMessage($message, $type = null)
-        {
+        private static function logMessage($message, $type = null){
             if(!self::$active){
                 return;
             }
@@ -166,8 +157,7 @@
          *
          * @return boolean|string
          */
-        public static function getHtml($negativeOffset = null, $reverse = null)
-        {
+        public static function getHtml($negativeOffset = null, $reverse = null){
             if(!self::$active){
                 return false;
             }

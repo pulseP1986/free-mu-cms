@@ -4009,8 +4009,7 @@ function footer($update_info = null)
         } else {
             xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
         }
-        xmlhttp.onreadystatechange=function()
-        {
+        xmlhttp.onreadystatechange=function(){
             var loadedOkay = 0;
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {

@@ -281,14 +281,14 @@ class Mstripe extends model{
 		]);
     }
 	
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	public function add_total_recharge($account, $server, $credits){
 		if($this->website->db('web')->check_if_table_exists('DmN_Total_Recharge')){
 			$this->insert_recharge($account, $server, $credits);
 		}
 	}
 	
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	private function insert_recharge($account, $server, $credits){
 		$stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Total_Recharge (account, server, points, date) VALUES (:account, :server, :points, GETDATE())');
 		$stmt->execute([':account' => $account, ':server' => $server, ':points' => $credits]);

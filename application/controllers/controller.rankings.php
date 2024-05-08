@@ -5,9 +5,8 @@
     {
         protected $vars = [], $errors = [];
 
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 	
-        public function __construct()
-        {
+         	
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -21,8 +20,7 @@
             $this->load->model('rankings');
         }
 
-        public function index($server = '', $page = 1, $class = 'all')
-        {
+        public function index($server = '', $page = 1, $class = 'all'){
             if($server == ''){
                 $server = array_keys($this->website->server_list());
                 $this->vars['server'] = $server[0];
@@ -43,8 +41,7 @@
             }
         }
 
-        public function online_players($server = '')
-        {
+        public function online_players($server = ''){
             if($server == ''){
                 $server = array_keys($this->website->server_list());
                 $this->vars['server'] = $server[0];
@@ -65,8 +62,7 @@
             }
         }
 
-        public function gm_list($server = '')
-        {
+        public function gm_list($server = ''){
             if($server == ''){
                 $server = array_keys($this->website->server_list());
                 $this->vars['def_server'] = $server[0];
@@ -81,8 +77,7 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'rankings' . DS . 'view.gm_list', $this->vars);
         }
 
-        public function ban_list($type = 'chars', $server = '')
-        {
+        public function ban_list($type = 'chars', $server = ''){
             if(!in_array($type, ['chars', 'accounts'])){
                 $this->vars['error'] = __('Invalid BanList Selected');
             } else{
@@ -102,8 +97,7 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'rankings' . DS . 'view.ban_list', $this->vars);
         }
 
-        public function load_ranking_data($page = 1, $class = 'all')
-        {
+        public function load_ranking_data($page = 1, $class = 'all'){
 			if(isset($_GET['type'])){
 				$_POST['type'] = $_GET['type'];	
 			}
@@ -171,8 +165,7 @@
             }
         }
 
-        public function top_player()
-        {
+        public function top_player(){
             if(!isset($_POST['server'])){
                 json(['error' => __('Unable to load ranking data.')]);
             } else{
@@ -189,8 +182,7 @@
             }
         }
 
-        public function top_guild()
-        {
+        public function top_guild(){
             if(!isset($_POST['server'])){
                 json(['error' => __('Unable to load ranking data.')]);
             } else{
@@ -236,8 +228,7 @@
 			json(["draw" => (int)$_POST['draw'], "recordsTotal" => $this->vars['total_records'], "recordsFiltered" => $this->vars['total_records'], "data" => $this->vars['data']]);
 		}
 
-        public function search($server)
-        {
+        public function search($server){
             if($server == ''){
                 $this->vars['error'] = __('Invalid server');
             } else{
@@ -255,8 +246,7 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'rankings' . DS . 'view.search', $this->vars);
         }
 
-        public function get_mark($mark = '', $size = 24)
-        {
+        public function get_mark($mark = '', $size = 24){
 			if($size > 256){
 				$size = 24;
 			}
@@ -264,8 +254,7 @@
             $this->Mrankings->load_mark($mark, $size);
         }
 
-        public function disabled()
-        {
+        public function disabled(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
         }
     }

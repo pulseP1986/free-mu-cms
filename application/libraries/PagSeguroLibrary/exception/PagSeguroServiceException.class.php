@@ -46,8 +46,7 @@
          * @param PagSeguroHttpStatus $httpStatus
          * @param array $errors
          */
-        public function __construct(PagSeguroHttpStatus $httpStatus, array $errors = null)
-        {
+        public function __construct(PagSeguroHttpStatus $httpStatus, array $errors = null){
             $this->httpStatus = $httpStatus;
             if($errors){
                 $this->errors = $errors;
@@ -59,40 +58,35 @@
         /***
          * @return array
          */
-        public function getErrors()
-        {
+        public function getErrors(){
             return $this->errors;
         }
 
         /***
          * @param array $errors
          */
-        public function setErrors(array $errors)
-        {
+        public function setErrors(array $errors){
             $this->errors = $errors;
         }
 
         /***
          * @return PagSeguroHttpStatus
          */
-        public function getHttpStatus()
-        {
+        public function getHttpStatus(){
             return $this->httpStatus;
         }
 
         /***
          * @param PagSeguroHttpStatus $httpStatus
          */
-        public function setHttpStatus(PagSeguroHttpStatus $httpStatus)
-        {
+        public function setHttpStatus(PagSeguroHttpStatus $httpStatus){
             $this->httpStatus = $httpStatus;
         }
 
         /***
          * @return string
          */
-        private function getHttpMessage()
-        {
+        private function getHttpMessage(){
             switch($type = $this->httpStatus->getType()){
                 case 'BAD_REQUEST':
                 case 'UNAUTHORIZED':
@@ -112,8 +106,7 @@
         /***
          * @return string
          */
-        public function getFormattedMessage()
-        {
+        public function getFormattedMessage(){
             $message = "";
             $message .= "[HTTP " . $this->httpStatus->getStatus() . "] - " . $this->getHttpMessage() . "\n";
             foreach($this->errors as $key => $value){
@@ -127,8 +120,7 @@
         /***
          * @return mixed
          */
-        public function getOneLineMessage()
-        {
+        public function getOneLineMessage(){
             return str_replace("\n", " ", $this->getFormattedMessage());
         }
     }

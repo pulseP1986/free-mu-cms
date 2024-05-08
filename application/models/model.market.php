@@ -10,23 +10,19 @@
         public $items = [];
         public $item_info;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 
-		public function count_total_items($server)
-        {
+		public function count_total_items($server){
             if($this->filter == true){
                 $this->query .= 'AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'';
             } else{
@@ -35,13 +31,11 @@
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market ' . $this->query);
         }
 
-		public function count_total_history_items($user, $server)
-        {
+		public function count_total_history_items($user, $server){
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'');
         }
 		
-		public function get_item_list_from_cat($cat, $server)
-        {
+		public function get_item_list_from_cat($cat, $server){
             return $this->website->db('web')->query('SELECT DISTINCT item_name, item_id FROM DmN_Market WHERE cat = ' . $this->website->db('web')->escape($cat) . ' AND active_till > GETDATE() AND active = 1  AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY item_id ASC')->fetch_all();
         }
 		
@@ -57,8 +51,7 @@
 			return $count[0]['count'];
 		}
 
-        private function catNameToId($cat = 'swords')
-        {
+        private function catNameToId($cat = 'swords'){
             switch($cat){
                 default:
                 case 'swords':
@@ -112,8 +105,7 @@
             }
         }
 
-		public function generate_query_post()
-        {
+		public function generate_query_post(){
             if(isset($this->vars['filter_items'])){
                 if(isset($this->vars['lvl'])){
                     $this->vars['lvl'] = array_filter($this->vars['lvl'], 'is_numeric');
@@ -228,8 +220,7 @@
             }
         }
 
-		public function load_items($page, $server)
-        {
+		public function load_items($page, $server){
             if(!isset($_SESSION['filter']['query'])){
                 $this->query = 'WHERE active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'';
             } else{
@@ -273,13 +264,11 @@
             return $this->items;
         }
 
-        public function load_all_items_names($server)
-        {
+        public function load_all_items_names($server){
             return $this->website->db('web')->query('SELECT DISTINCT(item_name) FROM DmN_Market WHERE item_name != \'NULL\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
         }
 
-		public function load_search_items($name, $server)
-        {
+		public function load_search_items($name, $server){
             $items = $this->website->db('web')->query('SELECT id, cat, item, price_type, price, seller, add_date, active_till, highlighted, char, price_jewel, jewel_type FROM DmN_Market WHERE item_name LIKE \'%' . $this->website->db('web')->escape($name) . '%\' AND active_till > GETDATE() AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND sold != 1 AND removed != 1 AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC');
             $pos = 1;
             foreach($items->fetch_all() as $value){
@@ -317,8 +306,7 @@
             return $this->items;
         }	
 
-		public function load_filtered_items($cat, $id, $class, $server)
-        {
+		public function load_filtered_items($cat, $id, $class, $server){
             $where = '';
             if($cat != 'all'){
                 $catId = $this->catNameToId($cat);
@@ -416,8 +404,7 @@
             return $this->items;
         }
 	
-		public function get_jewel_image($code, $style = '')
-        {
+		public function get_jewel_image($code, $style = ''){
             switch($code){
                 case 4:
                     $img = '12/15.webp';
@@ -452,8 +439,7 @@
 			}
         }
         
-        public function check_amount_of_jewels($amount, $type, $vault, $server)
-        {
+        public function check_amount_of_jewels($amount, $type, $vault, $server){
             $hex = str_split($vault, $this->website->get_value_from_server($server, 'item_size'));
             if($type == 4){ //chaos
                 $search = [1 => [12, 15], 2 => [12, 141]];
@@ -517,8 +503,7 @@
             return false;
         }
         
-        public function charge_jewels($slots, $vault, $server)
-        {
+        public function charge_jewels($slots, $vault, $server){
             $hex = str_split($vault, $this->website->get_value_from_server($server, 'item_size'));
             if(!empty($slots[0])){
                 foreach($slots[0] as $k1 => $s1){
@@ -533,8 +518,7 @@
             return implode('', $hex);
         }
 
-		public function add_jewels_to_web_wh($jewels, $account, $server)
-        {
+		public function add_jewels_to_web_wh($jewels, $account, $server){
             $query = 'INSERT INTO DmN_Web_Storage (item, account, server, expires_on) VALUES';
             foreach($jewels AS $key => $jewel){
                 $query .= '(\'' . $jewel . '\', \'' . $account . '\', \'' . $server . '\', ' . strtotime('+' . $this->config->config_entry('warehouse|web_wh_item_expires_after')) . '),';
@@ -542,8 +526,7 @@
             return $this->website->db('web')->query(substr($query, 0, -1));
         }
 
-		public function get_jewel_by_type($type)
-        {
+		public function get_jewel_by_type($type){
             switch($type){
                 default:
                     $jewel = [0, 0];
@@ -570,8 +553,7 @@
             return $jewel;
         }
 
-		public function price_to_jewels($type)
-        {
+		public function price_to_jewels($type){
             switch($type){
                 default:
                     $jewel = 'Undefined';
@@ -598,8 +580,7 @@
             return $jewel;
         }
 
-		public function load_history_items($user, $server, $page)
-        {
+		public function load_history_items($user, $server, $page){
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('market|items_per_page') * ((int)$page - 1);
             $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$this->config->config_entry('market|items_per_page')) . ' id, item, price, price_type, active, sold, removed, price_jewel, jewel_type FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' ORDER BY id DESC) ORDER BY id DESC');
             $pos = ($page == 1) ? 1 : (int)(($page - 1) * $this->config->config_entry('market|items_per_page')) + 1;
@@ -636,8 +617,7 @@
             return $this->items;
         }
 
-        public function load_item_from_market($id, $server)
-        {
+        public function load_item_from_market($id, $server){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 item, price, price_type, seller, add_date, active_till, cat, char, server, price_jewel, jewel_type, item_password AS password FROM DmN_Market WITH (UPDLOCK) WHERE id = :id AND add_date <= dateadd(minute,-1,getdate()) AND active = 1 AND removed != 1 AND server = :server');
             $stmt->execute([':id' => (int)$id, ':server' => $server]);
             if($this->item_info = $stmt->fetch()){
@@ -655,8 +635,7 @@
 			return false;
 		}
 		
-        public function load_item_from_market_for_history($id, $server)
-        {
+        public function load_item_from_market_for_history($id, $server){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 item, price, price_type, seller, add_date, active_till, active, sold, removed, cat, char, server FROM DmN_Market WITH (UPDLOCK) WHERE id = :id AND server = :server');
             $stmt->execute([':id' => $id, ':server' => $server]);
             if($this->item_info = $stmt->fetch()){
@@ -665,8 +644,7 @@
             return false;
         }
 
-        public function log_purchase($user, $price, $id)
-        {
+        public function log_purchase($user, $price, $id){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Market_Logs (seller, buyer, price, price_type, start_date, end_date, sold_date, item, cat, char, server)
 										VALUES 
 										(:seller, :buyer, :price, :type, :add_date, :active_till, GETDATE(), :item, :cat, :char, :server)');
@@ -679,20 +657,17 @@
             $stmt->execute([':id' => $id]);
 		}
 
-        public function change_item_status($id)
-        {
+        public function change_item_status($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Market SET active = 0, removed = 1 WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
 
-        public function remove_from_market($id)
-        {
+        public function remove_from_market($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Market WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
         
-        public function get_lattest_items($server)
-        {
+        public function get_lattest_items($server){
             $this->website->check_cache('last_market_' . $server, 'items', 3600, false);
             if(!$this->website->cached){
                 return false;
@@ -700,8 +675,7 @@
             return $this->website->items;
         }
         
-        public function get_lattest_sold_items($server)
-        {
+        public function get_lattest_sold_items($server){
             $this->website->check_cache('last_sold_market_' . $server, 'items', 3600, false);
             if(!$this->website->cached){
                 return false;

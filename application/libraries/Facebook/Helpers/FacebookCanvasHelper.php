@@ -35,8 +35,7 @@
          *
          * @return mixed|null
          */
-        public function getAppData()
-        {
+        public function getAppData(){
             return $this->signedRequest ? $this->signedRequest->get('app_data') : null;
         }
 
@@ -45,8 +44,7 @@
          *
          * @return string|null
          */
-        public function getRawSignedRequest()
-        {
+        public function getRawSignedRequest(){
             return $this->getRawSignedRequestFromPost() ?: null;
         }
     }

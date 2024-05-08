@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -17,8 +16,7 @@
             $this->load->helper('meta');
         }
 
-        public function index()
-        {
+        public function index(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.index', $this->vars);
@@ -27,8 +25,7 @@
             }
         }
 
-        public function reset()
-        {
+        public function reset(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $reset_config = $this->config->values('reset_config', $this->session->userdata(['user' => 'server']));
@@ -349,8 +346,7 @@
 			}  
 		}
 
-        public function grand_reset()
-        {
+        public function grand_reset(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $reset_config = $this->config->values('reset_config', $this->session->userdata(['user' => 'server']));
@@ -677,8 +673,7 @@
 			}  
 		}
 
-        public function add_stats($char = '')
-        {
+        public function add_stats($char = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 if(!$char){
@@ -730,8 +725,7 @@
             }
         }
 
-        public function reset_stats()
-        {
+        public function reset_stats(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.reset_stats', $this->vars);
@@ -740,8 +734,7 @@
             }
         }
 
-        public function hide_info()
-        {
+        public function hide_info(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->vars['hide_time'] = $this->Maccount->check_hide_time();
@@ -754,8 +747,7 @@
             }
         }
 
-        public function clear_skilltree()
-        {
+        public function clear_skilltree(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.clear_skill_tree', $this->vars);
@@ -764,8 +756,7 @@
             }
         }
 
-        public function clear_inventory()
-        {
+        public function clear_inventory(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.clear_inventory', $this->vars);
@@ -774,8 +765,7 @@
             }
         }
 
-        public function buy_zen()
-        {
+        public function buy_zen(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.buy_zen', $this->vars);
@@ -784,8 +774,7 @@
             }
         }
 
-		public function warp_char()
-        {
+		public function warp_char(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -834,8 +823,7 @@
             }
         }
 
-		public function recover_master()
-        {
+		public function recover_master(){
             if(defined('RES_CUSTOM_BACKUP_MASTER') && RES_CUSTOM_BACKUP_MASTER == true){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->load->model('account');
@@ -876,8 +864,7 @@
             }
         }
 
-        public function pk_clear()
-        {
+        public function pk_clear(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.pk_clear', $this->vars);
@@ -886,8 +873,7 @@
             }
         }
 
-		public function vote_reward()
-        {
+		public function vote_reward(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['votereward_config'] = $this->config->values('votereward_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['votereward_config']['active'] == 1){
@@ -995,8 +981,7 @@
 			$this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.reset_two_factor_auth', $this->vars);
 		}
 		
-		private function change_user_vip_session($user, $server)
-        {
+		private function change_user_vip_session($user, $server){
 			$this->vars['config'] = $this->config->values('vip_config');
 			
 			if(!empty($this->vars['config']) && $this->vars['config']['active'] == 1){
@@ -1017,8 +1002,7 @@
 			}
         }
 
-		public function settings()
-        {
+		public function settings(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['config'] = $this->config->values('registration_config');
 				
@@ -1097,8 +1081,7 @@
             }
         }
 
-		public function email_confirm($code)
-        {
+		public function email_confirm($code){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $code = strtolower(trim(preg_replace('/[^0-9a-f]/i', '', $code)));
@@ -1126,8 +1109,7 @@
             }
         }
 
-        public function exchange_wcoins()
-        {
+        public function exchange_wcoins(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['wcoin_config'] = $this->config->values('wcoin_exchange_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['wcoin_config'] != false && $this->vars['wcoin_config']['active'] == 1){
@@ -1140,8 +1122,7 @@
             }
         }
 
-        public function logs($page = 1)
-        {
+        public function logs($page = 1){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->load->lib("pagination");
@@ -1154,8 +1135,7 @@
             }
         }
 
-		public function zen_wallet()
-        {
+		public function zen_wallet(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
@@ -1257,8 +1237,7 @@
             }
         }
 
-        public function my_referral_list()
-        {
+        public function my_referral_list(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->vars['my_referral_list'] = $this->Maccount->load_my_referrals($this->session->userdata(['user' => 'username']));
@@ -1274,8 +1253,7 @@
             }
         }
 
-		public function exchange_online()
-        {
+		public function exchange_online(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->vars['online_time'] = $this->Maccount->load_online_hours($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -1309,8 +1287,7 @@
             }
         }
 
-		public function exchange_lucky_coins()
-        {
+		public function exchange_lucky_coins(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['coin_config'] = $this->config->values('luckycoin_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['coin_config']['active'] == 1){
@@ -1442,13 +1419,11 @@
             }
         }
 
-        public function login()
-        {
+        public function login(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.login');
         }
 
-		public function login_with_facebook()
-        {
+		public function login_with_facebook(){
             $this->load->lib('fb');
             $this->fb->check_fb_user();
             if(isset($_SESSION['fb_access_token'])){
@@ -1482,8 +1457,7 @@
             }
         }
 
-		public function coupons()
-        {
+		public function coupons(){
             if($this->session->userdata(['user' => 'logged_in'])){
                
                 if(isset($_POST['redeem_coupon'])){
@@ -1529,8 +1503,7 @@
             }
         }
 
-		public function logout()
-        {
+		public function logout(){
             $email = $this->session->userdata(['user' => 'email']);
             $id = $this->session->userdata(['user' => 'ipb_id']);
             $this->session->unset_session_key('user');
@@ -1547,8 +1520,7 @@
             }
         }
 
-        public function disabled()
-        {
+        public function disabled(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
         }
     }

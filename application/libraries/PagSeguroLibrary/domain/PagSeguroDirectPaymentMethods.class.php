@@ -40,8 +40,7 @@
          * Initializes a new instance of the PaymentMethods class
          * @param  $paymentMethod
          */
-        public function __construct($paymentMethod = null)
-        {
+        public function __construct($paymentMethod = null){
             if(isset($paymentMethod)){
                 if(array_key_exists($paymentMethod, $this->methodsList)){
                     $this->setPaymentMethod($this->methodsList[$paymentMethod]);
@@ -54,8 +53,7 @@
         /***
          * @return the method
          */
-        public function getPaymentMethod()
-        {
+        public function getPaymentMethod(){
             return $this->paymentMethod;
         }
 
@@ -63,8 +61,7 @@
          * Sets the payment method
          * @param $paymentMethod
          */
-        public function setPaymentMethod($paymentMethod)
-        {
+        public function setPaymentMethod($paymentMethod){
             if(isset($paymentMethod)){
                 $this->paymentMethod = $paymentMethod;
             }

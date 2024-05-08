@@ -5,8 +5,7 @@
     {
         private $_controller, $_method, $_args;
 
-        public function __construct()
-        {
+        public function __construct(){
             if((empty($_GET['action'])) && (empty($_POST['action']))){
                 $action = (preg_match('/setup/', $_SERVER['REQUEST_URI'])) ? 'setup' : 'home';
 				if(defined('IS_EVENT_PAGE') && IS_EVENT_PAGE == true){
@@ -29,18 +28,15 @@
             $this->_args = (isset($action[2])) ? array_slice($action, 2) : [];
         }
 
-        public function get_controller()
-        {
+        public function get_controller(){
             return $this->_controller;
         }
 
-        public function get_method()
-        {
+        public function get_method(){
             return $this->_method;
         }
 
-        public function get_args()
-        {
+        public function get_args(){
             return $this->_args;
         }
     }

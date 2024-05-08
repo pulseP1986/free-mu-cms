@@ -8,9 +8,8 @@
         private $after_upgrade_key = 'a953feaec195bba04c142bc38ec2846c';
         private $current_version;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
-        {
+		
+        public function __construct(){
             parent::__construct();
             $this->load->model('setup/application/models/setup');
             $this->load->helper('website');
@@ -25,9 +24,8 @@
             $this->vars['available_local_version'] = $this->Msetup->get_cms_version();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function index($version = '')
-        {
+		
+        public function index($version = ''){
             $this->vars['version'] = ($version != '') ? $version : $this->vars['available_local_version'];
             if(count($_POST) > 0){
                 $user = isset($_POST['username']) ? $_POST['username'] : '';
@@ -60,8 +58,7 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'upgrade' . DS . 'view.step0', $this->vars);
         }
 
-        public function step1($version = '')
-        {
+        public function step1($version = ''){
             if($this->Msetup->is_admin()){
                 $this->vars['version'] = ($version != '') ? $version : $this->vars['available_local_version'];
                 $this->Msetup->get_extension_data();
@@ -77,8 +74,7 @@
             }
         }
 
-        public function step2($version = '')
-        {
+        public function step2($version = ''){
             $this->vars['version'] = ($version != '') ? $version : $this->vars['available_local_version'];
             if($this->Msetup->is_admin()){
                 if(isset($_SESSION['upgrade_allow_step_2']) && $_SESSION['upgrade_allow_step_2'] == false){
@@ -163,8 +159,7 @@
             }
         }
 
-        public function step3()
-        {
+        public function step3(){
             if($this->Msetup->is_admin()){
                 if(isset($_SESSION['upgrade_allow_step_2']) && $_SESSION['upgrade_allow_step_2'] == false){
                     $this->vars['errors'][] = 'Please complete step 1 before continue.';
@@ -179,8 +174,7 @@
             }
         }
 
-        public function step4()
-        {
+        public function step4(){
             if($this->Msetup->is_admin()){
                 set_time_limit(0);
                 if(isset($_SESSION['upgrade_allow_step_2']) && $_SESSION['upgrade_allow_step_2'] == false){
@@ -209,9 +203,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_tables($version)
-        {
+		
+        public function add_tables($version){
             if(array_key_exists($version, $_SESSION['setup_versions'])){
                 $version_data = $_SESSION['setup_versions'][$version];
                 if(is_array($version_data)){
@@ -258,8 +251,7 @@
             echo json_encode(['step4' => 1, 'progress' => '60%', 'message' => 'SQL Table Upgrade Completed']);
         }
 
-        private function add_sql_tables($tables_info)
-        {
+        private function add_sql_tables($tables_info){
             if(is_array($tables_info) && count($tables_info) > 0){
                 foreach($tables_info AS $key => $table){
                     if($this->Msetup->check_if_table_exists($key, $table['db']) == false){
@@ -269,8 +261,7 @@
             }
         }
 
-        public function step5()
-        {
+        public function step5(){
             if($this->Msetup->is_admin()){
                 $this->vars['cms_versions'] = $this->Msetup->get_all_cms_versions();
                 $this->vars['current_version'] = $this->Msetup->get_current_version();
@@ -286,9 +277,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_columns($version)
-        {
+		
+        public function add_columns($version){
             if($this->Msetup->is_admin()){
                 if(array_key_exists($version, $_SESSION['setup_versions'])){
                     $version_data = $_SESSION['setup_versions'][$version];
@@ -339,9 +329,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function add_sql_columns($columns_info)
-        {
+		
+        private function add_sql_columns($columns_info){
             if($this->Msetup->is_admin()){
                 if(is_array($columns_info) && count($columns_info) > 0){
                     set_time_limit(0);
@@ -437,9 +426,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function step6()
-        {
+		
+        public function step6(){
             if($this->Msetup->is_admin()){
                 if(isset($_POST['submit_upgrade_data'])){
                     $procedures_info = json_decode(file_get_contents(INSTALL_DIR . 'data' . DS . 'procedures' . DS . 'required_stored_procedures[20.05.2015].json'), true);
@@ -510,9 +498,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function step7()
-        {
+		
+        public function step7(){
             if($this->Msetup->is_admin()){
                 if(isset($_POST['submit_upgrade_data'])){
                     if($this->write_config()){
@@ -551,16 +538,14 @@
             }
         }
 
-        public function completed()
-        {
+        public function completed(){
             session_destroy();
 			setcookie("dmn_language", "", 1);
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'upgrade' . DS . 'view.completed', $this->vars);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function write_config()
-        {
+		
+        private function write_config(){
             $ip_check = (ACP_IP_CHECK) ? 'true' : 'false';
             $pincode = (defined('PINCODE') && PINCODE != '') ? PINCODE : $_SESSION['pincode'];
             $data = "<?PHP\r\n";
@@ -720,9 +705,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function write_server_data()
-        {
+		
+        private function write_server_data(){
             $array = ['USE_MULTI_ACCOUNT_DB' => $this->is_multi_server];
             foreach($this->server_list AS $key => $server){
                 $array[$key] = [
@@ -759,9 +743,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function upgrade_version()
-        {
+		
+        private function upgrade_version(){
 			$new_data = ['package' => 'DmN MuCMS', "version" => $this->Msetup->get_cms_version()];
 			$data = json_encode($new_data, JSON_PRETTY_PRINT);
 			if(is_writable(BASEDIR . 'application' . DS . 'config')){
@@ -772,16 +755,14 @@
 			return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function clear_cache()
-        {
+		
+        private function clear_cache(){
             $files = glob(BASEDIR . 'application' . DS . 'data' . DS . 'cache' . DS . '*.dmn');
             array_map('unlink', $files);																									 
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function server_list($serv = '', $check_multi_acc = false)
-        {
+		
+        private function server_list($serv = '', $check_multi_acc = false){
             $file = file_get_contents(BASEDIR . 'application' . DS . 'data' . DS . 'serverlist.json');
             $servers = json_decode($file, true);
             if(is_array($servers)){
@@ -801,9 +782,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function create_localization_list()
-        {
+		
+		private function create_localization_list(){
 			$file = BASEDIR . 'application' . DS . 'config' . DS . 'locale_config.json';
 			$new_data = [
 				'default_localization' => 'en',
@@ -834,8 +814,7 @@
 			}
         }
 		
-		private function upgrade_meta_list()
-        {
+		private function upgrade_meta_list(){
 			$file = BASEDIR . 'application' . DS . 'config' . DS . 'meta_config.json';
 			if(file_exists($file)){
 				$data = json_decode(file_get_contents($file), true);
@@ -855,8 +834,7 @@
 			}
         }
 		
-		private function upgrade_server_data()
-        {
+		private function upgrade_server_data(){
 			$path = BASEDIR . 'application' . DS . 'data' . DS . 'ServerData' . DS . 'en_GB';
 			if(is_dir($path)){
 				rename($path, BASEDIR . 'application' . DS . 'data' . DS . 'ServerData' . DS . 'en');
@@ -880,7 +858,7 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function parse_server_files(){
 			$file = BASEDIR . 'application' . DS . 'config' . DS . 'scheduler_config.json';
 			if(file_exists($file)){
@@ -898,8 +876,7 @@
 			}
 		}
 		
-		private function create_meta_list()
-        {
+		private function create_meta_list(){
             $new_data = ['en' => ['default' => ['title' => '%server_title%', 'keywords' => '%server_title%, DmNMu CMS ' . $this->Msetup->get_cms_version() . ', MuOnline, Website', 'description' => 'Content Management System For MuOnline'], 'home' => ['title' => '%server_title% Home', 'keywords' => '%server_title%, DmN MuCMS ' . $this->Msetup->get_cms_version() . ', MuOnline, Website', 'description' => 'Content Management System For MuOnline'], 'registration' => ['title' => '%server_title% Registration', 'keywords' => '%server_title%, DmN MuCMS ' . $this->Msetup->get_cms_version() . ', MuOnline, Website', 'description' => 'Content Management System For MuOnline']]];
             $data = json_encode($new_data, JSON_PRETTY_PRINT);
             if(is_writable(BASEDIR . 'application' . DS . 'config')){
@@ -910,8 +887,7 @@
             return true;
         }
 
-        private function add_cron_task($task, $time, $desc, $owerwrite = 0, $status = 1)
-        {
+        private function add_cron_task($task, $time, $desc, $owerwrite = 0, $status = 1){
             $file = BASEDIR . 'application' . DS . 'config' . DS . 'scheduler_config.json';
             $data = file_get_contents($file);
             $tasks = json_decode($data, true);

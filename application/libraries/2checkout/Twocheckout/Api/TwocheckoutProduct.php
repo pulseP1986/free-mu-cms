@@ -2,16 +2,14 @@
 
     class Twocheckout_Product extends Twocheckout
     {
-        public static function create($params = [])
-        {
+        public static function create($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/products/create_product';
             $result = $request->doCall($urlSuffix, $params);
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function retrieve($params = [])
-        {
+        public static function retrieve($params = []){
             $request = new Twocheckout_Api_Requester();
             if(array_key_exists("product_id", $params)){
                 $urlSuffix = '/api/products/detail_product';
@@ -22,16 +20,14 @@
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function update($params = [])
-        {
+        public static function update($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/products/update_product';
             $result = $request->doCall($urlSuffix, $params);
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function delete($params = [])
-        {
+        public static function delete($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/products/delete_product';
             $result = $request->doCall($urlSuffix, $params);

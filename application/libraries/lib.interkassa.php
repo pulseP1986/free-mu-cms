@@ -13,14 +13,12 @@
         const FEES_PAYER_BUYER = 1;
         const FEES_PAYER_EQUAL = 2;
 
-        public function __construct()
-        {
+        public function __construct(){
             ini_set('unserialize_callback_func', 'spl_autoload_call');
             spl_autoload_register(['Interkassa', 'autoload']);
         }
 
-        public static function autoload($class)
-        {
+        public static function autoload($class){
             if(class_exists($class, false) || interface_exists($class, false))
                 return true;
             if(strpos($class, 'Interkassa_') !== 0)

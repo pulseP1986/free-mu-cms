@@ -19,8 +19,7 @@
          *
          * @param array $options
          */
-        public function __construct($options = [])
-        {
+        public function __construct($options = []){
             $available_options = ['cache_dir', 'extension'];
             foreach($available_options as $name){
                 if(isset($options[$name])){
@@ -34,8 +33,7 @@
          *
          * @param string $id
          */
-        public function get($id, $delete_old_cache = true)
-        {
+        public function get($id, $delete_old_cache = true){
             $this->getFileName($id);
             if(!is_readable($this->file_name)){
                 $this->cache_time[$id] = '';
@@ -55,8 +53,7 @@
             return $data;
         }
 
-        public function last_cached($id)
-        {
+        public function last_cached($id){
             return $this->cache_time[$id];
         }
 
@@ -67,8 +64,7 @@
          *
          * @return bool
          */
-        public function delete($id)
-        {
+        public function delete($id){
             $this->getFileName($id);
             return unlink($this->file_name);
         }
@@ -82,8 +78,7 @@
          *
          * @return bool
          */
-        public function save($id, $data, $lifetime = 3600)
-        {
+        public function save($id, $data, $lifetime = 3600){
             $dir = $this->getCacheDirectory();
             if(!is_dir($dir)){
                 if(!mkdir($dir, 0755, true)){
@@ -105,8 +100,7 @@
          *
          * @return string
          */
-        protected function getCacheDirectory()
-        {
+        protected function getCacheDirectory(){
             return $this->cache_dir;
         }
 
@@ -117,8 +111,7 @@
          *
          * @return string
          */
-        protected function getFileName($id)
-        {
+        protected function getFileName($id){
             $directory = $this->getCacheDirectory();
             $this->file_name = $directory . DS . $id . $this->extension;
         }

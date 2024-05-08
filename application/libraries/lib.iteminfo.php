@@ -64,16 +64,14 @@
 		private $muunExpirationTime = false;
 		private $expiretime = null;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->load->lib('serverfile');
             $this->no_socket = (SOCKET_LIBRARY == 1) ? 255 : 0;
             $this->empty_socket = (SOCKET_LIBRARY == 1) ? 254 : 255;
             $this->socket = (SOCKET_LIBRARY == 1) ? [255, 255, 255, 255, 255, 255] : [0, 0, 0, 0, 0, 0];
         }
 		
-		public function itemData($item = '', $load_item_settings = true, $server = false)
-        {
+		public function itemData($item = '', $load_item_settings = true, $server = false){
             if(preg_match('/[a-fA-F0-9]{20,64}/', $item)){
                 $this->hex = $item;
                 $this->calculateItemVariables();
@@ -127,8 +125,7 @@
 			$this->isMuun = $muun;
 		}
 		
-		private function calculateItemVariables()
-        {
+		private function calculateItemVariables(){
             $this->exe = hexdec(substr($this->hex, 14, 2));
             if(strlen($this->hex) == 20){
                 $tempId = hexdec(substr($this->hex, 0, 2));
@@ -157,12 +154,11 @@
             }
         }
 		
-		public function itemIndex($type, $id)
-        {
+		public function itemIndex($type, $id){
             return ($type * 512 + $id);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function calculateIdCat($index){
 			$cat = floor($index / 512);
 			$catIndex = $cat * 512;
@@ -170,8 +166,7 @@
 			return [$cat, $id];
 		}
 
-        public function setItemData($id = false, $type = false, $size = 32, $hex = null)
-        {
+        public function setItemData($id = false, $type = false, $size = 32, $hex = null){
             static $data = [];
 			if($size == 20)
 				$size = 32;
@@ -208,8 +203,7 @@
             return false;
         }
 		
-		private function setItemTooltip($id = false, $type = false)
-        {
+		private function setItemTooltip($id = false, $type = false){
             static $data = [];
             if(empty($data))
                 $data = $this->serverfile->item_tooltip()->get('item_tooltip');
@@ -233,42 +227,36 @@
             return false;
         }
 
-        private function getItemTooltip()
-        {
+        private function getItemTooltip(){
             $this->setItemTooltip();
             return $this->item_tooltip[$this->type][$this->id];
         }
 		
-		private function setItemTooltipText()
-        {
+		private function setItemTooltipText(){
             static $data = [];
             if(empty($data))
                 $data = $this->serverfile->item_tooltip_text()->get('item_tooltip_text');
             $this->item_tooltip_text = $data;
         }
 
-        private function getItemTooltipText()
-        {
+        private function getItemTooltipText(){
             $this->setItemTooltipText();
             return $this->item_tooltip_text;
         }
 
-        private function setItemLevelTooltip()
-        {
+        private function setItemLevelTooltip(){
             static $data = [];
             if(empty($data))
                 $data = $this->serverfile->item_level_tooltip()->get('item_level_tooltip');
             $this->item_level_tooltip = $data;
         }
 
-        private function getItemLevelTooltip()
-        {
+        private function getItemLevelTooltip(){
             $this->setItemLevelTooltip();
             return $this->item_level_tooltip;
         }
 		
-		private function setTooltipOptions()
-        {
+		private function setTooltipOptions(){
             if($this->setItemTooltip()){
                 $this->getItemTooltipText();
                 $this->tooltip_options = '';
@@ -310,8 +298,7 @@
             }
         }
 		
-		private function checkItemLevelTooltip()
-        {
+		private function checkItemLevelTooltip(){
             $this->getItemLevelTooltip();
             if(array_key_exists($this->item_tooltip['Unk3'] + (int)substr($this->getLevel(), 1), $this->item_level_tooltip)){
                 $value = $this->item_level_tooltip[$this->item_tooltip['Unk3'] + (int)substr($this->getLevel(), 1)];
@@ -351,8 +338,7 @@
             }
         }
 		
-		private function findTooltipOption($id)
-        {
+		private function findTooltipOption($id){
             if(!in_array($id, [10, 12, 14, 16, 18, 20, 174, 357])){
                 if(array_key_exists($id, $this->item_tooltip_text)){
                     if(array_key_exists(3, $this->item_tooltip_text[$id])){
@@ -362,8 +348,7 @@
             }
         }
 		
-		private function setTooltipOptionValues($id, $value)
-        {
+		private function setTooltipOptionValues($id, $value){
             switch($id){
                 case 0:
 				case 1:
@@ -628,8 +613,7 @@
             }
         }
 		
-		public function getItemSkill()
-        {
+		public function getItemSkill(){
             static $data = [];
             if(empty($data))
                 $data = $this->serverfile->skill()->get('skill');
@@ -646,8 +630,7 @@
             }
         }
 
-        public function hasSkill()
-        {
+        public function hasSkill(){
             $skill = 0;
             if($this->item_data['skill'] > 0){
                 $option = $this->option;
@@ -658,8 +641,7 @@
             return $skill;
         }
 		
-		public function getLevel()
-        {
+		public function getLevel(){
             $level = 0;
             $option = $this->option;
             if($option >= 128){
@@ -681,8 +663,7 @@
 			}
 		}
 		
-		public function getOption()
-        {
+		public function getOption(){
             $option = $this->option;
             if($option >= 128)
                 $option -= 128;
@@ -695,8 +676,7 @@
             return $option;
         }
 
-        public function getLuck()
-        {
+        public function getLuck(){
             $luck = 0;
 			$option = $this->option;
 			if($option >= 128)
@@ -709,8 +689,7 @@
 			return $luck;
         }
 		
-		public function additionalOption()
-        {
+		public function additionalOption(){
             $this->addopt = '';
             $option = $this->getOption();
 			
@@ -750,7 +729,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function exeForCompare(){
 			$exe_opts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 			$exe = $this->exe;
@@ -786,8 +765,7 @@
 			return $exe_opts;
 		}
 		
-		public function exeOpts()
-        {
+		public function exeOpts(){
             $exe = $this->exe;
 			if(MU_VERSION >= 1){
 				if($exe >= 64){
@@ -840,8 +818,7 @@
             return $exe_opts;
         }
 	
-		public function getExe()
-        {
+		public function getExe(){
             $this->exe_options = '';
             $exe = $this->exe;
 			if(MU_VERSION >= 1){
@@ -918,9 +895,8 @@
             $this->exe_options = '<div class="item_light_blue item_size_12 item_font_family">' . $this->exe_options . '</div>';
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function findExeOption($opt_number)
-        {
+		
+		private function findExeOption($opt_number){
             static $data = [];
             $kind = $this->getExeType($this->item_data['slot'], $this->id, $this->type);
             if(in_array($kind, [1, 2])){
@@ -960,7 +936,7 @@
 			return '';
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function exeFormula($value, $type){
 			switch($type){
 				case 0:
@@ -987,8 +963,7 @@
 			}
 		}
 
-        private function isFenrir($exe)
-        {
+        private function isFenrir($exe){
             if($this->type == 13 && $this->id == 37){
                 if($exe == 1)
                     $this->exe_options = __('Increases final damage by 10%') . '<br />';
@@ -1005,8 +980,7 @@
             return false;
         }
 		
-		public function getRefinery()
-        {
+		public function getRefinery(){
             if(!in_array($this->type, [12, 13, 14, 15])){
                 if($this->ref == 8){
                     $load_ref_file = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_ref_type.dmn');
@@ -1020,8 +994,7 @@
             }
         }
 		
-		public function getHarmony()
-        {
+		public function getHarmony(){
             static $data = [];
 			if($this->getExeType($this->item_data['slot'], $this->id, $this->type) == 76){
 				$this->getWingsGradeOptions();
@@ -1073,12 +1046,12 @@
 			}
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function bonusSocket(){
 			return hexdec(substr($this->hex, 20, 2));
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function getWingsGradeOptions(){
 			if(MU_VERSION >= 8){
 				static $data = [];
@@ -1182,8 +1155,7 @@
 			}
 		}
 		
-		public function elementType()
-        {
+		public function elementType(){
             if($this->isPentagramItem() || $this->isErrtelItem()){
                 if($this->harmony[1] == 1){
                     $this->elementtype = '<div class="item_red">(' . __('Fire Element') . ')</div>';
@@ -1202,8 +1174,7 @@
             return $this->elementopt;
         }
 		
-		public function elementInfo()
-        {
+		public function elementInfo(){
             $this->elementopt = '';
             if($this->isPentagramItem() || $this->isErrtelItem()){
                 for($i = 1; $i <= 5; $i++){
@@ -1274,8 +1245,7 @@
             }
         }
 		
-		public function loadElementName($element, $rank, $lvl)
-        {	
+		public function loadElementName($element, $rank, $lvl){	
 			if($this->pentagram_option_info == null){
 				$this->pentagram_option_info = $this->serverfile->pentagram_jewel_option_value(MU_VERSION)->get('pentagram_jewel_option_value');
             }
@@ -1294,8 +1264,7 @@
             return __('Unknown');
         }
 		
-		public function countMountableSlots()
-        {
+		public function countMountableSlots(){
             $slots = array_count_values($this->socket);
             unset($slots[0]);
             $mountable_slots = 5;
@@ -1305,8 +1274,7 @@
             return $mountable_slots;
         }
 		
-		private function socketOptionName()
-        {
+		private function socketOptionName(){
             $level = (int)substr($this->getLevel(), 1);
             $element_type = $this->socketElementType();
             foreach($this->getSocketData() AS $key => $value){
@@ -1320,8 +1288,7 @@
             return __('Unknown');
         }
 		
-		private function socketOptionValue()
-        {
+		private function socketOptionValue(){
             $level = (int)substr($this->getLevel(), 1);
             $element_type = $this->socketElementType();
             foreach($this->getSocketData() AS $key => $value){
@@ -1335,7 +1302,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function selectSocketOption($seedsIndex, $number, $socket, $socket_id, $seed, $i, $value){
 			$selected = 0;
 			if(isset($seedsIndex[$number]) && $seedsIndex[$number] == $value && $socket_id == $socket[$number] && $i >= 6){
@@ -1478,7 +1445,7 @@
 			return $selected;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function isSocketItem(){
 			if(!isset($this->item_data['type']) || $this->item_data['type'] == ''){
 				$soketItems = $this->serverfile->socket_item_type()->get('sockettype');
@@ -1504,7 +1471,7 @@
 			return $itemType;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function getSockets(){ 	
 			$itemType = $this->isSocketItem();
 			
@@ -1625,7 +1592,7 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function isMasteryItem(){
 			return isset($this->item_data['kindA']) ? $this->item_data['kindA'] : false;
 		}
@@ -1639,7 +1606,7 @@
 			return $id;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function seedsIndex($id_socket_level_20 = 1){
 			$seed_index = [];
 			$ancient = $this->ancient;
@@ -1779,7 +1746,7 @@
 			return $seed_index;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function findSocketValue($id, $isNewSocket = false){
 			if(($id == 254 || $id == 255) && !$isNewSocket)
 				return 0;
@@ -1792,8 +1759,7 @@
 			}
 		}
 		
-        public function addSocketBonusType($val, $type)
-        {
+        public function addSocketBonusType($val, $type){
             switch($type){
                 default:
                     return '+' . $val;
@@ -1804,8 +1770,7 @@
             }
         }
 		
-		private function socketElementType()
-        {
+		private function socketElementType(){
             $element_type = 1;
             if(in_array($this->id, [60, 100, 106, 112, 118, 124])){
                 $element_type = 1;
@@ -1828,8 +1793,7 @@
             return $element_type;
         }
 		
-		public function socketElementTypeName($type, $value)
-        {
+		public function socketElementTypeName($type, $value){
             $name = '';
             if($type == 1){
                 $name .= __('Fire') . ' (' . $value . ')';
@@ -1852,23 +1816,20 @@
             return $name;
         }
 
-        private function setSocketData()
-        {
+        private function setSocketData(){
             static $data = [];
             if(empty($data))
                 $data = $this->serverfile->socket_item(MU_VERSION)->get('socket_item');
             $this->socket_data = $data;
         }
 
-        public function getSocketData()
-        {
+        public function getSocketData(){
             if(!is_array($this->socket_data))
                 $this->setSocketData();
             return $this->socket_data;
         }
 		
-		public function getAncient()
-        {
+		public function getAncient(){
 			if($this->isSocketItem() != 2){
 				if($this->ancient > 0){
 					if(!in_array($this->ancient, [5,6,20])){
@@ -1891,7 +1852,7 @@
 			}
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function isAncientItem($id, $cat){
 			$set_type = $this->serverfile->item_set_type()->get('item_set_type');
 			if(is_array($set_type)){
@@ -1904,8 +1865,7 @@
 			return false;
 		}
 		
-		private function ancientOptions()
-        {
+		private function ancientOptions(){
             $set_type = $this->serverfile->item_set_type()->get('item_set_type');
             if(is_array($set_type)){
                 $this->set_options = $this->serverfile->item_set_option()->get('item_set_option');
@@ -1952,8 +1912,7 @@
             return false;
         }
 		
-		private function findAncientOption($set)
-        {
+		private function findAncientOption($set){
 			$options = '';
             if(isset($this->set_options[$set])){
 				$this->anc_prefix = $this->set_options[$set]['name'];
@@ -2021,8 +1980,7 @@
 			return $options;
         }
 		
-		private function findAncientOptionText($index, $val)
-        {
+		private function findAncientOptionText($index, $val){
             foreach($this->set_options_text AS $key => $value){
                 if($value[1] == $index){
                     $sign = '';
@@ -2035,8 +1993,7 @@
             }
         }
 
-        public function getX()
-        {
+        public function getX(){
 			
             if(is_array($this->item_data) && array_key_exists('x', $this->item_data)){
                 return $this->item_data['x'];
@@ -2044,24 +2001,21 @@
             return 1;
         }
 
-        public function getY()
-        {
+        public function getY(){
             if(is_array($this->item_data) && array_key_exists('y', $this->item_data)){
                 return $this->item_data['y'];
             }
             return 1;
         }
 
-        public function speed()
-        {
+        public function speed(){
             if(is_array($this->item_data) && array_key_exists('attspeed', $this->item_data)){
                 return $this->item_data['attspeed'];
             }
             return 0;
         }
 		
-		public function levelRequired()
-        {
+		public function levelRequired(){
             if(isset($this->item_data['lvlreq']) && $this->item_data['lvlreq'] != 0){
                 $level = (int)substr($this->getLevel(), 1);
                 if($this->index >= $this->itemIndex(0, 0) && $this->index < $this->itemIndex(12, 0)){
@@ -2099,8 +2053,7 @@
             return $this->item_data['lvlreq'];
         }
 		
-		public function getClass()
-        {
+		public function getClass(){
             $class = ['sm' => 0, 'bk' => 0, 'me' => 0, 'mg' => 0, 'dl' => 0, 'bs' => 0, 'rf' => 0, 'gl' => 0, 'rw' => 0, 'sl' => 0, 'gc' => 0, 'km' => 0, 'lm' => 0, 'ik' => 0];
             if(array_key_exists('dw/sm', $this->item_data)){
                 if(in_array($this->item_data['dw/sm'], [1,2,3,4,5])){
@@ -2175,8 +2128,7 @@
             return $class;
         }
 		
-		public function canEquip($short = false)
-        {
+		public function canEquip($short = false){
             if(is_array($this->item_data)){
 				if(array_key_exists('dw/sm', $this->item_data)){
 					if($this->item_data['dw/sm'] == 1){
@@ -2637,8 +2589,7 @@
 			return false;
 		}
 
-        private function chaosItem()
-        {
+        private function chaosItem(){
             if($this->index == $this->itemIndex(2, 6)){
                 return 15;
             } else if($this->index == $this->itemIndex(5, 7)){
@@ -2658,8 +2609,7 @@
 			return 0;
 		}
 		
-		public function damage()
-        {
+		public function damage(){
             $level = (int)substr($this->getLevel(), 1);
             $chaos_item = $this->chaosItem();
             $min_damage = 0;
@@ -2724,8 +2674,7 @@
             return round($min_damage) . '~' . round($max_damage);
         }
 		
-		private function increaseDamageWings()
-        {
+		private function increaseDamageWings(){
             $dmg = 0;
             $level = (int)substr($this->getLevel(), 1);
 			
@@ -2836,8 +2785,7 @@
             return $dmg;
         }
 		
-		private function absorbDamageWings()
-        {
+		private function absorbDamageWings(){
             $dmg = 0;
             $level = (int)substr($this->getLevel(), 1);
 			
@@ -2954,20 +2902,17 @@
             return $dmg;
         }
 		
-		private function wings4ThDamage()
-        {
+		private function wings4ThDamage(){
 			$level = (int)substr($this->getLevel(), 1);
             return round(100+($level**1.2*11.8));
         }
 		
-		private function wings4ThDefense()
-        {
+		private function wings4ThDefense(){
 			$level = (int)substr($this->getLevel(), 1);
             return round((140+($level**1.5*15)))+round((((($level-10)**1.3)*5)**1.6)); 
         }
 		
-		public function magicPower()
-        {
+		public function magicPower(){
 			if(array_key_exists('magpower', $this->item_data)){
 				 $this->item_data['magpow'] = $this->item_data['magpower'];
 			}
@@ -2989,8 +2934,7 @@
             return 0;
         }
 		
-		public function defense()
-        {
+		public function defense(){
             if(array_key_exists('def', $this->item_data)){
                 $def = $this->item_data['def'];
                 $level = (int)substr($this->getLevel(), 1);
@@ -3039,8 +2983,7 @@
             return 0;
         }
 		
-		public function successBlock()
-        {
+		public function successBlock(){
             if(array_key_exists('successblock', $this->item_data)){
                 $level = (int)substr($this->getLevel(), 1);
                 $success_block = $this->item_data['successblock'] + ($level * 3);
@@ -3068,8 +3011,7 @@
             return 0;
         }
 
-        public function iceRes()
-        {
+        public function iceRes(){
             if(array_key_exists('iceres', $this->item_data)){
                 return $this->item_data['iceres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3079,8 +3021,7 @@
             return 0;
         }
 
-        public function poisonRes()
-        {
+        public function poisonRes(){
             if(array_key_exists('poisonres', $this->item_data)){
                 return $this->item_data['poisonres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3090,8 +3031,7 @@
             return 0;
         }
 
-        public function lightRes()
-        {
+        public function lightRes(){
             if(array_key_exists('lightres', $this->item_data)){
                 return $this->item_data['lightres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3101,8 +3041,7 @@
             return 0;
         }
 
-        public function fireRes()
-        {
+        public function fireRes(){
             if(array_key_exists('fireres', $this->item_data)){
                 return $this->item_data['fireres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3112,8 +3051,7 @@
             return 0;
         }
 
-        public function earthRes()
-        {
+        public function earthRes(){
             if(array_key_exists('earthres', $this->item_data)){
                 return $this->item_data['earthres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3123,8 +3061,7 @@
             return 0;
         }
 
-        public function windRes()
-        {
+        public function windRes(){
             if(array_key_exists('windres', $this->item_data)){
                 return $this->item_data['windres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3134,8 +3071,7 @@
             return 0;
         }
 
-        public function waterRes()
-        {
+        public function waterRes(){
             if(array_key_exists('waterres', $this->item_data)){
                 return $this->item_data['waterres'] + (int)substr($this->getLevel(), 1);
             }
@@ -3145,8 +3081,7 @@
             return 0;
         }
 
-        public function reqStr()
-        {
+        public function reqStr(){
             if(array_key_exists('strreq', $this->item_data)){
                 if($this->item_data['strreq'] > 0){
                     return floor(((($this->item_data['strreq'] * (((int)substr($this->getLevel(), 1) * 3) + ($this->item_data['lvldrop'] + $this->additionalValue()))) * 3) / 100) + 20);
@@ -3155,8 +3090,7 @@
             return 0;
         }
 
-        public function reqAgi()
-        {
+        public function reqAgi(){
             if(array_key_exists('agireq', $this->item_data)){
                 if($this->item_data['agireq'] > 0){
                     return floor(((($this->item_data['agireq'] * (((int)substr($this->getLevel(), 1) * 3) + ($this->item_data['lvldrop'] + $this->additionalValue()))) * 3) / 100) + 20);
@@ -3165,8 +3099,7 @@
             return 0;
         }
 		
-		public function reqVit()
-        {
+		public function reqVit(){
             if(array_key_exists('vitreq', $this->item_data)){
                 if($this->item_data['vitreq'] > 0){
                     return floor(((($this->item_data['vitreq'] * (((int)substr($this->getLevel(), 1) * 3) + ($this->item_data['lvldrop'] + $this->additionalValue()))) * 3) / 100) + 20);
@@ -3175,8 +3108,7 @@
             return 0;
         }
 
-        public function reqEne()
-        {
+        public function reqEne(){
             if(array_key_exists('enereq', $this->item_data)){
                 if($this->item_data['enereq'] > 0){
                     $multiplier = ($this->type != 5 && $this->item_data['slot'] != 1) ? 4 : 3;
@@ -3186,8 +3118,7 @@
             return 0;
         }
 
-        public function reqCom()
-        {
+        public function reqCom(){
             if(array_key_exists('cmdreq', $this->item_data)){
                 if($this->item_data['cmdreq'] > 0){
                     if($this->index == $this->itemIndex(13, 5)){
@@ -3199,8 +3130,7 @@
             return 0;
         }
 		
-		public function durability()
-        {
+		public function durability(){
             if(array_key_exists('dur', $this->item_data)){
                 if($this->type == 5)
                     $dur = $this->item_data['magdur']; else
@@ -3234,8 +3164,7 @@
             return 0;
         }
 		
-		public function realName($id = false, $type = false)
-        {
+		public function realName($id = false, $type = false){
 			
             if($this->setItemTooltip($id, $type)){
                 if($this->item_tooltip['Unk3'] != -1){
@@ -3254,14 +3183,12 @@
             return $this->item_data['name'];
         }
 
-        public function getNameStyle($return = false, $limit_text = 50)
-        {
+        public function getNameStyle($return = false, $limit_text = 50){
             $this->getName($return, $limit_text);
             return $this->name;
         }
 		
-		public function getName($return = false, $limit_text = 50)
-        {
+		public function getName($return = false, $limit_text = 50){
             $this->name = '';
             $class = ($return) ? '' : 'item_white';
             $exe = $this->exe;
@@ -3327,12 +3254,12 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function setExpireTime($time){
 			$this->expiretime = $time;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function getExpireInfo(){
 			if($this->expiretime != NULL && $this->expiretime != ''){
 				return '<div class="item_size_12 item_font_family" style="margin-bottom: 3px;"><span style="color:#ed5109 !important;font-weight:bold;">'.__('Expirable Item').'</span><br>' . $this->website->date_diff(time(), strtotime('now +'.$this->expiretime.' minutes')) . '<br /></div>';	
@@ -3390,7 +3317,7 @@
 			return '';
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function earringOptions(){
 			$options = '';
 			
@@ -3430,7 +3357,7 @@
 			return $options;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function getEarringOptionValue($value, $edition, $operator){
 			$data = $this->serverfile->earring_option()->get('earringoption');	
 			if($data != false){
@@ -3443,7 +3370,7 @@
 			return '';
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function getMuunExpireInfo(){
 			$data = [];
 			if(!$this->server)
@@ -3542,8 +3469,7 @@
 			return $options;
 		}
 		
-		public function allInfo()
-        {
+		public function allInfo(){
             $this->canEquip();
 			$this->getItemSkill();
 			$this->additionalOption();
@@ -3597,8 +3523,7 @@
 			return $this->info;
         }
 		
-		private function getExeType($slot, $id, $cat)
-        {
+		private function getExeType($slot, $id, $cat){
 			$exetype = -2;
             switch($slot){
 				default:

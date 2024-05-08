@@ -31,8 +31,7 @@
         private static $data;
         const VARNAME = 'PagSeguroConfig';
 
-        private function __construct()
-        {
+        private function __construct(){
             define('ALLOW_PAGSEGURO_CONFIG', true);
             require_once PagSeguroLibrary::getPath() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "PagSeguroConfig.php";
             $varName = self::VARNAME;
@@ -44,16 +43,14 @@
             }
         }
 
-        public static function init()
-        {
+        public static function init(){
             if(self::$config == null){
                 self::$config = new PagSeguroConfig();
             }
             return self::$config;
         }
 
-        public static function getData($key1, $key2 = null)
-        {
+        public static function getData($key1, $key2 = null){
             if($key2 != null){
                 if(isset(self::$data[$key1][$key2])){
                     return self::$data[$key1][$key2];
@@ -69,8 +66,7 @@
             }
         }
 
-        public static function setData($key1, $key2, $value)
-        {
+        public static function setData($key1, $key2, $value){
             if(isset(self::$data[$key1][$key2])){
                 self::$data[$key1][$key2] = $value;
             } else{
@@ -78,13 +74,11 @@
             }
         }
 
-        public static function setEnvironment($value)
-        {
+        public static function setEnvironment($value){
             self::$data['environment'] = $value;
         }
 
-        public static function getApplicationCredentials()
-        {
+        public static function getApplicationCredentials(){
             if(isset(self::$data['credentials']) && isset(self::$data['credentials']['appId'][self::$data['environment']]) && isset(self::$data['credentials']['appKey'][self::$data['environment']])){
                 return new PagSeguroApplicationCredentials(self::$data['credentials']['appId'][self::$data['environment']], self::$data['credentials']['appKey'][self::$data['environment']]);
             } else{
@@ -92,8 +86,7 @@
             }
         }
 
-        public static function getAccountCredentials()
-        {
+        public static function getAccountCredentials(){
             if(isset(self::$data['credentials']) && isset(self::$data['credentials']['email']) && isset(self::$data['credentials']['token'][self::$data['environment']])){
                 return new PagSeguroAccountCredentials(self::$data['credentials']['email'], self::$data['credentials']['token'][self::$data['environment']]);
             } else{
@@ -101,18 +94,15 @@
             }
         }
 
-        public static function getPaymentRedirectUrl()
-        {
+        public static function getPaymentRedirectUrl(){
             return PagSeguroResources::getPaymentUrl(self::$data['environment']);
         }
 
-        public static function getStaticUrl()
-        {
+        public static function getStaticUrl(){
             return PagSeguroResources::getStaticUrl(self::$data['environment']);
         }
 
-        public static function getEnvironment()
-        {
+        public static function getEnvironment(){
             if(isset(self::$data['environment'])){
                 return self::$data['environment'];
             } else{
@@ -120,8 +110,7 @@
             }
         }
 
-        public static function getApplicationCharset()
-        {
+        public static function getApplicationCharset(){
             if(isset(self::$data['application']) && isset(self::$data['application']['charset'])){
                 return self::$data['application']['charset'];
             } else{
@@ -129,13 +118,11 @@
             }
         }
 
-        public static function setApplicationCharset($charset)
-        {
+        public static function setApplicationCharset($charset){
             self::setData('application', 'charset', $charset);
         }
 
-        public static function logIsActive()
-        {
+        public static function logIsActive(){
             if(isset(self::$data['log']) && isset(self::$data['log']['active'])){
                 return (bool)self::$data['log']['active'];
             } else{
@@ -143,15 +130,13 @@
             }
         }
 
-        public static function activeLog($fileName = null)
-        {
+        public static function activeLog($fileName = null){
             self::setData('log', 'active', true);
             self::setData('log', 'fileLocation', $fileName ? $fileName : '');
             LogPagSeguro::reLoad();
         }
 
-        public static function getLogFileLocation()
-        {
+        public static function getLogFileLocation(){
             if(isset(self::$data['log']) && isset(self::$data['log']['fileLocation'])){
                 return self::$data['log']['fileLocation'];
             } else{
@@ -163,8 +148,7 @@
          * Validate if the requirements are enable for use correct of the PagSeguro
          * @return array
          */
-        public static function validateRequirements()
-        {
+        public static function validateRequirements(){
             $requirements = ['version' => '', 'spl' => '', 'curl' => '', 'dom' => ''];
             $version = str_replace('.', '', phpversion());
             if($version < 533){

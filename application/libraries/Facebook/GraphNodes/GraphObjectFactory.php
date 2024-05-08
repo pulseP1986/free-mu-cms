@@ -54,8 +54,7 @@
          *
          * @deprecated 5.0.0 GraphObjectFactory has been renamed to GraphNodeFactory
          */
-        public function makeGraphObject($subclassName = null)
-        {
+        public function makeGraphObject($subclassName = null){
             return $this->makeGraphNode($subclassName);
         }
 
@@ -66,8 +65,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function makeGraphEvent()
-        {
+        public function makeGraphEvent(){
             return $this->makeGraphObject(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphEvent');
         }
 
@@ -81,8 +79,7 @@
          *
          * @deprecated 5.0.0 GraphObjectFactory has been renamed to GraphNodeFactory
          */
-        public function makeGraphList($subclassName = null, $auto_prefix = true)
-        {
+        public function makeGraphList($subclassName = null, $auto_prefix = true){
             return $this->makeGraphEdge($subclassName, $auto_prefix);
         }
     }

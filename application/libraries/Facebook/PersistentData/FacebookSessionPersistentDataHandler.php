@@ -45,8 +45,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function __construct($enableSessionCheck = true)
-        {
+        public function __construct($enableSessionCheck = true){
             if($enableSessionCheck && session_status() !== PHP_SESSION_ACTIVE){
                 throw new FacebookSDKException('Sessions are not active. Please make sure session_start() is at the top of your script.', 720);
             }
@@ -55,8 +54,7 @@
         /**
          * @inheritdoc
          */
-        public function get($key)
-        {
+        public function get($key){
             if(isset($_SESSION[$this->sessionPrefix . $key])){
                 return $_SESSION[$this->sessionPrefix . $key];
             }
@@ -66,8 +64,7 @@
         /**
          * @inheritdoc
          */
-        public function set($key, $value)
-        {
+        public function set($key, $value){
             $_SESSION[$this->sessionPrefix . $key] = $value;
         }
     }

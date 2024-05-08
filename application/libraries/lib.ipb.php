@@ -3,18 +3,15 @@
 
     class ipb extends library
     {
-        public function __construct()
-        {
+        public function __construct(){
         }
 
-        private function buildParameters($parameters)
-        {
+        private function buildParameters($parameters){
             $default = ['key' => IPS_CONNECT_MASTER_KEY, 'url' => $this->config->base_url,];
             return http_build_query(array_merge($default, $parameters));
         }
 
-        private function process($query)
-        {
+        private function process($query){
             $curl_url = IPS_CONNECT_BASE_URL . 'applications/core/interface/ipsconnect/ipsconnect.php?' . $query;
             $ch = curl_init($curl_url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -31,8 +28,7 @@
             }
         }
 
-        public function login($idType, $id, $password)
-        {
+        public function login($idType, $id, $password){
             $result = $this->process($this->buildParameters(['do' => 'login', 'idType' => $idType, 'id' => $id, 'password' => $password, 'key' => md5(IPS_CONNECT_MASTER_KEY . $id)]));
             if($result['status'] != 'SUCCESS'){
                 throw new Exception($result['status']);
@@ -41,20 +37,17 @@
             }
         }
 
-        public function crossLogin($id, $returnTo)
-        {
+        public function crossLogin($id, $returnTo){
             $query = $this->buildParameters(['do' => 'crossLogin', 'id' => $id, 'returnTo' => $returnTo, 'key' => md5(IPS_CONNECT_MASTER_KEY . $id)]);
             return IPS_CONNECT_BASE_URL . 'applications/core/interface/ipsconnect/ipsconnect.php?' . $query;
         }
 
-        public function crossLogout($id, $returnTo)
-        {
+        public function crossLogout($id, $returnTo){
             $query = $this->buildParameters(['do' => 'logout', 'id' => $id, 'returnTo' => $returnTo, 'key' => md5(IPS_CONNECT_MASTER_KEY . $id)]);
             header('Location: ' . IPS_CONNECT_BASE_URL . 'applications/core/interface/ipsconnect/ipsconnect.php?' . $query);
         }
 
-        public function register($name, $email, $pass_hash, $pass_salt, $revalidateUrl = null)
-        {
+        public function register($name, $email, $pass_hash, $pass_salt, $revalidateUrl = null){
             $result = $this->process($this->buildParameters(['do' => 'register', 'name' => $name, 'email' => $email, 'pass_hash' => $pass_hash, 'pass_salt' => $pass_salt, 'revalidateUrl' => $revalidateUrl]));
             if(isset($result['status']) && $result['status'] != 'SUCCESS'){
                 throw new Exception($result['status']);
@@ -65,8 +58,7 @@
             }
         }
 
-        public function checkEmail($email)
-        {
+        public function checkEmail($email){
             $result = $this->process($this->buildParameters(['do' => 'checkEmail', 'email' => $email]));
             if($result['status'] != 'SUCCESS'){
                 throw new Exception($result['status']);
@@ -75,8 +67,7 @@
             }
         }
 
-        public function fetchSalt($idType, $id)
-        {
+        public function fetchSalt($idType, $id){
             $result = $this->process($this->buildParameters(['do' => 'fetchSalt', 'idType' => $idType, 'id' => $id, 'key' => md5(IPS_CONNECT_MASTER_KEY . $id)]));
             if($result['status'] != 'SUCCESS'){
                 return $result['status'];
@@ -85,8 +76,7 @@
             }
         }
 
-        public function generateSalt()
-        {
+        public function generateSalt(){
             $salt = '';
             for($i = 0; $i < 22; $i++){
                 do{
@@ -97,8 +87,7 @@
             return $salt;
         }
 
-        public function encrypt_password($password, $salt)
-        {
+        public function encrypt_password($password, $salt){
             return crypt($password, '$2a$13$' . $salt);
         }
     }

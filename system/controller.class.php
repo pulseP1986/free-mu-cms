@@ -10,8 +10,7 @@
         private $translator;
         private $translations;
 		
-		public function __construct(config $config)
-        {
+		public function __construct(config $config){
             static $translation_data = null;
             date_default_timezone_set($config->config_entry('main|timezone'));
             $this->setLocalization($config);
@@ -42,8 +41,7 @@
             }
         }
 		
-		private function setLocalization($config)
-        {
+		private function setLocalization($config){
             if(!isset($_COOKIE['dmn_language'])){
 				if(defined('SWITCH_LANG_ON_LOCATION') && SWITCH_LANG_ON_LOCATION == true){
 					$country = get_country_code(ip());
@@ -65,8 +63,7 @@
             }
         }
 
-        public function translations()
-        {
+        public function translations(){
             return $this->translations;
         }
     }
@@ -76,8 +73,7 @@
         private static $_instance;
         public $translations;
 		
-		public function __construct()
-        {
+		public function __construct(){
             self::$_instance = $this;
             foreach($this->is_loaded() as $key => $class){
                 $this->$key = $this->load_class($class);
@@ -88,21 +84,18 @@
             date_default_timezone_set($this->config->config_entry('main|timezone'));
         }
 
-        public static function get_instance()
-        {
+        public static function get_instance(){
             if(!self::$_instance instanceof self){
                 self::$_instance = new controller;
             }
             return self::$_instance;
         }
 		
-		protected function load_class($class)
-        {
+		protected function load_class($class){
             return load_class($class);
         }
 		
-		protected function is_loaded()
-        {
+		protected function is_loaded(){
             return is_loaded();
         }
     }

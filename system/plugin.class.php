@@ -17,8 +17,7 @@
         private $scheme;
         private $table_name;
 		
-		public function __construct()
-        {
+		public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = load_class('config');
             $this->load = load_class('load');
@@ -35,18 +34,15 @@
             $this->load->lib(['database', 'db'], [HOST, USER, PASS, WEB_DB]);
         }
 
-        public function set_plugin_class($class)
-        {
+        public function set_plugin_class($class){
             $this->plugin_class = $class;
         }
 
-        public function get_plugin_class()
-        {
+        public function get_plugin_class(){
             return $this->plugin_class;
         }
 
-        public function set_about()
-        {
+        public function set_about(){
             $this->about_file = APP_PATH . DS . 'plugins' . DS . $this->plugin_class . DS . 'about.json';
             if(file_exists($this->about_file)){
                 $this->about = $this->jsond(file_get_contents($this->about_file), true);
@@ -56,8 +52,7 @@
             return $this;
         }
 
-        public function get_about()
-        {
+        public function get_about(){
             $this->about_file = APP_PATH . DS . 'plugins' . DS . $this->plugin_class . DS . 'about.json';
             if(file_exists($this->about_file)){
                 return $this->jsond(file_get_contents($this->about_file), true);
@@ -65,8 +60,7 @@
             return false;
         }
 		
-		public function add_plugin($data = [])
-        {
+		public function add_plugin($data = []){
             try{
                 if(is_array($data)){
                     if(!empty($data)){
@@ -91,8 +85,7 @@
             }
         }
 
-        public function remove_plugin()
-        {
+        public function remove_plugin(){
             try{
                 $config = $this->config->values('plugin_config');
                 if(isset($config[$this->plugin_class])){
@@ -108,8 +101,7 @@
             }
         }
 
-        public function enable_plugin()
-        {
+        public function enable_plugin(){
             try{
                 $config = $this->config->values('plugin_config');
                 if(isset($config[$this->plugin_class])){
@@ -129,8 +121,7 @@
             }
         }
 
-        public function disable_plugin()
-        {
+        public function disable_plugin(){
             try{
                 $config = $this->config->values('plugin_config');
                 if(isset($config[$this->plugin_class])){
@@ -150,8 +141,7 @@
             }
         }
 		
-		public function add_sql_scheme($scheme_file)
-        {
+		public function add_sql_scheme($scheme_file){
             $file = APP_PATH . DS . 'plugins' . DS . $this->plugin_class . DS . 'sql_schemes' . DS . $scheme_file . '.json';
             if(file_exists($file)){
                 $this->scheme = $this->jsond(file_get_contents($file), true);
@@ -162,8 +152,7 @@
             }
         }
 
-        public function remove_sql_scheme($scheme_file)
-        {
+        public function remove_sql_scheme($scheme_file){
             $file = APP_PATH . DS . 'plugins' . DS . $this->plugin_class . DS . 'sql_schemes' . DS . $scheme_file . '.json';
             if(file_exists($file)){
                 $this->scheme = $this->jsond(file_get_contents($file), true);
@@ -175,8 +164,7 @@
             return $this;
         }
 
-        private function create_table()
-        {
+        private function create_table(){
             try{
                 if(!$this->database->check_if_table_exists($this->table_name)){
                     if(isset($this->scheme[$this->table_name]['create_query'])){
@@ -197,8 +185,7 @@
             return $this;
         }
 
-        private function remove_table()
-        {
+        private function remove_table(){
             try{
                 if($this->database->check_if_table_exists($this->table_name)){
                     if(!$this->database->remove_table($this->table_name)){
@@ -213,8 +200,7 @@
             return $this;
         }
 
-        private function create_columns()
-        {
+        private function create_columns(){
             try{
                 if(isset($this->scheme[$this->table_name]['create_query'])){
                     unset($this->scheme[$this->table_name]['create_query']);
@@ -229,8 +215,7 @@
             }
         }
 
-        public function create_config($data = [])
-        {
+        public function create_config($data = []){
             try{
                 if(is_array($data)){
                     if(!empty($data)){
@@ -263,8 +248,7 @@
             }
         }
 
-        public function delete_config()
-        {
+        public function delete_config(){
             try{
                 $config_file = APP_PATH . DS . 'config' . DS . $this->plugin_class . '.json';
                 if(file_exists($config_file)){
@@ -280,8 +264,7 @@
             return $this;
         }
 
-        public function data()
-        {
+        public function data(){
             if(isset($this->plugin_data[$this->plugin_class])){
                 return $this;
             } else{				
@@ -290,8 +273,7 @@
             }
         }
 
-        public function value($value)
-        {
+        public function value($value){
             if($this->plugin_data[$this->plugin_class] != false){
                 if(array_key_exists($value, $this->plugin_data[$this->plugin_class])){
                     return $this->plugin_data[$this->plugin_class][$value];
@@ -300,16 +282,14 @@
             return false;
         }
 
-        public function values()
-        {
+        public function values(){
             if($this->plugin_data[$this->plugin_class] != false){
                 return $this->plugin_data[$this->plugin_class];
             }
             return false;
         }
 
-        public function plugin_config()
-        {
+        public function plugin_config(){
             if(isset($this->plugin_config)){
                 return $this->plugin_config;
             } else{
@@ -318,8 +298,7 @@
             }
         }
 
-        public function save_config($config)
-        {
+        public function save_config($config){
             try{
                 $config_file = APP_PATH . DS . 'config' . DS . $this->plugin_class . '.json';
                 if(file_exists($config_file)){
@@ -334,13 +313,11 @@
             }
         }
 
-        public function redirect($module)
-        {
+        public function redirect($module){
             header('Location: ' . $module);
         }
 
-        public function jsond($data, $array = true)
-        {
+        public function jsond($data, $array = true){
             $json_data = json_decode($data, (bool)$array);
             if($json_data == null){
                 $this->handle_json_error(json_last_error());
@@ -349,8 +326,7 @@
             }
         }
 
-        public function jsone($data, $pretty_print = JSON_PRETTY_PRINT)
-        {
+        public function jsone($data, $pretty_print = JSON_PRETTY_PRINT){
 			header('Content-Type: application/json');
             $json_data = json_encode($data, $pretty_print);
             if($json_data == null){
@@ -360,8 +336,7 @@
             }
         }
 
-        private function handle_json_error($errno)
-        {
+        private function handle_json_error($errno){
             $messages = [
 				JSON_ERROR_NONE => 'JSON - No errors', 
 				JSON_ERROR_DEPTH => 'JSON - Maximum stack depth exceeded', 
@@ -373,14 +348,12 @@
             throw new Exception(isset($messages[$errno]) ? $messages[$errno] : 'Unknown JSON error: ' . $errno);
         }
 
-        public function __get($var)
-        {
+        public function __get($var){
             if(isset($this->registry->$var))
                 return $this->registry->$var;
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->$key = $val;
         }
     }

@@ -6,23 +6,19 @@
         public $error = false, $vars = [], $characters = [], $total_characters, $char_info = [], $gens_family;
         private $price, $per_page, $chars, $char_list = [], $pos;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 		
-		public function checkAccount($name, $server)
-        {
+		public function checkAccount($name, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username Collate Database_Default)');
             $stmt->execute([':username' => $name]);
             return $stmt->fetch();

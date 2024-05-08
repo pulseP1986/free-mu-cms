@@ -28,8 +28,7 @@
 			$this->dom->load($fileFull);
 		}  
 
-		private function set_language()
-        {
+		private function set_language(){
             $this->lang = htmlspecialchars($_COOKIE['dmn_language']);
         }	
     }

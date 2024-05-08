@@ -37,8 +37,7 @@
         /**
          * @throws FacebookSDKException
          */
-        public function __construct()
-        {
+        public function __construct(){
             if(ini_get('open_basedir')){
                 throw new FacebookSDKException(static::ERROR_MESSAGE . 'There is an open_basedir constraint that prevents access to /dev/urandom.');
             }
@@ -50,8 +49,7 @@
         /**
          * @inheritdoc
          */
-        public function getPseudoRandomString($length)
-        {
+        public function getPseudoRandomString($length){
             $this->validateLength($length);
             $stream = fopen('/dev/urandom', 'rb');
             if(!is_resource($stream)){

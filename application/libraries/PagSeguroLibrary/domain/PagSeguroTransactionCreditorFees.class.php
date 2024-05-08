@@ -35,8 +35,7 @@
         /***
          * @param array|null $value
          */
-        public function __construct(array $value = null)
-        {
+        public function __construct(array $value = null){
             if($value){
                 $this->setIntermediationRateAmount($value['intermediationRateAmount']);
                 $this->setIntermediationFeeAmount($value['intermediationFeeAmount']);
@@ -47,16 +46,14 @@
          * Sets the transaction intermediation Rate Amount
          * @param float $intermediationRateAmount
          */
-        public function setIntermediationRateAmount($intermediationRateAmount)
-        {
+        public function setIntermediationRateAmount($intermediationRateAmount){
             $this->intermediationRateAmount = $intermediationRateAmount;
         }
 
         /***
          * @return float the transaction intermediation Rate Amount
          */
-        public function getIntermediationRateAmount()
-        {
+        public function getIntermediationRateAmount(){
             return $this->intermediationRateAmount;
         }
 
@@ -64,16 +61,14 @@
          * Sets the transaction intermediation Fee Amount
          * @param float $intermediationFeeAmount
          */
-        public function setIntermediationFeeAmount($intermediationFeeAmount)
-        {
+        public function setIntermediationFeeAmount($intermediationFeeAmount){
             $this->intermediationFeeAmount = $intermediationFeeAmount;
         }
 
         /***
          * @return float the transaction intermediation Fee Amount
          */
-        public function getIntermediationFeeAmount()
-        {
+        public function getIntermediationFeeAmount(){
             return $this->intermediationFeeAmount;
         }
     }

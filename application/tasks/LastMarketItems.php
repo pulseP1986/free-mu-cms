@@ -4,8 +4,7 @@
     {
         private $registry, $config, $load, $items = [], $server_list;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
@@ -16,9 +15,8 @@
             $this->server_list = $this->registry->website->server_list();
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function execute()
-        {
+		 
+        public function execute(){
             if($this->config->config_entry('modules|last_market_items_module') == 1){
                 foreach($this->server_list AS $key => $server){
                     $this->lastAdded($key);
@@ -28,7 +26,7 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		private function lastAdded($server){
 			$stmt = $this->registry->website->db('web')->prepare('SELECT TOP ' . $this->registry->website->db('web')->escape((int)$this->config->config_entry('modules|last_market_items_count')) . ' id, cat, item, price_type, price, price_jewel, jewel_type FROM DmN_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND server = :server ORDER BY add_date DESC');
 			$stmt->execute([':server' => $server]);
@@ -59,7 +57,7 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		private function lastSold($server){
 			$stmt = $this->registry->website->db('web')->prepare('SELECT TOP ' . $this->registry->website->db('web')->escape((int)$this->config->config_entry('modules|last_market_items_count')) . ' id, cat, item, price_type, price, price_jewel, jewel_type FROM DmN_Market WHERE sold = 1 AND server = :server ORDER BY add_date DESC');
 			$stmt->execute([':server' => $server]);

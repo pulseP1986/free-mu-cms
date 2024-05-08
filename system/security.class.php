@@ -9,9 +9,8 @@
         protected $_never_allowed_regex = ['javascript\s*:', '(document|(document\.)?window)\.(location|on\w*)', 'expression\s*(\(|&\#40;)', 'vbscript\s*:', 'wscript\s*:', 'jscript\s*:', 'vbs\s*:', 'Redirect\s+30\d', "([\"'])?data\s*:[^\\1]*?base64[^\\1]*?,[^\\1]*?\\1?"];
         private $charset = 'UTF-8';
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
-        {
+        
+        public function __construct(){
             if(!isCommandLineInterface()){
                 if(!preg_match('/\/edit-news\/(.*)|\/news-composer|\/edit-drop\/(.*)|\/add-drop|\/view-request\/(.*)|\/support|\/read-ticket\/(.*)|\/gm-announcement|\/add-vip|\/edit-vip\/(.*)|\/add-guide|\/edit-guide\/(.*)|\/create-bulk-email|\/edit-bulk-email\/(.*)$/', $_SERVER["REQUEST_URI"], $match)){
                     $this->Xss($_GET);
@@ -34,9 +33,8 @@
             //$this->isIPBanned();
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function SanitizeStr(&$str, $skipItemName = false)
-        {
+        
+        public function SanitizeStr(&$str, $skipItemName = false){
             if(is_array($str)){
                 foreach($str AS $id => $value){
                     $str[$id] = $this->SanitizeStr($value, $skipItemName);
@@ -54,9 +52,8 @@
             return $str;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function Xss(&$str)
-        {
+        
+        public function Xss(&$str){
             if(is_array($str)){
                 foreach($str AS $id => $value){
                     if($id == 'fb_script'){
@@ -106,22 +103,19 @@
             return $str;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _convert_attribute($match)
-        {
+        
+        protected function _convert_attribute($match){
             return str_replace(['>', '<', '\\'], ['&gt;', '&lt;', '\\\\'], $match[0]);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _decode_entity($match)
-        {
+        
+        protected function _decode_entity($match){
             $match = preg_replace('|\&([a-z\_0-9\-]+)\=([a-z\_0-9\-/]+)|i', $this->xss_hash() . '\\1=\\2', $match[0]);
             return str_replace($this->xss_hash(), '&', $this->entity_decode($match, $this->charset));
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function entity_decode($str, $charset = null)
-        {
+        
+        public function entity_decode($str, $charset = null){
             if(strpos($str, '&') === false){
                 return $str;
             }
@@ -155,9 +149,8 @@
             return $str;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function remove_invisible_characters($str, $url_encoded = true)
-        {
+        
+        public function remove_invisible_characters($str, $url_encoded = true){
             $non_displayables = [];
             if($url_encoded){
                 $non_displayables[] = '/%0[0-8bcef]/';    // url encoded 00-08, 11, 12, 14, 15
@@ -170,27 +163,23 @@
             return $str;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _compact_exploded_words($matches)
-        {
+        
+        protected function _compact_exploded_words($matches){
             return preg_replace('/\s+/s', '', $matches[1]) . $matches[2];
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _js_link_removal($match)
-        {
+        
+        protected function _js_link_removal($match){
             return str_replace($match[1], preg_replace('#href=.*?(?:(?:alert|prompt|confirm)(?:\(|&\#40;)|javascript:|livescript:|mocha:|charset=|window\.|document\.|\.cookie|<script|<xss|data\s*:)#si', '', $this->_filter_attributes($match[1])), $match[0]);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _js_img_removal($match)
-        {
+        
+        protected function _js_img_removal($match){
             return str_replace($match[1], preg_replace('#src=.*?(?:(?:alert|prompt|confirm|eval)(?:\(|&\#40;)|javascript:|livescript:|mocha:|charset=|window\.|document\.|\.cookie|<script|<xss|base64\s*,)#si', '', $this->_filter_attributes($match[1])), $match[0]);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _filter_attributes($str)
-        {
+        
+        protected function _filter_attributes($str){
             $out = '';
             if(preg_match_all('#\s*[a-z\-]+\s*=\s*(\042|\047)([^\\1]*?)\\1#is', $str, $matches)){
                 foreach($matches[0] as $match){
@@ -200,9 +189,8 @@
             return $out;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _sanitize_naughty_html($matches)
-        {
+        
+        protected function _sanitize_naughty_html($matches){
             static $naughty_tags = ['alert', 'prompt', 'confirm', 'applet', 'audio', 'basefont', 'base', 'behavior', 'bgsound', 'blink', 'body', 'embed', 'expression', 'form', 'frameset', 'frame', 'head', 'html', 'ilayer', 'iframe', 'input', 'button', 'select', 'isindex', 'layer', 'link', 'meta', 'keygen', 'object', 'plaintext', 'style', 'script', 'textarea', 'title', 'math', 'video', 'svg', 'xml', 'xss'];
             static $evil_attributes = ['on\w+', 'style', 'xmlns', 'formaction', 'form', 'xlink:href', 'FSCommand', 'seekSegmentTime'];
             if(empty($matches['closeTag'])){
@@ -231,9 +219,8 @@
             return $matches[0];
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function xss_hash()
-        {
+        
+        public function xss_hash(){
             if($this->_xss_hash === null){
                 $rand = $this->get_random_bytes(16);
                 $this->_xss_hash = ($rand === false) ? md5(uniqid(mt_rand(), true)) : bin2hex($rand);
@@ -241,9 +228,8 @@
             return $this->_xss_hash;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function get_random_bytes($length)
-        {
+        
+        public function get_random_bytes($length){
             if(empty($length) || !ctype_digit((string)$length)){
                 return false;
             }
@@ -272,9 +258,8 @@
             return false;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        protected function _do_never_allowed($str)
-        {
+        
+        protected function _do_never_allowed($str){
             $str = str_replace(array_keys($this->_never_allowed_str), $this->_never_allowed_str, $str);
             foreach($this->_never_allowed_regex as $regex){
                 $str = preg_replace('#' . $regex . '#is', '[removed]', $str);
@@ -282,9 +267,8 @@
             return $str;
         }  
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function isIPBanned()
-        {
+        
+        public function isIPBanned(){
             $file = APP_PATH . DS . 'data' . DS . 'ban.txt';
             if(file_exists($file)){
                 $ips = file($file);
@@ -319,9 +303,8 @@
             return false;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function inIPRange($ip, $range)
-        {
+        
+        private function inIPRange($ip, $range){
             $range = str_replace(' ', '', $range);
             $range = str_replace('[', '', $range);
             $range = str_replace(']', '', $range);

@@ -35,8 +35,7 @@
          *
          * @return string|null
          */
-        public function getAppId()
-        {
+        public function getAppId(){
             return $this->getField('app_id');
         }
 
@@ -45,8 +44,7 @@
          *
          * @return string|null
          */
-        public function getApplication()
-        {
+        public function getApplication(){
             return $this->getField('application');
         }
 
@@ -55,8 +53,7 @@
          *
          * @return \DateTime|null
          */
-        public function getExpiresAt()
-        {
+        public function getExpiresAt(){
             return $this->getField('expires_at');
         }
 
@@ -65,8 +62,7 @@
          *
          * @return boolean
          */
-        public function getIsValid()
-        {
+        public function getIsValid(){
             return $this->getField('is_valid');
         }
 
@@ -75,8 +71,7 @@
          *
          * @return \DateTime|null
          */
-        public function getIssuedAt()
-        {
+        public function getIssuedAt(){
             return $this->getField('issued_at');
         }
 
@@ -85,8 +80,7 @@
          *
          * @return array
          */
-        public function getScopes()
-        {
+        public function getScopes(){
             return $this->getField('scopes');
         }
 
@@ -95,8 +89,7 @@
          *
          * @return string|null
          */
-        public function getUserId()
-        {
+        public function getUserId(){
             return $this->getField('user_id');
         }
     }

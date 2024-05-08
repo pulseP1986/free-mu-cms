@@ -17,8 +17,7 @@
          *
          * @return string json
          */
-        public function toJson()
-        {
+        public function toJson(){
             return json_encode($this->jobs);
         }
 
@@ -28,8 +27,7 @@
          *
          * @return string
          */
-        public function __toString()
-        {
+        public function __toString(){
             return $this->toJson();
         }
 
@@ -41,8 +39,7 @@
          *
          * @return void
          */
-        public function read($filename)
-        {
+        public function read($filename){
             $file = fopen($filename, 'r');
             $json = fread($file, filesize($filename));
             fclose($file);
@@ -63,8 +60,7 @@
          *
          * @return void
          */
-        public function write($filename)
-        {
+        public function write($filename){
             if(count($this->jobs) == 0)
                 return;
             $file = fopen($filename, 'w');
@@ -81,8 +77,7 @@
          *
          * @return object Session.
          */
-        public static function load($options)
-        {
+        public static function load($options){
             if(!isset(static::$filename))
                 static::$filename = $options;
             $sess = new self;
@@ -95,8 +90,7 @@
          * Saves session.
          * @since 1.0.0
          */
-        public function save()
-        {
+        public function save(){
             $this->write(static::$filename);
         }
 
@@ -121,8 +115,7 @@
          *
          * @return mixed
          */
-        public function get($key)
-        {
+        public function get($key){
             return $this->has($key) ? $this->jobs[$key] : null;
         }
 
@@ -134,8 +127,7 @@
          * @param string $key Key.
          * @param mixed $value Value;
          */
-        public function set($key, $value)
-        {
+        public function set($key, $value){
             $this->jobs[$key] = $value;
         }
     }

@@ -5,13 +5,11 @@
     {
         protected $guides = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 		
-		public function load_guides($search = '')
-        {
+		public function load_guides($search = ''){
             $guides = $this->website->db('web')->query('SELECT id, title, text FROM DmN_Guides WHERE lang = '.$this->website->db('web')->escape($this->config->language()).' ORDER BY date DESC')->fetch_all();
 			$newGuides = [];
 			$sGuides = [];
@@ -32,9 +30,8 @@
 			return ($search != '') ? $sGuides : $newGuides;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		public function load_guides_by_category($id)
-        {
+		
+		public function load_guides_by_category($id){
             $guides = $this->website->db('web')->query('SELECT id, title, text FROM DmN_Guides WHERE lang = '.$this->website->db('web')->escape($this->config->language()).' AND category = ' . $this->website->db('web')->escape($id) . ' ORDER BY date DESC')->fetch_all();
 			$newGuides = [];
 			foreach($guides AS $guide){
@@ -47,8 +44,7 @@
 			return $newGuides;
         }
 		
-		public function load_guide_by_id($id)
-        {
+		public function load_guide_by_id($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, title, text, date, category FROM DmN_Guides WHERE id = :id');
             $stmt->execute([':id' => $id]);
             $data = $stmt->fetch();

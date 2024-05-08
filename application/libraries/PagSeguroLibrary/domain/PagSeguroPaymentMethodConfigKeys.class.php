@@ -32,8 +32,7 @@
          * Get available config key list for payment method config use in PagSeguro transactions
          * @return array
          */
-        public static function getAvailableKeysList()
-        {
+        public static function getAvailableKeysList(){
             return self::$availableKeyList;
         }
 
@@ -42,8 +41,7 @@
          * @param string $configKey
          * @return boolean
          */
-        public static function isKeyAvailable($configKey)
-        {
+        public static function isKeyAvailable($configKey){
             $configKey = strtoupper($configKey);
             return (isset(self::$availableKeyList[$configKey]));
         }
@@ -53,8 +51,7 @@
          * @param string $configKey
          * @return string
          */
-        public static function getDescriptionByKey($configKey)
-        {
+        public static function getDescriptionByKey($configKey){
             $configKey = strtoupper($configKey);
             if(isset(self::$availableKeyList[$configKey])){
                 return self::$availableKeyList[$configKey];
@@ -68,8 +65,7 @@
          * @param string $configDescription
          * @return string
          */
-        public static function getKeyByDescription($configDescription)
-        {
+        public static function getKeyByDescription($configDescription){
             return array_search(strtolower($configDescription), array_map('strtolower', self::$availableKeyList));
         }
     }

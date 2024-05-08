@@ -31,8 +31,7 @@
          * @param PagSeguroConnectionData $connectionData
          * @return string of url for connection with webservice.
          */
-        private static function buildInstallmentURL($connectionData)
-        {
+        private static function buildInstallmentURL($connectionData){
             return $connectionData->getBaseUrl() . $connectionData->getInstallmentUrl();
         }
 
@@ -46,8 +45,7 @@
          * @throws Exception|PagSeguroServiceException
          * @throws Exception
          */
-        public static function getInstallments($credentials, $session, $amount, $cardBrand)
-        {
+        public static function getInstallments($credentials, $session, $amount, $cardBrand){
             $connectionData = new PagSeguroConnectionData($credentials, 'installmentService');
             $url = self::buildInstallmentURL($connectionData) . "?sessionId=" . $session . "&amount=" . $amount . "&creditCardBrand=" . $cardBrand;
             LogPagSeguro::info("PagSeguroInstallmentService.getInstallments(" . $amount . "," . $cardBrand . ") - begin");

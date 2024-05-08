@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -19,8 +18,7 @@
             $this->load->lib('fb');
         }
 
-        public function index($page = 1)
-        {
+        public function index($page = 1){
             if(!$this->website->module_disabled('news')){
                 $this->vars['news'] = $this->Mhome->load_news($page);
                 $this->pagination->initialize($page, $this->config->config_entry('news|news_per_page'), $this->Mhome->count_total_news(), $this->config->base_url . 'home/index/%s');
@@ -29,8 +27,7 @@
             }
         }
 
-        public function read_news($title, $id)
-        {
+        public function read_news($title, $id){
             if(!$this->website->module_disabled('news')){
                 if(ctype_digit($id)){
                     if($this->vars['news'] = $this->Mhome->load_news_by_id($id)){

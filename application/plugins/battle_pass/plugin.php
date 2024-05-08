@@ -13,8 +13,7 @@
          * Initialize plugin class
          *
          */
-        public function __construct()
-        {
+        public function __construct(){
             //initialize parent constructor
             parent::__construct();
             //initialize pluginaizer
@@ -31,8 +30,7 @@
          *
          * Return mixed
          */
-        public function index()
-        {
+        public function index(){
             if($this->pluginaizer->data()->value('installed') == false){
                 throw new Exception('Plugin has not yet been installed.');
             } else{
@@ -48,7 +46,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function upgrade(){
 			if($this->pluginaizer->session->is_user()){
                 //load website helper
@@ -133,7 +131,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function reset(){
 			if($this->pluginaizer->session->is_user()){
                 //load website helper
@@ -200,7 +198,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function arrayKeyFirst($array){
 			foreach($array as $key => $unused){
 				return $key;
@@ -215,8 +213,7 @@
          * return mixed
          *
          */
-		private function user_module()
-        {
+		private function user_module(){
             //check if visitor has user privilleges
             //if($this->pluginaizer->session->is_user()){
                 //load website helper
@@ -997,7 +994,7 @@
             //}
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function claim($id = '', $pass_type = 0){
 			//check if visitor has user privilleges
             if($this->pluginaizer->session->is_user()){
@@ -1428,12 +1425,11 @@
          * return mixed
          *
          */
-        private function public_module()
-        {
+        private function public_module(){
             // public module not used in this plugin
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function pass_levels(){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = isset($_GET['server']) ? $_GET['server'] : '';
@@ -1518,7 +1514,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function edit_level($id, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -1588,9 +1584,8 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-		public function save_order($server)
-        {
+		 
+		public function save_order($server){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 $this->vars['battle_pass_levels'] = $this->config->values('battle_pass_levels');
@@ -1666,7 +1661,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function requirements($id, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -1787,7 +1782,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function edit_requirement($id, $rid, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -1907,7 +1902,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function delete_requirement($id, $rid, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -1966,7 +1961,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function rewards($id, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -2103,7 +2098,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function edit_reward($id, $rid, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -2240,7 +2235,7 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+		 
 		public function delete_reward($id, $rid, $server){
 			if($this->pluginaizer->session->is_admin()){
 				$this->vars['server'] = $server;
@@ -2299,9 +2294,8 @@
             }
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-		public function save_reward_order($bid, $server)
-        {
+		 
+		public function save_reward_order($bid, $server){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 $this->vars['battle_pass_rewards'] = $this->config->values('battle_pass_rewards');
@@ -2330,8 +2324,7 @@
          *
          * Return mixed
          */
-        public function admin()
-        {
+        public function admin(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //load website helper
@@ -2355,8 +2348,7 @@
          *
          * Return mixed
          */
-        public function save_settings()
-        {
+        public function save_settings(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 $this->vars['plugin_config'] = $this->pluginaizer->plugin_config();
@@ -2388,9 +2380,8 @@
          * Set plugin data, create plugin config template, create sql schemes
          *
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function install()
-        {
+		 
+        public function install(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //create plugin info
@@ -2448,9 +2439,8 @@
          * Remove plugin data, delete plugin config, delete sql schemes
          *
          */
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function uninstall()
-        {
+		 
+        public function uninstall(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //delete plugin config and remove plugin data
@@ -2465,8 +2455,7 @@
             }
         }
 
-		public function enable()
-        {
+		public function enable(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //enable plugin
@@ -2482,8 +2471,7 @@
             }
         }
 
-        public function disable()
-        {
+        public function disable(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //disable plugin
@@ -2499,8 +2487,7 @@
             }
         }
 
-		public function about()
-        {
+		public function about(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //create plugin info

@@ -4,16 +4,14 @@
     {
         private $registry, $config, $load, $feeds = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
             $this->load->helper('website');
         }
 
-        public function execute()
-        {
+        public function execute(){
             if($this->config->config_entry('modules|recent_forum_module') == 1 && $this->config->config_entry('modules|recent_forum_rss_url') != ''){
                 if($rawFeed = $this->load_data_from_url($this->config->config_entry('modules|recent_forum_rss_url'))){
                     try{
@@ -43,8 +41,7 @@
             return true;
         }
 
-        private function load_data_from_url($url)
-        {
+        private function load_data_from_url($url){
             if(extension_loaded('curl')){
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -64,8 +61,7 @@
             return $response;
         }
 
-        private function get_feed($data, $num)
-        {
+        private function get_feed($data, $num){
             $c = 0;
             $return = [];
             $this->sort_by_column($data, 'timestamp');
@@ -78,8 +74,7 @@
             return $return;
         }
 
-        private function sort_by_column(&$arr, $col, $dir = SORT_DESC)
-        {
+        private function sort_by_column(&$arr, $col, $dir = SORT_DESC){
             $sort_col = [];
             foreach($arr as $key => $row){
                 $sort_col[$key] = $row[$col];

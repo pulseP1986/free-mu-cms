@@ -6,23 +6,19 @@
         public $error = false, $vars = [], $characters = [], $total_characters, $char_info = [], $gens_family;
         private $price, $per_page, $chars, $char_list = [], $pos;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 		
-		public function checkAccount($name, $server)
-        {
+		public function checkAccount($name, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username Collate Database_Default)');
             $stmt->execute([':username' => $name]);
             return $stmt->fetch();
@@ -48,8 +44,7 @@
 			return  $this->website->db('web')->query('SELECT amount, transferDate, fromAccount, message FROM DmN_WCoinTransferLogs WHERE toAccount = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'')->fetch_all();
 		}
 		
-		public function add_wcoins($user, $server, $amount = 0, $config = [])
-        {
+		public function add_wcoins($user, $server, $amount = 0, $config = []){
             $stmt = $this->website->db($config['db'], $server)->prepare('UPDATE ' . $config['table'] . ' SET ' . $config['column'] . ' = ' . $config['column'] . ' + :wcoins WHERE ' . $config['identifier_column'] . ' = :account');
             $stmt->execute([':wcoins' => $amount, ':account' => $user]);
             if($stmt->rows_affected() == 0){
@@ -58,14 +53,12 @@
             }
         }
 
-        public function remove_wcoins($user, $server, $amount = 0, $config = [])
-        {
+        public function remove_wcoins($user, $server, $amount = 0, $config = []){
             $stmt = $this->website->db($config['db'], $server)->prepare('UPDATE ' . $config['table'] . ' SET ' . $config['column'] . ' = ' . $config['column'] . ' - :wcoins WHERE ' . $config['identifier_column'] . ' = :account');
             $stmt->execute([':wcoins' => $amount, ':account' => $user]);
         }
 
-        public function get_wcoins($user, $server, $config = [])
-        {
+        public function get_wcoins($user, $server, $config = []){
             $stmt = $this->website->db($config['db'], $server)->prepare('SELECT ' . $config['column'] . ' FROM ' . $config['table'] . ' WHERE ' . $config['identifier_column'] . ' = :account');
             $stmt->execute([':account' => $user]);
             if($wcoins = $stmt->fetch()){

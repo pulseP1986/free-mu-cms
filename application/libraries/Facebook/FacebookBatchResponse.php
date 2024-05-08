@@ -50,8 +50,7 @@
          * @param FacebookBatchRequest $batchRequest
          * @param FacebookResponse $response
          */
-        public function __construct(FacebookBatchRequest $batchRequest, FacebookResponse $response)
-        {
+        public function __construct(FacebookBatchRequest $batchRequest, FacebookResponse $response){
             $this->batchRequest = $batchRequest;
             $request = $response->getRequest();
             $body = $response->getBody();
@@ -67,8 +66,7 @@
          *
          * @return array
          */
-        public function getResponses()
-        {
+        public function getResponses(){
             return $this->responses;
         }
 
@@ -78,8 +76,7 @@
          *
          * @param array $responses
          */
-        public function setResponses(array $responses)
-        {
+        public function setResponses(array $responses){
             $this->responses = [];
             foreach($responses as $key => $graphResponse){
                 $this->addResponse($key, $graphResponse);
@@ -92,8 +89,7 @@
          * @param int $key
          * @param array|null $response
          */
-        public function addResponse($key, $response)
-        {
+        public function addResponse($key, $response){
             $originalRequestName = isset($this->batchRequest[$key]['name']) ? $this->batchRequest[$key]['name'] : $key;
             $originalRequest = isset($this->batchRequest[$key]['request']) ? $this->batchRequest[$key]['request'] : null;
             $httpResponseBody = isset($response['body']) ? $response['body'] : null;
@@ -105,40 +101,35 @@
         /**
          * @inheritdoc
          */
-        public function getIterator()
-        {
+        public function getIterator(){
             return new ArrayIterator($this->responses);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetSet($offset, $value)
-        {
+        public function offsetSet($offset, $value){
             $this->addResponse($offset, $value);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetExists($offset)
-        {
+        public function offsetExists($offset){
             return isset($this->responses[$offset]);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetUnset($offset)
-        {
+        public function offsetUnset($offset){
             unset($this->responses[$offset]);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetGet($offset)
-        {
+        public function offsetGet($offset){
             return isset($this->responses[$offset]) ? $this->responses[$offset] : null;
         }
     }

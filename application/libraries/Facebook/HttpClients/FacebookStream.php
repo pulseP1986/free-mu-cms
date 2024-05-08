@@ -47,8 +47,7 @@
          *
          * @param array $options
          */
-        public function streamContextCreate(array $options)
-        {
+        public function streamContextCreate(array $options){
             $this->stream = stream_context_create($options);
         }
 
@@ -57,8 +56,7 @@
          *
          * @return array|null
          */
-        public function getResponseHeaders()
-        {
+        public function getResponseHeaders(){
             return $this->responseHeaders;
         }
 
@@ -69,8 +67,7 @@
          *
          * @return mixed
          */
-        public function fileGetContents($url)
-        {
+        public function fileGetContents($url){
             $rawResponse = file_get_contents($url, false, $this->stream);
             $this->responseHeaders = $http_response_header;
             return $rawResponse;

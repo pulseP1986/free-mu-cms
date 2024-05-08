@@ -20,8 +20,7 @@
         public $parsed_file_name = "";
         public $saved_upload_name = "";
 
-        public function process($file)
-        {
+        public function process($file){
             $this->_cleanPaths();
             if(!function_exists('getimagesize')){
                 $this->image_check = 0;
@@ -134,8 +133,7 @@
             }
         }
 
-        protected function _checkXSSInfile()
-        {
+        protected function _checkXSSInfile(){
             $fh = fopen($this->saved_upload_name, 'rb');
             $file_check = fread($fh, 512);
             fclose($fh);
@@ -151,18 +149,15 @@
             return true;
         }
 
-        public function _getFileExtension($file)
-        {
+        public function _getFileExtension($file){
             return (strstr($file, '.')) ? strtolower(str_replace(".", "", substr($file, strrpos($file, '.')))) : strtolower($file);
         }
 
-        protected function _cleanPaths()
-        {
+        protected function _cleanPaths(){
             $this->out_file_dir = rtrim($this->out_file_dir, '/');
         }
 
-        private function parseCleanValue($val)
-        {
+        private function parseCleanValue($val){
             if($val == ""){
                 return "";
             }

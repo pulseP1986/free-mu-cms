@@ -44,8 +44,7 @@
          */
         private $group;
 
-        public function __construct($key = null, $value = null, $group = null)
-        {
+        public function __construct($key = null, $value = null, $group = null){
             if(isset($key) && !PagSeguroHelper::isEmpty($key)){
                 $this->setKey($key);
             }
@@ -61,8 +60,7 @@
          * Gets the metadata item key
          * @return string
          */
-        public function getKey()
-        {
+        public function getKey(){
             return $this->key;
         }
 
@@ -71,8 +69,7 @@
          *
          * @param string $key
          */
-        public function setKey($key)
-        {
+        public function setKey($key){
             $this->key = $key;
         }
 
@@ -80,8 +77,7 @@
          * Gets metadata item value
          * @return string
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -90,8 +86,7 @@
          *
          * @param string $value
          */
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = $this->normalizeParameter($value);
         }
 
@@ -100,8 +95,7 @@
          *
          * @return int
          */
-        public function getGroup()
-        {
+        public function getGroup(){
             return $this->group;
         }
 
@@ -110,8 +104,7 @@
          *
          * @param int $group
          */
-        public function setGroup($group)
-        {
+        public function setGroup($group){
             $this->group = (int)$group;
         }
 
@@ -120,8 +113,7 @@
          * @param string $parameterValue
          * @return string
          */
-        private function normalizeParameter($parameterValue)
-        {
+        private function normalizeParameter($parameterValue){
             $parameterValue = PagSeguroHelper::formatString($parameterValue, 100, '');
             switch($this->getKey()){
                 case PagSeguroMetaDataItemKeys::getItemKeyByDescription('CPF do passageiro'):

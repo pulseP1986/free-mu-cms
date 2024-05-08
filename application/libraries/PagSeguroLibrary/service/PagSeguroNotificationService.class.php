@@ -37,8 +37,7 @@
          * @param $notificationCode
          * @return string
          */
-        private static function buildTransactionNotificationUrl(PagSeguroConnectionData $connectionData, $notificationCode)
-        {
+        private static function buildTransactionNotificationUrl(PagSeguroConnectionData $connectionData, $notificationCode){
             $url = $connectionData->getServiceUrl();
             return "{$url}/{$notificationCode}/?" . $connectionData->getCredentialsUrlQuery();
         }
@@ -48,8 +47,7 @@
          * @param $notificationCode
          * @return string
          */
-        private static function buildAuthorizationNotificationUrl(PagSeguroConnectionData $connectionData, $notificationCode)
-        {
+        private static function buildAuthorizationNotificationUrl(PagSeguroConnectionData $connectionData, $notificationCode){
             $url = $connectionData->getWebserviceUrl() . '/' . $connectionData->getResource('applicationPath');
             return "{$url}/{$notificationCode}/?" . $connectionData->getCredentialsUrlQuery();
         }
@@ -64,8 +62,7 @@
          * @return PagSeguroTransaction
          * @see PagSeguroTransaction
          */
-        public static function checkTransaction(PagSeguroCredentials $credentials, $notificationCode)
-        {
+        public static function checkTransaction(PagSeguroCredentials $credentials, $notificationCode){
             LogPagSeguro::info("PagSeguroNotificationService.CheckTransaction(notificationCode=$notificationCode) - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -92,8 +89,7 @@
          * @return PagSeguroAuthorization
          * @see PagSeguroAuthorization
          */
-        public static function checkAuthorization(PagSeguroCredentials $credentials, $notificationCode)
-        {
+        public static function checkAuthorization(PagSeguroCredentials $credentials, $notificationCode){
             LogPagSeguro::info("PagSeguroNotificationService.CheckAuthorization(notificationCode=$notificationCode) - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -116,8 +112,7 @@
          * @return bool|mixed|string
          * @throws PagSeguroServiceException
          */
-        private function searchReturn($connection, $parsers, $code)
-        {
+        private function searchReturn($connection, $parsers, $code){
             $httpStatus = new PagSeguroHttpStatus($connection->getStatus());
             switch($httpStatus->getType()){
                 case 'OK':

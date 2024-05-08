@@ -38,8 +38,7 @@
          * Initializes a new instance of the PagSeguroPaymentMode class
          * @param array|object $value
          */
-        public function __construct($value)
-        {
+        public function __construct($value){
             if(array_key_exists($value, $this->modeList)){
                 $this->setValue($this->modeList[$value]);
             } else{
@@ -51,16 +50,14 @@
          * Set the payment mode value
          * @param string value
          */
-        private function setValue($value)
-        {
+        private function setValue($value){
             $this->value = $value;
         }
 
         /***
          * @return string $value of payment mode value
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -69,8 +66,7 @@
          * @param value
          * @return PagSeguroPaymentMode the corresponding to the informed value
          */
-        public static function fromValue($value)
-        {
+        public static function fromValue($value){
             try{
                 return array_search(strtoupper($value), $this->modeList);
             } catch(Exception $e){

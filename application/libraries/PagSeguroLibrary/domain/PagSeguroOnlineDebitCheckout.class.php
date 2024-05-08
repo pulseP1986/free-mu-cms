@@ -35,8 +35,7 @@
          * Initializes a new instance of the PagSeguroOnlineDebitCheckout class
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['bankName'])){
                     $this->setBankName($data['bankName']);
@@ -48,16 +47,14 @@
          * Sets the bank name
          * @param String $bankName
          */
-        public function setBankName($bankName)
-        {
+        public function setBankName($bankName){
             $this->bankName = $bankName;
         }
 
         /***
          * @return string bank name
          */
-        public function getBankName()
-        {
+        public function getBankName(){
             return $this->bankName;
         }
     }

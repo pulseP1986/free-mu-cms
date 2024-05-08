@@ -31,8 +31,7 @@
          * @param $credentials PagSeguroAuthorizationCredentials
          * @return mixed
          */
-        public static function getData($authorization, $credentials)
-        {
+        public static function getData($authorization, $credentials){
             $data = null;
             // AppID
             if($credentials->getAppId() != null){
@@ -79,8 +78,7 @@
          * @param $str_xml
          * @return PagSeguroAuthorization
          */
-        public static function readAuthorization($str_xml)
-        {
+        public static function readAuthorization($str_xml){
             // Parser
             $parser = new PagSeguroXmlParser($str_xml);
             return self::buildAuthorization(new PagSeguroAuthorization(), $parser->getResult('authorization'));
@@ -90,8 +88,7 @@
          * @param $str_xml
          * @return PagSeguroAuthorization
          */
-        public static function readSearchResult($str_xml)
-        {
+        public static function readSearchResult($str_xml){
             // Parser
             $parser = new PagSeguroXmlParser($str_xml);
             $authorization = new PagSeguroAuthorizationSearchResult();
@@ -134,8 +131,7 @@
          * @param PagSeguroAuthorization $authorization
          * @param $data
          */
-        private function buildAuthorization(PagSeguroAuthorization $authorization, $data)
-        {
+        private function buildAuthorization(PagSeguroAuthorization $authorization, $data){
             // <authorization><code>
             if(isset($data["code"])){
                 $authorization->setCode($data['code']);
@@ -169,8 +165,7 @@
          * @param $str_xml
          * @return PagSeguroParserData Success
          */
-        public static function readSuccessXml($str_xml)
-        {
+        public static function readSuccessXml($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             $data = $parser->getResult('authorizationRequest');
             $authorizationParserData = new PagSeguroParserData();
@@ -183,8 +178,7 @@
          * @param $error Authorization error
          * @return object()
          */
-        private static function readError($error)
-        {
+        private static function readError($error){
             $err = new stdClass();
             $err->message = key($error);
             $err->status = true;

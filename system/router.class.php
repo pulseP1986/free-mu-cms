@@ -12,8 +12,7 @@
         private $method;
         private $args;
 		
-		public function route($request)
-        {
+		public function route($request){
             $this->ctrl = $request->get_controller();
             $this->method = $request->get_method();
             $this->args = $request->get_args();
@@ -121,8 +120,7 @@
             throw new Exception('Controller ' . $this->ctrl . ' not found.');
         }
 		
-		private function check_plugin($plugin, $method, $args)
-        {
+		private function check_plugin($plugin, $method, $args){
             $this->plugin_file = APP_PATH . DS . 'plugins' . DS . $plugin . DS . 'plugin.php';
             if(file_exists($this->plugin_file)){
                 require_once $this->plugin_file;

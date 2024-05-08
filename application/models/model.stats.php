@@ -6,13 +6,11 @@
         public $error = false, $vars = [];
         private $cs_info, $arca_table = null;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function server_stats($server, $cached_query = 60)
-        {
+        public function server_stats($server, $cached_query = 60){
             $queries = [
 				'chars' => [
 					'query' => 'SELECT COUNT(*) AS count FROM Character',
@@ -78,8 +76,7 @@
             return $result;
         }
 
-        public function get_crywolf_state($server)
-        {
+        public function get_crywolf_state($server){
             if($this->website->db('game', $server)->check_if_table_exists('MuCrywolf_DATA')){
                 $table = 'MuCrywolf_DATA';
             } 
@@ -95,8 +92,7 @@
             return __('Not Protected');
         }
 
-        public function get_cs_info($server)
-        {
+        public function get_cs_info($server){
             $siege_periods = $this->siege_periods();
             $query = $this->website->db('game', $server)->query('SELECT c.owner_guild, c.siege_start_date, c.siege_end_date, c.money, c.tax_rate_chaos, c.tax_rate_store, c.tax_hunt_zone, g.G_Master, g.G_Mark FROM MuCastle_DATA AS c LEFT JOIN Guild AS g ON (c.owner_guild COLLATE Database_Default = g.G_Name COLLATE Database_Default)');
             while($row = $query->fetch()){
@@ -115,8 +111,7 @@
             return $this->cs_info;
         }
 
-        public function get_cs_guild_list($server)
-        {
+        public function get_cs_guild_list($server){
             return $this->website->db('game', $server)->query('SELECT r.SEQ_NUM, r.REG_SIEGE_GUILD, r.REG_MARKS, r.IS_GIVEUP, g.G_Master FROM MuCastle_REG_SIEGE AS r INNER JOIN Guild AS g ON(r.REG_SIEGE_GUILD Collate Database_Default = g.G_Name Collate Database_Default) ORDER BY r.SEQ_NUM DESC')->fetch_all();
         }
 		
@@ -124,13 +119,11 @@
 			return $this->website->db('web')->snumrows('SELECT SUM(totalvotes) AS count FROM DmN_Votereward_Ranking WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).'');
 		}
 		
-        private function siege_battle_start($time, $periods = [])
-        {
+        private function siege_battle_start($time, $periods = []){
             return strtotime($time) + $this->cstime_to_sec($periods[6]);
         }
 
-        private function cs_period($time, $periods = [])
-        {
+        private function cs_period($time, $periods = []){
             if(strtotime($time) > time()){
                 return __('Siege Period Is Overs');
             } 
@@ -160,8 +153,7 @@
             }
         }
 
-        private function siege_periods()
-        {
+        private function siege_periods(){
             $file = file(APP_PATH . DS . 'data' . DS . 'MuCastleData.dat', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
             if($file){
                 $new_file = '';
@@ -181,8 +173,7 @@
             return false;
         }
 
-        private function cstime_to_sec($time)
-        {
+        private function cstime_to_sec($time){
             $sec = ($time[2] != 0) ? $time[2] * 24 * 60 * 60 : 24 * 60 * 60;
             $sec += ($time[3] != 0) ? $time[3] * 60 * 60 : 0;
             $sec += ($time[4] != 0) ? $time[4] * 60 + 60 : 60;
@@ -214,8 +205,7 @@
 			return $this->website->db('game', $server)->query('SELECT a.G_Name, a.OuccupyObelisk, g.G_Mark, g.G_Master FROM '.$table.' AS a LEFT JOIN Guild AS g ON (a.G_Name COLLATE Database_Default = g.G_Name COLLATE Database_Default)')->fetch_all();           
 		}
 		
-		public function get_arca_guild_list($server, $cache_time)
-        {
+		public function get_arca_guild_list($server, $cache_time){
 			$table = $this->arca_table($server);
 			if($table == 'ArcaBattleWinner'){
 				return $this->website->db('game', $server)->query('SELECT GuildName AS G_Name FROM ArcaBattleGuildEmblem')->fetch_all();
@@ -231,8 +221,7 @@
 			return false;
 		}
 		
-		public function get_icewind_guild_list($server, $cache_time)
-        {
+		public function get_icewind_guild_list($server, $cache_time){
 			if($this->website->db('game', $server)->check_if_table_exists('IGC_IceWind_RegGuildList')){
 				return $this->website->db('game', $server)->query('SELECT ic.guildnumber, g.G_Name FROM IGC_IceWind_RegGuildList AS ic INNER JOIN Guild AS g ON (ic.guildnumber = g.Number)')->fetch_all();
 			}

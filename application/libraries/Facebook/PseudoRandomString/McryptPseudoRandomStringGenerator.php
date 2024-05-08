@@ -37,8 +37,7 @@
         /**
          * @throws FacebookSDKException
          */
-        public function __construct()
-        {
+        public function __construct(){
             if(!function_exists('mcrypt_create_iv')){
                 throw new FacebookSDKException(static::ERROR_MESSAGE . 'The function mcrypt_create_iv() does not exist.');
             }
@@ -47,8 +46,7 @@
         /**
          * @inheritdoc
          */
-        public function getPseudoRandomString($length)
-        {
+        public function getPseudoRandomString($length){
             $this->validateLength($length);
             $binaryString = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
             if($binaryString === false){

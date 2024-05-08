@@ -46,8 +46,7 @@
          *
          * @return Interkassa_Shop
          */
-        public static function factory(array $options)
-        {
+        public static function factory(array $options){
             return new Interkassa_Shop($options);
         }
 
@@ -62,8 +61,7 @@
          *
          * @throws Interkassa_Exception if any option values are missing
          */
-        public function __construct(array $options)
-        {
+        public function __construct(array $options){
             if(!isset($options['id'])){
                 throw new Interkassa_Exception('Shop id is required');
             }
@@ -83,8 +81,7 @@
          *
          * @return Interkassa_Payment
          */
-        public function createPayment(array $data)
-        {
+        public function createPayment(array $data){
             return Interkassa_Payment::factory($this, $data);
         }
 
@@ -99,8 +96,7 @@
          *
          * @throws Interkassa_Exception if received shop id does not match current shop id
          */
-        public function receiveStatus(array $source = null)
-        {
+        public function receiveStatus(array $source = null){
             if($source == null){
                 $source = $_REQUEST;
             }
@@ -112,8 +108,7 @@
          *
          * @return string
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->_id;
         }
 
@@ -122,8 +117,7 @@
          *
          * @return string
          */
-        public function getSecretKey()
-        {
+        public function getSecretKey(){
             return $this->_secret_key;
         }
     }

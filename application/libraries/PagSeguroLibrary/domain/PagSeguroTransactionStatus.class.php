@@ -41,8 +41,7 @@
         /***
          * @param null $value
          */
-        public function __construct($value = null)
-        {
+        public function __construct($value = null){
             if($value){
                 $this->value = $value;
             }
@@ -51,8 +50,7 @@
         /***
          * @param $value
          */
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = $value;
         }
 
@@ -60,8 +58,7 @@
          * @param $type
          * @throws Exception
          */
-        public function setByType($type)
-        {
+        public function setByType($type){
             if(isset(self::$statusList[$type])){
                 $this->value = self::$statusList[$type];
             } else{
@@ -72,8 +69,7 @@
         /***
          * @return integer the status value.
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -81,8 +77,7 @@
          * @param value
          * @return String the transaction status corresponding to the informed status value
          */
-        public function getTypeFromValue($value = null)
-        {
+        public function getTypeFromValue($value = null){
             $value = ($value == null ? $this->value : $value);
             return array_search($this->value, self::$statusList);
         }
@@ -91,8 +86,7 @@
          * Get status list
          * @return array
          */
-        public static function getStatusList()
-        {
+        public static function getStatusList(){
             return self::$statusList;
         }
     }

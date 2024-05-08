@@ -50,8 +50,7 @@
          *
          * @param array $items
          */
-        public function __construct(array $items = [])
-        {
+        public function __construct(array $items = []){
             $this->items = $items;
         }
 
@@ -63,8 +62,7 @@
          *
          * @return mixed
          */
-        public function getField($name, $default = null)
-        {
+        public function getField($name, $default = null){
             if(isset($this->items[$name])){
                 return $this->items[$name];
             }
@@ -82,8 +80,7 @@
          * @deprecated 5.0.0 getProperty() has been renamed to getField()
          * @todo v6: Remove this method
          */
-        public function getProperty($name, $default = null)
-        {
+        public function getProperty($name, $default = null){
             return $this->getField($name, $default);
         }
 
@@ -92,8 +89,7 @@
          *
          * @return array
          */
-        public function getFieldNames()
-        {
+        public function getFieldNames(){
             return array_keys($this->items);
         }
 
@@ -105,8 +101,7 @@
          * @deprecated 5.0.0 getPropertyNames() has been renamed to getFieldNames()
          * @todo v6: Remove this method
          */
-        public function getPropertyNames()
-        {
+        public function getPropertyNames(){
             return $this->getFieldNames();
         }
 
@@ -115,8 +110,7 @@
          *
          * @return array
          */
-        public function all()
-        {
+        public function all(){
             return $this->items;
         }
 
@@ -125,8 +119,7 @@
          *
          * @return array
          */
-        public function asArray()
-        {
+        public function asArray(){
             return array_map(function($value){
                 return $value instanceof Collection ? $value->asArray() : $value;
             }, $this->items);
@@ -139,8 +132,7 @@
          *
          * @return static
          */
-        public function map(\Closure $callback)
-        {
+        public function map(\Closure $callback){
             return new static(array_map($callback, $this->items, array_keys($this->items)));
         }
 
@@ -151,8 +143,7 @@
          *
          * @return string
          */
-        public function asJson($options = 0)
-        {
+        public function asJson($options = 0){
             return json_encode($this->asArray(), $options);
         }
 
@@ -161,8 +152,7 @@
          *
          * @return int
          */
-        public function count()
-        {
+        public function count(){
             return count($this->items);
         }
 
@@ -171,8 +161,7 @@
          *
          * @return ArrayIterator
          */
-        public function getIterator()
-        {
+        public function getIterator(){
             return new ArrayIterator($this->items);
         }
 
@@ -183,8 +172,7 @@
          *
          * @return bool
          */
-        public function offsetExists($key)
-        {
+        public function offsetExists($key){
             return array_key_exists($key, $this->items);
         }
 
@@ -195,8 +183,7 @@
          *
          * @return mixed
          */
-        public function offsetGet($key)
-        {
+        public function offsetGet($key){
             return $this->items[$key];
         }
 
@@ -208,8 +195,7 @@
          *
          * @return void
          */
-        public function offsetSet($key, $value)
-        {
+        public function offsetSet($key, $value){
             if(is_null($key)){
                 $this->items[] = $value;
             } else{
@@ -224,8 +210,7 @@
          *
          * @return void
          */
-        public function offsetUnset($key)
-        {
+        public function offsetUnset($key){
             unset($this->items[$key]);
         }
 
@@ -234,8 +219,7 @@
          *
          * @return string
          */
-        public function __toString()
-        {
+        public function __toString(){
             return $this->asJson();
         }
     }

@@ -34,8 +34,7 @@
         /***
          * @param array $config
          */
-        public function __construct(array $config = null)
-        {
+        public function __construct(array $config = null){
             if(!is_null($config) && count($config) > 0){
                 $this->setConfig($config);
             }
@@ -44,24 +43,21 @@
         /***
          * @param PagSeguroPaymentMethodConfigItem $configItem
          */
-        public function addConfig(PagSeguroPaymentMethodConfigItem $configItem)
-        {
+        public function addConfig(PagSeguroPaymentMethodConfigItem $configItem){
             $this->config[] = $configItem;
         }
 
         /***
          * @param array $config
          */
-        public function setConfig(array $config)
-        {
+        public function setConfig(array $config){
             $this->config = $config;
         }
 
         /***
          * @return array
          */
-        public function getConfig()
-        {
+        public function getConfig(){
             if($this->config == null){
                 $this->config = [];
             }

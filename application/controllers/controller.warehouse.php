@@ -6,9 +6,8 @@
         public $vars = [], $errors = [];
         private $serial;
 
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function __construct()
-        {
+         
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -24,8 +23,7 @@
             $this->load->model('warehouse');
         }
 
-        public function index()
-        {
+        public function index(){
             if(!$this->website->module_disabled('warehouse')){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->load->model('account');
@@ -46,8 +44,7 @@
             }
         }
 
-        public function web($page = 1)
-        {
+        public function web($page = 1){
             if(!$this->website->module_disabled('warehouse')){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->load->model('account');
@@ -64,8 +61,7 @@
             }
         }
         
-        public function sell_item()
-        {
+        public function sell_item(){
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     //$this->csrf->isTokenValid($this->csrf->verifyRequest('post', 'json'));
@@ -236,8 +232,7 @@
             }
         }
 
-        private function check_serial($pos)
-        {
+        private function check_serial($pos){
             $blocked1 = '00000000';
             $blocked2 = 'FFFFFFFF';
             if(is_array($pos)){
@@ -283,8 +278,7 @@
 			return $dec;
 		}
 
-        public function transfer_item($type = 'game')
-        {
+        public function transfer_item($type = 'game'){
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $slot = (isset($_POST['slot']) ? ctype_digit($_POST['slot']) ? $_POST['slot'] : '' : '');
@@ -342,8 +336,7 @@
             }
         }
 
-        public function del_item()
-        {
+        public function del_item(){
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->load->model('account');
@@ -373,8 +366,7 @@
             }
         }
 
-        public function item_info()
-        {
+        public function item_info(){
             if(is_ajax()){
                 if(!isset($_POST['item_hex']))
                     json(['error' => true]); 
@@ -390,8 +382,7 @@
             }
         }
 		
-		public function item_info_pet()
-        {
+		public function item_info_pet(){
             if(is_ajax()){
                 if(!isset($_POST['item_hex']))
                     json(['error' => true]); 
@@ -408,8 +399,7 @@
             }
         }
 
-        public function item_info_image()
-        {
+        public function item_info_image(){
             if(is_ajax()){
                 if(!isset($_POST['item_hex']))
                     json(['error' => true]); 
@@ -426,8 +416,7 @@
             }
         }
 		
-		public function item_info_image_pet()
-        {
+		public function item_info_image_pet(){
             if(is_ajax()){
                 if(!isset($_POST['item_hex']))
                     json(['error' => true]); 
@@ -445,8 +434,7 @@
             }
         }
 
-        public function login()
-        {
+        public function login(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.login');
         }
     }

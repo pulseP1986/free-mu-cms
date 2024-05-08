@@ -12,15 +12,13 @@
         protected $memcached = false;
         public $top_players = [], $masterlevel = [], $online = [], $gens = [], $guilds = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
         }
 
-		public function check_server_status_by_port($ip, $port, $gs_list, $name, $cache_time, $db, $cache_name = '')
-        {
+		public function check_server_status_by_port($ip, $port, $gs_list, $name, $cache_time, $db, $cache_name = ''){
             $this->check_cache('serv_status#'.$this->config->language().'#' . $cache_name, 'server', $cache_time);
             if(!$this->cached){
                 $check = @fsockopen($ip, $port, $errno, $errmsg, 0.3);
@@ -53,8 +51,7 @@
             return $this->server;
         }
 
-		public function check_server_status($cache_time = 120)
-        {
+		public function check_server_status($cache_time = 120){
             $serverlist = $this->server_list();
 			$this->check_cache('servers_status#'.$this->config->language(), 'servers', $cache_time);
 			
@@ -104,8 +101,7 @@
             return $this->servers;
         }
 
-		public function total_online($cached_query = 60)
-        {
+		public function total_online($cached_query = 60){
             $serverlist = $this->server_list();
             $max_online = 0;
             $online = 0;
@@ -125,8 +121,7 @@
             return ['online' => $online, 'percentage' => floor(100 * $online / $max_online)];
         }
 
-		public function online_by_server($server, $cached_query = 60)
-        {
+		public function online_by_server($server, $cached_query = 60){
             $db = $this->get_db_from_server($server, true);
             if($db != ''){
                 $online = $this->db($db)->cached_query('online_count_by_server_' . $server, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 ' . $this->server_code($this->get_servercode($server)) . '', [], $cached_query);
@@ -144,8 +139,7 @@
             return 0;
 		}
 
-		public function active_by_server($server, $cached_query = 60)
-        {
+		public function active_by_server($server, $cached_query = 60){
             $db = $this->get_db_from_server($server, true);
             if($db != ''){
                 $online = $this->db($db)->cached_query('active_count_by_server_' . $server, 'SELECT DISTINCT(COUNT(ip)) AS count FROM MEMB_STAT WHERE ConnectTM >= DATEADD(day, -1,CONVERT(datetime, CONVERT(varchar(10), GETDATE(), 101))) ' . $this->server_code($this->get_servercode($server)) . '', [], $cached_query);
@@ -154,8 +148,7 @@
             return 0;
         }
 
-        public function status_by_server($sv)
-        {
+        public function status_by_server($sv){
             $serverlist = $this->server_list($sv);
             if(is_array($serverlist)){
                 $check = @fsockopen($serverlist['gs_ip'], $serverlist['gs_port'], $errno, $errmsg, 0.5);
@@ -165,8 +158,7 @@
             }
         }
 
-		public function server_code($sv, $and = true)
-        {
+		public function server_code($sv, $and = true){
             if(strpos($sv, ',') !== false){
                 $server_array = explode(',', $sv);
                 $length = count($server_array);
@@ -186,8 +178,7 @@
             return $serv;
         }
 
-		public function get_first_server_code($sv)
-        {
+		public function get_first_server_code($sv){
             $serverlist = $this->server_list($sv);
             if(is_array($serverlist)){
                 if(strpos($serverlist['gs_list'], ',') !== false){
@@ -199,34 +190,29 @@
             }
         }
 
-        public function get_servercode($sv)
-        {
+        public function get_servercode($sv){
             $serverlist = $this->server_list($sv);
             if(is_array($serverlist)){
                 return $serverlist['gs_list'];
             }
         }
 
-        public function get_default_account_database()
-        {
+        public function get_default_account_database(){
             $serverlist = $this->server_list();
             $first = reset($serverlist);
             return $first['db_acc'];
         }
 
-		public function get_char_id_col($server = '')
-        {
+		public function get_char_id_col($server = ''){
             $serverlist = $this->server_list($server);
             return $serverlist['identity_column_character'];
         }
 
-        public function is_multiple_accounts()
-        {
+        public function is_multiple_accounts(){
             return (bool)$this->server_list('', true);
         }
 
-		public function stats($server = '', $cached_query = 60)
-        {
+		public function stats($server = '', $cached_query = 60){
             if(!$server)
                 $server = array_keys($this->server_list($server))[0];
 			
@@ -248,8 +234,7 @@
 			return [$this->vars['data'], $this->vars['config']['player']];
 		}
 
-		public function get_cs_info($server = false)
-        {
+		public function get_cs_info($server = false){
             if(!$server)
                 $server = array_keys($this->server_list())[0];
             $this->load->model('stats');
@@ -277,8 +262,7 @@
 		}
 				
 			
-		public function get_gens_info($server = false, $cache_time = 120, $amount = 1)
-        {
+		public function get_gens_info($server = false, $cache_time = 120, $amount = 1){
             if(!$server)
                 $server = array_keys($this->server_list())[0];
 			
@@ -289,8 +273,7 @@
 			return $data;
 		}
 
-		public function gens_gens_family($name, $server, $type)
-        {
+		public function gens_gens_family($name, $server, $type){
             switch($type){
                 case 'scf':
                     return $this->db('game', $server)->query('SELECT SCFGensFamily AS family FROM Character WHERE Name = '.$this->db('game', $server)->escape($name).'')->fetch();
@@ -316,8 +299,7 @@
             }
         }
 
-		private function gens_rank($points, $rank)
-        {
+		private function gens_rank($points, $rank){
             if($points < 500)
                 $gens_rank = 'Private'; 
 			else if($points >= 500 && $points < 1500)
@@ -351,32 +333,28 @@
             return $gens_rank;
         }
 
-		public function get_cs_guild_list($server = false)
-        {
+		public function get_cs_guild_list($server = false){
             if(!$server)
                 $server = array_keys($this->server_list())[0];
             $this->load->model('stats');
             return $this->registry->Mstats->get_cs_guild_list($server);
         }
 
-		public function csGuildList($server = false, $cache_time = 180)
-        {
+		public function csGuildList($server = false, $cache_time = 180){
             if(!$server)
                 $server = array_keys($this->server_list())[0];
             $this->load->model('stats');
             return $this->registry->Mstats->get_cs_guild_list($server, $cache_time);
         }
 
-		public function arcaGuildList($server = false, $cache_time = 120)
-        {
+		public function arcaGuildList($server = false, $cache_time = 120){
             if(!$server)
                 $server = array_keys($this->server_list())[0];
             $this->load->model('stats');
             return $this->registry->Mstats->get_arca_guild_list($server, $cache_time);
         }
 
-		public function iceWindGuildList($server = false, $cache_time = 120)
-        {
+		public function iceWindGuildList($server = false, $cache_time = 120){
             if(!$server)
                 $server = array_keys($this->server_list())[0];
             $this->load->model('stats');
@@ -498,8 +476,7 @@
 			return $this->db('web')->query('DELETE FROM DmN_Change_Class_Required_Items WHERE is_completed = 1 AND server = '.$this->db('web')->escape('web').' AND memb___id = '.$this->db('web')->escape('web').' AND character = '.$this->db('web')->escape('web').'');
 		}
 		
-		public function module_disabled($config)
-        {
+		public function module_disabled($config){
             if($this->config->config_entry($config . '|module_status') == 1){
                 return false;
             } else{
@@ -513,8 +490,7 @@
             }
         }
 
-        public function server_select_box($id = '', $class = '', $show_label = true)
-        {
+        public function server_select_box($id = '', $class = '', $show_label = true){
             $this->output = '';
 			$server_list = $this->server_list();
             if(count($server_list) > 1){
@@ -533,8 +509,7 @@
             return false;
         }
 		
-        public function server_list($serv = '', $check_multi_acc = false)
-        {
+        public function server_list($serv = '', $check_multi_acc = false){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'serverlist.json');
 			$servers = json_decode($file, true);
 			if(is_array($servers)){
@@ -556,8 +531,7 @@
 			}
         }
 		
-        public function hex2bin($hexstr)
-        {
+        public function hex2bin($hexstr){
             if(ctype_xdigit($hexstr) && strlen($hexstr) <= 128){
                 $n = strlen($hexstr);
                 $sbin = "";
@@ -581,8 +555,7 @@
             }
         }
 
-        public function set_limit($value, $limit, $return)
-        {
+        public function set_limit($value, $limit, $return){
             $simbol = (strlen($value) <= $limit ? "" : "$return");
             if(extension_loaded('mbstring')){
                 mb_internal_encoding("UTF-8");
@@ -592,15 +565,13 @@
             }
         }
 
-        public function strstr_alt($haystack, $needle, $before_needle = false)
-        {
+        public function strstr_alt($haystack, $needle, $before_needle = false){
             if(!$before_needle)
                 return strstr($haystack, $needle); else
                 return substr($haystack, 0, strpos($haystack, $needle));
         }
 
-        public function get_db_from_server($server, $acc_db = false)
-        {
+        public function get_db_from_server($server, $acc_db = false){
 			if(!empty($server)){
 				$servers = $this->server_list($server);
 				return ($acc_db == true) ? $servers['db_acc'] : $servers['db'];
@@ -608,8 +579,7 @@
 			return false;
         }
 
-        public function get_value_from_server($server, $val = 'db')
-        {
+        public function get_value_from_server($server, $val = 'db'){
 			static $servers = null;
 			
 			if($servers == null)
@@ -617,8 +587,7 @@
             return $servers[$val] ?? 'unknown val';
         }
 
-        public function check_cache($file, $return, $time = false, $delete_old_cache = true)
-        {
+        public function check_cache($file, $return, $time = false, $delete_old_cache = true){
             if($this->config->config_entry('main|cache_type') == 'file'){
                 $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'cache']]);
             } else{
@@ -632,8 +601,7 @@
             }
         }
 
-        public function set_cache($file, $content, $time = false)
-        {
+        public function set_cache($file, $content, $time = false){
             if($this->config->config_entry('main|cache_type') == 'file'){
                 $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'cache']]);
             } else{
@@ -642,18 +610,15 @@
             $this->registry->cache->set($file, $content, $time);
         }
 
-        public function get_cache_time()
-        {
+        public function get_cache_time(){
             return ($this->last_cached != '') ? sprintf(__('Next Cache Time %s'), date(DATETIME_FORMAT, ($this->last_cached))) : __('Cached Moment Ago');
         }
 
-        public function check_if_cached()
-        {
+        public function check_if_cached(){
             return $this->cached;
         }
 				  
-        public function translate_credits($credits, $server = 'DEFAULT')
-        {
+        public function translate_credits($credits, $server = 'DEFAULT'){
             switch($credits){
                 case 1:
                     return $this->config->config_entry('credits_' . $server . '|title_1');
@@ -670,8 +635,7 @@
             }
         }
 				  
-        public function get_user_credits_balance($user, $server, $type = 1, $guid = false)
-        {
+        public function get_user_credits_balance($user, $server, $type = 1, $guid = false){
 			if($type == 4){
 				$db = 'web';
 				$table = 'DmN_Shop_Credits';
@@ -710,8 +674,7 @@
             }
         }
 				   
-		public function add_credits($user, $server, $credits, $type = 1, $decrease = false, $guid = false)
-        {
+		public function add_credits($user, $server, $credits, $type = 1, $decrease = false, $guid = false){
 			if($type == 4){
 				$db = 'web';
 				$table = 'DmN_Shop_Credits';
@@ -731,13 +694,11 @@
             }
         }
 
-        public function charge_credits($account, $server, $credits, $decrease_type = 1, $guid = false)
-        {
+        public function charge_credits($account, $server, $credits, $decrease_type = 1, $guid = false){
             $this->add_credits($account, $server, $credits, $decrease_type, true, $guid);
         }
 		
-        private function increase_credits($db, $table, $column, $identifier_column, $user, $guid, $server, $credits)
-        {
+        private function increase_credits($db, $table, $column, $identifier_column, $user, $guid, $server, $credits){
             $data = [':credits' => $credits, ':user' => $user, ':server' => $server];
             if(strtolower($table) == 'dmn_shop_credits'){
                 $stmt = $this->db('web')->prepare('UPDATE ' . $table . ' SET ' . $column . ' = ' . $column . ' + :credits WHERE ' . $identifier_column . ' = :user AND server = :server');
@@ -762,8 +723,7 @@
             }
         }
 		
-        private function decrease_credits($db, $table, $column, $identifier_column, $user, $guid, $server, $credits)
-        {
+        private function decrease_credits($db, $table, $column, $identifier_column, $user, $guid, $server, $credits){
             $data = [':credits' => $credits, ':user' => $user, ':server' => $server];
             if(strtolower($table) == 'dmn_shop_credits'){
                 $stmt = $this->db('web')->prepare('UPDATE ' . $table . ' SET ' . $column . ' = CASE WHEN (' . $column . ' <= 0) THEN 0 WHEN (' . $column . ' - ' . $credits . ' <= 0) THEN 0 ELSE (' . $column . ' - :credits) END WHERE ' . $identifier_column . ' = :user AND server = :server');
@@ -778,8 +738,7 @@
             }
         }
 
-        public function get_account_wcoins_balance($server)
-        {
+        public function get_account_wcoins_balance($server){
             $this->vars['table_config'] = $this->config->values('table_config', $server);
             if(isset($this->vars['table_config']['wcoins'])){
                 $this->load->model('character');
@@ -788,8 +747,7 @@
             return 0;
         }
 		
-		public function get_account_goblinpoint_balance($server)
-        {
+		public function get_account_goblinpoint_balance($server){
             $this->vars['table_config'] = $this->config->values('table_config', $server);
             if(isset($this->vars['table_config']['goblinpoint'])){
                 $this->load->model('character');
@@ -798,8 +756,7 @@
             return 0;
         }
       
-        public function db($db, $server = '')
-        {
+        public function db($db, $server = ''){
             switch($db){
                 case 'web':
                     if(isset($this->registry->web_db))
@@ -836,8 +793,7 @@
             }
         }
         
-        public function load_rss($url = '', $item_count = 5, $cache_time = 0, $rss_name = 'recent_on_forum')
-        {
+        public function load_rss($url = '', $item_count = 5, $cache_time = 0, $rss_name = 'recent_on_forum'){
             if($url == ''){
                 return false;
             } else{
@@ -873,8 +829,7 @@
             }
         }
        
-        public function load_data_from_url($url)
-        {
+        public function load_data_from_url($url){
             if(extension_loaded('curl')){
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -900,8 +855,7 @@
             return $response;
         }
 
-        private function multi_xml_rss($links = [])
-        {
+        private function multi_xml_rss($links = []){
             $docList = new DOMDocument();
             $root = $docList->createElement('channel');
             $docList->appendChild($root);
@@ -919,8 +873,7 @@
             return $docList->saveXML();
         }
 
-        public function get_feed($data, $num)
-        {
+        public function get_feed($data, $num){
             $c = 0;
             $return = [];
             $this->sort_by_column($data, 'timestamp');
@@ -934,8 +887,7 @@
         }
 	
 		
-        private function sort_by_column(&$arr, $col, $dir = SORT_DESC)
-        {
+        private function sort_by_column(&$arr, $col, $dir = SORT_DESC){
             $sort_col = [];
             foreach($arr as $key => $row){
                 $sort_col[$key] = $row[$col];
@@ -943,26 +895,22 @@
             array_multisort($sort_col, $dir, $arr);
         }
 
-        public function load_wallpapers_shoots($count = 10)
-        {
+        public function load_wallpapers_shoots($count = 10){
             $gallery = $this->db('web')->query('SELECT Top ' . (int)$count . ' id, name FROM DmN_Gallery  WHERE section = 1 ORDER BY NEWID()')->fetch_all();
             return ($gallery) ? $gallery : false;
         }
 
-        public function load_screen_shoots($count = 10)
-        {
+        public function load_screen_shoots($count = 10){
             $gallery = $this->db('web')->query('SELECT Top ' . (int)$count . ' id, name FROM DmN_Gallery  WHERE section = 2 ORDER BY NEWID()')->fetch_all();
             return ($gallery) ? $gallery : false;
         }
 
-        public function load_random_galery($count = 10)
-        {
+        public function load_random_galery($count = 10){
             $gallery = $this->db('web')->query('SELECT Top ' . (int)$count . ' id, name FROM DmN_Gallery  WHERE section IN(1,2) ORDER BY NEWID()')->fetch_all();
             return ($gallery) ? $gallery : false;
         }
 
-        public function zen_format($zen)
-        {
+        public function zen_format($zen){
             $zens = $zen;
             for($i = 0; $zen >= 1000; $i++){
                 $zen = $zen / 1000;
@@ -981,8 +929,7 @@
 			return $hex;
 		}
 	
-        public function get_char_class($class, $short = false, $list = false)
-        {
+        public function get_char_class($class, $short = false, $list = false){
             $class_array = $this->config->values('class_config');
             if($list == true){
                 return $class_array['class_codes'];
@@ -998,20 +945,17 @@
             }
         }
 	
-        public function get_guild_status($status)
-        {
+        public function get_guild_status($status){
             $status_array = [0 => __('Member'), 32 => '<span style="color: green;">' . __('BattleMaster') . '</span>', 64 => '<span style="color: blue;">' . __('Assistant Guild Master') . '</span>', 128 => '<span style="color: red;font-weight: bold;">' . __('Guild Master') . '</span>'];
             return str_replace(array_keys($status_array), array_values($status_array), $status);
         }
 		
-        public function get_gens_family($influence)
-        {
+        public function get_gens_family($influence){
             $family_array = [1 => __('Duprian'), 2 => __('Vanert')];
             return str_replace(array_keys($family_array), array_values($family_array), $influence);
         }
 		
-        public function get_map_name($map_id, $list = false)
-        {
+        public function get_map_name($map_id, $list = false){
             $maps_array = $this->config->values('map_config');
             if($list){
                 return $maps_array['map_codes'];
@@ -1020,8 +964,7 @@
             }
         }
 
-		public function get_map_code($map_name)
-        {
+		public function get_map_code($map_name){
             $maps_array = $this->config->values('map_config');
 			foreach($maps_array['map_codes'] AS $key => $val){
 				if($val == $map_name)
@@ -1030,14 +973,12 @@
             return  -1;
         }
 
-		public function get_drop_cat($id)
-        {
+		public function get_drop_cat($id){
             $array = $this->config->values('drop_config');
             return array_key_exists($id, $array) ? $array[$id] : __('Unknown');
         }
 
-        public function pk_level($pklevel, $list = false)
-        {
+        public function pk_level($pklevel, $list = false){
             $level = [0 => __('*Hero*'), 1 => __('Hero lvl 2'), 2 => __('Hero lvl 1'), 3 => __('Commoner'), 4 => __('PK lvl 1'), 5 => __('PK lvl 1'), 6 => __('Murder'), 7 => __('*Phonoman*')];
             if($list){
                 return $level;
@@ -1047,34 +988,29 @@
         }
 
 		
-        public function show65kStats($stat_value)
-        {
+        public function show65kStats($stat_value){
             return ($stat_value < 0) ? $stat_value += 65536 : $stat_value;
         }
 
 		
-        public function fb_login($type = '', $style = '')
-        {
+        public function fb_login($type = '', $style = ''){
             $this->load->lib('fb');
             $this->registry->fb->get_fb_login_url($type, $style);
             return $this->registry->fb->redirect_url;
         }
 
-        public function get_country_code($ip)
-        {
+        public function get_country_code($ip){
             return get_country_code($ip);
         }
 
-        public function seconds2days($seconds, $text = true)
-        {
+        public function seconds2days($seconds, $text = true){
             $days = intval(intval($seconds) / (3600 * 24));
             if($days == 1)
                 return ($text) ? $days . ' ' . __('Day') : $days; else
                 return ($text) ? $days . ' ' . __('Days') : $days;
         }
 
-        private function no_more_event($times, $now)
-        {
+        private function no_more_event($times, $now){
             $times = explode(',', $times);
             $lastevent = strtotime('Today ' . end($times));
             if($lastevent < $now){
@@ -1084,8 +1020,7 @@
             }
         }
 
-        private function find_next_day($event)
-        {
+        private function find_next_day($event){
             $today = date('N');
             $f = false;
             for($i = $today; $i <= 7; $i++){
@@ -1103,8 +1038,7 @@
         }
 
 		
-        public function load_event_timers()
-        {
+        public function load_event_timers(){
             $events = $this->config->values('event_config', ['events', 'event_timers']);
             $days = [1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday',];
             $ii = 0;
@@ -1156,13 +1090,11 @@
             return $timers;
         }
 
-        public function seo_string($title)
-        {
+        public function seo_string($title){
             return seo_string($title);
         }
 		
-        public function lang_list()
-        {
+        public function lang_list(){
 			$this->load->helper('locales');
 			$this->vars['languages'] = $this->config->values('locale_config');
 			
@@ -1177,8 +1109,7 @@
             return $country_list;
         }
 
-        public function codeToCountryName($code, $list = false)
-        {
+        public function codeToCountryName($code, $list = false){
             $code = strtoupper($code);
             $countryList = ['AF' => 'Afghanistan', 'AX' => 'Aland Islands', 'AL' => 'Albania', 'DZ' => 'Algeria', 'AS' => 'American Samoa', 'AD' => 'Andorra', 'AO' => 'Angola', 'AI' => 'Anguilla', 'AQ' => 'Antarctica', 'AG' => 'Antigua and Barbuda', 'AR' => 'Argentina', 'AM' => 'Armenia', 'AW' => 'Aruba', 'AU' => 'Australia', 'AT' => 'Austria', 'AZ' => 'Azerbaijan', 'BS' => 'Bahamas the', 'BH' => 'Bahrain', 'BD' => 'Bangladesh', 'BB' => 'Barbados', 'BY' => 'Belarus', 'BE' => 'Belgium', 'BZ' => 'Belize', 'BJ' => 'Benin', 'BM' => 'Bermuda', 'BT' => 'Bhutan', 'BO' => 'Bolivia', 'BA' => 'Bosnia and Herzegovina', 'BW' => 'Botswana', 'BV' => 'Bouvet Island (Bouvetoya)', 'BR' => 'Brazil', 'IO' => 'British Indian Ocean Territory (Chagos Archipelago)', 'VG' => 'British Virgin Islands', 'BN' => 'Brunei Darussalam', 'BG' => 'Bulgaria', 'BF' => 'Burkina Faso', 'BI' => 'Burundi', 'KH' => 'Cambodia', 'CM' => 'Cameroon', 'CA' => 'Canada', 'CV' => 'Cape Verde', 'KY' => 'Cayman Islands', 'CF' => 'Central African Republic', 'TD' => 'Chad', 'CL' => 'Chile', 'CN' => 'China', 'CX' => 'Christmas Island', 'CC' => 'Cocos (Keeling) Islands', 'CO' => 'Colombia', 'KM' => 'Comoros the', 'CD' => 'Congo', 'CG' => 'Congo the', 'CK' => 'Cook Islands', 'CR' => 'Costa Rica', 'CI' => 'Cote d\'Ivoire', 'HR' => 'Croatia', 'CU' => 'Cuba', 'CY' => 'Cyprus', 'CZ' => 'Czech Republic', 'DK' => 'Denmark', 'DJ' => 'Djibouti', 'DM' => 'Dominica', 'DO' => 'Dominican Republic', 'EC' => 'Ecuador', 'EG' => 'Egypt', 'SV' => 'El Salvador', 'GQ' => 'Equatorial Guinea', 'ER' => 'Eritrea', 'EE' => 'Estonia', 'ET' => 'Ethiopia', 'FO' => 'Faroe Islands', 'FK' => 'Falkland Islands (Malvinas)', 'FJ' => 'Fiji the Fiji Islands', 'FI' => 'Finland', 'FR' => 'France, French Republic', 'GF' => 'French Guiana', 'PF' => 'French Polynesia', 'TF' => 'French Southern Territories', 'GA' => 'Gabon', 'GM' => 'Gambia the', 'GE' => 'Georgia', 'DE' => 'Germany', 'GH' => 'Ghana', 'GI' => 'Gibraltar', 'GR' => 'Greece', 'GL' => 'Greenland', 'GD' => 'Grenada', 'GP' => 'Guadeloupe', 'GU' => 'Guam', 'GT' => 'Guatemala', 'GG' => 'Guernsey', 'GN' => 'Guinea', 'GW' => 'Guinea-Bissau', 'GY' => 'Guyana', 'HT' => 'Haiti', 'HM' => 'Heard Island and McDonald Islands', 'VA' => 'Holy See (Vatican City State)', 'HN' => 'Honduras', 'HK' => 'Hong Kong', 'HU' => 'Hungary', 'IS' => 'Iceland', 'IN' => 'India', 'ID' => 'Indonesia', 'IR' => 'Iran', 'IQ' => 'Iraq', 'IE' => 'Ireland', 'IM' => 'Isle of Man', 'IL' => 'Israel', 'IT' => 'Italy', 'JM' => 'Jamaica', 'JP' => 'Japan', 'JE' => 'Jersey', 'JO' => 'Jordan', 'KZ' => 'Kazakhstan', 'KE' => 'Kenya', 'KI' => 'Kiribati', 'KP' => 'Korea', 'KR' => 'Korea', 'KW' => 'Kuwait', 'KG' => 'Kyrgyz Republic', 'LA' => 'Lao', 'LV' => 'Latvia', 'LB' => 'Lebanon', 'LS' => 'Lesotho', 'LR' => 'Liberia', 'LY' => 'Libyan Arab Jamahiriya', 'LI' => 'Liechtenstein', 'LT' => 'Lithuania', 'LU' => 'Luxembourg', 'MO' => 'Macao', 'MK' => 'Macedonia', 'MG' => 'Madagascar', 'MW' => 'Malawi', 'MY' => 'Malaysia', 'MV' => 'Maldives', 'ML' => 'Mali', 'MT' => 'Malta', 'MH' => 'Marshall Islands', 'MQ' => 'Martinique', 'MR' => 'Mauritania', 'MU' => 'Mauritius', 'YT' => 'Mayotte', 'MX' => 'Mexico', 'FM' => 'Micronesia', 'MD' => 'Moldova', 'MC' => 'Monaco', 'MN' => 'Mongolia', 'ME' => 'Montenegro', 'MS' => 'Montserrat', 'MA' => 'Morocco', 'MZ' => 'Mozambique', 'MM' => 'Myanmar', 'NA' => 'Namibia', 'NR' => 'Nauru', 'NP' => 'Nepal', 'AN' => 'Netherlands Antilles', 'NL' => 'Netherlands the', 'NC' => 'New Caledonia', 'NZ' => 'New Zealand', 'NI' => 'Nicaragua', 'NE' => 'Niger', 'NG' => 'Nigeria', 'NU' => 'Niue', 'NF' => 'Norfolk Island', 'MP' => 'Northern Mariana Islands', 'NO' => 'Norway', 'OM' => 'Oman', 'PK' => 'Pakistan', 'PW' => 'Palau', 'PS' => 'Palestinian Territory', 'PA' => 'Panama', 'PG' => 'Papua New Guinea', 'PY' => 'Paraguay', 'PE' => 'Peru', 'PH' => 'Philippines', 'PN' => 'Pitcairn Islands', 'PL' => 'Poland', 'PT' => 'Portugal, Portuguese Republic', 'PR' => 'Puerto Rico', 'QA' => 'Qatar', 'RE' => 'Reunion', 'RO' => 'Romania', 'RU' => 'Russian Federation', 'RW' => 'Rwanda', 'BL' => 'Saint Barthelemy', 'SH' => 'Saint Helena', 'KN' => 'Saint Kitts and Nevis', 'LC' => 'Saint Lucia', 'MF' => 'Saint Martin', 'PM' => 'Saint Pierre and Miquelon', 'VC' => 'Saint Vincent and the Grenadines', 'WS' => 'Samoa', 'SM' => 'San Marino', 'ST' => 'Sao Tome and Principe', 'SA' => 'Saudi Arabia', 'SN' => 'Senegal', 'RS' => 'Serbia', 'SC' => 'Seychelles', 'SL' => 'Sierra Leone', 'SG' => 'Singapore', 'SK' => 'Slovakia (Slovak Republic)', 'SI' => 'Slovenia', 'SB' => 'Solomon Islands', 'SO' => 'Somalia, Somali Republic', 'ZA' => 'South Africa', 'GS' => 'South Georgia and the South Sandwich Islands', 'ES' => 'Spain', 'LK' => 'Sri Lanka', 'SD' => 'Sudan', 'SR' => 'Suriname', 'SJ' => 'Svalbard & Jan Mayen Islands', 'SZ' => 'Swaziland', 'SE' => 'Sweden', 'CH' => 'Switzerland, Swiss Confederation', 'SY' => 'Syrian Arab Republic', 'TW' => 'Taiwan', 'TJ' => 'Tajikistan', 'TZ' => 'Tanzania', 'TH' => 'Thailand', 'TL' => 'Timor-Leste', 'TG' => 'Togo', 'TK' => 'Tokelau', 'TO' => 'Tonga', 'TT' => 'Trinidad and Tobago', 'TN' => 'Tunisia', 'TR' => 'Turkey', 'TM' => 'Turkmenistan', 'TC' => 'Turks and Caicos Islands', 'TV' => 'Tuvalu', 'UG' => 'Uganda', 'UA' => 'Ukraine', 'AE' => 'United Arab Emirates', 'GB' => 'United Kingdom', 'US' => 'United States of America', 'UM' => 'United States Minor Outlying Islands', 'VI' => 'United States Virgin Islands', 'UY' => 'Uruguay, Eastern Republic of', 'UZ' => 'Uzbekistan', 'VU' => 'Vanuatu', 'VE' => 'Venezuela', 'VN' => 'Vietnam', 'WF' => 'Wallis and Futuna', 'EH' => 'Western Sahara', 'YE' => 'Yemen', 'ZM' => 'Zambia', 'ZW' => 'Zimbabwe'];
             if($list)
@@ -1186,8 +1117,7 @@
             return isset($countryList[$code]) ? $countryList[$code] : false;
         }
 
-		public function iso_to_lang($iso, $full_code)
-        {
+		public function iso_to_lang($iso, $full_code){
             if(extension_loaded('intl')){
                 return Locale::getDisplayLanguage($full_code, $full_code);
             } else{
@@ -1197,8 +1127,7 @@
             }
         }
 		
-        public function secret_questions($check = false)
-        {
+        public function secret_questions($check = false){
             $questions = [0 => __('What is your mother`s maiden name?'), 1 => __('What was the name of your first school?'), 2 => __('Who is your favorite super hero?'), 3 => __('What is the name of your first pet?'), 4 => __('What was your favorite place to visit as a child?'), 5 => __('Who is your favorite cartoon character?'), 6 => __('What was the first game you played?'), 7 => __('What was the name of your first teacher?'), 8 => __('What was your favorite TV show as a child?'), 9 => __('What city was your mother born in?'),];
             if($check != false){
                 return array_key_exists($check, $questions) ? $questions[$check] : false;
@@ -1206,8 +1135,7 @@
             return $questions;
         }
 
-		public function timezone_list()
-        {
+		public function timezone_list(){
             static $timezones = null;
             if($timezones === null){
                 $timezones = [];
@@ -1223,15 +1151,13 @@
             return $timezones;
         }
 
-        private function format_GMT_offset($offset)
-        {
+        private function format_GMT_offset($offset){
             $hours = intval($offset / 3600);
             $minutes = abs(intval($offset % 3600 / 60));
             return 'GMT' . ($offset ? sprintf('%+03d:%02d', $hours, $minutes) : '');
         }
 
-        private function format_timezone_name($name)
-        {
+        private function format_timezone_name($name){
             $name = str_replace('/', ', ', $name);
             $name = str_replace('_', ' ', $name);
             $name = str_replace('St ', 'St. ', $name);
@@ -1298,8 +1224,7 @@
 			return @preg_match("/^[a-f0-9]{2,}$/i", $hex_code) && !(strlen($hex_code) & 1);
 		}
 
-		public function clean_hex($data)
-        {
+		public function clean_hex($data){
 			
             if(!$this->is_hex($data)){
                 $data = bin2hex($data);

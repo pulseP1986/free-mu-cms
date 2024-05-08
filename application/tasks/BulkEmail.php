@@ -5,22 +5,19 @@
 		public $vars = [];
         private $registry, $config, $load, $email_list, $max_recipients = 75, $transport, $mailer, $recipientList;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
         }
 
-        public function execute()
-        {
+        public function execute(){
             $this->load->helper('website');
             $this->load->model('account');
             $this->send_mail();
         }
 
-        private function send_mail()
-        {
+        private function send_mail(){
             $this->get_email_list();
             if(!empty($this->email_list)){
                 $i = 0;
@@ -76,20 +73,17 @@
             }
         }
 
-        private function get_email_list()
-        {
+        private function get_email_list(){
             $this->email_list = $this->registry->website->db('web')->query('SELECT id, subject, body, sending_started, sending_finished, sent_to, failed, seo_subject FROM DmN_Bulk_Emails WHERE is_finished = 0 ORDER BY sending_started ASC, id ASC')->fetch_all();
         }
 
-        private function update_email_list($id, $recipient_list, $sending_started, $sending_finished, $success, $failed, $is_finished, $seo_subject)
-        {
+        private function update_email_list($id, $recipient_list, $sending_started, $sending_finished, $success, $failed, $is_finished, $seo_subject){
             $this->update_recipient_list($recipient_list, $seo_subject);
             $stmt = $this->registry->website->db('web')->prepare('UPDATE DmN_Bulk_Emails SET sending_started = :sending_started, sending_finished = :sending_finished, sent_to = sent_to + :sent_to, failed = failed + :failed, is_finished = :is_finished WHERE id = :id');
             $stmt->execute([':sending_started' => $sending_started, ':sending_finished' => $sending_finished, ':sent_to' => $success, ':failed' => $failed, ':is_finished' => $is_finished, ':id' => $id]);
         }
 
-        private function get_recipient_list_from_file($subject)
-        {
+        private function get_recipient_list_from_file($subject){
             $file = APP_PATH . DS . 'data' . DS . 'bulk_email_recipient_list' . DS . $subject . '.txt';
             if(file_exists($file)){
                 return file_get_contents($file);

@@ -3,8 +3,7 @@
 
     class model
     {
-        public function __get($key)
-        {
+        public function __get($key){
             $registry = controller::get_instance();
             return $registry->$key;
         }

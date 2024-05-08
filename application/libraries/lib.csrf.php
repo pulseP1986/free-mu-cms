@@ -5,8 +5,7 @@
     {
         private $tokenName, $token;
 
-        public function __construct($tokenName = 'dmn_csrf_protection')
-        {
+        public function __construct($tokenName = 'dmn_csrf_protection'){
             $this->tokenName = $tokenName;
             if(session_status() !== PHP_SESSION_ACTIVE){
                 throw new Exception('Session initialization failed.');
@@ -14,23 +13,19 @@
             $this->setToken();
         }
         
-        public function getToken()
-        {
+        public function getToken(){
             return $this->setToken();
         }
         
-        public function isTokenValid($userToken)
-        {
+        public function isTokenValid($userToken){
             return ($userToken === $this->setToken());
         }
 
-        public function writeToken()
-        {
+        public function writeToken(){
             echo '<input type="hidden" name="' . $this->tokenName . '" value="' . $this->setToken() . '" />';
         }
 
-        public function writeTokenQueryString()
-        {
+        public function writeTokenQueryString(){
             return '?' . $this->tokenName . '=' . $this->setToken();
         }
 
@@ -42,9 +37,8 @@
          * @param  int $timespan Makes the token expire after $timespan seconds (null = never)
          * @param  boolean $multiple Makes the token reusable and not one-time (Useful for ajax-heavy requests)
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
-        public function verifyToken($type = 'post', $etype = 'exception', $timespan = null, $multiple = false)
-        {
+         
+        public function verifyToken($type = 'post', $etype = 'exception', $timespan = null, $multiple = false){
             return true;
             $type = ($type == 'post') ? $_POST : $_GET;
             if(isset($type[$this->tokenName])){
@@ -75,8 +69,7 @@
             }
         }
         
-        private function returnErrorMessage($message = '', $type = 'Exception')
-        {
+        private function returnErrorMessage($message = '', $type = 'Exception'){
             if($type == 'json'){
                 exit(json(['error' => $message]));
             } else{
@@ -84,8 +77,7 @@
             }
         }
         
-        private function setToken()
-        {
+        private function setToken(){
             $storedToken = $this->readTokenFromStorage();
             if($storedToken === ''){
                 $this->generateToken();
@@ -95,8 +87,7 @@
             return $storedToken;
         }
         
-        private function generateToken()
-        {
+        private function generateToken(){
             $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'empty';
             $extra = sha1(ip() . $agent . $this->config->base_url);
             $substring_start = rand(0, 9);
@@ -104,8 +95,7 @@
             $this->token = base64_encode($substring_start . time() . $this->randomStr($substring_start) . $extra . $this->randomStr(20));
         }
         
-        private function readTokenFromStorage()
-        {
+        private function readTokenFromStorage(){
             if(isset($_SESSION[$this->tokenName])){
                 return $_SESSION[$this->tokenName];
             } else{
@@ -113,13 +103,11 @@
             }
         }
         
-        private function writeTokenToStorage($token)
-        {
+        private function writeTokenToStorage($token){
             $_SESSION[$this->tokenName] = $token;
         }
         
-        private function randomStr($length)
-        {
+        private function randomStr($length){
             $keys = array_merge(range(0, 9), range('a', 'z'));
             $key = "";
             for($i = 0; $i < $length; $i++){

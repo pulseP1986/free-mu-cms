@@ -6,13 +6,11 @@
         protected $news = [];
         public $count_news = 0;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function load_news($page, $is_per_page = false)
-        {
+        public function load_news($page, $is_per_page = false){
             if($this->config->config_entry('news|storage') == 'ipb'){
                 return $this->load_from_ipb($page);
             } else if($this->config->config_entry('news|storage') == 'ipb4'){
@@ -26,8 +24,7 @@
             }
         }
 
-        protected function load_from_db($page = 1, $is_per_page = false)
-        {
+        protected function load_from_db($page = 1, $is_per_page = false){
             $news_file = APP_PATH . DS . 'data' . DS . 'dmn_news.json';
             if(file_exists($news_file)){
                 $file = file_get_contents($news_file);
@@ -117,8 +114,7 @@
 			}
 		}
 
-        protected function load_from_ipb($page = 1)
-        {
+        protected function load_from_ipb($page = 1){
             $this->website->check_cache('news#' . (int)$page, 'news', $this->config->config_entry('news|cache_time'));
             if(!$this->website->cached){
                 if(trim($this->config->config_entry('news|ipb_host')) != ''){
@@ -148,8 +144,7 @@
             return isset($this->website->news) ? $this->website->news : false;
         }
 
-        protected function load_from_ipb4($page = 1)
-        {
+        protected function load_from_ipb4($page = 1){
             $this->website->check_cache('news#' . (int)$page, 'news', $this->config->config_entry('news|cache_time'));
             if(!$this->website->cached){
                 if(trim($this->config->config_entry('news|ipb_host')) != ''){
@@ -179,8 +174,7 @@
             return isset($this->website->news) ? $this->website->news : false;
         }
 
-        private function load_from_rss($page = 1)
-        {
+        private function load_from_rss($page = 1){
             $this->website->check_cache('news#' . (int)$page, 'news', $this->config->config_entry('news|cache_time'));
             if(!$this->website->cached){
                 if($feed = $this->website->load_data_from_url($this->config->config_entry('news|rss_feed_url'))){
@@ -205,8 +199,7 @@
             return isset($this->website->news) ? $this->website->news : false;
         }
 
-        private function xml2array($xml)
-        {
+        private function xml2array($xml){
             $arr = [];
             foreach($xml->children() as $r){
                 $t = [];
@@ -219,14 +212,12 @@
             return $arr;
         }
 
-        private function load_from_fb()
-        {
+        private function load_from_fb(){
             $this->news = ['contents' => $this->config->config_entry('news|fb_script')];
             return $this->news;
         }
 
-        public function count_total_news()
-        {
+        public function count_total_news(){
             if($this->config->config_entry('news|storage') == 'ipb'){
                 if(trim($this->config->config_entry('news|ipb_host')) != ''){
                     $this->load->lib(['mysql', 'db'], [$this->config->config_entry('news|ipb_host'), $this->config->config_entry('news|ipb_user'), $this->config->config_entry('news|ipb_pass'), $this->config->config_entry('news|ipb_db'), 'pdo_mysql'], 'pdo_mysql');
@@ -249,8 +240,7 @@
                 return $this->count_news;
         }
 
-        public function load_news_by_id($id)
-        {
+        public function load_news_by_id($id){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
             if(is_array($json)){
@@ -264,8 +254,7 @@
             return false;
         }
 		
-		public function load_news_by_type($id, $count = 4)
-        {
+		public function load_news_by_type($id, $count = 4){
             $file = file_get_contents(APP_PATH . DS . 'data' . DS . 'dmn_news.json');
             $json = json_decode($file, true);
 			$newJson = [];
@@ -284,13 +273,11 @@
             return false;
         }
 
-        public function update_views($id)
-        {
+        public function update_views($id){
             return true;
         }
 
-        protected function set_topic_type($type)
-        {
+        protected function set_topic_type($type){
             switch($type){
                 case 3:
                     return 'news';

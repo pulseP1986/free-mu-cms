@@ -6,67 +6,55 @@
         public $error = false, $vars = [], $characters = [], $char_info = [], $price = 0, $socket_price = 0, $items_array = [];
         private $logs = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 		
-		public function setPriceForUpgrade($price)
-        {
+		public function setPriceForUpgrade($price){
             $this->price += $price;
         }
 
-        public function setPriceForLevel($current, $new, $price)
-        {
+        public function setPriceForLevel($current, $new, $price){
             $total = $new - $current;
             $this->price += $price * $total;
         }
 
-        public function setPriceForOption($current, $new, $price)
-        {
+        public function setPriceForOption($current, $new, $price){
             $total = $new - $current;
             $this->price += $price * $total;
         }
 
-        public function setPriceForLuck($price)
-        {
+        public function setPriceForLuck($price){
             $this->price += $price;
         }
 
-        public function setPriceForSkill($price)
-        {
+        public function setPriceForSkill($price){
             $this->price += $price;
         }
 
-        public function setPriceForExe($price, $count)
-        {
+        public function setPriceForExe($price, $count){
             $this->price += $price * $count;
         }
 		
-		public function setPriceForRemoveExe($price)
-        {
+		public function setPriceForRemoveExe($price){
             $this->price += $price;
         }
 
-        public function setPriceForSocket($price)
-        {
+        public function setPriceForSocket($price){
             $this->price += $price;
             $this->socket_price += $price;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        public function load_char_list($account, $server)
-        {
+          
+        public function load_char_list($account, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, Class, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
             $i = 0;
@@ -81,8 +69,7 @@
             }
         }
 
-        public function char_info($char, $account, $server)
-        {
+        public function char_info($char, $account, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, Class, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE AccountId = :user AND '.$this->website->get_char_id_col($server).' = :char');
             $stmt->execute([':user' => $account, ':char' => $char]);
             if($this->char_info = $stmt->fetch()){
@@ -90,9 +77,8 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        private function inventory($char, $server)
-        {
+          
+        private function inventory($char, $server){
 
             $stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
             $stmt->execute([':char' => $char]);
@@ -102,9 +88,8 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        public function load_equipment($server = '')
-        {
+          
+        public function load_equipment($server = ''){
             $items_array = array_chunk(str_split($this->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size')), 12);
             $equipment = [];
             foreach($items_array[0] as $key => $item){
@@ -124,9 +109,8 @@
             return $equipment;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        public function load_inventory($inv = 1, $server = '')
-        {
+          
+        public function load_inventory($inv = 1, $server = ''){
             $items_array = str_split($this->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             $inventory = [];
             $items = [];
@@ -171,9 +155,8 @@
             return $items;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
-        public function find_item($serial, $server)
-        {
+          
+        public function find_item($serial, $server){
             $found_item = [];
             $this->items_array = str_split($this->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             foreach($this->items_array as $key => $item){
@@ -193,8 +176,7 @@
             return $found_item;
         }
 
-        public function get_item_shop_info($id = '', $cat = '', $check_socket_part)
-        {
+        public function get_item_shop_info($id = '', $cat = '', $check_socket_part){
             if($id === '' || $cat === '')
                 return false;
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, item_id, item_cat, exetype, name, luck, price, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, stick_level, allow_upgrade, upgrade_price FROM DmN_Shopp WHERE item_id = :id AND original_item_cat = :cat');
@@ -206,8 +188,7 @@
             return false;
         }
 
-        public function socket_list($use_sockets = 1, $check_part = 1, $cat)
-        {
+        public function socket_list($use_sockets = 1, $check_part = 1, $cat){
             $exe_type = ($cat <= 5) ? 1 : 0;
             if($use_sockets == 1){
                 if($check_part == 1){
@@ -219,31 +200,26 @@
             }
         }
 
-        public function check_sockets_part_type($socket, $cat, $seed)
-        {
+        public function check_sockets_part_type($socket, $cat, $seed){
             $exe_type = ($cat <= 5) ? 1 : 0;
             return $this->website->db('web')->query('SELECT seed, socket_id, socket_price, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND seed = ' . $this->website->db('web')->escape($seed) . ' AND status != 0 AND socket_part_type IN (-1, ' . $exe_type . ')')->fetch();
         }
 
-        public function check_sockets($socket, $seed)
-        {
+        public function check_sockets($socket, $seed){
             return $this->website->db('web')->query('SELECT seed, socket_id, socket_price, value FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND seed = ' . $this->website->db('web')->escape($seed) . ' AND status != 0')->fetch();
         }
 
-        public function logUpgrade($oldHex, $newHex, $price, $payment_method, $char, $account, $server)
-        {
+        public function logUpgrade($oldHex, $newHex, $price, $payment_method, $char, $account, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_ItemUpgradeLog (mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server) VALUES (:id, :date, :hex_before, :hex_after, :price, :payment_method, :account, :server)');
             $stmt->execute([':id' => $char, ':date' => time(), ':hex_before' => $oldHex, ':hex_after' => $newHex, ':price' => $price, ':payment_method' => $payment_method, ':account' => $account, ':server' => $server]);
             return true;
         }
 
-        private function findCharName($id, $server)
-        {
+        private function findCharName($id, $server){
             return $this->website->db('game', $server)->query('SELECT Name FROM Character WHERE '.$this->website->get_char_id_col($server).' = ' . $id . '')->fetch()['Name'];
         }
 
-        public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
                 $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' mu_id, upgrade_date, hex_before, hex_after, price, payment_method, account, server FROM DmN_ItemUpgradeLog WHERE price > 0 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_ItemUpgradeLog ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
@@ -256,8 +232,7 @@
             return $this->logs;
         }
 
-        public function count_total_logs($acc = '', $server = 'All')
-        {
+        public function count_total_logs($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'AND account like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -269,15 +244,13 @@
             return $count;
         }
 
-        public function upgradeItem($char, $account, $server)
-        {
+        public function upgradeItem($char, $account, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Inventory = 0x' . implode('', $this->items_array) . ' WHERE AccountId = :user AND '.$this->website->get_char_id_col($server).' = :char');
             $stmt->execute([':user' => $account, ':char' => $char]);
             return true;
         }
 
-        public function check_connect_stat($account, $server)
-        {
+        public function check_connect_stat($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = :user');
             $stmt->execute([':user' => $account]);
             if($status = $stmt->fetch()){
@@ -286,8 +259,7 @@
             return true;
         }
 
-        public function get_guid($user = '', $server)
-        {
+        public function get_guid($user = '', $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :user');
             $stmt->execute([':user' => $user]);
             $info = $stmt->fetch();

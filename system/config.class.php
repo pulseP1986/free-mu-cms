@@ -6,8 +6,7 @@
         public $xmlfile = [], $xml, $base_url, $scriptname, $script_url, $time_offset, $val = [];
         private $xml_conf_values = ['main' => ['servername' => 'Free MuCMS', 'site_url' => 'http://', 'forum_url' => 'http://', 'con_check' => '1', 'template' => 'season6', 'timezone' => 'UTC', 'use_ajax_page_load' => '0', 'cache_type' => 'file', 'mem_cached_ip' => '', 'mem_cached_port' => '', 'grand_open_timer' => '', 'grand_open_timer_text' => 'Until server opening', 'maintenance' => '0', 'show_debug_info' => '0'], 'news' => ['module_status' => '1', 'storage' => 'dmn', 'news_per_page' => '5', 'ipb_host' => '', 'ipb_user' => '', 'ipb_pass' => '', 'ipb_db' => '', 'ipb_tb_prefix' => '', 'ipb_forum_ids' => '', 'rss_feed_url' => '', 'rss_feed_count' => '5', 'fb_script' => '', 'cache_time' => '360'], 'account' => ['account_logs_per_page' => '30', 'hide_char_enabled' => '1', 'hide_char_days' => '30', 'hide_char_price' => '200', 'hide_char_price_type' => '1', 'max_char_zen' => '2000000000', 'max_ware_zen' => '2000000000', 'online_trade_reward' => '100', 'online_trade_reward_type' => '1', 'allow_mail_change' => '1', 'allow_recover_masterkey' => '0'], 'buygm' => ['module_status' => '0', 'gm_ctlcode' => '32', 'price' => '5000', 'price_t' => '1'], 'buypoints' => ['module_status' => '0', 'price' => '1000', 'price_type' => '1', 'allow_external_chars' => '0', 'points' => '10'], 'character' => ['max_stats' => '32767', 'skill_tree_type' => 'scf', 'skilltree_reset_price' => '500', 'skilltree_reset_price_type' => '1', 'skilltree_reset_level' => '0', 'skilltree_reset_points' => '0', 'skilltree_points_multiplier' => '1', 'pk_clear_price' => '9999', 'allow_reset_stats' => '1', 'reset_stats_price' => '0', 'reset_stats_payment_type' => '1', 'show_equipment' => '1',], 'credits' => ['db_1' => 'web', 'table_1' => 'DmN_Shop_Credits', 'account_column_1' => 'memb___id', 'credits_column_1' => 'credits', 'title_1' => 'Credits', 'db_2' => 'web', 'table_2' => 'DmN_Shop_Credits', 'account_column_2' => 'memb___id', 'credits_column_2' => 'credits2', 'title_2' => 'Gold Credits', 'db_3' => 'web', 'table_3' => 'DmN_Shop_Credits', 'account_column_3' => 'memb___id', 'credits_column_3' => 'credits3', 'title_3' => 'Web Zen'], 'market' => ['module_status' => '1', 'items_per_page' => '20', 'price_limit_credits' => '9999', 'price_limit_gcredits' => '9999', 'price_limit_zen' => '9999999', 'price_limit_jewels' => '240', 'price_highlight' => '1000', 'sell_tax' => '15', 'sell_item_limit' => '5', 'allow_sell_shop_items' => '1', 'allow_remove_only_when_expired' => '0', 'max_exe' => '6',], 'media' => ['module_status' => '1', 'images_per_page' => '30',], 'modules' => ['recent_forum_module' => '0', 'recent_forum_rss_url' => '', 'recent_forum_rss_count' => '5', 'recent_forum_rss_cache_time' => '3600', 'last_market_items_module' => '0', 'last_market_items_count' => '5'], 'shop' => ['module_status' => '1', 'item_per_page' => '16', 'columns' => '4', 'exe_price' => '1', 'luck_price' => '1', 'skill_price' => '1', 'lvl_price' => '1', 'opt_price' => '1', 'anc1_price' => '1', 'anc2_price' => '1', 'dfenrir_price' => '1', 'pfenrir_price' => '1', 'gfenrir_price' => '1', 'ref_price' => '1', 'exe_limit' => '6', 'use_harmony' => '1', 'use_socket' => '1', 'allow_select_socket' => '1', 'equal_seed' => '0', 'equal_socket' => '0', 'empty_socket' => '1', 'socket_limit_credits' => '5', 'socket_limit_gcredits' => '5', 'check_socket_part_type' => '1', 'max_sockets_to_show' => '5', 'allow_exe_anc' => '1', 'allow_exe_socket' => '1', 'allow_anc_harmony' => '0', 'element_type_price' => '20', 'element_rank_1_price' => '20', 'element_rank_2_price' => '20', 'element_rank_3_price' => '20', 'element_rank_4_price' => '20', 'element_rank_5_price' => '20', 'pentagram_slot_anger_price' => '200', 'pentagram_slot_blessing_price' => '200', 'pentagram_slot_integrity_price' => '200', 'pentagram_slot_divinity_price' => '200', 'pentagram_slot_gale_price' => '200', 'discount' => '0', 'discount_time' => '0', 'discount_perc' => '0', 'discount_notice' => '', 'gold_credits_price' => '-20', 'card_item_expires' => 1800], 'warehouse' => ['module_status' => '1', 'allow_sell_for_credits' => '1', 'allow_sell_for_gcredits' => '1', 'allow_sell_for_zen' => '1', 'allow_sell_for_chaos' => '1', 'allow_sell_for_bless' => '1', 'allow_sell_for_soul' => '1', 'allow_sell_for_life' => '1', 'allow_sell_for_creation' => '1', 'allow_sell_for_harmony' => '1', 'allow_delete_item' => '0', 'allow_item_upgrade' => '0', 'allow_move_to_web_warehouse' => '1', 'web_wh_item_expires_after' => '1 month', 'web_items_per_page' => '25'], 'changename' => ['module_status' => '0', 'price' => '100', 'price_type' => '1', 'forbidden' => 'webzen,admin,test,[GM]', 'check_guild' => '1', 'user_master_level' => '0', 'max_length' => '10', 'allowed_pattern' => 'a-zA-Z0-9{}!$%&amp;\/()=?^@\[\]#',],];
 
-        public function __construct()
-        {
+        public function __construct(){
             $_SERVER['SERVER_NAME'] = $this->server_name();
             $_SERVER['SERVER_PORT'] = $this->server_port();
             $_SERVER['HTTP_HOST'] = $this->http_host();
@@ -37,8 +36,7 @@
             $this->time_offset = ((substr(date('O', time()), 0, 1) != '+') ? '-' : '') . (int)substr(date('O', time()), 1, 2) . '.' . substr(date('O', time()), 3, 2);
         }
 
-        private function server_name()
-        {
+        private function server_name(){
             if(isCommandLineInterface()){
                 return isset($_SERVER['argv'][2]) ? htmlspecialchars($_SERVER['argv'][2]) : '';
             } else{
@@ -46,8 +44,7 @@
             }
         }
 
-        private function server_port()
-        {
+        private function server_port(){
             if(isCommandLineInterface()){
                 return isset($_SERVER['argv'][3]) ? htmlspecialchars($_SERVER['argv'][3]) : '';
             } else{
@@ -55,8 +52,7 @@
             }
         }
 
-        private function http_host()
-        {
+        private function http_host(){
             if(isCommandLineInterface()){
                 return isset($_SERVER['argv'][4]) ? htmlspecialchars($_SERVER['argv'][4]) : '';
             } else{
@@ -64,8 +60,7 @@
             }
         }
 
-        public function language()
-        {
+        public function language(){
             if(isset($_COOKIE['dmn_language']))
                 return htmlspecialchars($_COOKIE['dmn_language']); 
 			else{
@@ -77,8 +72,7 @@
             return 'en';
         }
 
-        public function config_entry($conf)
-        {
+        public function config_entry($conf){
             $this->xmlfile = explode('|', $conf);
             self::xml_load(APP_PATH . DS . 'config' . DS . 'xml' . DS . $this->xmlfile[0] . '_conf.xml');
             $element = $this->xml->getElementsByTagName($this->xmlfile[0]);
@@ -125,14 +119,12 @@
             return false;
         }
 
-        public function load_all_xml_config($file)
-        {
+        public function load_all_xml_config($file){
             $conf = json_decode(json_encode((array)simplexml_load_file(APP_PATH . DS . 'config' . DS . 'xml' . DS . htmlspecialchars($file) . '_conf.xml')), 1);
             return $conf[$file];
         }
 
-        public function config_file($file)
-        {
+        public function config_file($file){
             $xml_file = APP_PATH . DS . 'config' . DS . 'xml' . DS . htmlspecialchars($file) . '_conf.xml';
             if(file_exists($xml_file)){
                 $conf_file = (array)simplexml_load_file($xml_file);
@@ -146,8 +138,7 @@
             }
         }
 
-        public function write_xml($file, $conf = [])
-        {
+        public function write_xml($file, $conf = []){
             $doc = new DOMDocument('1.0');
             $doc->formatOutput = true;
             $doc->preserveWhiteSpace = false;
@@ -192,8 +183,7 @@
             }
         }
 
-        private function xml_load($xml_file)
-        {
+        private function xml_load($xml_file){
             $this->xml = new DOMDocument('1.0', 'utf-8');
             $this->xml->formatOutput = true;
             $this->xml->preserveWhiteSpace = false;
@@ -220,8 +210,7 @@
             }
         }
 
-        private function apped_defaults($conf, $file, $xml)
-        {
+        private function apped_defaults($conf, $file, $xml){
             if(preg_match('/\bmain\b/i', $file)){
                 foreach($this->xml_conf_values['main'] AS $key => $value){
                     $conf->appendChild($xml->createElement($key, $value));
@@ -294,8 +283,7 @@
             }
         }
 
-        public function values($file_name = '', $key = false, $ext = '.json')
-        {
+        public function values($file_name = '', $key = false, $ext = '.json'){
             if($file_name != ''){
                 $file = APP_PATH . DS . 'config' . DS . $file_name . $ext;
                 if(!file_exists($file)){
@@ -357,8 +345,7 @@
             }
         }
 
-        public function pvalues($file_name = '', $key = false, $ext = '.json')
-        {
+        public function pvalues($file_name = '', $key = false, $ext = '.json'){
             if($file_name != ''){
                 $config_file = explode('/', $file_name);
                 $file = APP_PATH . DS . 'plugins' . DS . $config_file[0] . DS . 'config' . DS . $config_file[1] . $ext;
@@ -421,8 +408,7 @@
             }
         }
 
-        public function save_config_data($array = [], $file = '', $sort = false, $ext = '.json')
-        {
+        public function save_config_data($array = [], $file = '', $sort = false, $ext = '.json'){
             if($sort){
                 ksort($array);
             }
@@ -445,8 +431,7 @@
             }
         }
 
-        public function plugins()
-        {
+        public function plugins(){
             static $plugin_config = [];
             if(!empty($plugin_config)){
                 return $plugin_config;

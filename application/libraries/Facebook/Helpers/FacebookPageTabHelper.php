@@ -46,8 +46,7 @@
          * @param FacebookClient $client The client to make HTTP requests.
          * @param string|null $graphVersion The version of Graph to use.
          */
-        public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
-        {
+        public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null){
             parent::__construct($app, $client, $graphVersion);
             if(!$this->signedRequest){
                 return;
@@ -63,8 +62,7 @@
          *
          * @return mixed|null
          */
-        public function getPageData($key, $default = null)
-        {
+        public function getPageData($key, $default = null){
             if(isset($this->pageData[$key])){
                 return $this->pageData[$key];
             }
@@ -76,8 +74,7 @@
          *
          * @return boolean
          */
-        public function isAdmin()
-        {
+        public function isAdmin(){
             return $this->getPageData('admin') === true;
         }
 
@@ -86,8 +83,7 @@
          *
          * @return string|null
          */
-        public function getPageId()
-        {
+        public function getPageId(){
             return $this->getPageData('id');
         }
     }

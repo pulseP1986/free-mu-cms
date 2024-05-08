@@ -23,9 +23,8 @@
         private static $_instance;
         public $translator;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
-        {
+		
+        public function __construct(){
             self::$_instance = $this;
             foreach(is_loaded() as $key => $class){
                 $this->$key = load_class($class);
@@ -36,8 +35,7 @@
             $this->translator->register();
         }
 
-        public static function get_instance()
-        {
+        public static function get_instance(){
             if(!self::$_instance instanceof self){
                 self::$_instance = new controller;
             }
@@ -51,8 +49,7 @@
         private $scheduler_config;
         private $scheduler;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->config = load_class('config');
             $this->scheduler_config = $this->config->values('scheduler_config');
             if($this->scheduler_config['type'] == 1){
@@ -65,9 +62,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function run($key = '')
-        {
+		
+        public function run($key = ''){
             if($this->scheduler_config['key'] != $key){
                 echo "Incorrect key\n";
                 writelog("Incorrect key", "scheduler");

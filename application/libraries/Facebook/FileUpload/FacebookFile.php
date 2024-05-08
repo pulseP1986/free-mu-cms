@@ -59,8 +59,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function __construct($filePath, $maxLength = -1, $offset = -1)
-        {
+        public function __construct($filePath, $maxLength = -1, $offset = -1){
             $this->path = $filePath;
             $this->maxLength = $maxLength;
             $this->offset = $offset;
@@ -70,8 +69,7 @@
         /**
          * Closes the stream when destructed.
          */
-        public function __destruct()
-        {
+        public function __destruct(){
             $this->close();
         }
 
@@ -80,8 +78,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function open()
-        {
+        public function open(){
             if(!$this->isRemoteFile($this->path) && !is_readable($this->path)){
                 throw new FacebookSDKException('Failed to create FacebookFile entity. Unable to read resource: ' . $this->path . '.');
             }
@@ -94,8 +91,7 @@
         /**
          * Stops the file stream.
          */
-        public function close()
-        {
+        public function close(){
             if(is_resource($this->stream)){
                 fclose($this->stream);
             }
@@ -106,8 +102,7 @@
          *
          * @return string
          */
-        public function getContents()
-        {
+        public function getContents(){
             return stream_get_contents($this->stream, $this->maxLength, $this->offset);
         }
 
@@ -116,8 +111,7 @@
          *
          * @return string
          */
-        public function getFileName()
-        {
+        public function getFileName(){
             return basename($this->path);
         }
 
@@ -126,8 +120,7 @@
          *
          * @return string
          */
-        public function getFilePath()
-        {
+        public function getFilePath(){
             return $this->path;
         }
 
@@ -136,8 +129,7 @@
          *
          * @return int
          */
-        public function getSize()
-        {
+        public function getSize(){
             return filesize($this->path);
         }
 
@@ -146,8 +138,7 @@
          *
          * @return string
          */
-        public function getMimetype()
-        {
+        public function getMimetype(){
             return Mimetypes::getInstance()->fromFilename($this->path) ?: 'text/plain';
         }
 
@@ -158,8 +149,7 @@
          *
          * @return boolean
          */
-        protected function isRemoteFile($pathToFile)
-        {
+        protected function isRemoteFile($pathToFile){
             return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
         }
     }

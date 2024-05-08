@@ -14,7 +14,7 @@ class GatewayGerencia{
         $this->apiInstance = $this->getGerencianetInstance($config);
     }
     
-    // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+    
     private function getGerencianetInstance($config){
         try{
             $newInstance = Gerencianet::getInstance([
@@ -36,7 +36,7 @@ class GatewayGerencia{
         }
     }
     
-    // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+    
     public function createCharge($body){
         try{
             return $this->apiInstance->pixCreateImmediateCharge([], $body);
@@ -52,7 +52,7 @@ class GatewayGerencia{
         }
     }
     
-    // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+    
     public function createPixKey(){
         try{
             return $this->apiInstance->pixCreateEvp();
@@ -68,7 +68,7 @@ class GatewayGerencia{
         }
     }
     
-    // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+    
     public function generateQRCode($locationId){
         try{
             $params = [
@@ -89,7 +89,7 @@ class GatewayGerencia{
         }
     }
     
-    // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+    
     public function registerWebhook($pixKey, $url){
         try{
             $params = [

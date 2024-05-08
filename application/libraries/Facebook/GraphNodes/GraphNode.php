@@ -40,8 +40,7 @@
          *
          * @param array $data
          */
-        public function __construct(array $data = [])
-        {
+        public function __construct(array $data = []){
             parent::__construct($this->castItems($data));
         }
 
@@ -55,8 +54,7 @@
          *
          * @return array
          */
-        public function castItems(array $data)
-        {
+        public function castItems(array $data){
             $items = [];
             foreach($data as $k => $v){
                 if($this->shouldCastAsDateTime($k) && (is_numeric($v) || $k === 'birthday' || $this->isIso8601DateString($v))){
@@ -74,8 +72,7 @@
          *
          * @return array
          */
-        public function uncastItems()
-        {
+        public function uncastItems(){
             $items = $this->asArray();
             return array_map(function($v){
                 if($v instanceof \DateTime){
@@ -92,8 +89,7 @@
          *
          * @return string
          */
-        public function asJson($options = 0)
-        {
+        public function asJson($options = 0){
             return json_encode($this->uncastItems(), $options);
         }
 
@@ -108,8 +104,7 @@
          * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
          * @see http://en.wikipedia.org/wiki/ISO_8601
          */
-        public function isIso8601DateString($string)
-        {
+        public function isIso8601DateString($string){
             // This insane regex was yoinked from here:
             // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
             // ...and I'm all like:
@@ -125,8 +120,7 @@
          *
          * @return boolean
          */
-        public function shouldCastAsDateTime($key)
-        {
+        public function shouldCastAsDateTime($key){
             return in_array($key, ['created_time', 'updated_time', 'start_time', 'end_time', 'backdated_time', 'issued_at', 'expires_at', 'birthday', 'publish_time'], true);
         }
 
@@ -137,8 +131,7 @@
          *
          * @return \DateTime
          */
-        public function castToDateTime($value)
-        {
+        public function castToDateTime($value){
             if(is_int($value)){
                 $dt = new \DateTime();
                 $dt->setTimestamp($value);
@@ -153,8 +146,7 @@
          *
          * @return array
          */
-        public static function getObjectMap()
-        {
+        public static function getObjectMap(){
             return static::$graphObjectMap;
         }
     }

@@ -28,15 +28,13 @@
     {
         private $items;
 
-        public function __construct(array $items = null)
-        {
+        public function __construct(array $items = null){
             if(!is_null($items) && count($items) > 0){
                 $this->setItems($items);
             }
         }
 
-        public function addItem(PagSeguroParameterItem $parameterItem)
-        {
+        public function addItem(PagSeguroParameterItem $parameterItem){
             if(!PagSeguroHelper::isEmpty($parameterItem->getKey())){
                 if(!PagSeguroHelper::isEmpty($parameterItem->getValue())){
                     $this->items[] = $parameterItem;
@@ -48,13 +46,11 @@
             }
         }
 
-        public function setItems(array $items)
-        {
+        public function setItems(array $items){
             $this->items = $items;
         }
 
-        public function getItems()
-        {
+        public function getItems(){
             if($this->items == null){
                 $this->items = [];
             }

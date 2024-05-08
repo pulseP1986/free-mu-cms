@@ -45,8 +45,7 @@
          * @return self
          * @codeCoverageIgnore
          */
-        public static function getInstance()
-        {
+        public static function getInstance(){
             if(!self::$instance){
                 self::$instance = new self();
             }
@@ -60,8 +59,7 @@
          *
          * @return string|null
          */
-        public function fromExtension($extension)
-        {
+        public function fromExtension($extension){
             $extension = strtolower($extension);
             return isset($this->mimetypes[$extension]) ? $this->mimetypes[$extension] : null;
         }
@@ -73,8 +71,7 @@
          *
          * @return string|null
          */
-        public function fromFilename($filename)
-        {
+        public function fromFilename($filename){
             return $this->fromExtension(pathinfo($filename, PATHINFO_EXTENSION));
         }
     }

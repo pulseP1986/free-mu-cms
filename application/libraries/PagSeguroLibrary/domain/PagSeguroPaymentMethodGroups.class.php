@@ -32,8 +32,7 @@
          * Get available payment method groups list for payment method config use in PagSeguro transactions
          * @return array
          */
-        public static function getAvailableGroupList()
-        {
+        public static function getAvailableGroupList(){
             return self::$availableGroupList;
         }
 
@@ -42,8 +41,7 @@
          * @param string $itemKey
          * @return boolean
          */
-        public static function isKeyAvailable($groupKey)
-        {
+        public static function isKeyAvailable($groupKey){
             $groupKey = strtoupper($groupKey);
             return (isset(self::$availableGroupList[$groupKey]));
         }
@@ -53,8 +51,7 @@
          * @param string $groupKey
          * @return string
          */
-        public static function geDescriptionByKey($groupKey)
-        {
+        public static function geDescriptionByKey($groupKey){
             $groupKey = strtoupper($groupKey);
             if(isset(self::$availableGroupList[$groupKey])){
                 return self::$availableGroupList[$groupKey];
@@ -68,8 +65,7 @@
          * @param string $groupDescription
          * @return string
          */
-        public static function getGroupByDescription($groupDescription)
-        {
+        public static function getGroupByDescription($groupDescription){
             return array_search(strtolower($groupDescription), array_map('strtolower', self::$availableGroupList));
         }
     }

@@ -5,37 +5,32 @@
     {
         public $character_data = [], $accountCharInfo, $serials = [], $pets = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 		
-		public function check_if_acc_has_chars($user, $server)
-        {
+		public function check_if_acc_has_chars($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, '.$this->website->get_char_id_col($server).' FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $user]);
             $this->character_data = $stmt->fetch_all();
             return (count($this->character_data) > 0) ? true : false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-        public function check_if_chars_exists($id, $user, $server)
-        {
+			
+        public function check_if_chars_exists($id, $user, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name FROM Character WHERE '.$this->website->get_char_id_col($server).' = :id AND AccountId = :account');
             $stmt->execute([':id' => $id, ':account' => $user]);
             $data = $stmt->fetch();
             return ($data != false) ? $data : false;
         }
 
-		public function check_if_chars_exists_on_second_server($name, $server)
-        {
+		public function check_if_chars_exists_on_second_server($name, $server){
             $stmt = $this->website->db($this->website->get_db_from_server($server))->prepare('SELECT '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name = :name');
             $stmt->execute([':name' => $name]);
             return $stmt->fetch();
         }
 
-		public function check_free_slot($account, $server)
-        {
+		public function check_free_slot($account, $server){
             $this->accountCharInfo = $this->account_char_info($account, $server);
 			if($this->accountCharInfo == false){
 				$this->insert_account_character($account, $server);
@@ -68,9 +63,8 @@
             return false;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		private function account_char_info($account, $server)
-        {
+				
+		private function account_char_info($account, $server){
 			$additional_slots = '';
 			if(MU_VERSION >= 9){
 				$additional_slots .= ', GameID6, GameID7, GameID8';
@@ -88,9 +82,8 @@
 			$stmt->execute([':account' => $account]);
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function add_to_account_character($space, $name, $account, $server)
-        {
+				
+		public function add_to_account_character($space, $name, $account, $server){
             $accountCharInfo = $this->account_char_info($account, $server);
 			if($accountCharInfo != false){
 				if($space == 1){
@@ -172,8 +165,7 @@
 			return false;
         }
 
-		public function remove_account_character($account, $server, $name)
-        {
+		public function remove_account_character($account, $server, $name){
             $accountCharInfo = $this->account_char_info($account, $server);
 			if($accountCharInfo != false){
 				if($accountCharInfo['GameID1'] === $name){
@@ -257,8 +249,7 @@
 			return true;
         }
 
-		public function character($from, $to, $server, $name, $new_name, $titems = 1)
-        {
+		public function character($from, $to, $server, $name, $new_name, $titems = 1){
             $columns = $this->get_columns('Character', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             $columns = array_diff($columns, [$this->website->get_char_id_col($server), 'weey_sky', 'week_sky_base', 'MaxReached', 'Avatar', 'PatentId']);
 
@@ -321,8 +312,7 @@
             return true;
         }
 
-		public function gremory_case($from, $to, $server, $name, $new_name)
-        {
+		public function gremory_case($from, $to, $server, $name, $new_name){
             $columns = $this->get_columns('IGC_GremoryCase', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 			$columns = array_diff($columns, ['GremoryCaseIndex']);
 			if(!empty($columns)){
@@ -350,8 +340,7 @@
             return true;
         }
 
-		public function IGC_PeriodBuffInfo($from, $to, $server, $name, $new_name)
-        {
+		public function IGC_PeriodBuffInfo($from, $to, $server, $name, $new_name){
             $columns = $this->get_columns('IGC_PeriodBuffInfo', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             $columns = array_diff($columns, ['id']);
 			if(!empty($columns)){
@@ -375,8 +364,7 @@
             return true;
         }
 
-		public function IGC_PeriodItemInfo($from, $to, $server, $name, $new_name)
-        {
+		public function IGC_PeriodItemInfo($from, $to, $server, $name, $new_name){
             $columns = $this->get_columns('IGC_PeriodItemInfo', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             $columns = array_diff($columns, ['id', 'PeriodIndex']);
             if(!empty($columns)){
@@ -400,9 +388,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-        public function OptionData($from, $to, $server, $name, $new_name)
-        {
+			
+        public function OptionData($from, $to, $server, $name, $new_name){
             $columns = $this->get_columns('OptionData', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             $chars = $this->website->db('game', $this->session->userdata(['user' => 'server']))->query('SELECT ' . implode(',', $columns) . ' FROM OptionData WHERE Name = \'' . $name . '\'')->fetch_all();
             $s = [];
@@ -429,15 +416,13 @@
             return true;
         }
 
-        public function T_CGuid($from, $to, $server, $name)
-        {
+        public function T_CGuid($from, $to, $server, $name){
             $this->website->db($this->website->get_db_from_server($server))->query('INSERT INTO T_CGuid (Name) VALUES (\'' . $name . '\')');
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-        public function T_PentagramInfo($from, $to, $server, $name, $new_name)
-        {
+			
+        public function T_PentagramInfo($from, $to, $server, $name, $new_name){
 			if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists('IGC_PentagramInfo')){
 				$columns = $this->get_columns('IGC_PentagramInfo', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 				$columns = array_diff($columns, ['id']);
@@ -482,9 +467,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-		public function IGC_Muun_ConditionInfo($from, $to, $server, $name, $new_name)
-        {
+			
+		public function IGC_Muun_ConditionInfo($from, $to, $server, $name, $new_name){
 			if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists('IGC_Muun_ConditionInfo')){
 				$columns = $this->get_columns('IGC_Muun_ConditionInfo', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 				
@@ -508,9 +492,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-		public function IGC_Muun_Period($from, $to, $server, $name, $new_name)
-        {
+			
+		public function IGC_Muun_Period($from, $to, $server, $name, $new_name){
 			if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists('IGC_Muun_Period')){
 				$columns = $this->get_columns('IGC_Muun_Period', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 
@@ -534,9 +517,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-		public function IGC_Muun_Inventory($from, $to, $server, $name, $new_name)
-        {
+			
+		public function IGC_Muun_Inventory($from, $to, $server, $name, $new_name){
 			if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists('IGC_Muun_Inventory')){
 				$columns = $this->get_columns('IGC_Muun_Inventory', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 
@@ -578,9 +560,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-		public function IGC_HarmonyItemData($from, $to, $server, $name, $new_name)
-        {
+			
+		public function IGC_HarmonyItemData($from, $to, $server, $name, $new_name){
 			if(!empty($this->serials)){
 				if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists('IGC_HarmonyItemData')){
 					$columns = $this->get_columns('IGC_HarmonyItemData', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
@@ -607,9 +588,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-		public function IGC_ArtifactInfo($from, $to, $server, $name, $new_name)
-        {
+			
+		public function IGC_ArtifactInfo($from, $to, $server, $name, $new_name){
 			if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists('IGC_ArtifactInfo')){
 				$columns = $this->get_columns('IGC_ArtifactInfo', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 				$columns = array_diff($columns, ['id']);
@@ -638,9 +618,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM	
-		public function T_PetItem_Info($from, $to, $server, $name, $new_name)
-        {
+			
+		public function T_PetItem_Info($from, $to, $server, $name, $new_name){
 			if(!empty($this->pets)){
 				$columns = $this->get_columns('T_PetItem_Info', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
 				//$columns = array_diff($columns, ['id']);
@@ -661,9 +640,8 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function IGC_Gens($from, $to, $server, $name, $new_name)
-        {
+				
+		public function IGC_Gens($from, $to, $server, $name, $new_name){
             $columns = $this->get_columns('IGC_Gens', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             if(!empty($columns)){
 				$chars = $this->website->db('game', $this->session->userdata(['user' => 'server']))->query('SELECT ' . implode(',', $columns) . ' FROM IGC_Gens WHERE Name = \'' . $name . '\'')->fetch_all();
@@ -688,8 +666,7 @@
             return true;
         }
 		
-		public function IGC_SeasonPass($from, $to, $server, $id, $newId)
-        {
+		public function IGC_SeasonPass($from, $to, $server, $id, $newId){
             $columns = $this->get_columns('IGC_SeasonPass', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             if(!empty($columns)){
 				$columns = array_diff($columns, ['id']);
@@ -715,8 +692,7 @@
             return true;
         }
 		
-		public function IGC_SeasonPassMission($from, $to, $server, $id, $newId)
-        {
+		public function IGC_SeasonPassMission($from, $to, $server, $id, $newId){
             $columns = $this->get_columns('IGC_SeasonPassMission', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             if(!empty($columns)){
 				$columns = array_diff($columns, ['id']);
@@ -742,8 +718,7 @@
             return true;
         }
 		
-		public function IGC_SeasonPassTicket($from, $to, $server, $id, $newId)
-        {
+		public function IGC_SeasonPassTicket($from, $to, $server, $id, $newId){
             $columns = $this->get_columns('IGC_SeasonPassTicket', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             if(!empty($columns)){
 				$columns = array_diff($columns, ['id']);
@@ -769,8 +744,7 @@
             return true;
         }
 		
-		public function DmN_User_Achievements($from, $to, $server, $id, $newId)
-        {
+		public function DmN_User_Achievements($from, $to, $server, $id, $newId){
             $columns = $this->get_columns('DmN_User_Achievements', $this->website->db('web'));
             if(!empty($columns)){
 				$columns = array_diff($columns, ['id']);
@@ -799,8 +773,7 @@
             return true;
         }
 		
-		public function DmN_Unlocked_Achievements($from, $to, $server, $id, $newId)
-        {
+		public function DmN_Unlocked_Achievements($from, $to, $server, $id, $newId){
             $columns = $this->get_columns('DmN_Unlocked_Achievements', $this->website->db('web'));
             if(!empty($columns)){
 				$columns = array_diff($columns, ['id']);
@@ -829,9 +802,8 @@
             return true;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function CustomQuest($from, $to, $server, $name, $new_name)
-        {
+				
+		public function CustomQuest($from, $to, $server, $name, $new_name){
             $columns = $this->get_columns('CustomQuest', $this->website->db('game', $this->session->userdata(['user' => 'server'])));
             if(!empty($columns)){
 				$chars = $this->website->db('game', $this->session->userdata(['user' => 'server']))->query('SELECT ' . implode(',', $columns) . ' FROM CustomQuest WHERE Name = \'' . $name . '\'')->fetch_all();
@@ -856,7 +828,7 @@
             return true;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function check_if_transfered($id, $server){
 			$stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_CharacterTransferServerLogs WHERE mu_id = :id AND server = :server');
 			$stmt->execute([
@@ -866,9 +838,8 @@
 			return $stmt->fetch();
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function log_transfer($from, $to, $to_server, $id, $name, $new_name)
-        {
+				
+		public function log_transfer($from, $to, $to_server, $id, $name, $new_name){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_CharacterTransferServerLogs (mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver) VALUES (:mu_id, :name, :newname, :fromAccount, :toAccount, :transferDate, :server, :toserver)');
             $stmt->execute([
 				':mu_id' => $id,
@@ -883,8 +854,7 @@
             $stmt->close_cursor();
         }
 		
-		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
                 $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . '  id, mu_id, name, newname, fromAccount, toAccount, transferDate, server, toserver FROM DmN_CharacterTransferServerLogs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_CharacterTransferServerLogs ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
@@ -907,8 +877,7 @@
             return $logs;
         }
 
-        public function count_total_logs($acc = '', $server = 'All')
-        {
+        public function count_total_logs($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE fromAccount like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -920,16 +889,14 @@
             return $count;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-        public function deleteChar($name, $table, $identifier)
-        {
+				
+        public function deleteChar($name, $table, $identifier){
 			if($this->website->db('game', $this->session->userdata(['user' => 'server']))->check_if_table_exists($table)){
 				$this->website->db('game', $this->session->userdata(['user' => 'server']))->query('DELETE FROM ' . $table . ' WHERE ' . $identifier . ' = \'' . $name . '\'');
 			}
         }
 
-        public function check_connect_stat($account, $server)
-        {
+        public function check_connect_stat($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = :user');
             $stmt->execute([':user' => $account]);
             if($status = $stmt->fetch()){
@@ -943,8 +910,7 @@
 			$stmt->execute([':user' => $account]);
 		}
 
-		private function get_columns($table, $db)
-        {
+		private function get_columns($table, $db){
             $data = $db->query('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = \'' . $table . '\'');
             $arr = [];
             while($row = $data->fetch()){

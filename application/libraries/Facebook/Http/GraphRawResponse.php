@@ -50,8 +50,7 @@
          * @param string $body The raw response body.
          * @param int $httpStatusCode The HTTP response code (if sending headers as parsed array).
          */
-        public function __construct($headers, $body, $httpStatusCode = null)
-        {
+        public function __construct($headers, $body, $httpStatusCode = null){
             if(is_numeric($httpStatusCode)){
                 $this->httpResponseCode = (int)$httpStatusCode;
             }
@@ -68,8 +67,7 @@
          *
          * @return array
          */
-        public function getHeaders()
-        {
+        public function getHeaders(){
             return $this->headers;
         }
 
@@ -78,8 +76,7 @@
          *
          * @return string
          */
-        public function getBody()
-        {
+        public function getBody(){
             return $this->body;
         }
 
@@ -88,8 +85,7 @@
          *
          * @return int
          */
-        public function getHttpResponseCode()
-        {
+        public function getHttpResponseCode(){
             return $this->httpResponseCode;
         }
 
@@ -98,8 +94,7 @@
          *
          * @param string $rawResponseHeader
          */
-        public function setHttpResponseCodeFromHeader($rawResponseHeader)
-        {
+        public function setHttpResponseCodeFromHeader($rawResponseHeader){
             preg_match('|HTTP/\d\.\d\s+(\d+)\s+.*|', $rawResponseHeader, $match);
             $this->httpResponseCode = (int)$match[1];
         }
@@ -109,8 +104,7 @@
          *
          * @param string $rawHeaders The raw headers from the response.
          */
-        protected function setHeadersFromString($rawHeaders)
-        {
+        protected function setHeadersFromString($rawHeaders){
             // Normalize line breaks
             $rawHeaders = str_replace("\r\n", "\n", $rawHeaders);
             // There will be multiple headers if a 301 was followed

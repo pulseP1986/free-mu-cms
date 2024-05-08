@@ -113,8 +113,7 @@
          * Party that will be sending the Uri to where the PagSeguro payment page should redirect the
          * user after the payment information is processed.
          */
-        public function getSender()
-        {
+        public function getSender(){
             return $this->sender;
         }
 
@@ -127,8 +126,7 @@
          * @param String $documentType
          * @param String $documentValue
          */
-        public function setSender($name, $email = null, $areaCode = null, $number = null, $documentType = null, $documentValue = null)
-        {
+        public function setSender($name, $email = null, $areaCode = null, $number = null, $documentType = null, $documentValue = null){
             $param = $name;
             if(is_array($param)){
                 $this->sender = new PagSeguroSender($param);
@@ -148,8 +146,7 @@
          * Sets the name of the sender, party that will be sending the money
          * @param String $senderName
          */
-        public function setSenderName($senderName)
-        {
+        public function setSenderName($senderName){
             if($this->sender == null){
                 $this->sender = new PagSeguroSender();
             }
@@ -160,8 +157,7 @@
          * Sets the name of the sender, party that will be sending the money
          * @param String $senderEmail
          */
-        public function setSenderEmail($senderEmail)
-        {
+        public function setSenderEmail($senderEmail){
             if($this->sender == null){
                 $this->sender = new PagSeguroSender();
             }
@@ -174,8 +170,7 @@
          * @param areaCode
          * @param number
          */
-        public function setSenderPhone($areaCode, $number = null)
-        {
+        public function setSenderPhone($areaCode, $number = null){
             $param = $areaCode;
             if($this->sender == null){
                 $this->sender = new PagSeguroSender();
@@ -191,8 +186,7 @@
          * @return String the currency
          * Example: BRL
          */
-        public function getCurrency()
-        {
+        public function getCurrency(){
             return $this->currency;
         }
 
@@ -200,16 +194,14 @@
          * Sets the currency
          * @param String $currency
          */
-        public function setCurrency($currency)
-        {
+        public function setCurrency($currency){
             $this->currency = $currency;
         }
 
         /***
          * @return array the items/products list in this payment request
          */
-        public function getItems()
-        {
+        public function getItems(){
             return $this->items;
         }
 
@@ -217,8 +209,7 @@
          * Sets the items/products list in this payment request
          * @param array $items
          */
-        public function setItems(array $items)
-        {
+        public function setItems(array $items){
             if(is_array($items)){
                 $i = [];
                 foreach($items as $key => $item){
@@ -244,8 +235,7 @@
          * @param String $weight
          * @param String $shippingCost
          */
-        public function addItem($id, $description = null, $quantity = null, $amount = null, $weight = null, $shippingCost = null)
-        {
+        public function addItem($id, $description = null, $quantity = null, $amount = null, $weight = null, $shippingCost = null){
             $param = $id;
             if($this->items == null){
                 $this->items = [];
@@ -268,8 +258,7 @@
             }
         }
 
-        public function addSenderDocument($type, $value)
-        {
+        public function addSenderDocument($type, $value){
             if($this->getSender() instanceof PagSeguroSender){
                 $this->getSender()->addDocument($type, $value);
             }
@@ -281,8 +270,7 @@
          *
          * @return String the redirectURL
          */
-        public function getRedirectURL()
-        {
+        public function getRedirectURL(){
             return $this->redirectURL;
         }
 
@@ -294,8 +282,7 @@
          *
          * @param String $redirectURL
          */
-        public function setRedirectURL($redirectURL)
-        {
+        public function setRedirectURL($redirectURL){
             $this->redirectURL = $this->verifyURLTest($redirectURL);
         }
 
@@ -305,8 +292,7 @@
          *
          * @return float the extra amount
          */
-        public function getExtraAmount()
-        {
+        public function getExtraAmount(){
             return $this->extraAmount;
         }
 
@@ -317,16 +303,14 @@
          *
          * @param extraAmount
          */
-        public function setExtraAmount($extraAmount)
-        {
+        public function setExtraAmount($extraAmount){
             $this->extraAmount = $extraAmount;
         }
 
         /***
          * @return mixed the reference of this payment request
          */
-        public function getReference()
-        {
+        public function getReference(){
             return $this->reference;
         }
 
@@ -334,8 +318,7 @@
          * Sets the reference of this payment request
          * @param reference
          */
-        public function setReference($reference)
-        {
+        public function setReference($reference){
             $this->reference = $reference;
         }
 
@@ -343,8 +326,7 @@
          * @return PagSeguroShipping the shipping information for this payment request
          * @see PagSeguroShipping
          */
-        public function getShipping()
-        {
+        public function getShipping(){
             return $this->shipping;
         }
 
@@ -353,8 +335,7 @@
          * @param PagSeguroShipping $address
          * @param PagSeguroShippingType $type
          */
-        public function setShipping($address, $type = null)
-        {
+        public function setShipping($address, $type = null){
             $param = $address;
             if($param instanceof PagSeguroShipping){
                 $this->shipping = $param;
@@ -389,8 +370,7 @@
          * @param String $state
          * @param String $country
          */
-        public function setShippingAddress($postalCode = null, $street = null, $number = null, $complement = null, $district = null, $city = null, $state = null, $country = null)
-        {
+        public function setShippingAddress($postalCode = null, $street = null, $number = null, $complement = null, $district = null, $city = null, $state = null, $country = null){
             $param = $postalCode;
             if($this->shipping == null){
                 $this->shipping = new PagSeguroShipping();
@@ -417,8 +397,7 @@
          * Sets the shipping type for this payment request
          * @param PagSeguroShippingType $type
          */
-        public function setShippingType($type)
-        {
+        public function setShippingType($type){
             $param = $type;
             if($this->shipping == null){
                 $this->shipping = new PagSeguroShipping();
@@ -434,8 +413,7 @@
          * Sets the shipping cost for this payment request
          * @param float $shippingCost
          */
-        public function setShippingCost($shippingCost)
-        {
+        public function setShippingCost($shippingCost){
             $param = $shippingCost;
             if($this->shipping == null){
                 $this->shipping = new PagSeguroShipping();
@@ -449,8 +427,7 @@
          * After this payment request is submitted, the payment code returned
          * will remain valid for the period specified.
          */
-        public function getMaxAge()
-        {
+        public function getMaxAge(){
             return $this->maxAge;
         }
 
@@ -461,8 +438,7 @@
          *
          * @param maxAge
          */
-        public function setMaxAge($maxAge)
-        {
+        public function setMaxAge($maxAge){
             $this->maxAge = $maxAge;
         }
 
@@ -472,8 +448,7 @@
          *
          * @return integer the max uses configured for this payment request
          */
-        public function getMaxUses()
-        {
+        public function getMaxUses(){
             return $this->maxUses;
         }
 
@@ -485,8 +460,7 @@
          *
          * @param maxUses
          */
-        public function setMaxUses($maxUses)
-        {
+        public function setMaxUses($maxUses){
             $this->maxUses = $maxUses;
         }
 
@@ -495,8 +469,7 @@
          *
          * @return String
          */
-        public function getNotificationURL()
-        {
+        public function getNotificationURL(){
             return $this->notificationURL;
         }
 
@@ -505,8 +478,7 @@
          *
          * @param String $notificationURL
          */
-        public function setNotificationURL($notificationURL)
-        {
+        public function setNotificationURL($notificationURL){
             $this->notificationURL = $this->verifyURLTest($notificationURL);
         }
 
@@ -515,8 +487,7 @@
          *
          * @param PagSeguroMetaData $metaData
          */
-        public function setMetaData($metaData)
-        {
+        public function setMetaData($metaData){
             $this->metadata = $metaData;
         }
 
@@ -525,8 +496,7 @@
          *
          * @return PagSeguroMetaData $metaData
          */
-        public function getMetaData()
-        {
+        public function getMetaData(){
             if($this->metadata == null){
                 $this->metadata = new PagSeguroMetaData();
             }
@@ -540,8 +510,7 @@
          * @param PagSeguroMetaDataItem $itemValue value
          * @param PagSeguroMetaDataItem $itemGroup group
          */
-        public function addMetaData($itemKey, $itemValue, $itemGroup = null)
-        {
+        public function addMetaData($itemKey, $itemValue, $itemGroup = null){
             $this->getMetaData()->addItem(new PagSeguroMetaDataItem($itemKey, $itemValue, $itemGroup));
         }
 
@@ -549,8 +518,7 @@
          * Sets payment method config for PagSeguro checkout requests
          * @param PagSeguroPaymentMethodConfig $paymentMethodConfig
          */
-        public function setPaymentMethodConfig($paymentMethodConfig)
-        {
+        public function setPaymentMethodConfig($paymentMethodConfig){
             $this->paymentMethodConfig = $paymentMethodConfig;
         }
 
@@ -558,8 +526,7 @@
          * Gets payment method config for PagSeguro checkout requests
          * @return PagSeguroPaymentMethodConfig $paymentMethodConfig
          */
-        public function getPaymentMethodConfig()
-        {
+        public function getPaymentMethodConfig(){
             if($this->paymentMethodConfig == null){
                 $this->paymentMethodConfig = new PagSeguroPaymentMethodConfig();
             }
@@ -572,8 +539,7 @@
          * @param PagSeguroPaymentMethodConfig $itemValue value
          * @param PagSeguroPaymentMethodGroups $itemGroup group
          */
-        public function addPaymentMethodConfig($itemGroup, $itemValue, $itemKey)
-        {
+        public function addPaymentMethodConfig($itemGroup, $itemValue, $itemKey){
             $this->getPaymentMethodConfig()->addConfig(new PagSeguroPaymentMethodConfigItem($itemGroup, $itemValue, $itemKey));
         }
 
@@ -582,8 +548,7 @@
          *
          * @param PagSeguroParameter $parameter
          */
-        public function setParameter($parameter)
-        {
+        public function setParameter($parameter){
             $this->parameter = $parameter;
         }
 
@@ -592,8 +557,7 @@
          *
          * @return PagSeguroParameter
          */
-        public function getParameter()
-        {
+        public function getParameter(){
             if($this->parameter == null){
                 $this->parameter = new PagSeguroParameter();
             }
@@ -606,8 +570,7 @@
          * @param PagSeguroParameterItem $parameterName key
          * @param PagSeguroParameterItem $parameterValue value
          */
-        public function addParameter($parameterName, $parameterValue)
-        {
+        public function addParameter($parameterName, $parameterValue){
             $this->getParameter()->addItem(new PagSeguroParameterItem($parameterName, $parameterValue));
         }
 
@@ -618,8 +581,7 @@
          * @param PagSeguroParameterItem $parameterValue value
          * @param PagSeguroParameterItem $parameterIndex group
          */
-        public function addIndexedParameter($parameterName, $parameterValue, $parameterIndex)
-        {
+        public function addIndexedParameter($parameterName, $parameterValue, $parameterIndex){
             $this->getParameter()->addItem(new PagSeguroParameterItem($parameterName, $parameterValue, $parameterIndex));
         }
 
@@ -630,16 +592,14 @@
          * @return String The URL to where the user needs to be redirected to in order to complete the payment process or
          * the CODE when use lightbox
          */
-        public function register(PagSeguroCredentials $credentials, $onlyCheckoutCode = false)
-        {
+        public function register(PagSeguroCredentials $credentials, $onlyCheckoutCode = false){
             return PagSeguroPaymentService::createCheckoutRequest($credentials, $this, $onlyCheckoutCode);
         }
 
         /***
          * @return String a string that represents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $email = $this->sender ? $this->sender->getEmail() : "null";
             $request = [];
             $request['Reference'] = $this->reference;
@@ -652,8 +612,7 @@
          * @param type $url
          * @return type
          */
-        public function verifyURLTest($url)
-        {
+        public function verifyURLTest($url){
             $adress = ['127.0.0.1', '::1'];
             foreach($adress as $item){
                 $find = strpos($url, $item);

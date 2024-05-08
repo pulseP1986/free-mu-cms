@@ -31,20 +31,17 @@
         private static $typeList = ['PAYMENT' => 1, 'TRANSFER' => 2, 'FUND_ADDITION' => 3, 'WITHDRAW' => 4, 'CHARGE' => 5, 'DONATION' => 6, 'BONUS' => 7, 'BONUS_REPASS' => 8, 'OPERATIONAL' => 9, 'POLITICAL_DONATION' => 10];
         private $value;
 
-        public function __construct($value = null)
-        {
+        public function __construct($value = null){
             if($value){
                 $this->value = $value;
             }
         }
 
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = $value;
         }
 
-        public function setByType($type)
-        {
+        public function setByType($type){
             if(isset(self::$typeList[$type])){
                 $this->value = self::$typeList[$type];
             } else{
@@ -52,8 +49,7 @@
             }
         }
 
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -61,8 +57,7 @@
          * @param integer|string $value
          * @return string|integer the transaction type corresponding to the informed type value value
          */
-        public function getTypeFromValue($value = null)
-        {
+        public function getTypeFromValue($value = null){
             $value = ($value == null ? $this->value : $value);
             return array_search($value, self::$typeList);
         }

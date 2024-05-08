@@ -35,8 +35,7 @@
          * @param PagSeguroConnectionData $connectionData
          * @return string
          */
-        private static function buildCheckoutRequestUrl(PagSeguroConnectionData $connectionData)
-        {
+        private static function buildCheckoutRequestUrl(PagSeguroConnectionData $connectionData){
             return $connectionData->getServiceUrl() . '/?' . $connectionData->getCredentialsUrlQuery();
         }
 
@@ -45,8 +44,7 @@
          * @param $code
          * @return string
          */
-        private static function buildCheckoutUrl(PagSeguroConnectionData $connectionData, $code)
-        {
+        private static function buildCheckoutUrl(PagSeguroConnectionData $connectionData, $code){
             return $connectionData->getPaymentUrl() . $connectionData->getResource('checkoutUrl') . "?code=$code";
         }
 
@@ -60,8 +58,7 @@
          * @throws Exception|PagSeguroServiceException
          * @throws Exception
          */
-        public static function createCheckoutRequest(PagSeguroCredentials $credentials, PagSeguroPaymentRequest $paymentRequest, $onlyCheckoutCode)
-        {
+        public static function createCheckoutRequest(PagSeguroCredentials $credentials, PagSeguroPaymentRequest $paymentRequest, $onlyCheckoutCode){
             LogPagSeguro::info("PagSeguroPaymentService.Register(" . $paymentRequest->toString() . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{

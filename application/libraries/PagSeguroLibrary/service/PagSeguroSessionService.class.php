@@ -31,8 +31,7 @@
          * @param PagSeguroConnectionData $connectionData
          * @return string session URL
          */
-        private static function buildSessionURL($connectionData)
-        {
+        private static function buildSessionURL($connectionData){
             return $connectionData->getWebserviceUrl() . $connectionData->getSessionUrl();
         }
 
@@ -43,8 +42,7 @@
          * @throws Exception|PagSeguroServiceException
          * @throws Exception
          */
-        public static function getSession($credentials)
-        {
+        public static function getSession($credentials){
             $connectionData = new PagSeguroConnectionData($credentials, 'sessionService');
             $url = self::buildSessionURL($connectionData) . "?" . $connectionData->getCredentialsUrlQuery();
             try{

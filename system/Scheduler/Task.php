@@ -87,8 +87,7 @@
          *
          * @return this
          */
-        public function daily()
-        {
+        public function daily(){
             $this->interval = self::DAILY;
             return $this;
         }
@@ -99,8 +98,7 @@
          *
          * @return this
          */
-        public function weekly()
-        {
+        public function weekly(){
             $this->interval = self::WEEKLY;
             return $this;
         }
@@ -111,8 +109,7 @@
          *
          * @return this
          */
-        public function monthly()
-        {
+        public function monthly(){
             $this->interval = self::MONTHLY;
             return $this;
         }
@@ -123,8 +120,7 @@
          *
          * @return this
          */
-        public function everyMinute()
-        {
+        public function everyMinute(){
             $this->interval = self::MIN1;
             return $this;
         }
@@ -135,8 +131,7 @@
          *
          * @return this
          */
-        public function everyFiveMinutes()
-        {
+        public function everyFiveMinutes(){
             $this->interval = self::MIN5;
             return $this;
         }
@@ -147,8 +142,7 @@
          *
          * @return this
          */
-        public function everyTenMinutes()
-        {
+        public function everyTenMinutes(){
             $this->interval = self::MIN10;
             return $this;
         }
@@ -159,8 +153,7 @@
          *
          * @return this
          */
-        public function everyHalfHour()
-        {
+        public function everyHalfHour(){
             $this->interval = self::MIN30;
             return $this;
         }
@@ -171,8 +164,7 @@
          *
          * @return this
          */
-        public function everyHour()
-        {
+        public function everyHour(){
             $this->interval = self::MIN60;
             return $this;
         }
@@ -183,8 +175,7 @@
          *
          * @return this
          */
-        public function everyTwelveHours()
-        {
+        public function everyTwelveHours(){
             $this->interval = self::MIN720;
             return $this;
         }
@@ -195,8 +186,7 @@
          *
          * @return this
          */
-        public function now()
-        {
+        public function now(){
             sleep(5);
             $this->interval = self::NOW;
             return $this;
@@ -208,8 +198,7 @@
          *
          * @return this
          */
-        public function custom($present = '')
-        {
+        public function custom($present = ''){
             $this->interval = self::CUSTOM;
             $this->present = $present;
             return $this;
@@ -221,8 +210,7 @@
          *
          * @return mixed
          */
-        public function __get($property)
-        {
+        public function __get($property){
             if($property === 'interval' || $property === 'present')
                 return $this->$property;
         }

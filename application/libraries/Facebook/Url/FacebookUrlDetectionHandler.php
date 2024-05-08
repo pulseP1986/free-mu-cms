@@ -33,8 +33,7 @@
         /**
          * @inheritdoc
          */
-        public function getCurrentUrl()
-        {
+        public function getCurrentUrl(){
             return $this->getHttpScheme() . '://' . $this->getHostName() . $this->getServerVar('REQUEST_URI');
         }
 
@@ -43,8 +42,7 @@
          *
          * @return string
          */
-        protected function getHttpScheme()
-        {
+        protected function getHttpScheme(){
             return $this->isBehindSsl() ? 'https' : 'http';
         }
 
@@ -53,8 +51,7 @@
          *
          * @return boolean
          */
-        protected function isBehindSsl()
-        {
+        protected function isBehindSsl(){
             // Check for proxy first
             $protocol = $this->getHeader('X_FORWARDED_PROTO');
             if($protocol){
@@ -74,8 +71,7 @@
          *
          * @return boolean
          */
-        protected function protocolWithActiveSsl($protocol)
-        {
+        protected function protocolWithActiveSsl($protocol){
             $protocol = strtolower((string)$protocol);
             return in_array($protocol, ['on', '1', 'https', 'ssl'], true);
         }
@@ -89,8 +85,7 @@
          *
          * @return string
          */
-        protected function getHostName()
-        {
+        protected function getHostName(){
             // Check for proxy first
             if($host = $this->getHeader('X_FORWARDED_HOST')){
                 $elements = explode(',', $host);
@@ -114,8 +109,7 @@
             return $host . $appendPort;
         }
 
-        protected function getCurrentPort()
-        {
+        protected function getCurrentPort(){
             // Check for proxy first
             $port = $this->getHeader('X_FORWARDED_PORT');
             if($port){
@@ -135,8 +129,7 @@
          *
          * @return string
          */
-        protected function getServerVar($key)
-        {
+        protected function getServerVar($key){
             return isset($_SERVER[$key]) ? $_SERVER[$key] : '';
         }
 
@@ -147,8 +140,7 @@
          *
          * @return string
          */
-        protected function getHeader($key)
-        {
+        protected function getHeader($key){
             return $this->getServerVar('HTTP_' . $key);
         }
     }

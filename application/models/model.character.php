@@ -59,8 +59,7 @@
             }
         }
 
-        private function reset_column($server)
-        {
+        private function reset_column($server){
             $resets = $this->config->values('table_config', [$server, 'resets', 'column']);
             if($resets && $resets != ''){
                 return $resets . ' AS resets,';
@@ -68,8 +67,7 @@
             return '0 AS resets,';
         }
 
-        private function greset_column($server)
-        {
+        private function greset_column($server){
             $grand_resets = $this->config->values('table_config', [$server, 'grand_resets', 'column']);
             if($grand_resets && $grand_resets != ''){
                 return $grand_resets . ' AS grand_resets,';
@@ -77,8 +75,7 @@
             return '0 AS grand_resets,';
         }
 
-        public function check_char($user, $server, $char = '', $custom_field = '', $lock = false)
-        {
+        public function check_char($user, $server, $char = '', $custom_field = '', $lock = false){
             $char = ($char != '') ? $char : $this->vars['character'];
 			$with_lock = ($lock == true) ? 'WITH (UPDLOCK,HOLDLOCK)' : '';
 			$leadership = (MU_VERSION < 1) ? '0 AS Leadership,' : 'Leadership,';
@@ -94,8 +91,7 @@
             return false;
         }
 		
-		public function check_char_no_account($char, $server)
-        {
+		public function check_char_no_account($char, $server){
 			$leadership = (MU_VERSION < 1) ? '0 AS Leadership,' : 'Leadership,';
             $stmt = $this->website->db('game', $server)->prepare('SELECT AccountId, Name, Money, Class, cLevel, ' . $this->reset_column($server) . $this->greset_column($server) . ' LevelUpPoint, Strength, Dexterity, Vitality, Energy, '.$leadership.' PkLevel, PkCount, CtlCode, MagicList, CONVERT(IMAGE, Inventory) AS Inventory, last_reset_time, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name = :char');
             $stmt->execute([':char' => $char]);
@@ -108,8 +104,7 @@
             return false;
         }
 		
-		public function check_zen($required = 0, $multiply = 0, $col = 'resets')
-        {
+		public function check_zen($required = 0, $multiply = 0, $col = 'resets'){
             if($this->session->userdata('vip')){
                 $required -= $this->session->userdata(['vip' => 'reset_price_decrease']);
             }
@@ -122,38 +117,32 @@
             return ($this->char_info['Money'] >= $this->char_info['res_money']) ? true : $this->char_info['res_money'];
         }
 
-        public function check_zen_wallet($user, $server, $id, $required = 0, $multiply = 0, $col = 'resets')
-        {
+        public function check_zen_wallet($user, $server, $id, $required = 0, $multiply = 0, $col = 'resets'){
             $this->charge_from_zen_wallet = 1;
             $status = $this->website->get_user_credits_balance($user, $server, 3, $id);
             return ($status['credits'] >= $this->char_info['res_money']) ? true : $this->char_info['res_money'];
         }
 
-        public function check_lvl($req_lvl = 400)
-        {
+        public function check_lvl($req_lvl = 400){
             if($this->session->userdata('vip')){
                 $req_lvl -= $this->session->userdata(['vip' => 'reset_level_decrease']);
             }
             return ($this->char_info['cLevel'] >= $req_lvl) ? true : $req_lvl;
         }
 		
-		public function check_mlvl($req_lvl = 400)
-        {
+		public function check_mlvl($req_lvl = 400){
             return ($this->char_info['mlevel'] >= $req_lvl) ? true : $req_lvl;
         }
 
-        public function check_resets($req_resets = 100)
-        {
+        public function check_resets($req_resets = 100){
             return ($this->char_info['resets'] >= $req_resets);
         }
 
-        public function check_gresets($req_gresets = 0)
-        {
+        public function check_gresets($req_gresets = 0){
             return ($this->char_info['grand_resets'] >= $req_gresets);
         }
 
-        public function check_stats()
-        {
+        public function check_stats(){
             $this->vars['str_stat'] = isset($this->vars['str_stat']) ? (int)$this->vars['str_stat'] : 0;
             $this->vars['agi_stat'] = isset($this->vars['agi_stat']) ? (int)$this->vars['agi_stat'] : 0;
             $this->vars['ene_stat'] = isset($this->vars['ene_stat']) ? (int)$this->vars['ene_stat'] : 0;
@@ -162,8 +151,7 @@
             $this->vars['allstats'] = in_array($this->char_info['Class'], [64, 65, 66, 67, 70, 78]) ? ($this->vars['str_stat'] + $this->vars['agi_stat'] + $this->vars['ene_stat'] + $this->vars['vit_stat'] + $this->vars['com_stat']) : ($this->vars['str_stat'] + $this->vars['agi_stat'] + $this->vars['ene_stat'] + $this->vars['vit_stat']);
         }
 
-        public function set_new_stats()
-        {
+        public function set_new_stats(){
             $this->vars['new_str'] = $this->website->show65kStats($this->char_info['Strength']) + $this->vars['str_stat'];
             $this->vars['new_agi'] = $this->website->show65kStats($this->char_info['Dexterity']) + $this->vars['agi_stat'];
             $this->vars['new_ene'] = $this->website->show65kStats($this->char_info['Energy']) + $this->vars['ene_stat'];
@@ -172,8 +160,7 @@
             $this->vars['new_lvlup'] = $this->char_info['LevelUpPoint'] - $this->vars['allstats'];
         }
 
-        public function check_max_stat_limit($server)
-        {
+        public function check_max_stat_limit($server){
             if($this->vars['new_str'] > $this->config->config_entry('character_' . $server . '|max_stats')){
                 $this->vars['error'] = 'Max Strength: ' . $this->config->config_entry('character_' . $server . '|max_stats');
             }
@@ -196,8 +183,7 @@
             return true;
         }
 		
-		public function add_stats($user, $server, $char)
-        {
+		public function add_stats($user, $server, $char){
 			$data = [
 				':new_lvlup' => $this->vars['new_lvlup'], 
 				':new_str' => $this->vars['new_str'], 
@@ -222,8 +208,7 @@
             $stmt->execute($data);
         }
 		
-		public function reset_character($user, $server)
-        {
+		public function reset_character($user, $server){
 			$location = 'MapNumber = 0, MapPosX = 123, MapPosY = 130,';
 			
 			if(!defined('CRYSTALMU')){
@@ -344,8 +329,7 @@
 			]);
 		}
 
-		public function greset_character($user, $server)
-        {
+		public function greset_character($user, $server){
             if(isset($this->char_info['gres_info']['clear_all_resets']) && $this->char_info['gres_info']['clear_all_resets'] == 0){
                 $resets = $this->config->values('table_config', [$server, 'resets', 'column']) . '-' . $this->char_info['gres_info']['reset'];
             } else{
@@ -460,8 +444,7 @@
 			]);
 		}
 		
-		private function clear_reset_stats($user, $server)
-        {
+		private function clear_reset_stats($user, $server){
             if(!defined('RES_DECREASE_STATS_PERC') || RES_DECREASE_STATS_PERC == false){
                 $data = [
 					':str' => $this->Mcharacter->char_info['res_info']['new_stat_points'], 
@@ -498,8 +481,7 @@
             $stmt->execute($data);
         }
 		
-		private function clear_greset_stats($user, $server)
-        {
+		private function clear_greset_stats($user, $server){
             $data = [':str' => $this->Mcharacter->char_info['gres_info']['new_stat_points'], ':agi' => $this->Mcharacter->char_info['gres_info']['new_stat_points'], ':vit' => $this->Mcharacter->char_info['gres_info']['new_stat_points'], ':ene' => $this->Mcharacter->char_info['gres_info']['new_stat_points']];
             if(in_array($this->char_info['Class'], [64, 65, 66, 67, 70, 78])){
                 $dl = ', Leadership = :com';
@@ -513,26 +495,22 @@
             $stmt->execute($data);
         }
 		
-		private function clear_reset_levelup($user, $server)
-        {
+		private function clear_reset_levelup($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET LevelUpPoint = :freepoints WHERE Name = :character AND AccountId = :user');
             $stmt->execute([':freepoints' => $this->Mcharacter->char_info['res_info']['new_free_points'], ':character' => $this->vars['character'], ':user' => $user]);
         }
 		
-		private function clear_greset_levelup($user, $server)
-        {
+		private function clear_greset_levelup($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET LevelUpPoint = :freepoints WHERE Name = :character AND AccountId = :user');
             $stmt->execute([':freepoints' => $this->Mcharacter->char_info['gres_info']['new_free_points'], ':character' => $this->vars['character'], ':user' => $user]);
         }
 
-        public function clear_magic_list($user, $server)
-        {
+        public function clear_magic_list($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET MagicList = CAST(REPLICATE(char(0xff), 180) as varbinary(180)) WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 		
-		private function clear_inventory($user, $server, $res_config = false)
-        {
+		private function clear_inventory($user, $server, $res_config = false){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
 			$multiplier = $this->website->get_value_from_server($server, 'inv_multiplier');
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $item_size);
@@ -577,8 +555,7 @@
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 		
-		private function add_bonus_reset_points($user, $server)
-        {
+		private function add_bonus_reset_points($user, $server){
             $bonus = ($this->char_info['resets'] + 1) * $this->bonus_points_by_class($this->char_info['Class']);
 			if($this->session->userdata('vip')){
                 $bonus += $this->session->userdata(['vip' => 'reset_bonus_points']);
@@ -594,8 +571,7 @@
             $stmt->execute([':lvlup' => $bonus, ':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        private function add_bonus_greset_points($user, $server)
-        {
+        private function add_bonus_greset_points($user, $server){
             if($this->char_info['gres_info']['bonus_points_save'] == 1){
                 $bonus = ($this->char_info['grand_resets'] + 1) * $this->bonus_points_by_class($this->char_info['Class'], 'gres_info');
             } else{
@@ -611,20 +587,17 @@
             $stmt->execute([':lvlup' => $bonus, ':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        private function add_bonus_stats_for_resets($user, $server)
-        {
+        private function add_bonus_stats_for_resets($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET LevelUpPoint = LevelUpPoint + :lvlup WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':lvlup' => $this->char_info['bonus_reset_stats_points'], ':char' => $this->vars['character'], ':user' => $user]);
         }
 		
-		private function add_bonus_stats_for_gresets($user, $server)
-        {
+		private function add_bonus_stats_for_gresets($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET LevelUpPoint = LevelUpPoint + :lvlup WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':lvlup' => $this->char_info['bonus_greset_stats_points'], ':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        public function bonus_points_by_class($class, $type = 'res_info', $data = false)
-        {
+        public function bonus_points_by_class($class, $type = 'res_info', $data = false){
             $char_info = ($data != false) ? $data : $this->Mcharacter->char_info;
 			if(isset($char_info[$type]['bonus_points'][$class])){
 				return $char_info[$type]['bonus_points'][$class];
@@ -632,26 +605,22 @@
 			return 0;
         }
 		
-        private function backup_master_level($user, $server)
-        {
+        private function backup_master_level($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Master = mLevel WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        private function change_reset_class($user, $server)
-        {
+        private function change_reset_class($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Class = CASE WHEN Class IN(50, 66, 98) THEN Class - 2 ELSE Class - 1 END WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        public function restore_master_level($user, $server)
-        {
+        public function restore_master_level($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET mLevel = Master, Class = CASE WHEN Class IN(48, 64, 96) THEN Class + 2 ELSE Class + 1 END, mlPoint = Master + (' . $this->config->values('table_config', [$server, 'resets', 'column']) . '*150) WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 		
-		private function questToReadable($quest)
-        {
+		private function questToReadable($quest){
             $quest = substr($quest, 0, 100);
             if($quest == 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'){
                 return 0; //No quest
@@ -670,8 +639,7 @@
             }
         }
 		
-		public function getBaseStats($class, $server)
-        {
+		public function getBaseStats($class, $server){
 			$leadership = (MU_VERSION >= 1) ? ', Leadership' : '';
             switch($class){
                 case 0:
@@ -787,8 +755,7 @@
             }
         }
 
-        public function calculateNewStats($server)
-        {
+        public function calculateNewStats($server){
             $new_stats = 0;
             $this->defaultStats = $this->getBaseStats($this->char_info['Class'], $server);
             $quest = $this->questToReadable($this->char_info['Quest']);
@@ -846,8 +813,7 @@
             return $new_stats;
         }
 
-        public function reset_stats($user, $server, $character = '', $freePoints = false, $baseStats = false)
-        {
+        public function reset_stats($user, $server, $character = '', $freePoints = false, $baseStats = false){
 			if($character != ''){
 				$this->vars['character'] = $character;
 			}
@@ -876,8 +842,7 @@
 			 $stmt->execute([':newgr' => $gr, ':newres' => $res, ':newlvl' => $level, ':char' => $name, ':user' => $user]);
 		}
 		
-		public function reset_skill_tree($user, $server, $type, $reset_level = 1, $reset_points = 1, $points_multiplier = 1)
-        {
+		public function reset_skill_tree($user, $server, $type, $reset_level = 1, $reset_points = 1, $points_multiplier = 1){
             switch($type){
                 default:
                     return false;
@@ -894,8 +859,7 @@
             }
         }
 		
-		public function reset_skill_tree_igcn($user, $server, $reset_level = 1, $reset_points = 1, $points_multiplier = 1)
-        {
+		public function reset_skill_tree_igcn($user, $server, $reset_level = 1, $reset_points = 1, $points_multiplier = 1){
             if($reset_points == 0){
                 $this->ml_points = $this->get_master_level_igcn($user, $server);
             }
@@ -941,8 +905,7 @@
             return $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 		
-		public function reset_skill_tree_muengine($user, $server, $reset_level = 1, $reset_points = 1, $points_multiplier = 1)
-        {
+		public function reset_skill_tree_muengine($user, $server, $reset_level = 1, $reset_points = 1, $points_multiplier = 1){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET MagicList = CAST(REPLICATE(char(0xff), 180) AS varbinary(180)) WHERE Name = :char');
             $stmt->execute([':char' => $this->vars['character']]);
             if($reset_points == 0){
@@ -958,8 +921,7 @@
             return $stmt->execute([':char' => $this->vars['character']]);
         }
 		
-		public function reset_skill_tree_xteam($user, $server, $reset_level = 1, $reset_points = 1, $points_multiplier = 1)
-        {
+		public function reset_skill_tree_xteam($user, $server, $reset_level = 1, $reset_points = 1, $points_multiplier = 1){
             if($reset_points == 0){
                 $this->ml_points = $this->get_master_level_xteam($server);
             }
@@ -1006,16 +968,14 @@
         }
 
 
-        private function get_master_level_muengine($server)
-        {
+        private function get_master_level_muengine($server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT MASTER_LEVEL FROM T_MasterLevelSystem WHERE CHAR_NAME = :char');
             $stmt->execute([':char' => $this->vars['character']]);
             $points = $stmt->fetch();
             return $points['MASTER_LEVEL'];
         }
 
-        private function get_master_level_igcn($user, $server)
-        {
+        private function get_master_level_igcn($user, $server){
             $stmt = $$this->website->db('game', $server)->prepare('SELECT mLevel FROM Character WHERE AccountId = :user AND Name = :char');
             $stmt->execute([':user' => $user, ':char' => $this->vars['character']]);
             $points = $stmt->fetch();
@@ -1025,16 +985,14 @@
             return 0;
         }
 
-        private function get_master_level_xteam($server)
-        {
+        private function get_master_level_xteam($server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT MasterLevel FROM MasterSkillTree WHERE Name = :char');
             $stmt->execute([':char' => $this->vars['character']]);
             $points = $stmt->fetch();
             return $points['MasterLevel'];
         }
 		
-		private function is_master_skill($skill_id)
-        {
+		private function is_master_skill($skill_id){
             static $SkillList = null;
             $is_master_skill = false;
             libxml_use_internal_errors(true);
@@ -1056,8 +1014,7 @@
             return $is_master_skill;
         }
 		
-		private function skill_index($hex)
-        {
+		private function skill_index($hex){
             $id = hexdec(substr($hex, 0, 2));
             $id2 = hexdec(substr($hex, 2, 2));
             $id3 = hexdec(substr($hex, 4, 2));
@@ -1067,30 +1024,26 @@
             return $id;
         }
 
-		private function get_skill_list($user, $server)
-        {
+		private function get_skill_list($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, MagicList) AS MagicList FROM Character WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
 			$skills = unpack('H*', implode('', $stmt->fetch()));
             $this->char_info['MagicList'] = $this->website->clean_hex($skills[1]);
         }
 
-        public function check_pk()
-        {
+        public function check_pk(){
             if($this->char_info['PkLevel'] <= 3){
                 return false;
             }
             return true;
         }
 
-        public function clear_pk($user, $server, $money = 0)
-        {
+        public function clear_pk($user, $server, $money = 0){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET PkLevel = 3, PkCount = 0, Money = Money - :money WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':money' => $money, ':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        public function teleport_char($user, $server, $cords, $money)
-        {
+        public function teleport_char($user, $server, $cords, $money){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET MapNumber = :world, MapPosX = :x, MapPosY = :y WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':world' => $this->vars['world'], ':x' => $cords[0], ':y' => $cords[1], ':char' => $this->vars['character'], ':user' => $user]);
 			if($money > 0){
@@ -1098,29 +1051,25 @@
 			}
         }
 
-        public function update_level($user, $server)
-        {
+        public function update_level($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET cLevel = :new_level WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':new_level' => $this->char_info['cLevel'] + (int)$this->vars['level'], ':char' => $this->vars['character'], ':user' => $user]);
             return true;
         }
 
-        public function update_points($user, $server)
-        {
+        public function update_points($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET LevelUpPoint = LevelUpPoint + :new_point WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':new_point' => (int)$this->vars['points'], ':char' => $this->vars['character'], ':user' => $user]);
             return true;
         }
 
-        public function update_gm($user, $server)
-        {
+        public function update_gm($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET CtlCode = :ctlcode WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':ctlcode' => $this->config->config_entry('buygm|gm_ctlcode'), ':char' => $this->vars['character'], ':user' => $user]);
             return true;
         }
 		
-		public function add_wcoins($user, $server, $uid, $amount = 0, $config = [])
-        {
+		public function add_wcoins($user, $server, $uid, $amount = 0, $config = []){
             $acc = (in_array($config['identifier_column'], ['MemberGuid', 'memb_guid'])) ? $uid : $user;
             $stmt = $this->website->db($config['db'], $server)->prepare('UPDATE ' . $config['table'] . ' SET ' . $config['column'] . ' = ' . $config['column'] . ' + :wcoins WHERE ' . $config['identifier_column'] . ' = :account');
             $stmt->execute([':wcoins' => $amount, ':account' => $acc]);
@@ -1130,8 +1079,7 @@
             }
         }
 		
-		public function remove_wcoins($user, $server, $uid, $config = [], $amount = false)
-        {
+		public function remove_wcoins($user, $server, $uid, $config = [], $amount = false){
 			if($amount != false){
 				$this->vars['credits'] = $amount;
 			}
@@ -1140,8 +1088,7 @@
             $stmt->execute([':wcoins' => $this->vars['credits'], ':account' => $acc]);
         }
 		
-		public function get_wcoins($user, $uid, $config, $server)
-        {
+		public function get_wcoins($user, $uid, $config, $server){
             $acc = (in_array($config['identifier_column'], ['MemberGuid', 'memb_guid'])) ? $uid : $user;
             $stmt = $this->website->db($config['db'], $server)->prepare('SELECT ' . $config['column'] . ' FROM ' . $config['table'] . ' WHERE ' . $config['identifier_column'] . ' = :account');
             $stmt->execute([':account' => $acc]);
@@ -1151,8 +1098,7 @@
             return false;
         }
 		
-		public function remove_ruud($money, $char, $user, $server)
-        {
+		public function remove_ruud($money, $char, $user, $server){
 			if($this->website->db('game', $server)->check_if_column_exists('RuudMoney', 'Character') != false){
 				$ruud = 'RuudMoney';
 			}
@@ -1163,8 +1109,7 @@
 			$stmt->execute([':money' => (int)$money, ':account' => $user, ':char' => $char]);
         }
 		
-		public function add_ruud($money, $char, $user, $server)
-        {
+		public function add_ruud($money, $char, $user, $server){
 			if($this->website->db('game', $server)->check_if_column_exists('RuudMoney', 'Character') != false){
 				$ruud = 'RuudMoney';
 			}
@@ -1175,8 +1120,7 @@
 			$stmt->execute([':money' => (int)$money, ':account' => $user, ':char' => $char]);
         }
 
-		public function load_character_info($char, $server, $by_id = false)
-        {
+		public function load_character_info($char, $server, $by_id = false){
 			$ruud = ', 0 AS Ruud';
 			if(MU_VERSION >= 5){
 				$ruud = ', Ruud';
@@ -1208,8 +1152,7 @@
             return false;
         }
 
-		public function get_inventory_content($char, $server)
-        {
+		public function get_inventory_content($char, $server){
 			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
 			$stmt->execute([':char' => $char]);
 			if($inv = $stmt->fetch()){
@@ -1218,8 +1161,7 @@
 			} 
         }
 		
-		public function load_equipment($server)
-        {
+		public function load_equipment($server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $item_size);
             $eq = array_chunk($items_array, 12);
@@ -1272,8 +1214,7 @@
             return $equipment;
         }
 
-		public function load_inventory($inv, $server)
-        {
+		public function load_inventory($inv, $server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $item_size);
             $inventory = [];
@@ -1318,8 +1259,7 @@
             return $items;
         }
 
-		public function clear_inv($user, $server)
-        {
+		public function clear_inv($user, $server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $item_size);
             if(isset($this->vars['inventory'])){
@@ -1351,38 +1291,32 @@
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 
-        public function check_equipment($server)
-        {
+        public function check_equipment($server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             return (strtoupper(substr($this->char_info['Inventory'], 0, $item_size * 12)) === str_repeat('F', $item_size * 12));
         }
 		
-		public function check_store($server)
-        {
+		public function check_store($server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             return (strtoupper(substr($this->char_info['Inventory'], $item_size * 204, $item_size * 32)) === str_repeat('F', $item_size * 32));
         }
 		
-		public function check_inventory($server)
-        {
+		public function check_inventory($server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             return (strtoupper(substr($this->char_info['Inventory'], $item_size * 12, $item_size * 64)) === str_repeat('F', $item_size * 64));
         }
 		
-		public function check_exp_inv1($server)
-        {
+		public function check_exp_inv1($server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             return (strtoupper(substr($this->char_info['Inventory'], $item_size * 76, $item_size * 32)) === str_repeat('F', $item_size * 32));
         }
 		
-		public function check_exp_inv2($server)
-        {
+		public function check_exp_inv2($server){
 			$item_size = $this->website->get_value_from_server($server, 'item_size');
             return (strtoupper(substr($this->char_info['Inventory'], $item_size * 108, $item_size * 32)) === str_repeat('F', $item_size * 32));
         }
 
-        public function gen_class_select_field($config = false)
-        {
+        public function gen_class_select_field($config = false){
             if($config != false){
 				if(isset($config[$this->char_info['Class']])){
 					$select = '<option disabled="disabled" selected="selected" value="">- SELECT -</option>';
@@ -1395,15 +1329,13 @@
             return false;
         }
 
-        public function update_char_class($user, $server)
-        {
+        public function update_char_class($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Class = :class WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':class' => $this->vars['class_select'], ':char' => $this->vars['character'], ':user' => $user]);
             return true;
         }
 		
-		public function clear_quests_list($user, $server, $class)
-        {
+		public function clear_quests_list($user, $server, $class){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Quest = (SELECT TOP 1 Quest FROM Character WHERE Class = :class) WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':class' => $class, ':char' => $this->vars['character'], ':user' => $user]);
         }
@@ -1419,44 +1351,38 @@
 			$stmt->execute([':char' => $char_id, ':server' => $server, ':old' => $old, ':new' => $new]);
 		}
 
-        public function get_status($name, $server)
-        {
+        public function get_status($name, $server){
             $accountDb = ($this->website->is_multiple_accounts() == true) ? $this->website->get_db_from_server($server, true) : $this->website->get_default_account_database();
             $stmt = $this->website->db('game', $server)->prepare('SELECT TOP 1 a.Id, a.GameIDC, m.ConnectStat, m.ConnectTM, m.DisConnectTM, m.IP, m.ServerName FROM AccountCharacter AS a RIGHT JOIN [' . $accountDb . '].dbo.MEMB_STAT AS m ON (a.Id Collate Database_Default = m.memb___id) WHERE m.memb___id = :user ' . $this->website->server_code($this->website->get_servercode($server)) . '');
             $stmt->execute([':user' => $name]);
             return $stmt->fetch();
         }
 
-        public function load_chars($name, $server)
-        {
+        public function load_chars($name, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name FROM Character WHERE AccountId = :user');
             $stmt->execute([':user' => $name]);
             return $stmt->fetch_all();
         }
 
-        public function check_guild($name, $server)
-        {
+        public function check_guild($name, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT G_Name FROM GuildMember WHERE Name = :char');
             $stmt->execute([':char' => $name]);
             return $stmt->fetch();
         }
 
-        public function load_guild_info($g_name, $server)
-        {
+        public function load_guild_info($g_name, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT G_Mark, G_Master FROM Guild WHERE G_Name = :g_name');
             $stmt->execute([':g_name' => $g_name]);
             return $stmt->fetch();
         }
 
-        public function guild_member_count($g_name, $server)
-        {
+        public function guild_member_count($g_name, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT COUNT(Name) AS count FROM GuildMember WHERE G_Name = :g_name');
             $stmt->execute([':g_name' => $g_name]);
             return $stmt->fetch();
         }
 
-        public function check_hidden_char($name, $server, $gs = null)
-        {
+        public function check_hidden_char($name, $server, $gs = null){
 			if($gs != null && defined('HIDE_CHARS_GS') && in_array($gs, HIDE_CHARS_GS[$server])){
 				return true;
 			}
@@ -1475,8 +1401,7 @@
 			}
         }
 		
-		public function check_hidden_char_PK($name, $server)
-        {
+		public function check_hidden_char_PK($name, $server){
             $stmt = $this->website->db('web')->prepare('SELECT until_date FROM DmN_Hidden_Chars_PK WHERE account = :name AND server = :server');
             $stmt->execute([':name' => $name, ':server' => $server]);
             if($info = $stmt->fetch()){
@@ -1491,21 +1416,18 @@
             }
         }
 
-        public function delete_expired_hide($name, $server)
-        {
+        public function delete_expired_hide($name, $server){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Hidden_Chars WHERE account = :name AND server = :server');
             $stmt->execute([':name' => $name, ':server' => $server]);
         }
 
-        public function add_account_log($log, $credits, $acc, $server)
-        {
+        public function add_account_log($log, $credits, $acc, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 		
-		public function get_guild_info($guild, $server)
-        {
+		public function get_guild_info($guild, $server){
 			$g_union = (MU_VERSION < 1) ? '' : ', Number, G_Union';
             $stmt = $this->website->db('game', $server)->prepare('SELECT G_Name, G_Master, G_Mark, G_Score '.$g_union.' FROM Guild WHERE G_Name = :name');
             $stmt->execute([':name' => $guild]);
@@ -1534,8 +1456,7 @@
             return false;
         }
 		
-		private function checkStatus($acc, $server)
-        {
+		private function checkStatus($acc, $server){
 			$stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat, IP FROM MEMB_STAT WHERE memb___id = :user');
 			$stmt->execute([':user' => $acc]);
 			if($status = $stmt->fetch()){
@@ -1544,8 +1465,7 @@
 			return false;
         }
 
-		public function get_guild_members($guild, $server)
-        {
+		public function get_guild_members($guild, $server){
 			$g_status = (MU_VERSION < 1) ? '0 AS G_Status' : 'g.G_Status';
 			$order = (MU_VERSION < 1) ? 'g.Name ASC' : 'g.G_Status DESC';
 			$stmt = $this->website->db('game', $server)->prepare('SELECT g.Name, '.$g_status.', c.Class, c.cLevel, c.AccountId, ' . $this->reset_column($server) . ' ' . substr_replace($this->greset_column($server), '', -1) . ' FROM GuildMember AS g INNER JOIN Character AS c ON (g.Name Collate Database_Default = c.Name Collate Database_Default) WHERE g.G_Name = :name ORDER BY '.$order);
@@ -1578,20 +1498,17 @@
             return $this->guild_info;
         }
 
-        public function decrease_zen($account, $server, $money, $char)
-        {
+        public function decrease_zen($account, $server, $money, $char){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Money = Money - :money WHERE AccountId = :account AND Name = :char');
             return $stmt->execute([':money' => (int)$money, ':account' => $account, ':char' => $char]);
         }
 
-        public function add_zen($account, $server, $money, $char)
-        {
+        public function add_zen($account, $server, $money, $char){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Money = Money + :money WHERE AccountId = :account AND Name = :char');
             return $stmt->execute([':money' => (int)$money, ':account' => $account, ':char' => $char]);
         }
 
-        public function load_chars_from_ref($ref_acc, $server)
-        {
+        public function load_chars_from_ref($ref_acc, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, cLevel, ' . $this->reset_column($server) . substr_replace($this->greset_column($server), '', -1) . ' FROM Character WHERE AccountId = :ref_acc');
             $stmt->execute([':ref_acc' => $ref_acc]);
             $char_list = [];
@@ -1601,8 +1518,7 @@
             return $char_list;
         }
 
-		public function load_master_level($char, $server)
-        {
+		public function load_master_level($char, $server){
             if($this->config->values('table_config', [$server, 'master_level', 'column']) != false){
                 $stmt = $this->website->db('game', $server)->prepare('SELECT ' . $this->config->values('table_config', [$server, 'master_level', 'column']) . ' AS mlevel FROM ' . $this->config->values('table_config', [$server, 'master_level', 'table']) . ' WHERE ' . $this->config->values('table_config', [$server, 'master_level', 'identifier_column']) . ' = :char');
                 $stmt->execute([':char' => $char]);
@@ -1615,22 +1531,19 @@
             return 0;
         }
 
-        public function check_if_char_exists($char, $server)
-        {
+        public function check_if_char_exists($char, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, AccountId, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE Name = :name');
             $stmt->execute([':name' => $char]);
             return $stmt->fetch();
         }
 
-        public function has_guild($char, $server)
-        {
+        public function has_guild($char, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name FROM GuildMember WHERE Name = :name');
             $stmt->execute([':name' => $char]);
             return $stmt->fetch();
         }
 
-		public function update_account_character($old, $new, $server)
-        {
+		public function update_account_character($old, $new, $server){
 			$old = $this->website->db('game', $server)->escape($old);
 			$new = $this->website->db('game', $server)->escape($new);
 			$data = 'UPDATE AccountCharacter SET 
@@ -1649,44 +1562,37 @@
             return $this->website->db('game', $server)->query($data);
         }
 
-        public function update_guild($old, $new, $server)
-        {
+        public function update_guild($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Guild SET G_Master = :name WHERE G_Master = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 
-        public function update_guild_member($old, $new, $server)
-        {
+        public function update_guild_member($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE GuildMember SET Name = :name WHERE Name = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 
-        public function update_character($old, $new, $server)
-        {
+        public function update_character($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Name = :name WHERE Name = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 
-        public function update_option_data($old, $new, $server)
-        {
+        public function update_option_data($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE OptionData SET Name = :name WHERE Name = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 
-        public function update_t_friendlist($old, $new, $server)
-        {
+        public function update_t_friendlist($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE T_FriendList SET FriendName = :name WHERE FriendName = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 
-        public function update_t_friendmail($old, $new, $server)
-        {
+        public function update_t_friendmail($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE T_FriendMail SET FriendName = :name WHERE FriendName = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 		
-		public function update_t_friendmain($old, $new, $server)
-        {
+		public function update_t_friendmain($old, $new, $server){
 			if($this->website->db('game', $server)->check_if_table_exists('T_FriendMain')){
 				$stmt = $this->website->db('game', $server)->prepare('UPDATE T_FriendMain SET Name = :name WHERE Name = :old_name');
 				return $stmt->execute([':name' => $new, ':old_name' => $old]);  
@@ -1696,14 +1602,12 @@
             }
         }     
 
-        public function update_t_cguid($old, $new, $server)
-        {
+        public function update_t_cguid($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE T_CGuid SET Name = :name WHERE Name = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 		
-		public function update_T_CurCharName($old, $new, $server)
-        {
+		public function update_T_CurCharName($old, $new, $server){
 			if($this->website->db('game', $server)->check_if_table_exists('T_CurCharName')){
 				$stmt = $this->website->db('game', $server)->prepare('UPDATE T_CurCharName SET Name = :name WHERE Name = :old_name');
 				return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1713,8 +1617,7 @@
             }
         }
 		
-		public function update_T_Event_Inventory($old, $new, $server)
-        {
+		public function update_T_Event_Inventory($old, $new, $server){
 			if($this->website->db('game', $server)->check_if_table_exists('T_Event_Inventory')){
 				$stmt = $this->website->db('game', $server)->prepare('UPDATE T_Event_Inventory SET Name = :name WHERE Name = :old_name');
 				return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1724,14 +1627,12 @@
             }
         }
 
-        public function update_master_level_table($old, $new, $server)
-        {
+        public function update_master_level_table($old, $new, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE ' . $this->config->values('table_config', [$server, 'master_level', 'table']) . ' SET ' . $this->config->values('table_config', [$server, 'master_level', 'identifier_column']) . ' = :name WHERE ' . $this->config->values('table_config', [$server, 'master_level', 'identifier_column']) . ' = :old_name');
             return $stmt->execute([':name' => $new, ':old_name' => $old]);
         }
 
-        public function update_IGC_Gens($old, $new, $server)
-        {
+        public function update_IGC_Gens($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_Gens')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_Gens SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1740,8 +1641,7 @@
             }
         }
 
-        public function update_IGC_GensAbuse($old, $new, $server)
-        {
+        public function update_IGC_GensAbuse($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_GensAbuse')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_GensAbuse SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1750,8 +1650,7 @@
             }
         }
 		
-		public function update_IGC_GremoryCase($old, $new, $server)
-        {
+		public function update_IGC_GremoryCase($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_GremoryCase')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_GremoryCase SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1760,8 +1659,7 @@
             }
         }
 		
-		public function update_IGC_HuntingRecord($old, $new, $server)
-        {
+		public function update_IGC_HuntingRecord($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_HuntingRecord')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_HuntingRecord SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1770,8 +1668,7 @@
             }
         }
 		
-		public function update_IGC_HuntingRecordOption($old, $new, $server)
-        {
+		public function update_IGC_HuntingRecordOption($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_HuntingRecordOption')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_HuntingRecordOption SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1780,8 +1677,7 @@
             }
         }
 		
-		public function update_IGC_LabyrinthClearLog($old, $new, $server)
-        {
+		public function update_IGC_LabyrinthClearLog($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_LabyrinthClearLog')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_LabyrinthClearLog SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1790,8 +1686,7 @@
             }
         }
 		
-		public function update_IGC_LabyrinthInfo($old, $new, $server)
-        {
+		public function update_IGC_LabyrinthInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_LabyrinthInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_LabyrinthInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1800,8 +1695,7 @@
             }
         }
 		
-		public function update_IGC_LabyrinthLeagueLog($old, $new, $server)
-        {
+		public function update_IGC_LabyrinthLeagueLog($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_LabyrinthLeagueLog')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_LabyrinthLeagueLog SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1810,8 +1704,7 @@
             }
         }
 		
-		public function update_IGC_LabyrinthLeagueUser($old, $new, $server)
-        {
+		public function update_IGC_LabyrinthLeagueUser($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_LabyrinthLeagueUser')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_LabyrinthLeagueUser SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1820,8 +1713,7 @@
             }
         }
 		
-		public function update_IGC_LabyrinthMissionInfo($old, $new, $server)
-        {
+		public function update_IGC_LabyrinthMissionInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_LabyrinthMissionInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_LabyrinthMissionInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1830,8 +1722,7 @@
             }
         }
 		
-		public function update_IGC_MixLostItemInfo($old, $new, $server)
-        {
+		public function update_IGC_MixLostItemInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_MixLostItemInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_MixLostItemInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1840,8 +1731,7 @@
             }
         }
 		
-		public function update_IGC_Muun_Inventory($old, $new, $server)
-        {
+		public function update_IGC_Muun_Inventory($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_Muun_Inventory')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_Muun_Inventory SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1850,8 +1740,7 @@
             }
         }
 		
-		public function update_IGC_Muun_Period($old, $new, $server)
-        {
+		public function update_IGC_Muun_Period($old, $new, $server){
 			if($this->website->db('game', $server)->check_if_table_exists('IGC_Muun_Period')){
 				$stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_Muun_Period SET Name = :name WHERE Name = :old_name');
 				return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1860,8 +1749,7 @@
             }
         }
 		
-		public function update_IGC_RestoreItem_Inventory($old, $new, $server)
-        {
+		public function update_IGC_RestoreItem_Inventory($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_RestoreItem_Inventory')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_RestoreItem_Inventory SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1870,8 +1758,7 @@
             }
         }
 		
-        public function update_IGC_PeriodBuffInfo($old, $new, $server)
-        {
+        public function update_IGC_PeriodBuffInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PeriodBuffInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PeriodBuffInfo SET CharacterName = :name WHERE CharacterName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1880,8 +1767,7 @@
             }
         }
 
-        public function update_IGC_PeriodExpiredItemInfo($old, $new, $server)
-        {
+        public function update_IGC_PeriodExpiredItemInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PeriodExpiredItemInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PeriodExpiredItemInfo SET CharacterName = :name WHERE CharacterName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1890,8 +1776,7 @@
             }
         }
 
-        public function update_IGC_PeriodItemInfo($old, $new, $server)
-        {
+        public function update_IGC_PeriodItemInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PeriodItemInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PeriodItemInfo SET CharacterName = :name WHERE CharacterName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1900,8 +1785,7 @@
             }
         }
 		
-		public function update_IGC_PentagramInfo($old, $new, $server)
-        {
+		public function update_IGC_PentagramInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PentagramInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PentagramInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1910,8 +1794,7 @@
             }
         }
 
-		public function update_IGC_PStore_Items($old, $new, $server)
-        {
+		public function update_IGC_PStore_Items($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PStore_Items')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PStore_Items SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1920,8 +1803,7 @@
             }
         }
 		
-		public function update_IGC_PStore_Data($old, $new, $server)
-        {
+		public function update_IGC_PStore_Data($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PStore_Data')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PStore_Data SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1930,8 +1812,7 @@
             }
         }
 		 
-        public function update_IGC_PersonalStore_Info($old, $new, $server)
-        {
+        public function update_IGC_PersonalStore_Info($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PersonalStore_Info')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_PersonalStore_Info SET name = :name WHERE name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1940,8 +1821,7 @@
             }
         }
 		
-		public function update_IGC_ArtifactInfo($old, $new, $server)
-        {
+		public function update_IGC_ArtifactInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_ArtifactInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_ArtifactInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1950,8 +1830,7 @@
             }
         }
 		
-		public function update_IGC_BlessingBox_Character($old, $new, $server)
-        {
+		public function update_IGC_BlessingBox_Character($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_BlessingBox_Character')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_BlessingBox_Character SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1960,8 +1839,7 @@
             }
         }
 		
-		public function update_IGC_HuntPoint($old, $new, $server)
-        {
+		public function update_IGC_HuntPoint($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_HuntPoint')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_HuntPoint SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1970,8 +1848,7 @@
             }
         }
 		
-		public function update_IGC_StatsSystem($old, $new, $server)
-        {
+		public function update_IGC_StatsSystem($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_StatsSystem')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE IGC_StatsSystem SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -1980,8 +1857,7 @@
             }
         }
 		
-		public function insert_IGC_PersonalStore_ChangeName($old, $new, $id, $server)
-        {
+		public function insert_IGC_PersonalStore_ChangeName($old, $new, $id, $server){
             if($this->website->db('game', $server)->check_if_table_exists('IGC_PersonalStore_ChangeName')){
                 $stmt = $this->website->db('game', $server)->prepare('INSERT INTO IGC_PersonalStore_ChangeName (old_name, new_name, character_id) VALUES (:old_name, :new_name, :character_id)');
                 return $stmt->execute([':old_name' => $old, ':new_name' => $new, ':character_id' => $id]);
@@ -1990,8 +1866,7 @@
             }
         }
 		
-        public function update_T_3rd_Quest_Info($old, $new, $server)
-        {
+        public function update_T_3rd_Quest_Info($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_3rd_Quest_Info')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_3rd_Quest_Info SET CHAR_NAME = :name WHERE CHAR_NAME = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2000,8 +1875,7 @@
             }
         }
 
-        public function update_T_GMSystem($old, $new, $server)
-        {
+        public function update_T_GMSystem($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_GMSystem')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_GMSystem SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2010,8 +1884,7 @@
             }
         }
 
-        public function update_T_LUCKY_ITEM_INFO($old, $new, $server)
-        {
+        public function update_T_LUCKY_ITEM_INFO($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_LUCKY_ITEM_INFO')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_LUCKY_ITEM_INFO SET CharName = :name WHERE CharName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2020,8 +1893,7 @@
             }
         }
 
-        public function update_T_PentagramInfo($old, $new, $server)
-        {
+        public function update_T_PentagramInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_PentagramInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_PentagramInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2030,8 +1902,7 @@
             }
         }
 
-        public function update_T_QUEST_EXP_INFO($old, $new, $server)
-        {
+        public function update_T_QUEST_EXP_INFO($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_QUEST_EXP_INFO')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_QUEST_EXP_INFO SET CHAR_NAME = :name WHERE CHAR_NAME = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2040,8 +1911,7 @@
             }
         }
 
-        public function update_PetWarehouse($old, $new, $server)
-        {
+        public function update_PetWarehouse($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('PetWarehouse')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE PetWarehouse SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2050,8 +1920,7 @@
             }
         }
 
-        public function update_T_WaitFriend($old, $new, $server)
-        {
+        public function update_T_WaitFriend($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_WaitFriend')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_WaitFriend SET FriendName = :name WHERE FriendName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2060,8 +1929,7 @@
             }
         }
 		
-		public function update_T_PSHOP_ITEMVALUE_INFO($old, $new, $server)
-        {
+		public function update_T_PSHOP_ITEMVALUE_INFO($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('T_PSHOP_ITEMVALUE_INFO')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE T_PSHOP_ITEMVALUE_INFO SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2070,8 +1938,7 @@
             }
         }
 		
-		public function update_C_Monster_KillCount($old, $new, $server)
-        {
+		public function update_C_Monster_KillCount($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('C_Monster_KillCount')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE C_Monster_KillCount SET name = :name WHERE name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2080,8 +1947,7 @@
             }
         }
 		
-		public function update_C_PlayerKiller_Info($old, $new, $server)
-        {
+		public function update_C_PlayerKiller_Info($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('C_PlayerKiller_Info')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE C_PlayerKiller_Info SET Victim = :name WHERE Victim = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2090,8 +1956,7 @@
             }
         }
 		
-		public function update_C_PlayerKiller_Info2($old, $new, $server)
-        {
+		public function update_C_PlayerKiller_Info2($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('C_PlayerKiller_Info')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE C_PlayerKiller_Info SET Killer = :name WHERE Killer = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2100,8 +1965,7 @@
             }
         }
 		
-		public function update_Gens_Left($old, $new, $server)
-        {
+		public function update_Gens_Left($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('Gens_Left')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE Gens_Left SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2110,8 +1974,7 @@
             }
         }
 		
-		public function update_Gens_Rank($old, $new, $server)
-        {
+		public function update_Gens_Rank($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('Gens_Rank')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE Gens_Rank SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2120,8 +1983,7 @@
             }
         }
 		
-		public function update_Gens_Reward($old, $new, $server)
-        {
+		public function update_Gens_Reward($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('Gens_Reward')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE Gens_Reward SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2130,8 +1992,7 @@
             }
         }
 		
-		public function update_EnhanceSkillTree($old, $new, $server)
-        {
+		public function update_EnhanceSkillTree($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('EnhanceSkillTree')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE EnhanceSkillTree SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2140,8 +2001,7 @@
             }
         }
 		
-		public function update_EventEntryCount($old, $new, $server)
-        {
+		public function update_EventEntryCount($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('EventEntryCount')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE EventEntryCount SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2150,8 +2010,7 @@
             }
         }
 		
-		public function update_EventEntryLimit($old, $new, $server)
-        {
+		public function update_EventEntryLimit($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('EventEntryLimit')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE EventEntryLimit SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2160,8 +2019,7 @@
             }
         }
 		
-		public function update_EventInventory($old, $new, $server)
-        {
+		public function update_EventInventory($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('EventInventory')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE EventInventory SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2170,8 +2028,7 @@
             }
         }
 		
-		public function update_FavoriteWarpList($old, $new, $server)
-        {
+		public function update_FavoriteWarpList($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('FavoriteWarpList')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE FavoriteWarpList SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2180,8 +2037,7 @@
             }
         }
 		
-		public function update_GremoryCase($old, $new, $server)
-        {
+		public function update_GremoryCase($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('GremoryCase')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE GremoryCase SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2190,8 +2046,7 @@
             }
         }
 		
-		public function update_HelperData($old, $new, $server)
-        {
+		public function update_HelperData($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('HelperData')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE HelperData SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2200,8 +2055,7 @@
             }
         }
 		
-		public function update_MuHelperPlus($old, $new, $server)
-        {
+		public function update_MuHelperPlus($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('MuHelperPlus')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE MuHelperPlus SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2210,8 +2064,7 @@
             }
         }
 		
-		public function update_MuQuestInfo($old, $new, $server)
-        {
+		public function update_MuQuestInfo($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('MuQuestInfo')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE MuQuestInfo SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2220,8 +2073,7 @@
             }
         }
 
-		public function update_MuunInventory($old, $new, $server)
-        {
+		public function update_MuunInventory($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('MuunInventory')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE MuunInventory SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2230,8 +2082,7 @@
             }
         }
 		
-		public function update_PentagramJewel($old, $new, $server)
-        {
+		public function update_PentagramJewel($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('PentagramJewel')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE PentagramJewel SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2240,8 +2091,7 @@
             }
         }
 		
-		public function update_PersonalShopRenewalList($old, $new, $server)
-        {
+		public function update_PersonalShopRenewalList($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('PersonalShopRenewalList')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE PersonalShopRenewalList SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2250,8 +2100,7 @@
             }
         }
 		
-		public function update_PShopItemValue($old, $new, $server)
-        {
+		public function update_PShopItemValue($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('PShopItemValue')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE PShopItemValue SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2260,8 +2109,7 @@
             }
         }
 		
-		public function update_QuestGuide($old, $new, $server)
-        {
+		public function update_QuestGuide($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('QuestGuide')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE QuestGuide SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2270,8 +2118,7 @@
             }
         }
 		
-		public function update_QuestKillCount($old, $new, $server)
-        {
+		public function update_QuestKillCount($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('QuestKillCount')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE QuestKillCount SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2280,8 +2127,7 @@
             }
         }
 		
-		public function update_QuestWorld($old, $new, $server)
-        {
+		public function update_QuestWorld($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('QuestWorld')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE QuestWorld SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2290,8 +2136,7 @@
             }
         }
 		
-		public function update_RankingBloodCastle($old, $new, $server)
-        {
+		public function update_RankingBloodCastle($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('RankingBloodCastle')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE RankingBloodCastle SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2300,8 +2145,7 @@
             }
         }
 		
-		public function update_RankingCastleSiege($old, $new, $server)
-        {
+		public function update_RankingCastleSiege($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('RankingCastleSiege')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE RankingCastleSiege SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2310,8 +2154,7 @@
             }
         }
 		
-		public function update_RankingChaosCastle($old, $new, $server)
-        {
+		public function update_RankingChaosCastle($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('RankingChaosCastle')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE RankingChaosCastle SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2320,8 +2163,7 @@
             }
         }
 		
-		public function update_RankingDevilSquare($old, $new, $server)
-        {
+		public function update_RankingDevilSquare($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('RankingDevilSquare')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE RankingDevilSquare SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2330,8 +2172,7 @@
             }
         }
 		
-		public function update_RankingDuel($old, $new, $server)
-        {
+		public function update_RankingDuel($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('RankingDuel')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE RankingDuel SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2340,8 +2181,7 @@
             }
         }
 		
-		public function update_RankingIllusionTemple($old, $new, $server)
-        {
+		public function update_RankingIllusionTemple($old, $new, $server){
             if($this->website->db('game', $server)->check_if_table_exists('RankingIllusionTemple')){
                 $stmt = $this->website->db('game', $server)->prepare('UPDATE RankingIllusionTemple SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2350,8 +2190,7 @@
             }
         }
 		
-		public function update_EVENT_INFO($old, $new, $table_config, $server)
-        {
+		public function update_EVENT_INFO($old, $new, $table_config, $server){
             if($this->website->db($table_config['db'], $server)->check_if_table_exists('EVENT_INFO')){
                 $stmt = $this->website->db($table_config['db'], $server)->prepare('UPDATE EVENT_INFO SET CharacterName = :name WHERE CharacterName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2360,8 +2199,7 @@
             }
         }
 		
-		public function update_EVENT_INFO_BC_5TH($old, $new, $table_config, $server)
-        {
+		public function update_EVENT_INFO_BC_5TH($old, $new, $table_config, $server){
             if($this->website->db($table_config['db'], $server)->check_if_table_exists('EVENT_INFO_BC_5TH')){
                 $stmt = $this->website->db($table_config['db'], $server)->prepare('UPDATE EVENT_INFO_BC_5TH SET CharacterName = :name WHERE CharacterName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2370,8 +2208,7 @@
             }
         }
 		
-		public function update_EVENT_INFO_CC($old, $new, $table_config, $server)
-        {
+		public function update_EVENT_INFO_CC($old, $new, $table_config, $server){
             if($this->website->db($table_config['db'], $server)->check_if_table_exists('EVENT_INFO_CC')){
                 $stmt = $this->website->db($table_config['db'], $server)->prepare('UPDATE EVENT_INFO_CC SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2380,8 +2217,7 @@
             }
         }
 		
-		public function update_EVENT_INFO_IT($old, $new, $table_config, $server)
-        {
+		public function update_EVENT_INFO_IT($old, $new, $table_config, $server){
             if($this->website->db($table_config['db'], $server)->check_if_table_exists('EVENT_INFO_IT')){
                 $stmt = $this->website->db($table_config['db'], $server)->prepare('UPDATE EVENT_INFO_IT SET Name = :name WHERE Name = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2390,8 +2226,7 @@
             }
         }
 		
-		public function update_T_ENTER_CHECK_BC($old, $new, $table_config, $server)
-        {
+		public function update_T_ENTER_CHECK_BC($old, $new, $table_config, $server){
             if($this->website->db($table_config['db'], $server)->check_if_table_exists('T_ENTER_CHECK_BC')){
                 $stmt = $this->website->db($table_config['db'], $server)->prepare('UPDATE T_ENTER_CHECK_BC SET CharName = :name WHERE CharName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2400,8 +2235,7 @@
             }
         }
 		
-		public function update_T_ENTER_CHECK_ILLUSION_TEMPLE($old, $new, $table_config, $server)
-        {
+		public function update_T_ENTER_CHECK_ILLUSION_TEMPLE($old, $new, $table_config, $server){
             if($this->website->db($table_config['db'], $server)->check_if_table_exists('T_ENTER_CHECK_ILLUSION_TEMPLE')){
                 $stmt = $this->website->db($table_config['db'], $server)->prepare('UPDATE T_ENTER_CHECK_ILLUSION_TEMPLE SET CharName = :name WHERE CharName = :old_name');
                 return $stmt->execute([':name' => $new, ':old_name' => $old]);
@@ -2410,44 +2244,37 @@
             }
         }
 
-        public function update_DmN_Ban_List($old, $new, $server)
-        {
+        public function update_DmN_Ban_List($old, $new, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Ban_List SET name = :name WHERE name = :old_name AND type = 2 AND server = :server');
             return $stmt->execute([':name' => $new, ':old_name' => $old, ':server' => $server]);
         }
 
-        public function update_DmN_Gm_List($old, $new, $server)
-        {
+        public function update_DmN_Gm_List($old, $new, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Gm_List SET character = :name WHERE character = :old_name AND server = :server');
             return $stmt->execute([':name' => $new, ':old_name' => $old, ':server' => $server]);
         }
 
-        public function update_DmN_Market($old, $new, $server)
-        {
+        public function update_DmN_Market($old, $new, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Market SET char = :name WHERE char = :old_name AND server = :server');
             return $stmt->execute([':name' => $new, ':old_name' => $old, ':server' => $server]);
         }
 
-        public function update_DmN_Market_Logs($old, $new, $server)
-        {
+        public function update_DmN_Market_Logs($old, $new, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Market_Logs SET char = :name WHERE char = :old_name AND server = :server');
             return $stmt->execute([':name' => $new, ':old_name' => $old, ':server' => $server]);
         }
 
-        public function update_DmN_Votereward_Ranking($old, $new, $server)
-        {
+        public function update_DmN_Votereward_Ranking($old, $new, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Votereward_Ranking SET character = :name WHERE character = :old_name AND server = :server');
             return $stmt->execute([':name' => $new, ':old_name' => $old, ':server' => $server]);
         }
 
-        public function add_to_change_name_history($old, $new, $user, $server)
-        {
+        public function add_to_change_name_history($old, $new, $user, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_ChangeName_History (account, old_name, new_name, change_date, server) VALUES (:acc, :old, :new, GETDATE(), :server)');
             return $stmt->execute([':acc' => $user, ':old' => $old, ':new' => $new, ':server' => $server]);
         }
 
-		public function check_amount_of_coins($server)
-        {
+		public function check_amount_of_coins($server){
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             //$check_in = ['inv' => [12, 76], 'inv2' => [76, 107], 'inv3' => [108, 140],];
 			$check_in = ['inv' => [12, 76]];
@@ -2468,8 +2295,7 @@
             return $coins;
         }
 
-		public function check_amount_of_items($id, $cat, $server)
-        {
+		public function check_amount_of_items($id, $cat, $server){
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             //$check_in = ['inv' => [12, 76], 'inv2' => [76, 107], 'inv3' => [108, 140],];
 			$check_in = ['inv' => [12, 76]];
@@ -2490,8 +2316,7 @@
             return $coins;
         }
 
-		public function remove_old_coins($data, $user, $server)
-        {
+		public function remove_old_coins($data, $user, $server){
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             foreach($data AS $key => $val){
                 if(array_key_exists($key, $items_array)){
@@ -2502,8 +2327,7 @@
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 
-		public function add_new_coins($where_to_add, $hex, $user, $server)
-        {
+		public function add_new_coins($where_to_add, $hex, $user, $server){
             $this->get_inventory_content($this->vars['character'], $server);
             $items_array = str_split($this->Mcharacter->char_info['Inventory'], $this->website->get_value_from_server($server, 'item_size'));
             if(array_key_exists($where_to_add, $items_array)){
@@ -2513,8 +2337,7 @@
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
 
-		public function draw_chance($probabilities, $max_propability = 1000)
-        {
+		public function draw_chance($probabilities, $max_propability = 1000){
             $rand = rand(0, $max_propability);
             $keys = array_keys($probabilities);
             arsort($keys);

@@ -55,8 +55,7 @@
          * @param array $files The files to send with this request.
          * @param string $boundary Provide a specific boundary.
          */
-        public function __construct(array $params = [], array $files = [], $boundary = null)
-        {
+        public function __construct(array $params = [], array $files = [], $boundary = null){
             $this->params = $params;
             $this->files = $files;
             $this->boundary = $boundary ?: uniqid();
@@ -65,8 +64,7 @@
         /**
          * @inheritdoc
          */
-        public function getBody()
-        {
+        public function getBody(){
             $body = '';
             // Compile normal params
             $params = $this->getNestedParams($this->params);
@@ -87,8 +85,7 @@
          *
          * @return string
          */
-        public function getBoundary()
-        {
+        public function getBoundary(){
             return $this->boundary;
         }
 
@@ -100,8 +97,7 @@
          *
          * @return string
          */
-        private function getFileString($name, FacebookFile $file)
-        {
+        private function getFileString($name, FacebookFile $file){
             return sprintf("--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s\r\n\r\n%s\r\n", $this->boundary, $name, $file->getFileName(), $this->getFileHeaders($file), $file->getContents());
         }
 
@@ -113,8 +109,7 @@
          *
          * @return string
          */
-        private function getParamString($name, $value)
-        {
+        private function getParamString($name, $value){
             return sprintf("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n", $this->boundary, $name, $value);
         }
 
@@ -125,8 +120,7 @@
          *
          * @return array
          */
-        private function getNestedParams(array $params)
-        {
+        private function getNestedParams(array $params){
             $query = http_build_query($params, null, '&');
             $params = explode('&', $query);
             $result = [];
@@ -144,8 +138,7 @@
          *
          * @return string
          */
-        protected function getFileHeaders(FacebookFile $file)
-        {
+        protected function getFileHeaders(FacebookFile $file){
             return "\r\nContent-Type: {$file->getMimetype()}";
         }
     }

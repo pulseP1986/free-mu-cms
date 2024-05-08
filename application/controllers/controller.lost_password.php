@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -16,8 +15,7 @@
             $this->load->helper('meta');
         }
 
-        public function index()
-        {
+        public function index(){
             $this->vars['config'] = $this->config->values('lostpassword_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->vars['security_config'] = $this->config->values('security_config');
@@ -95,8 +93,7 @@
                 $this->disabled();
             }
         }
-        public function by_question()
-        {
+        public function by_question(){
             $this->vars['secret_question_list'] = $this->website->secret_questions();
             if($this->session->userdata(['lost_password' => 'user'])){
                 if(isset($_POST['fpas_ques'], $_POST['fpas_answ'])){
@@ -145,8 +142,7 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'lost_password' . DS . 'view.lost_password', $this->vars);
         }
 
-        private function by_email()
-        {
+        private function by_email(){
             $data = $this->Maccount->load_account_by_name($this->Maccount->vars['lost_info']);
             if($data){
                 $reminder = $this->Maccount->load_reminder_by_name($data['memb___id'], $this->session->userdata(['lost_password' => 'server']));
@@ -179,8 +175,7 @@
             }
         }
 
-        public function activation($code, $server)
-        {
+        public function activation($code, $server){
             $this->vars['config'] = $this->config->values('lostpassword_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->vars['rconfig'] = $this->config->values('registration_config');
@@ -227,8 +222,7 @@
             }
         }
 
-        public function disabled()
-        {
+        public function disabled(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
         }
     }

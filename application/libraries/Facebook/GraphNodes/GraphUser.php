@@ -40,8 +40,7 @@
          *
          * @return string|null
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->getField('id');
         }
 
@@ -50,8 +49,7 @@
          *
          * @return string|null
          */
-        public function getName()
-        {
+        public function getName(){
             return $this->getField('name');
         }
 
@@ -60,8 +58,7 @@
          *
          * @return string|null
          */
-        public function getFirstName()
-        {
+        public function getFirstName(){
             return $this->getField('first_name');
         }
 
@@ -70,8 +67,7 @@
          *
          * @return string|null
          */
-        public function getMiddleName()
-        {
+        public function getMiddleName(){
             return $this->getField('middle_name');
         }
 
@@ -80,8 +76,7 @@
          *
          * @return string|null
          */
-        public function getLastName()
-        {
+        public function getLastName(){
             return $this->getField('last_name');
         }
 
@@ -90,8 +85,7 @@
          *
          * @return string|null
          */
-        public function getEmail()
-        {
+        public function getEmail(){
             return $this->getField('email');
         }
 
@@ -100,8 +94,7 @@
          *
          * @return string|null
          */
-        public function getGender()
-        {
+        public function getGender(){
             return $this->getField('gender');
         }
 
@@ -110,8 +103,7 @@
          *
          * @return string|null
          */
-        public function getLink()
-        {
+        public function getLink(){
             return $this->getField('link');
         }
 
@@ -120,8 +112,7 @@
          *
          * @return \DateTime|null
          */
-        public function getBirthday()
-        {
+        public function getBirthday(){
             return $this->getField('birthday');
         }
 
@@ -130,8 +121,7 @@
          *
          * @return GraphPage|null
          */
-        public function getLocation()
-        {
+        public function getLocation(){
             return $this->getField('location');
         }
 
@@ -140,8 +130,7 @@
          *
          * @return GraphPage|null
          */
-        public function getHometown()
-        {
+        public function getHometown(){
             return $this->getField('hometown');
         }
 
@@ -150,8 +139,7 @@
          *
          * @return GraphUser|null
          */
-        public function getSignificantOther()
-        {
+        public function getSignificantOther(){
             return $this->getField('significant_other');
         }
 
@@ -160,8 +148,7 @@
          *
          * @return GraphPicture|null
          */
-        public function getPicture()
-        {
+        public function getPicture(){
             return $this->getField('picture');
         }
     }

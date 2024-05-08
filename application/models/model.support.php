@@ -6,23 +6,19 @@
         public $error = false, $vars = [];
         protected $replies = [], $times = [], $pos = 1;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 
-        public function load_department_list()
-        {
+        public function load_department_list(){
             $stmt = $this->website->db('web')->prepare('SELECT id, department_name, pay_per_incident, payment_type FROM DmN_Support_Departments WHERE server = :server AND is_active = 1 ORDER BY id DESC');
             $stmt->execute([':server' => $this->session->userdata(['user' => 'server'])]);
 			$departments = $stmt->fetch_all();
@@ -39,8 +35,7 @@
 			}
         }
 
-        public function get_department_name($id)
-        {
+        public function get_department_name($id){
             $stmt = $this->website->db('web')->prepare('SELECT department_name FROM DmN_Support_Departments WHERE id = :id');
             $stmt->execute([':id' => $id]);
             if($name = $stmt->fetch()){
@@ -49,8 +44,7 @@
             return 'Unknown';
         }
 
-        public function check_department_payment($id)
-        {
+        public function check_department_payment($id){
             $stmt = $this->website->db('web')->prepare('SELECT pay_per_incident, payment_type FROM DmN_Support_Departments WHERE id = :id');
             $stmt->execute([':id' => $id]);
             if($name = $stmt->fetch()){
@@ -59,8 +53,7 @@
             return false;
         }
 
-        public function generate_priority($pr = 1, $list = false, $style = false)
-        {
+        public function generate_priority($pr = 1, $list = false, $style = false){
             $priority = [1 => ['<div class="PriorityZero">' . __('Low') . '</div>', __('Low')], 2 => ['<div class="PriorityOne">' . __('Medium') . '</div>', __('Medium')], 3 => ['<div class="PriorityTwo">' . __('High') . '</div>', __('High')], 4 => ['<div class="PriorityThree">' . __('Urgent') . '</div>', __('Urgent')],];
             if($list){
                 return $priority;
@@ -73,8 +66,7 @@
             }
         }
 
-        public function create_ticket($subject, $character, $department, $priority, $text, $files)
-        {
+        public function create_ticket($subject, $character, $department, $priority, $text, $files){
             $data = [':subject' => bin2hex($subject), ':message' => bin2hex($text), ':dept' => $department, ':prior' => $priority, ':time' => time(), ':account' => $this->session->userdata(['user' => 'username']), ':character' => $character, ':server' => $this->session->userdata(['user' => 'server'])];
             $sql = ['', ''];
             if(count($files) > 0){
@@ -86,15 +78,13 @@
 			return $this->website->db('web')->last_insert_id();
         }
 
-        public function check_last_ticket_time()
-        {
+        public function check_last_ticket_time(){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 create_time FROM DmN_Support_Tickets WHERE creator_account = :account AND server = :server ORDER BY create_time DESC');
             $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
             return $stmt->fetch();
         }
 
-        public function load_my_ticket_list()
-        {
+        public function load_my_ticket_list(){
             $stmt = $this->website->db('web')->prepare('SELECT id, subject, department, create_time, status, replied_by_user FROM DmN_Support_Tickets WHERE creator_account = :account AND server = :server ORDER BY create_time DESC');
             $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
 			$tickets = $stmt->fetch_all();
@@ -112,15 +102,13 @@
             //return $stmt->fetch_all();
         }
 
-        public function get_last_reply_time($id)
-        {
+        public function get_last_reply_time($id){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 reply_time FROM DmN_Support_Replies WHERE ticket_id = :id ORDER BY reply_time DESC');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         }
 
-        public function readable_status($status)
-        {
+        public function readable_status($status){
             switch($status){
                 default:
                 case 0:
@@ -145,8 +133,7 @@
             return $s;
         }
 
-        public function check_ticket($id)
-        {
+        public function check_ticket($id){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, subject, message, department, priority, create_time, status, creator_character, attachment FROM DmN_Support_Tickets WHERE id = :id AND creator_account = :account AND server = :server');
             $stmt->execute([':id' => $id, ':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
             $ticket = $stmt->fetch();
@@ -162,21 +149,18 @@
 			return false;
         }
 
-        public function resolve_ticket($id)
-        {
+        public function resolve_ticket($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET status = 3 WHERE id = :id AND creator_account = :account AND server = :server');
             return $stmt->execute([':id' => $id, ':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
         }
 
-        public function check_unreplied_tickets()
-        {
+        public function check_unreplied_tickets(){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Support_Tickets WHERE creator_account = :account AND server = :server AND replied_by_user = 0');
             $stmt->execute([':account' => $this->session->userdata(['user' => 'username']), ':server' => $this->session->userdata(['user' => 'server'])]);
             return $stmt->fetch_all();
         }
 
-        public function get_ticket_create_time($id)
-        {
+        public function get_ticket_create_time($id){
             $stmt = $this->website->db('web')->prepare('SELECT create_time FROM DmN_Support_Tickets WHERE id = :id');
             $stmt->execute([':id' => $id]);
             if($time = $stmt->fetch()){
@@ -185,8 +169,7 @@
             return 0;
         }
 
-        public function load_ticket_replies($id)
-        {
+        public function load_ticket_replies($id){
             $ticket_create_date = $this->get_ticket_create_time($id);
             $stmt = $this->website->db('web')->prepare('SELECT id, ticket_id, reply, reply_time, reply_by FROM DmN_Support_Replies WHERE ticket_id = :id ORDER BY reply_time ASC');
             $stmt->execute([':id' => $id]);
@@ -200,39 +183,33 @@
             return $this->replies;
         }
 
-        public function check_my_last_reply_time($id)
-        {
+        public function check_my_last_reply_time($id){
             $stmt = $this->website->db('web')->prepare('SELECT Top 1 reply_time FROM DmN_Support_Replies WHERE ticket_id = :id AND reply_by = :account ORDER BY reply_time DESC');
             $stmt->execute([':id' => $id, ':account' => $this->session->userdata(['user' => 'username'])]);
             return $stmt->fetch();
         }
 
-        public function add_reply($id, $text)
-        {
+        public function add_reply($id, $text){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Support_Replies(ticket_id, reply, reply_time, reply_by) VALUES (:id, :reply, :time, :account)');
             return $stmt->execute([':id' => $id, ':reply' => bin2hex($text), ':time' => time(), ':account' => $this->session->userdata(['user' => 'username'])]);
         }
 
-        public function log_reply_time($id)
-        {
+        public function log_reply_time($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET last_reply_time = :time WHERE id = :id');
             return $stmt->execute([':time' => time(), ':id' => $id]);
         }
 
-        public function set_replied_by_user($id)
-        {
+        public function set_replied_by_user($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET replied_by_admin = 0, replied_by_user = 1 WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function set_replied_by_admin_and_user($id)
-        {
+        public function set_replied_by_admin_and_user($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Support_Tickets SET replied_by_admin = 1, replied_by_user = 1 WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-        public function date_diff($start_date, $end_date)
-        {
+        public function date_diff($start_date, $end_date){
             $diff = $end_date - $start_date;
             $seconds = 0;
             $hours = 0;
@@ -264,15 +241,13 @@
             return $days . ' ' . $hours . ' ' . $minutes . ' ' . $seconds;
         }
 
-        public function human_filesize($bytes, $decimals = 2)
-        {
+        public function human_filesize($bytes, $decimals = 2){
             $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
             $factor = floor((strlen($bytes) - 1) / 3);
             return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
         }
 
-        public function reArrayFiles(&$files)
-        {
+        public function reArrayFiles(&$files){
             $file_array = [];
             $file_count = count($files['name']);
             $file_keys = array_keys($files);
@@ -284,8 +259,7 @@
             return $file_array;
         }
 		
-		public function sent_ticket_email_admin($user, $server, $uemail, $aemail, $subject, $id)
-        {
+		public function sent_ticket_email_admin($user, $server, $uemail, $aemail, $subject, $id){
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'support_email_admin_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
@@ -301,8 +275,7 @@
             }
         }
 		
-		public function sent_ticket_reply_email_admin($user, $server, $uemail, $aemail, $subject, $id)
-        {
+		public function sent_ticket_reply_email_admin($user, $server, $uemail, $aemail, $subject, $id){
             $body = @file_get_contents(APP_PATH . DS . 'data' . DS . 'email_patterns' . DS . 'support_email_reply_admin_pattern.html');
             $body = str_replace('###USERNAME###', $user, $body);
             $body = str_replace('###SERVERNAME###', $this->config->config_entry('main|servername'), $body);
@@ -318,8 +291,7 @@
             }
         }
 
-        public function sendmail($recipients, $subject, $message, $from = [])
-        {
+        public function sendmail($recipients, $subject, $message, $from = []){
             $this->vars['email_config'] = $this->config->values('email_config');
             if(!$this->vars['email_config'])
                 throw new Exception('Email settings not configured.');

@@ -4,16 +4,14 @@
     {
         private $registry, $config, $load, $vote_config, $last_month, $reward, $year, $formula = '';
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
             $this->vote_config = $this->config->values('votereward_config');
         }
 
-        public function execute()
-        {
+        public function execute(){
             $this->load->helper('website');
             $this->load->model('account');
             foreach($this->vote_config AS $key => $data){
@@ -39,8 +37,7 @@
             }
         }
 		
-		private function set_reward_is_give($server, $year, $month)
-        {
+		private function set_reward_is_give($server, $year, $month){
             $this->registry->website->db('web')->query('UPDATE DmN_Votereward_Ranking SET reward_is_give = 1 WHERE server = \'' . $server . '\' AND year = ' . $year . ' AND month = \'' . $month . '\'  AND reward_is_give = 0');
         }
     }

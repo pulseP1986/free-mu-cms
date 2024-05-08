@@ -5,8 +5,7 @@
 		private $cache_name = '';
 
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 		
@@ -59,8 +58,7 @@
 			return false;	
 		}
 		
-		private function check_cache($name, $identifier, $server, $time = 360)
-        {
+		private function check_cache($name, $identifier, $server, $time = 360){
             if($this->npc_filter == true){
                 $this->cache_name = $name . '#' . $server . '#' . $this->c_npc . '#' . $this->top;
             } else{

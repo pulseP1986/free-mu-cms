@@ -61,8 +61,7 @@
          * @param string $accessToken
          * @param string $graphVersion
          */
-        public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $graphVersion)
-        {
+        public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $graphVersion){
             $this->app = $app;
             $this->client = $client;
             $this->accessToken = $accessToken;
@@ -79,8 +78,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function start($endpoint, FacebookFile $file)
-        {
+        public function start($endpoint, FacebookFile $file){
             $params = ['upload_phase' => 'start', 'file_size' => $file->getSize(),];
             $response = $this->sendUploadRequest($endpoint, $params);
             return new FacebookTransferChunk($file, $response['upload_session_id'], $response['video_id'], $response['start_offset'], $response['end_offset']);
@@ -97,8 +95,7 @@
          *
          * @throws FacebookResponseException
          */
-        public function transfer($endpoint, FacebookTransferChunk $chunk, $allowToThrow = false)
-        {
+        public function transfer($endpoint, FacebookTransferChunk $chunk, $allowToThrow = false){
             $params = ['upload_phase' => 'transfer', 'upload_session_id' => $chunk->getUploadSessionId(), 'start_offset' => $chunk->getStartOffset(), 'video_file_chunk' => $chunk->getPartialFile(),];
             try{
                 $response = $this->sendUploadRequest($endpoint, $params);
@@ -124,8 +121,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function finish($endpoint, $uploadSessionId, $metadata = [])
-        {
+        public function finish($endpoint, $uploadSessionId, $metadata = []){
             $params = array_merge($metadata, ['upload_phase' => 'finish', 'upload_session_id' => $uploadSessionId,]);
             $response = $this->sendUploadRequest($endpoint, $params);
             return $response['success'];
@@ -139,8 +135,7 @@
          *
          * @return array
          */
-        private function sendUploadRequest($endpoint, $params = [])
-        {
+        private function sendUploadRequest($endpoint, $params = []){
             $request = new FacebookRequest($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
             return $this->client->sendRequest($request)->getDecodedBody();
         }

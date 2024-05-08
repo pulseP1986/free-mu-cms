@@ -30,8 +30,7 @@
          * @param $str_xml
          * @return PagSeguroTransactionSearchResult
          */
-        public static function readSearchResult($str_xml)
-        {
+        public static function readSearchResult($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             $data = $parser->getResult('transactionSearchResult');
             $searchResutlt = new PagSeguroTransactionSearchResult();
@@ -66,8 +65,7 @@
          * @param $str_xml
          * @return PagSeguroTransaction
          */
-        public static function readTransaction($str_xml)
-        {
+        public static function readTransaction($str_xml){
             // Parser
             $parser = new PagSeguroXmlParser($str_xml);
             // <transaction>
@@ -279,8 +277,7 @@
          * @param $data
          * @return PagSeguroItem
          */
-        private static function parseTransactionItem($data)
-        {
+        private static function parseTransactionItem($data){
             // <transaction> <items> <item>
             $item = new PagSeguroItem();
             // <transaction> <items> <item> <id>
@@ -310,8 +307,7 @@
          * @param $data
          * @return PagSeguroTransactionSummary
          */
-        private static function parseTransactionSummary($data)
-        {
+        private static function parseTransactionSummary($data){
             $transactionSummary = new PagSeguroTransactionSummary();
             if(isset($data['type'])){
                 $transactionSummary->setType(new PagSeguroTransactionType($data['type']));

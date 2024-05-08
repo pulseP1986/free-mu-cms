@@ -40,8 +40,7 @@
          *
          * @return string|null
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->getField('id');
         }
 
@@ -50,8 +49,7 @@
          *
          * @return GraphCoverPhoto|null
          */
-        public function getCover()
-        {
+        public function getCover(){
             return $this->getField('cover');
         }
 
@@ -60,8 +58,7 @@
          *
          * @return string|null
          */
-        public function getDescription()
-        {
+        public function getDescription(){
             return $this->getField('description');
         }
 
@@ -70,8 +67,7 @@
          *
          * @return \DateTime|null
          */
-        public function getEndTime()
-        {
+        public function getEndTime(){
             return $this->getField('end_time');
         }
 
@@ -80,8 +76,7 @@
          *
          * @return bool|null
          */
-        public function getIsDateOnly()
-        {
+        public function getIsDateOnly(){
             return $this->getField('is_date_only');
         }
 
@@ -90,8 +85,7 @@
          *
          * @return string|null
          */
-        public function getName()
-        {
+        public function getName(){
             return $this->getField('name');
         }
 
@@ -100,8 +94,7 @@
          *
          * @return GraphNode|null
          */
-        public function getOwner()
-        {
+        public function getOwner(){
             return $this->getField('owner');
         }
 
@@ -110,8 +103,7 @@
          *
          * @return GraphGroup|null
          */
-        public function getParentGroup()
-        {
+        public function getParentGroup(){
             return $this->getField('parent_group');
         }
 
@@ -120,8 +112,7 @@
          *
          * @return GraphPage|null
          */
-        public function getPlace()
-        {
+        public function getPlace(){
             return $this->getField('place');
         }
 
@@ -130,8 +121,7 @@
          *
          * @return string|null
          */
-        public function getPrivacy()
-        {
+        public function getPrivacy(){
             return $this->getField('privacy');
         }
 
@@ -140,8 +130,7 @@
          *
          * @return \DateTime|null
          */
-        public function getStartTime()
-        {
+        public function getStartTime(){
             return $this->getField('start_time');
         }
 
@@ -150,8 +139,7 @@
          *
          * @return string|null
          */
-        public function getTicketUri()
-        {
+        public function getTicketUri(){
             return $this->getField('ticket_uri');
         }
 
@@ -160,8 +148,7 @@
          *
          * @return string|null
          */
-        public function getTimezone()
-        {
+        public function getTimezone(){
             return $this->getField('timezone');
         }
 
@@ -170,8 +157,7 @@
          *
          * @return \DateTime|null
          */
-        public function getUpdatedTime()
-        {
+        public function getUpdatedTime(){
             return $this->getField('updated_time');
         }
 
@@ -180,8 +166,7 @@
          *
          * @return GraphPicture|null
          */
-        public function getPicture()
-        {
+        public function getPicture(){
             return $this->getField('picture');
         }
 
@@ -190,8 +175,7 @@
          *
          * @return int|null
          */
-        public function getAttendingCount()
-        {
+        public function getAttendingCount(){
             return $this->getField('attending_count');
         }
 
@@ -200,8 +184,7 @@
          *
          * @return int|null
          */
-        public function getDeclinedCount()
-        {
+        public function getDeclinedCount(){
             return $this->getField('declined_count');
         }
 
@@ -210,8 +193,7 @@
          *
          * @return int|null
          */
-        public function getMaybeCount()
-        {
+        public function getMaybeCount(){
             return $this->getField('maybe_count');
         }
 
@@ -220,8 +202,7 @@
          *
          * @return int|null
          */
-        public function getNoreplyCount()
-        {
+        public function getNoreplyCount(){
             return $this->getField('noreply_count');
         }
 
@@ -230,8 +211,7 @@
          *
          * @return int|null
          */
-        public function getInvitedCount()
-        {
+        public function getInvitedCount(){
             return $this->getField('invited_count');
         }
     }

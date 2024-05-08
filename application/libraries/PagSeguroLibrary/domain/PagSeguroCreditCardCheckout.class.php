@@ -54,8 +54,7 @@
          * Initializes a new instance of the PagSeguroCreditCardCheckout class
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['token'])){
                     $this->token = $data['token'];
@@ -76,16 +75,14 @@
          * Sets the credit card brand
          * @param string $brand
          */
-        public function setBrand($brand)
-        {
+        public function setBrand($brand){
             $this->brand = $brand;
         }
 
         /***
          * @return string the credit card brand
          */
-        public function getBrand()
-        {
+        public function getBrand(){
             return $this->brand;
         }
 
@@ -93,16 +90,14 @@
          * Sets the credit card token
          * @param mixed $token
          */
-        public function setToken($token)
-        {
+        public function setToken($token){
             $this->token = $token;
         }
 
         /***
          * @return mixed the credit card token
          */
-        public function getToken()
-        {
+        public function getToken(){
             return $this->token;
         }
 
@@ -110,8 +105,7 @@
          * Sets the PagSeguroCreditCardHolder
          * @param intanceof PagSeguroCreditCardHolder $holder
          */
-        public function setHolder($holder)
-        {
+        public function setHolder($holder){
             $this->holder = $holder;
         }
 
@@ -119,8 +113,7 @@
          * @return PagSeguroCreditCardHolder object
          * @see PagSeguroCreditCardHolder
          */
-        public function getHolder()
-        {
+        public function getHolder(){
             return $this->holder;
         }
 
@@ -128,8 +121,7 @@
          * Sets the PagSeguroInstallment
          * @param intanceof PagSeguroInstallment $installment
          */
-        public function setInstallment($installment)
-        {
+        public function setInstallment($installment){
             $this->installment = $installment;
         }
 
@@ -137,8 +129,7 @@
          * @return PagSeguroInstallment object
          * @see PagSeguroInstallment
          */
-        public function getInstallment()
-        {
+        public function getInstallment(){
             return $this->installment;
         }
 
@@ -146,8 +137,7 @@
          * Sets the PagSeguroBilling
          * @param intanceof PagSeguroBilling $billing
          */
-        public function setBilling($billing)
-        {
+        public function setBilling($billing){
             $this->billing = $billing;
         }
 
@@ -155,8 +145,7 @@
          * @return PagSeguroBilling object
          * @see PagSeguroBilling
          */
-        public function getBilling()
-        {
+        public function getBilling(){
             return $this->billing;
         }
     }

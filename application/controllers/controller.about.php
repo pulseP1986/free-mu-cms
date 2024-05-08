@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -16,13 +15,11 @@
             $this->load->helper('meta');
         }
 
-        public function index()
-        {
+        public function index(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'about' . DS . 'view.about');
         }
 
-        public function stats($server = '')
-        {
+        public function stats($server = ''){
             if($server != ''){
                 $this->vars['server'] = $server;
                 $this->vars['title'] = $this->website->get_value_from_server($server, 'title');

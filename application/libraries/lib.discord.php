@@ -23,18 +23,18 @@ class discord extends library{
   public $messageId = null;
   private $_offsetIndex = 0;
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
+    
   public function __construct($webhook, $opts = []){ 
     $opts = $webhook && !$opts ? $webhook : [ "webhook" => array_merge($webhook, $opts) ];
     $this->_setOpts($opts); 
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM  
+    
   public function toJSON(){ 
 	return $this->_getData(); 
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _setOpts($opts) {
 	  
     if (is_string($opts)) {
@@ -47,7 +47,7 @@ class discord extends library{
     }
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _resolveColor($clr) {
     if (is_string($clr)) {
       if ($clr == 'random') return rand(0x000000, 0xFFFFFF);
@@ -66,7 +66,7 @@ class discord extends library{
     }
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _silentJSONParse($str) {
     $json = json_decode($str, true);
     if (json_last_error() != JSON_ERROR_NONE) {
@@ -75,7 +75,7 @@ class discord extends library{
     return $json;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _arrayAdderHandler($name, $values) {
     foreach ($values as $value) {
       if (!$value) continue;
@@ -89,7 +89,7 @@ class discord extends library{
     }
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getData() {
     $embed = $this->embed;
     $embeds = $this->embeds;
@@ -112,7 +112,7 @@ class discord extends library{
     return json_encode($data);
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getFormData() {
     $files = [];
     foreach ($this->files as $id => $file) {
@@ -125,22 +125,22 @@ class discord extends library{
     return $data;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _setEmbed($key, $value, $append=false) {
     return $append ? $this->embed[$key][] = $value : $this->embed[$key] = $value;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getEmbed($key) {
     return $key ? $this->embed[$key] : $this->embed;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _setEmbedArrayValue($key, $firstArg, $structuredVal) {
     return $this->_setEmbed($key, is_array($firstArg) ? $firstArg : $structuredVal);
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getFileSnowflakeById($id) {
     if (isset($this->files[$id])) {
       return $this->files[$id]["snowflake"];
@@ -149,21 +149,21 @@ class discord extends library{
     }
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getWebhookMsgUrl($messageId=null) {
     $messageId = $messageId ?? $this->_getMessageId();
     $webhook = $this->_buildWebhookQuery($this->_getWebhook().'\/messages\/'.$messageId);
     return $webhook;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getMessageId() {
     $messageId = $this->messageId;
     if (!$messageId) throw new Exception("Message Id is Required.");
     return $messageId;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getPostCurlOpts() {
     if ($this->files) {
       $contentType = 'multipart/form-data';
@@ -180,14 +180,14 @@ class discord extends library{
     ];
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _getWebhook() {
     $webhook = $this->webhook;
     if (!$webhook) throw new Exception("Webhook is Required.");
     return $webhook;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _buildWebhookQuery($webhook) {
     $query = [];
     if ($this->wait) $query['wait'] = true;
@@ -196,7 +196,7 @@ class discord extends library{
     return $webhook;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _buildCurlOpts($opts=[]) {
     $defaultOpts = [
       CURLOPT_RETURNTRANSFER => true,
@@ -205,7 +205,7 @@ class discord extends library{
     return $defaultOpts + $opts + $this->curlOpts;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _curlResHandler($ch, $body) {
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $success = $code >= 200 && $code < 299;
@@ -226,7 +226,7 @@ class discord extends library{
     return (object) $res;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   private function _execCurl($url, $opts=[]) {
     $ch = curl_init($url);
 
@@ -238,13 +238,13 @@ class discord extends library{
     return $resp;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setWebhook($webhook) {
     $this->webhook = $webhook;
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setUsername($username) {
     $this->username = $username;
     return $this;
@@ -255,7 +255,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setThreadId($id) {
     $this->threadId = $id;
     return $this;
@@ -266,7 +266,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function newMessage($message=null) {
     $cloned = clone $this;
     if ($message) $cloned->setContent($message);
@@ -279,93 +279,93 @@ class discord extends library{
     return $cloned;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setContent($content) {
     $this->content = $content;
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function prependContent($content) {
     $this->content = $content . $this->content;
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function appendContent($content) {
     $this->content .= $content;
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setTts($tts=true) {
     $this->tts = $tts;
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setTitle($title, $url=null) {
     $this->_setEmbed("title", $title);
     if ($url) $this->setUrl($url);
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function prependTitle($title) {
     $this->_setEmbed("title", $title . $this->_getEmbed("title"));
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function appendTitle($title) {
     $this->_setEmbed("title", $this->_getEmbed("title") . $title);
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setUrl($url) {
     $this->_setEmbed("url", $url);
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setDescription($desc) {
     $this->_setEmbed("description", $desc);
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function prependDescription($desc) {
     $this->_setEmbed("description", $desc . $this->_getEmbed("description"));
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function appendDescription($desc) {
     $this->_setEmbed("description", $this->_getEmbed("description") . $desc);
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setColor($clr) {
     $this->_setEmbed("color", $this->_resolveColor($clr));
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setRandomColor() {
     $this->_setEmbed("color", $this->_resolveColor("random"));
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setTimestamp($ts=null) {
     if (!$ts) $ts = date('c');
     $this->_setEmbed("timestamp", $ts);
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setAuthor($name, $url=null, $iconUrl=null, $proxyIconUrl=null) {
     $this->_setEmbedArrayValue("author", $name, [
       "name" => $name,
@@ -376,7 +376,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setThumbnail($url, $proxyUrl=null, $height=null, $width=null) {
     $this->_setEmbedArrayValue("thumbnail", $url, [
       "url" => $url,
@@ -387,7 +387,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setImage($url, $proxyUrl=null, $height=null, $width=null) {
     $this->_setEmbedArrayValue("image", $url, [
       "url" => $url,
@@ -398,7 +398,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setFooter($text, $iconUrl=null, $proxyIconUrl=null) {
     $this->_setEmbedArrayValue("footer", $text, [
       "text" => $text,
@@ -408,7 +408,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function addField($name, $value=null, $inline=false) {
     $this->embed["fields"][] = is_array($name) ? $name : [
       "name" => $name,
@@ -423,7 +423,7 @@ class discord extends library{
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function addFile($id, $path=null, $name=null, $type=null) {
     $snowflake = count($this->files);
     if (is_array($id)) {
@@ -439,13 +439,13 @@ class discord extends library{
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function addFiles(...$files) {
     $this->_arrayAdderHandler("addFile", $files);
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function addAttachment($id, $filename=null) {
     if (is_array($id)) {
       $attachment = $id;
@@ -462,25 +462,25 @@ class discord extends library{
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function addAttachments(...$attachments) {
     $this->_arrayAdderHandler("addAttachment", $attachments);
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setFlag($flag) {
     $this->flags = $flag;
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setAllowedMentions($data) {
     $this->allowedMentions = $data;
     return $this;
   }
 
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function addEmbed($embedClass, $indx=null, $replace=false) {
     // DiscordWebhook->embed | DiscordEmbed->toArray()
     $embed = property_exists($embedClass, "embed") ? $embedClass->embed : $embedClass->toArray();
@@ -503,13 +503,13 @@ class discord extends library{
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function setMessageId($messageId) {
     $this->messageId = $messageId;
     return $this;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function getMessage($messageId=null, $copyMsg=true) {
     $webhook = $this->_getWebhookMsgUrl($messageId);
     $curlOpts = $this->_buildCurlOpts();
@@ -562,7 +562,7 @@ class discord extends library{
     return $clone ?? null;
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function get($messageId=null) {
     $webhook = $this->_getWebhookMsgUrl($messageId);
 
@@ -571,7 +571,7 @@ class discord extends library{
     return $this->_execCurl($webhook, $curlOpts);
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function delete($messageId=null) {
     $webhook = $this->_getWebhookMsgUrl($messageId);
 
@@ -582,7 +582,7 @@ class discord extends library{
     return $this->_execCurl($webhook, $curlOpts);
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function update($messageId=null) {
     $webhook = $this->_getWebhookMsgUrl($messageId);
 
@@ -591,7 +591,7 @@ class discord extends library{
     return $this->_execCurl($webhook, $curlOpts);
   }
   
-  // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM 
+   
   public function send($opts=null) {
     $this->_setOpts($opts);
 

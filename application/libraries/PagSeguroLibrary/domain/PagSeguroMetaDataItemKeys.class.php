@@ -32,8 +32,7 @@
          * Get available item key list for metadata use in PagSeguro transactions
          * @return array
          */
-        public static function getAvailableItemKeysList()
-        {
+        public static function getAvailableItemKeysList(){
             return self::$availableItemKeysList;
         }
 
@@ -42,8 +41,7 @@
          * @param string $itemKey
          * @return boolean
          */
-        public static function isItemKeyAvailable($itemKey)
-        {
+        public static function isItemKeyAvailable($itemKey){
             $itemKey = strtoupper($itemKey);
             return (isset(self::$availableItemKeysList[$itemKey]));
         }
@@ -53,8 +51,7 @@
          * @param string $itemKey
          * @return string
          */
-        public static function getItemDescriptionByKey($itemKey)
-        {
+        public static function getItemDescriptionByKey($itemKey){
             $itemKey = strtoupper($itemKey);
             if(isset(self::$availableItemKeysList[$itemKey])){
                 return self::$availableItemKeysList[$itemKey];
@@ -68,8 +65,7 @@
          * @param string $itemDescription
          * @return string
          */
-        public static function getItemKeyByDescription($itemDescription)
-        {
+        public static function getItemKeyByDescription($itemDescription){
             return array_search(strtolower($itemDescription), array_map('strtolower', self::$availableItemKeysList));
         }
     }

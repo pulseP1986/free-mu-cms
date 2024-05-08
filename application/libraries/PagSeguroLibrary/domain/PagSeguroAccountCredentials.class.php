@@ -44,8 +44,7 @@
          * @param string $email
          * @param string $token
          */
-        public function __construct($email, $token)
-        {
+        public function __construct($email, $token){
             if($email !== null && $token !== null){
                 $this->email = $email;
                 $this->token = $token;
@@ -57,48 +56,42 @@
         /***
          * @return string the e-mail from this account credential object
          */
-        public function getEmail()
-        {
+        public function getEmail(){
             return $this->email;
         }
 
         /***
          * Sets the e-mail from this account credential object
          */
-        public function setEmail($email)
-        {
+        public function setEmail($email){
             $this->email = $email;
         }
 
         /***
          * @return string the token from this account credential object
          */
-        public function getToken()
-        {
+        public function getToken(){
             return $this->token;
         }
 
         /***
          * Sets the token in this account credential object
          */
-        public function setToken($token)
-        {
+        public function setToken($token){
             $this->token = $token;
         }
 
         /***
          * @return array a map of name value pairs that compose this set of credentials
          */
-        public function getAttributesMap()
-        {
+        public function getAttributesMap(){
             return ['email' => $this->email, 'token' => $this->token];
         }
 
         /***
          * @return string a string that represents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $credentials = [];
             $credentials['E-mail'] = $this->email;
             $credentials['Token'] = $this->token;

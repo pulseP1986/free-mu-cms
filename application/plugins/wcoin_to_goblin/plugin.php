@@ -11,8 +11,7 @@
          * Initialize plugin class
          *
          */
-        public function __construct()
-        {
+        public function __construct(){
             //initialize parent constructor
             parent::__construct();
             //initialize pluginaizer
@@ -29,8 +28,7 @@
          *
          * Return mixed
          */
-        public function index()
-        {
+        public function index(){
             if($this->pluginaizer->data()->value('installed') == false){
                 throw new Exception('Plugin has not yet been installed.');
             } else{
@@ -53,8 +51,7 @@
          * return mixed
          *
          */
-        private function user_module()
-        {
+        private function user_module(){
             //check if visitor has user privilleges
             if($this->pluginaizer->session->is_user()){
                 //load plugin config
@@ -93,8 +90,7 @@
          * return mixed
          *
          */
-        public function change_credits()
-        {
+        public function change_credits(){
             //check if visitor has user privilleges
             if($this->pluginaizer->session->is_user()){
                 //load website helper
@@ -157,8 +153,7 @@
          * return mixed
          *
          */
-        private function public_module()
-        {
+        private function public_module(){
             // public module not used in this plugin
         }
 
@@ -170,8 +165,7 @@
          *
          * Return mixed
          */
-        public function admin()
-        {
+        public function admin(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 $this->vars['is_multi_server'] = $this->pluginaizer->data()->value('is_multi_server');
@@ -192,8 +186,7 @@
          *
          * Return mixed
          */
-        public function save_settings()
-        {
+        public function save_settings(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 $this->vars['plugin_config'] = $this->pluginaizer->plugin_config();
@@ -225,8 +218,7 @@
          * Set plugin data, create plugin config template, create sql schemes
          *
          */
-        public function install()
-        {
+        public function install(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //create plugin info
@@ -263,8 +255,7 @@
          * Remove plugin data, delete plugin config, delete sql schemes
          *
          */
-        public function uninstall()
-        {
+        public function uninstall(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //delete plugin config and remove plugin data
@@ -280,8 +271,7 @@
             }
         }
 
-        public function enable()
-        {
+        public function enable(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //enable plugin
@@ -297,8 +287,7 @@
             }
         }
 
-        public function disable()
-        {
+        public function disable(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //disable plugin
@@ -314,8 +303,7 @@
             }
         }
 
-        public function about()
-        {
+        public function about(){
             //check if visitor has administrator privilleges
             if($this->pluginaizer->session->is_admin()){
                 //create plugin info

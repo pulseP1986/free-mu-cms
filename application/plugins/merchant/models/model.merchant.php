@@ -4,8 +4,7 @@
     {
         private $characters = [], $logs = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
@@ -17,8 +16,7 @@
          *
          * @return mixed
          */
-        public function load_merchants()
-        {
+        public function load_merchants(){
             return $this->website->db('web')->query('SELECT id, memb___id, name, contact, server, wallet, active FROM DmN_Merchant_List ORDER BY id ASC')->fetch_all();
         }
 
@@ -30,8 +28,7 @@
          *
          * @return mixed
          */
-        public function check_account($account, $server)
-        {
+        public function check_account($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT TOP 1 memb_guid FROM MEMB_INFO WHERE memb___id = :account');
             $stmt->execute([':account' => $account]);
             return $stmt->fetch();
@@ -46,8 +43,7 @@
          *
          * @return mixed
          */
-        public function check_merchant($account, $server, $id = -1)
-        {
+        public function check_merchant($account, $server, $id = -1){
             $id_check = '';
             if($id != -1){
                 $id_check = 'AND id != :id';
@@ -68,8 +64,7 @@
          *
          * @return mixed
          */
-        public function check_merchant_id($id = -1)
-        {
+        public function check_merchant_id($id = -1){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id FROM DmN_Merchant_List WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
@@ -87,8 +82,7 @@
          * @return mixed
          *
          */
-        public function add_merchant($account, $name, $contact, $wallet, $server)
-        {
+        public function add_merchant($account, $name, $contact, $wallet, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Merchant_List (memb___id, name, contact, server, wallet) VALUES (:account, :name, :contact, :server, :wallet)');
             $stmt->execute([':account' => $account, ':name' => $name, ':contact' => $contact, ':server' => $server, ':wallet' => $wallet]);
             return $this->website->db('web')->last_insert_id();
@@ -106,8 +100,7 @@
          *
          *
          */
-        public function edit_merchant($id, $account, $name, $contact, $wallet, $server)
-        {
+        public function edit_merchant($id, $account, $name, $contact, $wallet, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Merchant_List SET memb___id = :account, name = :name, contact = :contact, server = :server, wallet = :wallet WHERE id = :id');
             $stmt->execute([':account' => $account, ':name' => $name, ':contact' => $contact, ':server' => $server, ':wallet' => $wallet, ':id' => $id]);
         }
@@ -119,8 +112,7 @@
          *
          *
          */
-        public function delete_merchant($id)
-        {
+        public function delete_merchant($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Merchant_List WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
@@ -133,8 +125,7 @@
          *
          *
          */
-        public function change_status($id, $status)
-        {
+        public function change_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Merchant_List SET active = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
@@ -149,8 +140,7 @@
          *
          *
          */
-        public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
                 $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id, merchant, amount, currency, account, server, date FROM DmN_Merchant_Logs WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Merchant_Logs ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
@@ -172,8 +162,7 @@
          *
          * @return int
          */
-        public function count_total_logs($acc = '', $server = 'All')
-        {
+        public function count_total_logs($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE merchant like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -185,8 +174,7 @@
             return $count;
         }
 
-        public function add_wcoins($amount = 0, $id, $account, $server, $config = [])
-        {
+        public function add_wcoins($amount = 0, $id, $account, $server, $config = []){
             $acc = (in_array($config['identifier_column'], ['MemberGuid', 'memb_guid'])) ? $id : $account;
             $stmt = $this->website->db($config['db'], $server)->prepare('UPDATE ' . $config['table'] . ' SET ' . $config['column'] . ' = ' . $config['column'] . ' + :wcoins WHERE ' . $config['identifier_column'] . ' = :account');
             $stmt->execute([':wcoins' => $amount, ':account' => $acc]);
@@ -196,22 +184,19 @@
             }
         }
 
-        public function add_account_log($log, $credits, $acc, $server)
-        {
+        public function add_account_log($log, $credits, $acc, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 
-        public function deduct_merchant_money($merchant, $money, $server)
-        {
+        public function deduct_merchant_money($merchant, $money, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Merchant_List SET wallet = wallet - :money WHERE memb___id = :merchant AND server = :server');
             $stmt->execute([':money' => $money, ':merchant' => $merchant, ':server' => $server]);
             $stmt->close_cursor();
         }
 
-        public function add_merchant_log($merchant, $amount, $currency, $account, $server)
-        {
+        public function add_merchant_log($merchant, $amount, $currency, $account, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Merchant_Logs (merchant, amount, currency, account, server, date) VALUES (:merchant, :amount, :currency, :acc, :server, :date)');
             $stmt->execute([':merchant' => $merchant, ':amount' => $amount, ':currency' => $currency, ':acc' => $account, ':server' => $server, ':date' => time()]);
             $stmt->close_cursor();
@@ -225,8 +210,7 @@
          *
          * @return bool
          */
-        public function check_connect_stat($account, $server)
-        {
+        public function check_connect_stat($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = :user ' . $this->website->server_code($this->website->get_servercode($server)) . '');
             $stmt->execute([':user' => $account]);
             if($status = $stmt->fetch()){

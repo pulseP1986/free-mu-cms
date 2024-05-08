@@ -30,8 +30,7 @@
          * @param $payment PagSeguroPaymentRequest
          * @return mixed
          */
-        public static function getData($payment)
-        {
+        public static function getData($payment){
             $data = null;
             // reference
             if($payment->getReference() != null){
@@ -210,8 +209,7 @@
          * @param $str_xml
          * @return PagSeguroPaymentParserData Success
          */
-        public static function readSuccessXml($str_xml)
-        {
+        public static function readSuccessXml($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             $data = $parser->getResult('checkout');
             $PaymentParserData = new PagSeguroPaymentParserData();
@@ -224,8 +222,7 @@
          * @param $str_xml
          * @return parsed credit card brand
          */
-        public static function readCCBRandXml($str_xml)
-        {
+        public static function readCCBRandXml($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             $PaymentParserData = new PagSeguroPaymentParserData();
             $PaymentParserData->setCode($data['code']);
@@ -237,8 +234,7 @@
          * @param $str_xml
          * @return parsed transaction
          */
-        public static function readTransactionXml($str_xml)
-        {
+        public static function readTransactionXml($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             $data = $parser->getResult('transaction');
             $PaymentParserData = new PagSeguroPaymentParserData();

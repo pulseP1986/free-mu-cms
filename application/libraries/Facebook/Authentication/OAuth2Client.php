@@ -73,8 +73,7 @@
          * @param FacebookClient $client
          * @param string|null $graphVersion The version of the Graph API to use.
          */
-        public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
-        {
+        public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null){
             $this->app = $app;
             $this->client = $client;
             $this->graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
@@ -86,8 +85,7 @@
          *
          * @return FacebookRequest|null
          */
-        public function getLastRequest()
-        {
+        public function getLastRequest(){
             return $this->lastRequest;
         }
 
@@ -98,8 +96,7 @@
          *
          * @return AccessTokenMetadata
          */
-        public function debugToken($accessToken)
-        {
+        public function debugToken($accessToken){
             $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
             $params = ['input_token' => $accessToken];
             $this->lastRequest = new FacebookRequest($this->app, $this->app->getAccessToken(), 'GET', '/debug_token', $params, null, $this->graphVersion);
@@ -119,8 +116,7 @@
          *
          * @return string
          */
-        public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&')
-        {
+        public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&'){
             $params += ['client_id' => $this->app->getId(), 'state' => $state, 'response_type' => 'code', 'sdk' => 'php-sdk-' . Facebook::VERSION, 'redirect_uri' => $redirectUrl, 'scope' => implode(',', $scope)];
             return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' . http_build_query($params, null, $separator);
         }
@@ -135,8 +131,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getAccessTokenFromCode($code, $redirectUri = '')
-        {
+        public function getAccessTokenFromCode($code, $redirectUri = ''){
             $params = ['code' => $code, 'redirect_uri' => $redirectUri,];
             return $this->requestAnAccessToken($params);
         }
@@ -150,8 +145,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getLongLivedAccessToken($accessToken)
-        {
+        public function getLongLivedAccessToken($accessToken){
             $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
             $params = ['grant_type' => 'fb_exchange_token', 'fb_exchange_token' => $accessToken,];
             return $this->requestAnAccessToken($params);
@@ -167,8 +161,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = '')
-        {
+        public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = ''){
             $params = ['redirect_uri' => $redirectUri,];
             $response = $this->sendRequestWithClientParams('/oauth/client_code', $params, $accessToken);
             $data = $response->getDecodedBody();
@@ -187,8 +180,7 @@
          *
          * @throws FacebookSDKException
          */
-        protected function requestAnAccessToken(array $params)
-        {
+        protected function requestAnAccessToken(array $params){
             $response = $this->sendRequestWithClientParams('/oauth/access_token', $params);
             $data = $response->getDecodedBody();
             if(!isset($data['access_token'])){
@@ -221,8 +213,7 @@
          *
          * @throws FacebookResponseException
          */
-        protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null)
-        {
+        protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null){
             $params += $this->getClientParams();
             $accessToken = $accessToken ?: $this->app->getAccessToken();
             $this->lastRequest = new FacebookRequest($this->app, $accessToken, 'GET', $endpoint, $params, null, $this->graphVersion);
@@ -234,8 +225,7 @@
          *
          * @return array
          */
-        protected function getClientParams()
-        {
+        protected function getClientParams(){
             return ['client_id' => $this->app->getId(), 'client_secret' => $this->app->getSecret(),];
         }
     }

@@ -117,8 +117,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function __construct(array $config = [])
-        {
+        public function __construct(array $config = []){
             $appId = isset($config['app_id']) ? $config['app_id'] : getenv(static::APP_ID_ENV_NAME);
             if(!$appId){
                 throw new FacebookSDKException('Required "app_id" key not supplied in config and could not find fallback environment variable "' . static::APP_ID_ENV_NAME . '"');
@@ -191,8 +190,7 @@
          *
          * @return FacebookApp
          */
-        public function getApp()
-        {
+        public function getApp(){
             return $this->app;
         }
 
@@ -201,8 +199,7 @@
          *
          * @return FacebookClient
          */
-        public function getClient()
-        {
+        public function getClient(){
             return $this->client;
         }
 
@@ -211,8 +208,7 @@
          *
          * @return OAuth2Client
          */
-        public function getOAuth2Client()
-        {
+        public function getOAuth2Client(){
             if(!$this->oAuth2Client instanceof OAuth2Client){
                 $app = $this->getApp();
                 $client = $this->getClient();
@@ -226,8 +222,7 @@
          *
          * @return FacebookResponse|FacebookBatchResponse|null
          */
-        public function getLastResponse()
-        {
+        public function getLastResponse(){
             return $this->lastResponse;
         }
 
@@ -236,8 +231,7 @@
          *
          * @return UrlDetectionInterface
          */
-        public function getUrlDetectionHandler()
-        {
+        public function getUrlDetectionHandler(){
             if(!$this->urlDetectionHandler instanceof UrlDetectionInterface){
                 $this->urlDetectionHandler = new FacebookUrlDetectionHandler();
             }
@@ -249,8 +243,7 @@
          *
          * @return AccessToken|null
          */
-        public function getDefaultAccessToken()
-        {
+        public function getDefaultAccessToken(){
             return $this->defaultAccessToken;
         }
 
@@ -261,8 +254,7 @@
          *
          * @throws \InvalidArgumentException
          */
-        public function setDefaultAccessToken($accessToken)
-        {
+        public function setDefaultAccessToken($accessToken){
             if(is_string($accessToken)){
                 $this->defaultAccessToken = new AccessToken($accessToken);
                 return;
@@ -279,8 +271,7 @@
          *
          * @return string
          */
-        public function getDefaultGraphVersion()
-        {
+        public function getDefaultGraphVersion(){
             return $this->defaultGraphVersion;
         }
 
@@ -289,8 +280,7 @@
          *
          * @return FacebookRedirectLoginHelper
          */
-        public function getRedirectLoginHelper()
-        {
+        public function getRedirectLoginHelper(){
             return new FacebookRedirectLoginHelper($this->getOAuth2Client(), $this->persistentDataHandler, $this->urlDetectionHandler, $this->pseudoRandomStringGenerator);
         }
 
@@ -299,8 +289,7 @@
          *
          * @return FacebookJavaScriptHelper
          */
-        public function getJavaScriptHelper()
-        {
+        public function getJavaScriptHelper(){
             return new FacebookJavaScriptHelper($this->app, $this->client, $this->defaultGraphVersion);
         }
 
@@ -309,8 +298,7 @@
          *
          * @return FacebookCanvasHelper
          */
-        public function getCanvasHelper()
-        {
+        public function getCanvasHelper(){
             return new FacebookCanvasHelper($this->app, $this->client, $this->defaultGraphVersion);
         }
 
@@ -319,8 +307,7 @@
          *
          * @return FacebookPageTabHelper
          */
-        public function getPageTabHelper()
-        {
+        public function getPageTabHelper(){
             return new FacebookPageTabHelper($this->app, $this->client, $this->defaultGraphVersion);
         }
 
@@ -336,8 +323,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
-        {
+        public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null){
             return $this->sendRequest('GET', $endpoint, $params = [], $accessToken, $eTag, $graphVersion);
         }
 
@@ -354,8 +340,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function post($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-        {
+        public function post($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null){
             return $this->sendRequest('POST', $endpoint, $params, $accessToken, $eTag, $graphVersion);
         }
 
@@ -372,8 +357,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function delete($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-        {
+        public function delete($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null){
             return $this->sendRequest('DELETE', $endpoint, $params, $accessToken, $eTag, $graphVersion);
         }
 
@@ -386,8 +370,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function next(GraphEdge $graphEdge)
-        {
+        public function next(GraphEdge $graphEdge){
             return $this->getPaginationResults($graphEdge, 'next');
         }
 
@@ -400,8 +383,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function previous(GraphEdge $graphEdge)
-        {
+        public function previous(GraphEdge $graphEdge){
             return $this->getPaginationResults($graphEdge, 'previous');
         }
 
@@ -415,8 +397,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getPaginationResults(GraphEdge $graphEdge, $direction)
-        {
+        public function getPaginationResults(GraphEdge $graphEdge, $direction){
             $paginationRequest = $graphEdge->getPaginationRequest($direction);
             if(!$paginationRequest){
                 return null;
@@ -442,8 +423,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function sendRequest($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-        {
+        public function sendRequest($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null){
             $accessToken = $accessToken ?: $this->defaultAccessToken;
             $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
             $request = $this->request($method, $endpoint, $params, $accessToken, $eTag, $graphVersion);
@@ -461,8 +441,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function sendBatchRequest(array $requests, $accessToken = null, $graphVersion = null)
-        {
+        public function sendBatchRequest(array $requests, $accessToken = null, $graphVersion = null){
             $accessToken = $accessToken ?: $this->defaultAccessToken;
             $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
             $batchRequest = new FacebookBatchRequest($this->app, $requests, $accessToken, $graphVersion);
@@ -483,8 +462,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function request($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-        {
+        public function request($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null){
             $accessToken = $accessToken ?: $this->defaultAccessToken;
             $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
             return new FacebookRequest($this->app, $accessToken, $method, $endpoint, $params, $eTag, $graphVersion);
@@ -499,8 +477,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function fileToUpload($pathToFile)
-        {
+        public function fileToUpload($pathToFile){
             return new FacebookFile($pathToFile);
         }
 
@@ -513,8 +490,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function videoToUpload($pathToFile)
-        {
+        public function videoToUpload($pathToFile){
             return new FacebookVideo($pathToFile);
         }
 
@@ -532,8 +508,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function uploadVideo($target, $pathToFile, $metadata = [], $accessToken = null, $maxTransferTries = 5, $graphVersion = null)
-        {
+        public function uploadVideo($target, $pathToFile, $metadata = [], $accessToken = null, $maxTransferTries = 5, $graphVersion = null){
             $accessToken = $accessToken ?: $this->defaultAccessToken;
             $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
             $uploader = new FacebookResumableUploader($this->app, $this->client, $accessToken, $graphVersion);
@@ -558,8 +533,7 @@
          *
          * @throws FacebookSDKException
          */
-        private function maxTriesTransfer(FacebookResumableUploader $uploader, $endpoint, FacebookTransferChunk $chunk, $retryCountdown)
-        {
+        private function maxTriesTransfer(FacebookResumableUploader $uploader, $endpoint, FacebookTransferChunk $chunk, $retryCountdown){
             $newChunk = $uploader->transfer($endpoint, $chunk, $retryCountdown < 1);
             if($newChunk !== $chunk){
                 return $newChunk;

@@ -49,8 +49,7 @@
          * @param string $appKey
          * @param string $authorizationCode
          */
-        public function __construct($appId, $appKey, $authorizationCode = null)
-        {
+        public function __construct($appId, $appKey, $authorizationCode = null){
             if($appId !== null && $appKey !== null){
                 $this->appId = $appId;
                 $this->appKey = $appKey;
@@ -65,8 +64,7 @@
         /***
          * @return string the appID from this authorization credentials
          */
-        public function getAppId()
-        {
+        public function getAppId(){
             return $this->appId;
         }
 
@@ -74,16 +72,14 @@
          * Sets the app ID from this authorization credentials
          * @param string $appId
          */
-        public function setAppId($appId)
-        {
+        public function setAppId($appId){
             $this->appId = $appId;
         }
 
         /***
          * @return string the appKey from this authorization credentials
          */
-        public function getAppKey()
-        {
+        public function getAppKey(){
             return $this->appKey;
         }
 
@@ -91,16 +87,14 @@
          * Sets the app ID from this authorization credentials
          * @param string $appKey
          */
-        public function setAppKey($appKey)
-        {
+        public function setAppKey($appKey){
             $this->appKey = $appKey;
         }
 
         /***
          * @return string the appKey from this authorization credentials
          */
-        public function getAuthorizationCode()
-        {
+        public function getAuthorizationCode(){
             return $this->authorizationCode;
         }
 
@@ -108,24 +102,21 @@
          * Sets the app ID from this authorization credentials
          * @param string $authorizationCode
          */
-        public function setAuthorizationCode($authorizationCode)
-        {
+        public function setAuthorizationCode($authorizationCode){
             $this->authorizationCode = $authorizationCode;
         }
 
         /***
          * @return array a map of name value pairs that compose this set of credentials
          */
-        public function getAttributesMap()
-        {
+        public function getAttributesMap(){
             return ['appId' => $this->appId, 'appKey' => $this->appKey, 'authorizationCode' => $this->authorizationCode];
         }
 
         /***
          * @return string a string that represents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $credentials = [];
             $credentials['AppID'] = $this->appId;
             $credentials['AppKey'] = $this->appKey;

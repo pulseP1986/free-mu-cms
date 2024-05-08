@@ -6,13 +6,11 @@
         public $vault_items, $vault_money, $item = '', $items = [], $total_items, $exe_opt_count = 0;
         private $new_hex;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-		public function get_vault_content($user, $server)
-        {
+		public function get_vault_content($user, $server){
 			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items, Money FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){ 
@@ -25,8 +23,7 @@
 			}  
         }
 
-		public function load_items($server)
-        {
+		public function load_items($server){
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $items = [];
             $i = 0;
@@ -61,13 +58,11 @@
             return $items;
         }
 
-        private function set_total_items($count = 120)
-        {
+        private function set_total_items($count = 120){
             $this->total_items = $count;
         }
 
-		public function find_item_by_slot($slot, $server)
-        {
+		public function find_item_by_slot($slot, $server){
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             $found = false;
             if(isset($hex[$slot - 1]) && $hex[$slot - 1] != str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F")){
@@ -77,8 +72,7 @@
             return $found;
         }
 
-		public function generate_new_item_by_slot($slot, $server)
-        {
+		public function generate_new_item_by_slot($slot, $server){
             $hex = str_split($this->vault_items['Items'], $this->website->get_value_from_server($server, 'item_size'));
             if(isset($hex[$slot - 1])){
                 $hex[$slot - 1] = str_pad("", $this->website->get_value_from_server($server, 'item_size'), "F");
@@ -86,32 +80,27 @@
             $this->new_hex = implode('', $hex);
         }
 
-        public function insert_web_item($user, $server, $item = null)
-        {
+        public function insert_web_item($user, $server, $item = null){
 			$item = ($item != null) ? $item : $this->item;
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Web_Storage (item, account, server, expires_on) VALUES (:item, :account, :server, :expires_on)');
             return $stmt->execute([':item' => $item, ':account' => $user, ':server' => $server, ':expires_on' => strtotime('+' . $this->config->config_entry('warehouse|web_wh_item_expires_after'))]);
         }
 
-        public function check_web_wh_item($id, $user, $server)
-        {
+        public function check_web_wh_item($id, $user, $server){
             return $this->website->db('web')->query('SELECT item FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . ' AND id = ' . $this->website->db('web')->escape($id) . '')->fetch();
         }
 
-        public function set_removed_web_item($id)
-        {
+        public function set_removed_web_item($id){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Web_Storage SET is_removed = 1 WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 		
-		public function remove_web_item($id)
-        {
+		public function remove_web_item($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Web_Storage WHERE id = :id');
             return $stmt->execute([':id' => $id]);
         }
 
-		public function load_web_items($user, $server, $page = 1, $item = '')
-        {
+		public function load_web_items($user, $server, $page = 1, $item = ''){
             $per_page = ($page <= 1) ? 0 : (int)$this->config->config_entry('warehouse|web_items_per_page') * ((int)$page - 1);
 			$pp = ($item != '') ? 500 : $this->website->db('web')->escape((int)$this->config->config_entry('warehouse|web_items_per_page'));
             $items = $this->website->db('web')->query('SELECT TOP ' . $pp . ' id, item, expires_on FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . ' AND id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page) . ' id FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . ' ORDER BY id DESC) ORDER BY id DESC');
@@ -152,19 +141,16 @@
 			return $this->website->db('web')->query('SELECT id, item FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . '')->fetch_all();
 		}
 
-        public function count_total_web_items($user, $server)
-        {
+        public function count_total_web_items($user, $server){
             $this->total_items = $this->website->db('web')->snumrows('SELECT COUNT(item) AS count FROM DmN_Web_Storage WHERE account = '.$this->website->db('web')->escape($user).' AND server = '.$this->website->db('web')->escape($server).' AND is_removed = 0 AND expires_on > ' . time() . '');
         }
 
-        public function update_warehouse($user, $server)
-        {
+        public function update_warehouse($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_hex . ' WHERE AccountId = :user');
             return $stmt->execute([':user' => $user]);
         }
 
-		public function load_item_info($item = '')
-        {
+		public function load_item_info($item = ''){
 			if($item != ''){
 				$this->iteminfo->itemData($item);
 			}
@@ -241,14 +227,12 @@
             return ['info' => $info, 'luck' => $luck, 'exe_opts' => $exe_opts];
         }
 
-        public function check_shop_item($item = null)
-        {
+        public function check_shop_item($item = null){
 			$check = ($item != null) ? $item : $this->item;
             return $this->website->db('web')->query('SELECT id FROM DmN_Shop_Logs WHERE SUBSTRING(item_hex ,7 ,8) = '.$this->website->db('web')->escape(substr($check, 6, 8)).'')->fetch();
         }
 
-		public function add_market_item($user, $server, $info, $price, $ptype, $time, $char, $highlight, $password = '', $item = null)
-        {
+		public function add_market_item($user, $server, $info, $price, $ptype, $time, $char, $highlight, $password = '', $item = null){
 			$item = ($item != null) ? $item : $this->item;
 			
             if(in_array($ptype, [4, 5, 6, 7, 8, 9])){
@@ -307,38 +291,32 @@
 			]);
         }
 
-        public function check_existing_item()
-        {
+        public function check_existing_item(){
             $stmt = $this->website->db('web')->prepare('SELECT id FROM DmN_Market WHERE item = :item AND active = 1 AND sold != 1 AND removed != 1');
             $stmt->execute([':item' => $this->item]);
             return $stmt->fetch();
         }
 
-        public function log_deleted_item($user, $server, $by_admin = 0)
-        {
+        public function log_deleted_item($user, $server, $by_admin = 0){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Warehouse_Delete_Log (account, server, item, date, deleted_by_admin) VALUES (:account, :server, :item, GETDATE(), :by_admin)');
             $stmt->execute([':account' => $user, ':server' => $server, ':item' => $this->item, ':by_admin' => $by_admin]);
         }
 
-        public function get_market_item_count($user, $server)
-        {
+        public function get_market_item_count($user, $server){
             return $this->website->db('web')->query('SELECT COUNT(*) AS count FROM DmN_Market WHERE seller = '.$this->website->db('web')->escape($user).' AND DATEDIFF(day, add_date, GETDATE()) = 0')->fetch();
         }
 
-        public function decrease_zen($account, $server, $money)
-        {
+        public function decrease_zen($account, $server, $money){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Money = Money - :money WHERE AccountId = :account');
             return $stmt->execute([':money' => $money, ':account' => $account]);
         }
 
-        public function add_zen($account, $server, $money)
-        {
+        public function add_zen($account, $server, $money){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Money = Money + :money WHERE AccountId = :account');
             return $stmt->execute([':money' => $money, ':account' => $account]);
         }
 
-        public function create_vault($user, $server)
-        {
+        public function create_vault($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff),' . $this->website->get_value_from_server($server, 'wh_size') . ') as varbinary(' . $this->website->get_value_from_server($server, 'wh_size') . ')), 0, getdate())');
             $stmt->execute([':user' => $user]);
         }

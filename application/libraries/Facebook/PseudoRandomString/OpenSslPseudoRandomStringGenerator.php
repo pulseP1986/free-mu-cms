@@ -37,8 +37,7 @@
         /**
          * @throws FacebookSDKException
          */
-        public function __construct()
-        {
+        public function __construct(){
             if(!function_exists('openssl_random_pseudo_bytes')){
                 throw new FacebookSDKException(static::ERROR_MESSAGE . 'The function openssl_random_pseudo_bytes() does not exist.');
             }
@@ -47,8 +46,7 @@
         /**
          * @inheritdoc
          */
-        public function getPseudoRandomString($length)
-        {
+        public function getPseudoRandomString($length){
             $this->validateLength($length);
             $wasCryptographicallyStrong = false;
             $binaryString = openssl_random_pseudo_bytes($length, $wasCryptographicallyStrong);

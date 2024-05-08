@@ -35,8 +35,7 @@
          * @param PagSeguroConnectionData $connectionData
          * @return string
          */
-        private static function buildAuthorizationUrl(PagSeguroConnectionData $connectionData)
-        {
+        private static function buildAuthorizationUrl(PagSeguroConnectionData $connectionData){
             return $connectionData->getServiceUrl() . $connectionData->getResource('requestUrl') . '?';
         }
 
@@ -45,8 +44,7 @@
          * @param string $code
          * @return string
          */
-        private static function buildAuthorizationApprovalUrl(PagSeguroConnectionData $connectionData, $code)
-        {
+        private static function buildAuthorizationApprovalUrl(PagSeguroConnectionData $connectionData, $code){
             return $connectionData->getBaseUrl() . $connectionData->getResource('approvalUrl') . '?code=' . $code;
         }
 
@@ -57,8 +55,7 @@
          * @return bool|string
          * @throws Exception
          */
-        public static function createAuthorizationRequest(PagSeguroCredentials $credentials, PagSeguroAuthorizationRequest $authorizationRequest, $onlyAuthorizationCode)
-        {
+        public static function createAuthorizationRequest(PagSeguroCredentials $credentials, PagSeguroAuthorizationRequest $authorizationRequest, $onlyAuthorizationCode){
             LogPagSeguro::info("PagSeguroAuthorizationService.Register(" . $authorizationRequest->toString() . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -81,8 +78,7 @@
          * @return bool|mixed|string
          * @throws PagSeguroServiceException
          */
-        private static function authorizationReturn(PagSeguroHttpConnection $connection, PagSeguroAuthorizationRequest $authorizationRequest, PagSeguroConnectionData $connectionData, $onlyAuthorizationCode = null)
-        {
+        private static function authorizationReturn(PagSeguroHttpConnection $connection, PagSeguroAuthorizationRequest $authorizationRequest, PagSeguroConnectionData $connectionData, $onlyAuthorizationCode = null){
             $httpStatus = new PagSeguroHttpStatus($connection->getStatus());
             switch($httpStatus->getType()){
                 case 'OK':

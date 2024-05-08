@@ -29,8 +29,7 @@
          * Default constructor.
          * @since 1.0.0
          */
-        public function __construct()
-        {
+        public function __construct(){
             $this->time = time();
             $this->jobs = [];
         }
@@ -44,8 +43,7 @@
          *
          * @return this for chaining
          */
-        public function job($name, Closure $task)
-        {
+        public function job($name, Closure $task){
             //set task name for log
             $this->task_name = $name;
             $filename = $this->jobsPath . '/' . $name . '.php';
@@ -69,8 +67,7 @@
          *
          * @return this for chaining
          */
-        public function start()
-        {
+        public function start(){
             // Check on first time execution
             if(!$this->session->has('last_exec_time'))
                 $this->session->set('last_exec_time', 0);
@@ -91,8 +88,7 @@
          *
          * @param int $index Index.
          */
-        private function executeJob($index)
-        {
+        private function executeJob($index){
             try{
                 if(!$this->check_lock($this->jobs[$index])){
                     if($this->onSchedule($this->jobs[$index])){
@@ -113,8 +109,7 @@
          *
          * @param object $job .
          */
-        private function onSchedule(Job $job)
-        {
+        private function onSchedule(Job $job){
             if(!$this->session->has('jobs') && !isset($this->session->get('jobs')->{get_class($job)}))
                 return true;
             switch($job->task->interval){
@@ -169,8 +164,7 @@
          * @param string $job
          * @return bool
          */
-        private function isDue(Job $job)
-        {
+        private function isDue(Job $job){
             //pre($job->task->interval);
             if(!$parts = $this->parseExpr($job->task->present)){
 				writelog("Task time cannot be parsed " . $job->task->present . "", "scheduler");
@@ -189,8 +183,7 @@
          * @param string $expr
          * @return array|FALSE
          */
-        private function parseExpr($expr)
-        {
+        private function parseExpr($expr){
             $parts = [];
             if(preg_match('/^@(\w+)$/', $expr, $m)){
                 if(!isset($this->presets[$m[1]]))
@@ -225,8 +218,7 @@
          * @param string $name
          * @param string $expr
          */
-        private function preset($name, $expr)
-        {
+        private function preset($name, $expr){
             $this->presets[$name] = $expr;
         }
 
@@ -235,8 +227,7 @@
          * @param int $time
          * @return array
          */
-        private function parseTimestamp($time)
-        {
+        private function parseTimestamp($time){
             return [(int)date('i', $time), //minute
                 (int)date('H', $time), //hour
                 (int)date('d', $time), //day of month
@@ -251,8 +242,7 @@
          *
          * @param object $job .
          */
-        private function log(Job $job)
-        {
+        private function log(Job $job){
             if(!$this->session->has('jobs'))
                 $this->session->set('jobs', new stdClass);
             if(!isset($this->session->get('jobs')->{get_class($job)}))
@@ -266,8 +256,7 @@
          *
          * @param object $job .
          */
-        private function lock(Job $job)
-        {
+        private function lock(Job $job){
             if(!$this->session->has('locked_jobs'))
                 $this->session->set('locked_jobs', new stdClass);
             if(!isset($this->session->get('locked_jobs')->{get_class($job)}))
@@ -281,8 +270,7 @@
          *
          * @param object $job .
          */
-        private function check_lock(Job $job)
-        {
+        private function check_lock(Job $job){
             if(!$this->session->has('locked_jobs')){
                 return false;
             }
@@ -304,8 +292,7 @@
          *
          * @return float
          */
-        private function lapsedTimeToMinutes(Job $job)
-        {
+        private function lapsedTimeToMinutes(Job $job){
             return ($this->time - $this->session->get('jobs')->{get_class($job)}->time) / 60;
         }
 
@@ -315,8 +302,7 @@
          *
          * @return string
          */
-        private function timeToDay(Job $job)
-        {
+        private function timeToDay(Job $job){
             return date('Ymd', $this->session->get('jobs')->{get_class($job)}->time);
         }
 
@@ -326,8 +312,7 @@
          *
          * @return string
          */
-        private function timeToMonth(Job $job)
-        {
+        private function timeToMonth(Job $job){
             return date('Ym', $this->session->get('jobs')->{get_class($job)}->time);
         }
 
@@ -337,8 +322,7 @@
          *
          * @return string
          */
-        private function timeToWeek(Job $job)
-        {
+        private function timeToWeek(Job $job){
             return date('YW', $this->session->get('jobs')->{get_class($job)}->time);
         }
     }

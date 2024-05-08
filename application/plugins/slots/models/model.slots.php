@@ -4,13 +4,11 @@
     {
         private $logs = [], $mechanism;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function get_slots_on_server($server)
-        {
+        public function get_slots_on_server($server){
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Slots_Prizes WHERE server = '.$this->website->db('web')->escape($server).' AND STATUS = 1');
             if($count > 0){
                 return true;
@@ -18,38 +16,32 @@
             return false;
         }
 
-        public function get_prizes($server)
-        {
+        public function get_prizes($server){
             return $this->website->db('web')->query('SELECT id, reel1, reel2, reel3, payout_credits, payout_winnings  FROM DmN_Slots_Prizes WHERE server = '.$this->website->db('web')->escape($server).' AND STATUS = 1 ORDER BY payout_winnings DESC, payout_credits DESC')->fetch_all();
         }
 
-        public function increment_slot_machine_spins($userID, $server)
-        {
+        public function increment_slot_machine_spins($userID, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Slots_Users SET spins = spins + 1 WHERE id = :id AND server = :server');
             return $stmt->execute([':id' => $userID, ':server' => $server]);
         }
 
-        private function check_user($userID, $server)
-        {
+        private function check_user($userID, $server){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, spins, free_spins FROM DmN_Slots_Users WHERE id = :id AND server = :server');
             $stmt->execute([':id' => $userID, ':server' => $server]);
             return $stmt->fetch();
         }
 
-        public function add_free_spins($userID, $server, $spins)
-        {
+        public function add_free_spins($userID, $server, $spins){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Slots_Users SET free_spins = free_spins + :free_spins WHERE id = :id AND server = :server');
             return $stmt->execute([':free_spins' => $spins, ':id' => $userID, ':server' => $server]);
         }
 
-        public function decrease_free_spins($userID, $server, $spins)
-        {
+        public function decrease_free_spins($userID, $server, $spins){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Slots_Users SET free_spins = free_spins - :free_spins WHERE id = :id AND server = :server');
             return $stmt->execute([':free_spins' => $spins, ':id' => $userID, ':server' => $server]);
         }
 
-        public function get_free_spins($userID, $account, $server, $spins = 0)
-        {
+        public function get_free_spins($userID, $account, $server, $spins = 0){
             if(($data = $this->check_user($userID, $server)) != false){
                 return $data['free_spins'];
             } else{
@@ -58,38 +50,32 @@
             }
         }
 
-        private function insert_user($userID, $account, $server, $spins)
-        {
+        private function insert_user($userID, $account, $server, $spins){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Slots_Users (id, memb___id, spins, server, free_spins) VALUES (:id, :account, 1, :server, :free_spins)');
             return $stmt->execute([':id' => $userID, ':account' => $account, ':server' => $server, ':free_spins' => $spins]);
         }
 
-        private function update_user($userID, $server)
-        {
+        private function update_user($userID, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Slots_Users SET spins = spins + 1 WHERE id = :id AND server = :server');
             return $stmt->execute([':id' => $userID, ':server' => $server]);
         }
 
-        public function increase_winnings($userID, $payout, $server)
-        {
+        public function increase_winnings($userID, $payout, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Slots_Users SET lifetime_winnings = lifetime_winnings + :payout WHERE id = :id AND server = :server');
             return $stmt->execute([':payout' => $payout, ':id' => $userID, ':server' => $server]);
         }
 
-        public function lifetime_winnings($userID, $server)
-        {
+        public function lifetime_winnings($userID, $server){
             $stmt = $this->website->db('web')->prepare('SELECT lifetime_winnings FROM DmN_Slots_Users WHERE id = :id AND server = :server');
             $stmt->execute([':id' => $userID, ':server' => $server]);
             return $stmt->fetch()['lifetime_winnings'];
         }
 
-        public function random_mechanism($mechanism)
-        {
+        public function random_mechanism($mechanism){
             $this->mechanism = $mechanism;
         }
 
-        public function spin($userID, $account, $server, $bet, $windowID)
-        {
+        public function spin($userID, $account, $server, $bet, $windowID){
             if($this->mechanism == 2){
                 $result = ['reels' => [$this->random_reel_spin($server, 1), $this->random_reel_spin($server, 2), $this->random_reel_spin($server, 3)]];
             } else if($this->mechanism == 1){
@@ -109,8 +95,7 @@
             return $result;
         }
 
-        private function random_reel_spin($server, $reel)
-        {
+        private function random_reel_spin($server, $reel){
             $outcomes = $this->reel_odds_table($server, $reel);
             $totalWeight = $outcomes[count($outcomes) - 1]['accWeight'];
             $r = rand() * $totalWeight / getrandmax();
@@ -121,8 +106,7 @@
             }
         }
 
-        private function random_prize_spin($server)
-        {
+        private function random_prize_spin($server){
             $prizes = $this->prize_odds_table($server);
             $r = rand() / getrandmax();
             for($i = 0; $i < count($prizes); $i++){
@@ -138,8 +122,7 @@
         static $_PrizeOddsCache = [];
         static $_ReelsCache = [];
 
-        private function reel_odds_table($server, $reel)
-        {
+        private function reel_odds_table($server, $reel){
             $key = $server . "_" . $reel;
             if(!isset(self::$_ReelsCache[$key])){
                 $reelData = [];
@@ -155,8 +138,7 @@
             return self::$_ReelsCache[$key];
         }
 
-        private function prize_odds_table($server)
-        {
+        private function prize_odds_table($server){
             if(!isset(self::$_PrizeOddsCache[$server])){
                 $prizeData = [];
                 $totalWeight = 0;
@@ -171,8 +153,7 @@
             return self::$_PrizeOddsCache[$server];
         }
 
-        private function get_forced_spin($server, $forcedPrizeID)
-        {
+        private function get_forced_spin($server, $forcedPrizeID){
             $matchedPrizeID = -1;
             $count = 0;
             if($forcedPrizeID != null){
@@ -191,16 +172,14 @@
             return $reels;
         }
 
-        private function prize_data($prizeID, $server)
-        {
+        private function prize_data($prizeID, $server){
             if(!isset(self::$_PrizesCacheByID[$prizeID])){
                 $this->load_prizes_cache($server);
             }
             return self::$_PrizesCacheByID[$prizeID];
         }
 
-        private function load_prizes_cache($server)
-        {
+        private function load_prizes_cache($server){
             $prizes = $this->website->db('web')->query('SELECT * FROM DmN_Slots_Prizes WHERE server = '.$this->website->db('web')->escape($server).' AND STATUS = 1 ORDER BY payout_winnings DESC, payout_credits DESC')->fetch_all();
             foreach($prizes as $row){
                 $row['reel1_unprocessed'] = $row['reel1'];
@@ -217,8 +196,7 @@
             }
         }
 
-        private function pre_process_reel_rule($rule)
-        {
+        private function pre_process_reel_rule($rule){
             $rules = explode("/", $rule);
             $rules = array_map('trim', $rules);
             if(count($rules) == 1){
@@ -227,8 +205,7 @@
             return $rules;
         }
 
-        private function forced_reel_spin($server, $rule)
-        {
+        private function forced_reel_spin($server, $rule){
             $randMax = $this->icons_per_reel($server) * 2 + 1;
             $reel = rand(2, $randMax) / 2;
             $count = 0;
@@ -242,13 +219,11 @@
             return $reel;
         }
 
-        public function icons_per_reel($server)
-        {
+        public function icons_per_reel($server){
             return 6;
         }
 
-        private function compare_reel($outcome, $rule)
-        {
+        private function compare_reel($outcome, $rule){
             if($rule == "*"){
                 return true;
             }
@@ -269,8 +244,7 @@
             return ($outcome == $rule);
         }
 
-        private function get_prize_for_reels($server, $reels)
-        {
+        private function get_prize_for_reels($server, $reels){
             $prizes = $this->prizes_for_server($server);
             foreach($prizes as $row){
                 if($this->compare_reel($reels[0], $row['reel1']) && $this->compare_reel($reels[1], $row['reel2']) && $this->compare_reel($reels[2], $row['reel3'])){
@@ -280,16 +254,14 @@
             return null;
         }
 
-        private function prizes_for_server($server)
-        {
+        private function prizes_for_server($server){
             if(!isset(self::$_PrizesCacheByServer[$server])){
                 $this->load_prizes_cache($server);
             }
             return self::$_PrizesCacheByServer[$server];
         }
 
-        public function prize_won($userID, $server, $prizeID)
-        {
+        public function prize_won($userID, $server, $prizeID){
         }
 
         public function log_spin($userID, $account, $server, $windowID, $action, $bet = null, $reel1 = null, $reel2 = null, $reel3 = null, $prizeID = null, $payoutCredits = null, $payoutWinnings = null){
@@ -347,8 +319,7 @@
          *
          * @return int
          */
-        public function count_total_logs($acc = '', $server = 'All')
-        {
+        public function count_total_logs($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE memb___id like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -369,8 +340,7 @@
          *
          * @return bool
          */
-        public function get_guid($account, $server)
-        {
+        public function get_guid($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :account');
             $stmt->execute([':account' => $account]);
             $guid = $stmt->fetch();

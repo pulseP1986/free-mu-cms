@@ -93,8 +93,7 @@
         /***
          * @return the transaction date
          */
-        public function getDate()
-        {
+        public function getDate(){
             return $this->date;
         }
 
@@ -102,16 +101,14 @@
          * Sets the transaction date
          * @param String $date
          */
-        public function setDate($date)
-        {
+        public function setDate($date){
             $this->date = $date;
         }
 
         /***
          * @return the transaction code
          */
-        public function getCode()
-        {
+        public function getCode(){
             return $this->code;
         }
 
@@ -119,8 +116,7 @@
          * Sets transaction code
          * @param String $code
          */
-        public function setCode($code)
-        {
+        public function setCode($code){
             $this->code = $code;
         }
 
@@ -130,8 +126,7 @@
          *
          * @return the reference code
          */
-        public function getReference()
-        {
+        public function getReference(){
             return $this->reference;
         }
 
@@ -140,16 +135,14 @@
          *
          * @param reference
          */
-        public function setReference($reference)
-        {
+        public function setReference($reference){
             $this->reference = $reference;
         }
 
         /***
          * @return the transaction gross amount
          */
-        public function getGrossAmount()
-        {
+        public function getGrossAmount(){
             return $this->grossAmount;
         }
 
@@ -157,8 +150,7 @@
          * Sets the gorss amount
          * @param float $grossAmount
          */
-        public function setGrossAmount($grossAmount)
-        {
+        public function setGrossAmount($grossAmount){
             $this->grossAmount = $grossAmount;
         }
 
@@ -166,8 +158,7 @@
          * @return the transaction type
          * @see PagSeguroTransactionType
          */
-        public function getType()
-        {
+        public function getType(){
             return $this->type;
         }
 
@@ -175,8 +166,7 @@
          * Sets the transaction sype
          * @param PagSeguroTransactionType $type
          */
-        public function setType(PagSeguroTransactionType $type)
-        {
+        public function setType(PagSeguroTransactionType $type){
             $this->type = $type;
         }
 
@@ -184,8 +174,7 @@
          * Date the last notification about this transaction was sent
          * @return the last event date
          */
-        public function getLastEventDate()
-        {
+        public function getLastEventDate(){
             return $this->lastEventDate;
         }
 
@@ -193,8 +182,7 @@
          * Sets the last event date
          * @param String $lastEventDate
          */
-        public function setLastEventDate($lastEventDate)
-        {
+        public function setLastEventDate($lastEventDate){
             $this->lastEventDate = $lastEventDate;
         }
 
@@ -202,8 +190,7 @@
          * @return the transaction status
          * @see PagSeguroTransactionStatus
          */
-        public function getStatus()
-        {
+        public function getStatus(){
             return $this->status;
         }
 
@@ -211,16 +198,14 @@
          * Sets the transaction status
          * @param PagSeguroTransactionStatus $status
          */
-        public function setStatus(PagSeguroTransactionStatus $status)
-        {
+        public function setStatus(PagSeguroTransactionStatus $status){
             $this->status = $status;
         }
 
         /***
          * @return the net amount
          */
-        public function getNetAmount()
-        {
+        public function getNetAmount(){
             return $this->netAmount;
         }
 
@@ -228,16 +213,14 @@
          * Sets the net amount
          * @param float $netAmount
          */
-        public function setNetAmount($netAmount)
-        {
+        public function setNetAmount($netAmount){
             $this->netAmount = $netAmount;
         }
 
         /***
          * @return the discount amount
          */
-        public function getDiscountAmount()
-        {
+        public function getDiscountAmount(){
             return $this->discountAmount;
         }
 
@@ -245,16 +228,14 @@
          * Sets the discount amount
          * @param float $discountAmount
          */
-        public function setDiscountAmount($discountAmount)
-        {
+        public function setDiscountAmount($discountAmount){
             $this->discountAmount = $discountAmount;
         }
 
         /***
          * @return the fee amount
          */
-        public function getFeeAmount()
-        {
+        public function getFeeAmount(){
             return $this->feeAmount;
         }
 
@@ -262,16 +243,14 @@
          * Sets the fee amount
          * @param float $feeAmount
          */
-        public function setFeeAmount($feeAmount)
-        {
+        public function setFeeAmount($feeAmount){
             $this->feeAmount = $feeAmount;
         }
 
         /***
          * @return the extra amount
          */
-        public function getExtraAmount()
-        {
+        public function getExtraAmount(){
             return $this->extraAmount;
         }
 
@@ -279,8 +258,7 @@
          * Sets the extra amount
          * @param float $extraAmount
          */
-        public function setExtraAmount($extraAmount)
-        {
+        public function setExtraAmount($extraAmount){
             $this->extraAmount = $extraAmount;
         }
 
@@ -288,8 +266,7 @@
          * Sets the cancellation source
          * @param PagSeguroTransactionCancellationSource $cancellationSource
          */
-        public function setCancellationSource(PagSeguroTransactionCancellationSource $cancellationSource)
-        {
+        public function setCancellationSource(PagSeguroTransactionCancellationSource $cancellationSource){
             $this->cancellationSource = $cancellationSource;
         }
 
@@ -297,8 +274,7 @@
          * @return the cancellation source
          * @see PagSeguroTransactionCancellationSource
          */
-        public function getCancellationSource()
-        {
+        public function getCancellationSource(){
             return $this->cancellationSource;
         }
 
@@ -306,8 +282,7 @@
          * Sets the payment method
          * @param PagSeguroPaymentMethod $paymentMethod
          */
-        public function setPaymentMethod(PagSeguroPaymentMethod $paymentMethod)
-        {
+        public function setPaymentMethod(PagSeguroPaymentMethod $paymentMethod){
             $this->paymentMethod = $paymentMethod;
         }
 
@@ -315,16 +290,14 @@
          * @return the payment method
          * @see PagSeguroPaymentMethod
          */
-        public function getPaymentMethod()
-        {
+        public function getPaymentMethod(){
             return $this->paymentMethod;
         }
 
         /***
          * @return the recovery code
          */
-        public function getRecoveryCode()
-        {
+        public function getRecoveryCode(){
             return $this->recoveryCode;
         }
 
@@ -332,8 +305,7 @@
          * Sets the recovery code
          * @param string $recoveryCode
          */
-        public function setRecoveryCode($recoverycode)
-        {
+        public function setRecoveryCode($recoverycode){
             $this->recoveryCode = $recoverycode;
         }
     }

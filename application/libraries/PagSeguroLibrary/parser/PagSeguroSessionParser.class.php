@@ -30,8 +30,7 @@
          * @param $str_xml
          * @return PagSeguroSession
          */
-        public static function readResult($str_xml)
-        {
+        public static function readResult($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             $data = $parser->getResult('session');
             $session = new PagSeguroSession();

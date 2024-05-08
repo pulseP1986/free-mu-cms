@@ -314,7 +314,7 @@ class _plugin_xendit extends controller implements pluginInterface{
 		}
 	}
 	
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	public function notify(){
 
 		$original_response = json_decode(file_get_contents('php://input'), true);
@@ -803,7 +803,7 @@ class _plugin_xendit extends controller implements pluginInterface{
 	 * Set plugin data, create plugin config template, create sql schemes
 	 *
 	 */
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	public function install(){
 		//check if visitor has administrator privilleges
 		if($this->pluginaizer->session->is_admin()){

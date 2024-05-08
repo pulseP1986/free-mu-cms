@@ -67,8 +67,7 @@
          * Initializes a new instance of the Address class
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if(isset($data['postalCode'])){
                 $this->postalCode = $data['postalCode'];
             }
@@ -98,64 +97,56 @@
         /***
          * @return string the street
          */
-        public function getStreet()
-        {
+        public function getStreet(){
             return $this->street;
         }
 
         /***
          * @return string the number
          */
-        public function getNumber()
-        {
+        public function getNumber(){
             return $this->number;
         }
 
         /***
          * @return string the complement
          */
-        public function getComplement()
-        {
+        public function getComplement(){
             return $this->complement;
         }
 
         /***
          * @return string the distrcit
          */
-        public function getDistrict()
-        {
+        public function getDistrict(){
             return $this->district;
         }
 
         /***
          * @return string the city
          */
-        public function getCity()
-        {
+        public function getCity(){
             return $this->city;
         }
 
         /***
          * @return string the state
          */
-        public function getState()
-        {
+        public function getState(){
             return $this->state;
         }
 
         /***
          * @return string the postal code
          */
-        public function getPostalCode()
-        {
+        public function getPostalCode(){
             return $this->postalCode;
         }
 
         /***
          * @return string the country
          */
-        public function getCountry()
-        {
+        public function getCountry(){
             return $this->country;
         }
 
@@ -163,8 +154,7 @@
          * Sets the country
          * @param String $country
          */
-        public function setCountry($country)
-        {
+        public function setCountry($country){
             $this->country = $country;
         }
 
@@ -172,8 +162,7 @@
          * Sets the street
          * @param String $street
          */
-        public function setStreet($street)
-        {
+        public function setStreet($street){
             $this->street = $street;
         }
 
@@ -181,8 +170,7 @@
          * sets the numbetr
          * @param String $number
          */
-        public function setNumber($number)
-        {
+        public function setNumber($number){
             $this->number = $number;
         }
 
@@ -190,8 +178,7 @@
          * Sets the complement
          * @param String $complement
          */
-        public function setComplement($complement)
-        {
+        public function setComplement($complement){
             $this->complement = $complement;
         }
 
@@ -199,8 +186,7 @@
          * sets the district
          * @param String $district
          */
-        public function setDistrict($district)
-        {
+        public function setDistrict($district){
             $this->district = $district;
         }
 
@@ -208,8 +194,7 @@
          * Sets the city
          * @param String $city
          */
-        public function setCity($city)
-        {
+        public function setCity($city){
             $this->city = $city;
         }
 
@@ -217,8 +202,7 @@
          * Sets the state
          * @param String $state
          */
-        public function setState($state)
-        {
+        public function setState($state){
             $this->state = $this->treatState($state);
         }
 
@@ -226,8 +210,7 @@
          * Sets the postal code
          * @param String $postalCode
          */
-        public function setPostalCode($postalCode)
-        {
+        public function setPostalCode($postalCode){
             $this->postalCode = $postalCode;
         }
 
@@ -236,8 +219,7 @@
          * @param type $defaultState
          * @return string
          */
-        private function treatState($defaultState)
-        {
+        private function treatState($defaultState){
             if(strlen($defaultState) == 2){
                 foreach(self::$acronyms as $key => $val){
                     if($val == strtoupper($defaultState)){

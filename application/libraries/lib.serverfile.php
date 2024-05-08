@@ -7,8 +7,7 @@
         private $info = [];
 		private $cachedir = '';
 
-        public function __construct()
-        {
+        public function __construct(){
 			$this->cachedir = APP_PATH . DS . 'data' . DS . 'shop';
             if($this->config->config_entry('main|cache_type') == 'file'){
                 $this->load->lib(['cacher', 'cache'], ['File', ['cache_dir' => $this->cachedir]]);
@@ -18,23 +17,19 @@
             $this->set_language();
         }
 
-        public function __isset($key)
-        {
+        public function __isset($key){
             return isset($this->info[$key]);
         }
 
-        public function get($key)
-        {
+        public function get($key){
             return isset($this->info[$key]) ? $this->info[$key] : false;
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->info[$key] = $val;
         }
 		
-		public function item_list($cat, $size = 32)
-        {
+		public function item_list($cat, $size = 32){
 			if($size == 40){
 				$size = 32;
 			}
@@ -48,8 +43,7 @@
             return $this;
         }
 
-        public function item_tooltip()
-        {
+        public function item_tooltip(){
 			$file = 'item_tooltip#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_tooltip#en.dmn';
@@ -60,8 +54,7 @@
             return $this;
         }
 
-        public function item_tooltip_text()
-        {
+        public function item_tooltip_text(){
 			$file = 'item_tooltip_text#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_tooltip_text#en.dmn';
@@ -72,8 +65,7 @@
             return $this;
         }
 
-        public function jewel_of_harmony_option()
-        {
+        public function jewel_of_harmony_option(){
 			$file = 'jewel_of_harmony_option#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'jewel_of_harmony_option#en.dmn';
@@ -84,8 +76,7 @@
             return $this;
         }
 
-        public function npc_names()
-        {
+        public function npc_names(){
 			$file = 'npc_name#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'npc_name#en.dmn';
@@ -107,7 +98,7 @@
 			return $this;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function muun_info(){
 			$file = 'muun_info#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
@@ -141,8 +132,7 @@
 			return $this;
 		}
 
-        public function pentagram_jewel_option_value($version = 4)
-        {
+        public function pentagram_jewel_option_value($version = 4){
 			$file = 'pentagram_jewel_option_value#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'pentagram_jewel_option_value#en.dmn';
@@ -154,8 +144,7 @@
             return $this;
         }
 
-        public function skill()
-        {
+        public function skill(){
 			$file = 'skill#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'skill#en.dmn';
@@ -166,8 +155,7 @@
             return $this;
         }
 
-        public function socket_item($version = 5)
-        {
+        public function socket_item($version = 5){
 			$v = ($version > 5) ? '[6]' : '';
 			$file = 'socket_item'.$v.'#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
@@ -180,8 +168,7 @@
             return $this;
         }
 
-        public function exe_common()
-        {
+        public function exe_common(){
 			$file = 'exe_common#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'exe_common#en.dmn';
@@ -192,8 +179,7 @@
             return $this;
         }
 
-        public function exe_wing()
-        {
+        public function exe_wing(){
 			$file = 'exe_wing#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'exe_wing#en.dmn';
@@ -204,8 +190,7 @@
             return $this;
         }
 
-        public function item_add_option()
-        {
+        public function item_add_option(){
 			$file = 'item_add_option#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_add_option#en.dmn';
@@ -215,8 +200,7 @@
                 $this->item_add_option = $cached_data;
         }
 
-        public function item_level_tooltip()
-        {
+        public function item_level_tooltip(){
 			$file = 'item_level_tooltip#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_level_tooltip#en.dmn';
@@ -227,8 +211,7 @@
             return $this;
         }
 
-        public function item_set_option()
-        {
+        public function item_set_option(){
 			$file = 'item_set_option#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_set_option#en.dmn';
@@ -239,8 +222,7 @@
             return $this;
         }
 
-        public function item_set_option_text()
-        {
+        public function item_set_option_text(){
 			$file = 'item_set_option_text#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_set_option_text#en.dmn';
@@ -251,8 +233,7 @@
             return $this;
         }
 
-        public function item_set_type()
-        {
+        public function item_set_type(){
 			$file = 'item_set_type#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_set_type#en.dmn';
@@ -263,8 +244,7 @@
             return $this;
         }
 		
-		public function item_grade_option()
-        {
+		public function item_grade_option(){
 			$file = 'item_grade_option#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'item_grade_option#en.dmn';
@@ -275,9 +255,8 @@
             return $this;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		public function earring_type()
-        {
+		
+		public function earring_type(){
 			$file = 'earringtype#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'earringtype#en.dmn';
@@ -288,8 +267,7 @@
             return $this;
         }
 		
-		public function earring_option()
-        {
+		public function earring_option(){
 			$file = 'earringoption#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'earringoption#en.dmn';
@@ -300,8 +278,7 @@
             return $this;
         }
 		
-		public function staticitems()
-        {
+		public function staticitems(){
 			$file = 'staticitems#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'staticitems#en.dmn';
@@ -312,8 +289,7 @@
             return $this;
         }
 		
-		public function staticoptioninfo()
-        {
+		public function staticoptioninfo(){
 			$file = 'staticoptioninfo#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'staticoptioninfo#en.dmn';
@@ -324,8 +300,7 @@
             return $this;
         }
 		
-		public function earring_option_name()
-        {
+		public function earring_option_name(){
 			$file = 'earringoptionname#' . $this->lang . '.dmn';
 			if(!file_exists($this->cachedir . DS . $file)){
 				$file = 'earringoptionname#en.dmn';
@@ -336,8 +311,7 @@
             return $this;
         }
 
-        private function set_language()
-        {
+        private function set_language(){
             $this->lang = $this->config->language();
         }
     }

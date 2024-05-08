@@ -38,8 +38,7 @@
          */
         private $value;
 
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['type']) && isset($data['value'])){
                     $this->setType($data['type']);
@@ -52,8 +51,7 @@
          * Get document type
          * @return String
          */
-        public function getType()
-        {
+        public function getType(){
             return $this->type;
         }
 
@@ -61,8 +59,7 @@
          * Set document type
          * @param String $type
          */
-        public function setType($type)
-        {
+        public function setType($type){
             $this->type = strtoupper($type);
         }
 
@@ -70,8 +67,7 @@
          * Get document value
          * @return String
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -79,8 +75,7 @@
          * Set document value
          * @param String $value
          */
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = $value;
         }
 
@@ -89,8 +84,7 @@
          * @param string $documentType
          * @return array|boolean
          */
-        public static function isDocumentTypeAvailable($documentType)
-        {
+        public static function isDocumentTypeAvailable($documentType){
             return (array_search(strtoupper($documentType), self::$availableDocumentList));
         }
     }

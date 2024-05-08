@@ -37,8 +37,7 @@
          * @param $transactionCode
          * @return string
          */
-        private static function buildSearchUrlByCode(PagSeguroConnectionData $connectionData, $transactionCode)
-        {
+        private static function buildSearchUrlByCode(PagSeguroConnectionData $connectionData, $transactionCode){
             $url = $connectionData->getServiceUrl('v3');
             return "{$url}/{$transactionCode}/?" . $connectionData->getCredentialsUrlQuery();
         }
@@ -48,8 +47,7 @@
          * @param array $searchParams
          * @return string
          */
-        private static function buildSearchUrlByDate(PagSeguroConnectionData $connectionData, array $searchParams)
-        {
+        private static function buildSearchUrlByDate(PagSeguroConnectionData $connectionData, array $searchParams){
             $url = $connectionData->getServiceUrl('v2');
             $initialDate = $searchParams['initialDate'] != null ? $searchParams['initialDate'] : "";
             $finalDate = $searchParams['finalDate'] != null ? ("&finalDate=" . $searchParams['finalDate']) : "";
@@ -67,8 +65,7 @@
          * @param array $searchParams
          * @return string
          */
-        private static function buildSearchUrlAbandoned(PagSeguroConnectionData $connectionData, array $searchParams)
-        {
+        private static function buildSearchUrlAbandoned(PagSeguroConnectionData $connectionData, array $searchParams){
             $url = $connectionData->getServiceUrl('v2');
             $initialDate = $searchParams['initialDate'] != null ? $searchParams['initialDate'] : "";
             $finalDate = $searchParams['finalDate'] != null ? ("&finalDate=" . $searchParams['finalDate']) : "";
@@ -87,8 +84,7 @@
          * @param null $searchParams
          * @return string
          */
-        private static function buildSearchUrlByReference(PagSeguroConnectionData $connectionData, $reference, $searchParams = null)
-        {
+        private static function buildSearchUrlByReference(PagSeguroConnectionData $connectionData, $reference, $searchParams = null){
             $url = $connectionData->getServiceUrl('v2');
             if($searchParams == null){
                 return "{$url}?" . $connectionData->getCredentialsUrlQuery() . "&reference=" . $reference;
@@ -115,8 +111,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchByCode(PagSeguroCredentials $credentials, $transactionCode)
-        {
+        public static function searchByCode(PagSeguroCredentials $credentials, $transactionCode){
             LogPagSeguro::info("PagSeguroTransactionSearchService.SearchByCode($transactionCode) - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -144,8 +139,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchByDate(PagSeguroCredentials $credentials, $pageNumber, $maxPageResults, $initialDate, $finalDate = null)
-        {
+        public static function searchByDate(PagSeguroCredentials $credentials, $pageNumber, $maxPageResults, $initialDate, $finalDate = null){
             LogPagSeguro::info("PagSeguroTransactionSearchService.SearchByDate(initialDate=" . PagSeguroHelper::formatDate($initialDate) . ", finalDate=" . PagSeguroHelper::formatDate($finalDate) . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             $searchParams = self::buildParams($pageNumber, $maxPageResults, $initialDate, $finalDate);
@@ -175,8 +169,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchAbandoned(PagSeguroCredentials $credentials, $pageNumber, $maxPageResults, $initialDate, $finalDate = null)
-        {
+        public static function searchAbandoned(PagSeguroCredentials $credentials, $pageNumber, $maxPageResults, $initialDate, $finalDate = null){
             LogPagSeguro::info("PagSeguroTransactionSearchService.searchAbandoned(initialDate=" . PagSeguroHelper::formatDate($initialDate) . ", finalDate=" . PagSeguroHelper::formatDate($finalDate) . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             $searchParams = self::buildParams($pageNumber, $maxPageResults, $initialDate, $finalDate);
@@ -203,8 +196,7 @@
          * @throws Exception
          * @throws PagSeguroServiceException
          */
-        public static function searchByReference(PagSeguroCredentials $credentials, $reference, $initialDate = null, $finalDate = null, $pageNumber = null, $maxPageResults = null)
-        {
+        public static function searchByReference(PagSeguroCredentials $credentials, $reference, $initialDate = null, $finalDate = null, $pageNumber = null, $maxPageResults = null){
             LogPagSeguro::info("PagSeguroTransactionSearchService.SearchByReference(reference=" . $reference . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             if($initialDate)
@@ -230,8 +222,7 @@
          * @param null $finalDate
          * @return array
          */
-        private function buildParams($pageNumber, $maxPageResults, $initialDate, $finalDate = null)
-        {
+        private function buildParams($pageNumber, $maxPageResults, $initialDate, $finalDate = null){
             $searchParams = ['initialDate' => PagSeguroHelper::formatDate($initialDate), 'pageNumber' => $pageNumber, 'maxPageResults' => $maxPageResults];
             $searchParams['finalDate'] = $finalDate ? PagSeguroHelper::formatDate($finalDate) : null;
             return $searchParams;
@@ -243,8 +234,7 @@
          * @return bool|PagSeguroTransaction
          * @throws PagSeguroServiceException
          */
-        private function searchByCodeResult($connection, $code)
-        {
+        private function searchByCodeResult($connection, $code){
             $httpStatus = new PagSeguroHttpStatus($connection->getStatus());
             switch($httpStatus->getType()){
                 case 'OK':
@@ -273,8 +263,7 @@
          * @return bool|PagSeguroTransactionSearchResult
          * @throws PagSeguroServiceException
          */
-        private function searchResult($connection, $initialDate = null, $finalDate = null)
-        {
+        private function searchResult($connection, $initialDate = null, $finalDate = null){
             $httpStatus = new PagSeguroHttpStatus($connection->getStatus());
             switch($httpStatus->getType()){
                 case 'OK':

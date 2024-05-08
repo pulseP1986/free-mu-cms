@@ -2,8 +2,7 @@
 
     class Twocheckout_Return extends Twocheckout
     {
-        public static function check($params = [], $secretWord)
-        {
+        public static function check($params = [], $secretWord){
             $hashSecretWord = $secretWord;
             $hashSid = $params['sid'];
             $hashTotal = $params['total'];

@@ -4,15 +4,13 @@
     {
         private $registry, $config, $load, $vars = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
         }
 
-        public function execute()
-        {
+        public function execute(){
             if($this->config->values('vip_config', 'active') == 1){
                 $this->load->helper('website');
                 $this->load->model('account');

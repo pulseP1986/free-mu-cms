@@ -40,8 +40,7 @@
          *
          * @return string|null
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->getField('id');
         }
 
@@ -50,8 +49,7 @@
          *
          * @return string|null
          */
-        public function getCategory()
-        {
+        public function getCategory(){
             return $this->getField('category');
         }
 
@@ -60,8 +58,7 @@
          *
          * @return string|null
          */
-        public function getName()
-        {
+        public function getName(){
             return $this->getField('name');
         }
 
@@ -70,8 +67,7 @@
          *
          * @return GraphPage|null
          */
-        public function getBestPage()
-        {
+        public function getBestPage(){
             return $this->getField('best_page');
         }
 
@@ -80,8 +76,7 @@
          *
          * @return GraphPage|null
          */
-        public function getGlobalBrandParentPage()
-        {
+        public function getGlobalBrandParentPage(){
             return $this->getField('global_brand_parent_page');
         }
 
@@ -90,8 +85,7 @@
          *
          * @return GraphLocation|null
          */
-        public function getLocation()
-        {
+        public function getLocation(){
             return $this->getField('location');
         }
 
@@ -102,8 +96,7 @@
          *
          * @return string|null
          */
-        public function getAccessToken()
-        {
+        public function getAccessToken(){
             return $this->getField('access_token');
         }
 
@@ -114,8 +107,7 @@
          *
          * @return array|null
          */
-        public function getPerms()
-        {
+        public function getPerms(){
             return $this->getField('perms');
         }
     }

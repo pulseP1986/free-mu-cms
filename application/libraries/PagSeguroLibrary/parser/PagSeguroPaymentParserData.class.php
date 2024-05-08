@@ -38,32 +38,28 @@
         /***
          * @return mixed
          */
-        public function getCode()
-        {
+        public function getCode(){
             return $this->code;
         }
 
         /***
          * @param $code
          */
-        public function setCode($code)
-        {
+        public function setCode($code){
             $this->code = $code;
         }
 
         /***
          * @return mixed
          */
-        public function getRegistrationDate()
-        {
+        public function getRegistrationDate(){
             return $this->registrationDate;
         }
 
         /***
          * @param $registrationDate
          */
-        public function setRegistrationDate($registrationDate)
-        {
+        public function setRegistrationDate($registrationDate){
             $this->registrationDate = $registrationDate;
         }
     }

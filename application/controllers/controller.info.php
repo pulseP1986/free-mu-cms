@@ -5,8 +5,7 @@
     {
         public $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -20,13 +19,11 @@
             $this->load->lib("iteminfo");
         }
 
-        public function index()
-        {
+        public function index(){
             throw new Exception('Nothing to see in here.');
         }
 
-        public function character($name = '', $server = '')
-        {
+        public function character($name = '', $server = ''){
             $this->load->model('account');
 			
             if($server == ''){
@@ -87,8 +84,7 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'info' . DS . 'view.character', $this->vars);
         }
 
-        public function guild($name = '', $server = '')
-        {
+        public function guild($name = '', $server = ''){
             if($server == ''){
                throw new Exception('Invalid server selected.');
             }

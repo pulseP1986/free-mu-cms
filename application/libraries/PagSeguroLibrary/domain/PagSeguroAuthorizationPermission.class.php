@@ -46,8 +46,7 @@
          * @param null|date $lastUpdate
          * @throws string Exception
          */
-        public function __construct($code = null, $status = null, $lastUpdate = null)
-        {
+        public function __construct($code = null, $status = null, $lastUpdate = null){
             if(isset($code) and isset($status) and isset($lastUpdate)){
                 $this->setCode($code);
                 $this->setStatus($status);
@@ -60,8 +59,7 @@
         /***
          * @return string of authorization permission code
          */
-        public function getCode()
-        {
+        public function getCode(){
             return $this->code;
         }
 
@@ -69,8 +67,7 @@
          * Sets the authorization permission code
          * @param mixed $code
          */
-        public function setCode($code)
-        {
+        public function setCode($code){
             if(isset($code)){
                 $this->code = $code;
             }
@@ -79,8 +76,7 @@
         /***
          * @return string of authorization permission status
          */
-        public function getStatus()
-        {
+        public function getStatus(){
             return $this->status;
         }
 
@@ -88,8 +84,7 @@
          * Sets the authorization permission status
          * @param string $status
          */
-        public function setStatus($status)
-        {
+        public function setStatus($status){
             if(isset($status)){
                 $this->status = $status;
             }
@@ -98,8 +93,7 @@
         /***
          * @return string of authorization last update
          */
-        public function getLastUpdate()
-        {
+        public function getLastUpdate(){
             return $this->lastUpdate;
         }
 
@@ -107,8 +101,7 @@
          * Sets the authorization permission last update
          * @param date $lastUpdate
          */
-        public function settLastUpdate($lastUpdate)
-        {
+        public function settLastUpdate($lastUpdate){
             if(isset($lastUpdate)){
                 $this->lastUpdate = $lastUpdate;
             }

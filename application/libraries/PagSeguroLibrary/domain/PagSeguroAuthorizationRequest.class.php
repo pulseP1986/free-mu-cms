@@ -60,16 +60,14 @@
          * Sets reference for PagSeguro authorization requests
          * @param string $reference
          */
-        public function setReference($reference)
-        {
+        public function setReference($reference){
             $this->reference = $reference;
         }
 
         /***
          * @return string of $redirectURL
          */
-        public function getReference()
-        {
+        public function getReference(){
             return $this->reference;
         }
 
@@ -77,16 +75,14 @@
          * Sets redirect URL for PagSeguro authorization requests
          * @param string $redirectURL
          */
-        public function setRedirectURL($redirectURL)
-        {
+        public function setRedirectURL($redirectURL){
             $this->redirectURL = $redirectURL;
         }
 
         /***
          * @return string of $redirectURL
          */
-        public function getRedirectURL()
-        {
+        public function getRedirectURL(){
             return $this->redirectURL;
         }
 
@@ -94,24 +90,21 @@
          * Sets notificationURL for PagSeguro authorization requests
          * @param string $notificationURL
          */
-        public function setNotificationURL($notificationURL)
-        {
+        public function setNotificationURL($notificationURL){
             $this->permissions = $notificationURL;
         }
 
         /***
          * @return string of notificationURL
          */
-        public function getNotificationURL()
-        {
+        public function getNotificationURL(){
             return $this->notificationURL;
         }
 
         /***
          * @return array of permissions
          */
-        public function getPermissions()
-        {
+        public function getPermissions(){
             return $this->permissions;
         }
 
@@ -119,8 +112,7 @@
          * Sets permissions for PagSeguro authorization requests
          * @param array $permissions
          */
-        public function setPermissions(array $permissions)
-        {
+        public function setPermissions(array $permissions){
             $this->permissions = new PagSeguroAuthorizationPermissions($permissions);
         }
 
@@ -129,8 +121,7 @@
          *
          * @param PagSeguroParameter $parameter
          */
-        public function setParameter($parameter)
-        {
+        public function setParameter($parameter){
             $this->parameter = $parameter;
         }
 
@@ -139,8 +130,7 @@
          *
          * @return PagSeguroParameter
          */
-        public function getParameter()
-        {
+        public function getParameter(){
             if($this->parameter == null){
                 $this->parameter = new PagSeguroParameter();
             }
@@ -153,8 +143,7 @@
          * @param PagSeguroParameterItem $parameterName key
          * @param PagSeguroParameterItem $parameterValue value
          */
-        public function addParameter($parameterName, $parameterValue)
-        {
+        public function addParameter($parameterName, $parameterValue){
             $this->getParameter()->addItem(new PagSeguroParameterItem($parameterName, $parameterValue));
         }
 
@@ -165,8 +154,7 @@
          * @param PagSeguroParameterItem $parameterValue value
          * @param PagSeguroParameterItem $parameterIndex group
          */
-        public function addIndexedParameter($parameterName, $parameterValue, $parameterIndex)
-        {
+        public function addIndexedParameter($parameterName, $parameterValue, $parameterIndex){
             $this->getParameter()->addItem(new PagSeguroParameterItem($parameterName, $parameterValue, $parameterIndex));
         }
 
@@ -176,16 +164,14 @@
          * @param bool $onlyAuthorizationCode
          * @return PagSeguroAuthorizationService Data
          */
-        public function register(PagSeguroCredentials $credentials, $onlyAuthorizationCode = false)
-        {
+        public function register(PagSeguroCredentials $credentials, $onlyAuthorizationCode = false){
             return PagSeguroAuthorizationService::createAuthorizationRequest($credentials, $this, $onlyAuthorizationCode);
         }
 
         /***
          * @return String a string that represents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $request = [];
             $request['Reference'] = $this->reference;
             return "PagSeguroAuthorizationRequest: " . implode(' - ', $request);
@@ -196,8 +182,7 @@
          * @param type $url
          * @return type
          */
-        public function verifyURLTest($url)
-        {
+        public function verifyURLTest($url){
             $address = ['127.0.0.1', '::1'];
             foreach($address as $item){
                 $find = strpos($url, $item);

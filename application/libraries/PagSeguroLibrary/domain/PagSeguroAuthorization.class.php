@@ -60,8 +60,7 @@
         /***
          * @return string of authorization code.
          */
-        public function getCode()
-        {
+        public function getCode(){
             return $this->code;
         }
 
@@ -69,8 +68,7 @@
          * Sets the authorization code
          * @param string $code
          */
-        public function setCode($code)
-        {
+        public function setCode($code){
             if(isset($code)){
                 $this->code = $code;
             }
@@ -79,8 +77,7 @@
         /***
          * @return string of authorization date.
          */
-        public function getDate()
-        {
+        public function getDate(){
             return $this->date;
         }
 
@@ -88,8 +85,7 @@
          * Sets the authorization date
          * @param string $date
          */
-        public function setDate($date)
-        {
+        public function setDate($date){
             if(isset($date)){
                 $this->date = $date;
             }
@@ -98,8 +94,7 @@
         /***
          * @return string of authorization creation date.
          */
-        public function getCreationDate()
-        {
+        public function getCreationDate(){
             return $this->creationDate;
         }
 
@@ -107,8 +102,7 @@
          * Sets the authorization creation date
          * @param string $creationDate
          */
-        public function setCreationDate($creationDate)
-        {
+        public function setCreationDate($creationDate){
             if(isset($creationDate)){
                 $this->creationDate = $creationDate;
             }
@@ -117,8 +111,7 @@
         /***
          * @return string of authorization reference.
          */
-        public function getReference()
-        {
+        public function getReference(){
             return $this->reference;
         }
 
@@ -126,8 +119,7 @@
          * Sets the authorization reference
          * @param string $reference
          */
-        public function setReference($reference)
-        {
+        public function setReference($reference){
             if(isset($reference)){
                 $this->reference = $reference;
             }
@@ -136,8 +128,7 @@
         /***
          * @return string of authorization permissions.
          */
-        public function getPermissions()
-        {
+        public function getPermissions(){
             return $this->permissions;
         }
 
@@ -145,8 +136,7 @@
          * Sets the authorization permissions
          * @param string $permissions
          */
-        public function setPermissions($permissions)
-        {
+        public function setPermissions($permissions){
             if(isset($permissions)){
                 $this->permissions = $permissions;
             }
@@ -155,8 +145,7 @@
         /***
          * @return string of authorization account.
          */
-        public function getAccount()
-        {
+        public function getAccount(){
             return $this->account;
         }
 
@@ -164,8 +153,7 @@
          * Sets the authorization account
          * @param string $account
          */
-        public function setAccount($account)
-        {
+        public function setAccount($account){
             if(isset($account)){
                 $this->account = $account;
             }
@@ -174,8 +162,7 @@
         /***
          * @return String that resents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $authorization = [];
             $authorization['code'] = $this->code;
             $authorization['reference'] = $this->reference;

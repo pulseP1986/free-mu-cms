@@ -41,16 +41,14 @@
         /**
          * @param \GuzzleHttp\Client|null The Guzzle client.
          */
-        public function __construct(Client $guzzleClient = null)
-        {
+        public function __construct(Client $guzzleClient = null){
             $this->guzzleClient = $guzzleClient ?: new Client();
         }
 
         /**
          * @inheritdoc
          */
-        public function send($url, $method, $body, array $headers, $timeOut)
-        {
+        public function send($url, $method, $body, array $headers, $timeOut){
             $options = ['headers' => $headers, 'body' => $body, 'timeout' => $timeOut, 'connect_timeout' => 10, 'verify' => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',];
             $request = $this->guzzleClient->createRequest($method, $url, $options);
             try{
@@ -74,8 +72,7 @@
          *
          * @return string
          */
-        public function getHeadersAsString(ResponseInterface $response)
-        {
+        public function getHeadersAsString(ResponseInterface $response){
             $headers = $response->getHeaders();
             $rawHeaders = [];
             foreach($headers as $name => $values){

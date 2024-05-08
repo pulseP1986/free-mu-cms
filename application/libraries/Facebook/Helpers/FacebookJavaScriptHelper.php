@@ -35,8 +35,7 @@
          *
          * @return string|null
          */
-        public function getRawSignedRequest()
-        {
+        public function getRawSignedRequest(){
             return $this->getRawSignedRequestFromCookie();
         }
     }

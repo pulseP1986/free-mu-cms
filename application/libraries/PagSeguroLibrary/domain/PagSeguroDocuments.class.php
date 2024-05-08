@@ -36,8 +36,7 @@
          * Get available document list for Sender use in PagSeguro transactions
          * @return array
          */
-        public static function getAvailableDocumentList()
-        {
+        public static function getAvailableDocumentList(){
             return self::$availableDocumentList;
         }
 
@@ -46,8 +45,7 @@
          * @param string $documentType
          * @return boolean
          */
-        public static function isDocumentTypeAvailable($documentType)
-        {
+        public static function isDocumentTypeAvailable($documentType){
             $documentType = strtoupper($documentType);
             return (isset(self::$availableDocumentList[$documentType]));
         }
@@ -57,8 +55,7 @@
          * @param string
          * @return string
          */
-        public static function getDocumentByType($documentType)
-        {
+        public static function getDocumentByType($documentType){
             $documentType = strtoupper($documentType);
             if(isset(self::$availableDocumentList[$documentType])){
                 return self::$availableDocumentList[$documentType];
@@ -72,8 +69,7 @@
          * @param string $documentDescription
          * @return string
          */
-        public static function getDocumentByDescription($documentDescription)
-        {
+        public static function getDocumentByDescription($documentDescription){
             return array_search(strtolower($documentDescription), array_map('strtolower', self::$availableDocumentList));
         }
     }

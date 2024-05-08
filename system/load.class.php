@@ -10,8 +10,7 @@
         private $original_lib_name;
         private $lib_path;
 
-        public function model($name)
-        {
+        public function model($name){
             $this->registry = controller::get_instance();
             if(preg_match('/[\/]/', $name)){
                 $this->elements = explode("/", $name);
@@ -38,8 +37,7 @@
             }
         }
 
-        public function view($name, $vars = null)
-        {
+        public function view($name, $vars = null){
             $this->full_path = APP_PATH . DS . 'views' . DS . $name . '.php';
             if(preg_match('/setup[\/|\\\]application/', $name)){
                 $this->full_path = BASEDIR . $name . '.php';
@@ -68,8 +66,7 @@
             }
         }
 
-		public function lib($class_name, $params = [], $type = '')
-        {
+		public function lib($class_name, $params = [], $type = ''){
             if(is_array($class_name)){
                 $this->lib_name = $class_name[0];
                 $this->original_lib_name = $class_name[1];
@@ -102,8 +99,7 @@
             }
         }
 
-        private function load_sqlsrv($original_lib, $lib_name, $driver, $params)
-        {
+        private function load_sqlsrv($original_lib, $lib_name, $driver, $params){
             $this->lib_path = APP_PATH . DS . 'libraries' . DS . 'lib.' . $original_lib . '.php';
             if(is_readable($this->lib_path)){
                 if(!is_object($lib_name)){
@@ -124,8 +120,7 @@
             throw new Exception('Library file lib.' . $original_lib . '.php not found.');
         }
 
-        public function helper($name, $params = [])
-        {
+        public function helper($name, $params = []){
             if(is_readable($helperpath = APP_PATH . DS . 'helpers' . DS . 'helper.' . $name . '.php')){
                 require_once($helperpath);
                 if(class_exists($name)){

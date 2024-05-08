@@ -30,8 +30,7 @@
          * @param $str_xml
          * @return null|string
          */
-        public static function readSuccessXml($str_xml)
-        {
+        public static function readSuccessXml($str_xml){
             $parser = new PagSeguroXmlParser($str_xml);
             return $parser->getResult('result');
         }

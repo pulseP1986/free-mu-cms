@@ -46,8 +46,7 @@
          *
          * @return Interkassa_Status
          */
-        public static function factory(Interkassa_Shop $shop, array $source)
-        {
+        public static function factory(Interkassa_Shop $shop, array $source){
             return new Interkassa_Status($shop, $source);
         }
 
@@ -61,8 +60,7 @@
          *                              does not match current shop id or received
          *                              signature is invalid
          */
-        public function __construct(Interkassa_Shop $shop, array $source)
-        {
+        public function __construct(Interkassa_Shop $shop, array $source){
             $this->_shop = $shop;
             foreach(['ik_co_id' => 'Shop id', 'ik_pm_no' => 'Payment id', 'ik_am' => 'Payment amount', 'ik_desc' => 'Payment description', 'ik_pw_via' => 'Payway Via', 'ik_sign' => 'Payment Signature', 'ik_cur' => 'Currency', 'ik_inv_prc' => 'Payment Time', 'ik_inv_st' => 'Payment State', 'ik_trn_id' => 'Transaction', 'ik_ps_price' => 'PaySystem Price', 'ik_co_rfn' => 'Checkout Refund'] as $field => $title)
                 if(!isset($source[$field]))
@@ -90,8 +88,7 @@
          *
          * @return int
          */
-        public function getTimestamp()
-        {
+        public function getTimestamp(){
             return $this->_timestamp;
         }
 
@@ -102,8 +99,7 @@
          *
          * @return DateTime
          */
-        public function getDateTime()
-        {
+        public function getDateTime(){
             return new DateTime('@' . $this->getTimestamp());
         }
 
@@ -114,8 +110,7 @@
          *
          * @return string
          */
-        public function getState()
-        {
+        public function getState(){
             return $this->_state;
         }
 
@@ -126,8 +121,7 @@
          *
          * @return string
          */
-        public function getTransId()
-        {
+        public function getTransId(){
             return $this->_trans_id;
         }
 
@@ -139,8 +133,7 @@
          *
          * @return float
          */
-        public function getCurrencyName()
-        {
+        public function getCurrencyName(){
             return $this->_currency;
         }
 
@@ -149,8 +142,7 @@
          *
          * @return float
          */
-        public function getFeesPayer()
-        {
+        public function getFeesPayer(){
             return $this->_fees_payer;
         }
 
@@ -165,8 +157,7 @@
          *
          * @return bool
          */
-        public function getVerified()
-        {
+        public function getVerified(){
             return $this->_verified;
         }
 
@@ -175,8 +166,7 @@
          *
          * @return Interkassa_Payment
          */
-        public function getPayment()
-        {
+        public function getPayment(){
             return $this->_payment;
         }
 
@@ -185,8 +175,7 @@
          *
          * @return Interkassa_Shop
          */
-        public function getShop()
-        {
+        public function getShop(){
             return $this->_shop;
         }
 
@@ -197,8 +186,7 @@
          *
          * @return bool
          */
-        final protected function _checkSignature($source)
-        {
+        final protected function _checkSignature($source){
 			if(isset($source['action'])){
 				unset($source['action']);
 			}

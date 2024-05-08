@@ -49,8 +49,7 @@
          * @param string $accessToken
          * @param int $expiresAt
          */
-        public function __construct($accessToken, $expiresAt = 0)
-        {
+        public function __construct($accessToken, $expiresAt = 0){
             $this->value = $accessToken;
             if($expiresAt){
                 $this->setExpiresAtFromTimeStamp($expiresAt);
@@ -64,8 +63,7 @@
          *
          * @return string
          */
-        public function getAppSecretProof($appSecret)
-        {
+        public function getAppSecretProof($appSecret){
             return hash_hmac('sha256', $this->value, $appSecret);
         }
 
@@ -74,8 +72,7 @@
          *
          * @return \DateTime|null
          */
-        public function getExpiresAt()
-        {
+        public function getExpiresAt(){
             return $this->expiresAt;
         }
 
@@ -84,8 +81,7 @@
          *
          * @return bool
          */
-        public function isAppAccessToken()
-        {
+        public function isAppAccessToken(){
             return strpos($this->value, '|') !== false;
         }
 
@@ -94,8 +90,7 @@
          *
          * @return bool
          */
-        public function isLongLived()
-        {
+        public function isLongLived(){
             if($this->expiresAt){
                 return $this->expiresAt->getTimestamp() > time() + (60 * 60 * 2);
             }
@@ -110,8 +105,7 @@
          *
          * @return boolean|null
          */
-        public function isExpired()
-        {
+        public function isExpired(){
             if($this->getExpiresAt() instanceof \DateTime){
                 return $this->getExpiresAt()->getTimestamp() < time();
             }
@@ -126,8 +120,7 @@
          *
          * @return string
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -136,8 +129,7 @@
          *
          * @return string
          */
-        public function __toString()
-        {
+        public function __toString(){
             return $this->getValue();
         }
 
@@ -146,8 +138,7 @@
          *
          * @param int $timeStamp
          */
-        protected function setExpiresAtFromTimeStamp($timeStamp)
-        {
+        protected function setExpiresAtFromTimeStamp($timeStamp){
             $dt = new \DateTime();
             $dt->setTimestamp($timeStamp);
             $this->expiresAt = $dt;

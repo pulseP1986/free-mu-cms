@@ -7,8 +7,7 @@
         private $fbconfig;
         public $redirect_url = '';
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->fbconfig = $this->config->values('social_config', 'providers');
             if((bool)$this->fbconfig['Facebook']['enabled'] == true){
                 require_once APP_PATH . DS . 'libraries' . DS . 'Facebook' . DS . 'autoload.php';
@@ -16,8 +15,7 @@
             }
         }
 
-        public function get_fb_login_url($type = '', $style = '')
-        {
+        public function get_fb_login_url($type = '', $style = ''){
             if((bool)$this->fbconfig['Facebook']['enabled'] == true){
                 $helper = $this->data->getRedirectLoginHelper();
                 if(!isset($_SESSION['fb_access_token']) || !$this->session->userdata(['user' => 'logged_in'])){
@@ -33,8 +31,7 @@
             }
         }
 
-        public function check_fb_user()
-        {
+        public function check_fb_user(){
             if((bool)$this->fbconfig['Facebook']['enabled'] == true){
                 $helper = $this->data->getRedirectLoginHelper();
                 try{
@@ -75,8 +72,7 @@
             }
         }
 
-        public function getEmail()
-        {
+        public function getEmail(){
             if((bool)$this->fbconfig['Facebook']['enabled'] == true){
                 $this->data->setDefaultAccessToken((string)$_SESSION['fb_access_token']);
                 $response = $this->data->get('/me?locale=en_US&fields=name,email');

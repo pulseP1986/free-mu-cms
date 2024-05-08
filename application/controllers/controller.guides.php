@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -18,8 +17,7 @@
             $this->load->lib('fb');
         }
 
-        public function index()
-        {
+        public function index(){
             $this->vars['guides'] = $this->Mguides->load_guides();
             $this->load->view($this->config->config_entry('main|template') . DS . 'guides' . DS . 'view.guides', $this->vars);
         }
@@ -46,8 +44,7 @@
             $this->load->view($this->config->config_entry('main|template') . DS . 'guides' . DS . 'view.guides', $this->vars);
         }
         
-        public function read($title, $id)
-        {
+        public function read($title, $id){
             if(ctype_digit($id)){
                 $this->vars['guide'] = $this->Mguides->load_guide_by_id($id);
                 

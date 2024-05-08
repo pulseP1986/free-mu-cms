@@ -55,8 +55,7 @@
          * @param float $totalAmount
          * @param float $interestFree
          */
-        public function __construct($cardBrand, $quantity = null, $amount = null, $totalAmount = null, $interestFree = null)
-        {
+        public function __construct($cardBrand, $quantity = null, $amount = null, $totalAmount = null, $interestFree = null){
             $param = $cardBrand;
             if(isset($param) && is_array($param) || is_object($param)){
                 $this->setInstallment($param);
@@ -69,16 +68,14 @@
          * Set brand of credit card
          * @param $cardBrand string
          */
-        public function setCardBrand($cardBrand)
-        {
+        public function setCardBrand($cardBrand){
             $this->cardBrand = $cardBrand;
         }
 
         /***
          * @return string the credit card brand
          */
-        public function getCardBrand()
-        {
+        public function getCardBrand(){
             return $this->cardBrand;
         }
 
@@ -86,16 +83,14 @@
          * Set the installments quantity
          * @param $quantity int
          */
-        public function setQuantity($quantity)
-        {
+        public function setQuantity($quantity){
             $this->quantity = $quantity;
         }
 
         /***
          * @return int of installments quantity
          */
-        public function getQuantity()
-        {
+        public function getQuantity(){
             return $this->quantity;
         }
 
@@ -103,16 +98,14 @@
          * Set the installments amount
          * @param $installmentAmount float
          */
-        public function setInstallmentAmount($installmentAmount)
-        {
+        public function setInstallmentAmount($installmentAmount){
             $this->installmentAmount = $installmentAmount;
         }
 
         /***
          * @return float of installments amount
          */
-        public function getInstallmentAmount()
-        {
+        public function getInstallmentAmount(){
             return $this->installmentAmount;
         }
 
@@ -120,16 +113,14 @@
          * Set the installments total amount
          * @param $totalAmount float
          */
-        public function setTotalAmount($totalAmount)
-        {
+        public function setTotalAmount($totalAmount){
             $this->totalAmount = $totalAmount;
         }
 
         /***
          * @return float of installments total amount
          */
-        public function getTotalAmount()
-        {
+        public function getTotalAmount(){
             return $this->totalAmount;
         }
 
@@ -137,16 +128,14 @@
          * Set the installments interest free
          * @param $interestFree float
          */
-        public function setInterestFree($interestFree)
-        {
+        public function setInterestFree($interestFree){
             $this->interestFree = $interestFree;
         }
 
         /***
          * @return float of installments interest free
          */
-        public function getInterestFree()
-        {
+        public function getInterestFree(){
             return $this->interestFree;
         }
 
@@ -158,8 +147,7 @@
          * @param float $totalAmount
          * @param float $interestFree
          */
-        public function setInstallment($cardBrand, $quantity = null, $amount = null, $totalAmount = null, $interestFree = null)
-        {
+        public function setInstallment($cardBrand, $quantity = null, $amount = null, $totalAmount = null, $interestFree = null){
             $param = $quantity;
             $param = $cardBrand;
             if(isset($param) && is_array($param) || is_object($param)){

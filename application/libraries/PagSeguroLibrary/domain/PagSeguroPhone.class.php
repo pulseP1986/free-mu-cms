@@ -42,8 +42,7 @@
          * @param String $number
          * @return PagSeguroPhone
          */
-        public function __construct($areaCode = null, $number = null)
-        {
+        public function __construct($areaCode = null, $number = null){
             $this->areaCode = ($areaCode == null ? null : $areaCode);
             $this->number = ($number == null ? null : $number);
             return $this;
@@ -52,16 +51,14 @@
         /***
          * @return int the area code
          */
-        public function getAreaCode()
-        {
+        public function getAreaCode(){
             return $this->areaCode;
         }
 
         /***
          * @return int the number
          */
-        public function getNumber()
-        {
+        public function getNumber(){
             return $this->number;
         }
 
@@ -70,8 +67,7 @@
          * @param String $areaCode
          * @return PagSeguroPhone
          */
-        public function setAreaCode($areaCode)
-        {
+        public function setAreaCode($areaCode){
             $this->areaCode = $areaCode;
             return $this;
         }
@@ -81,8 +77,7 @@
          * @param String $number
          * @return PagSeguroPhone
          */
-        public function setNumber($number)
-        {
+        public function setNumber($number){
             $this->number = $number;
             return $this;
         }
@@ -93,8 +88,7 @@
          * @param $number String formatted string like <code>(099) [9]9999-9999</code>
          * @return $this
          */
-        public function setFullPhone($number)
-        {
+        public function setFullPhone($number){
             /** We clean the string that is coming. Can be formatted or not */
             $number = preg_replace("/[^0-9]/", '', $number);
             $number = $number[0] == 0 ? substr($number, 1) : $number;

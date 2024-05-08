@@ -58,8 +58,7 @@
          * @param int $startOffset
          * @param int $endOffset
          */
-        public function __construct(FacebookFile $file, $uploadSessionId, $videoId, $startOffset, $endOffset)
-        {
+        public function __construct(FacebookFile $file, $uploadSessionId, $videoId, $startOffset, $endOffset){
             $this->file = $file;
             $this->uploadSessionId = $uploadSessionId;
             $this->videoId = $videoId;
@@ -72,8 +71,7 @@
          *
          * @return FacebookFile
          */
-        public function getFile()
-        {
+        public function getFile(){
             return $this->file;
         }
 
@@ -82,8 +80,7 @@
          *
          * @return FacebookFile
          */
-        public function getPartialFile()
-        {
+        public function getPartialFile(){
             $maxLength = $this->endOffset - $this->startOffset;
             return new FacebookFile($this->file->getFilePath(), $maxLength, $this->startOffset);
         }
@@ -93,8 +90,7 @@
          *
          * @return int
          */
-        public function getUploadSessionId()
-        {
+        public function getUploadSessionId(){
             return $this->uploadSessionId;
         }
 
@@ -103,16 +99,14 @@
          *
          * @return bool
          */
-        public function isLastChunk()
-        {
+        public function isLastChunk(){
             return $this->startOffset === $this->endOffset;
         }
 
         /**
          * @return int
          */
-        public function getStartOffset()
-        {
+        public function getStartOffset(){
             return $this->startOffset;
         }
 
@@ -121,8 +115,7 @@
          *
          * @return int
          */
-        public function getVideoId()
-        {
+        public function getVideoId(){
             return $this->videoId;
         }
     }

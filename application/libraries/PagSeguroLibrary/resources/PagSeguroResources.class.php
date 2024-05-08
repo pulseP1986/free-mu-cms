@@ -27,8 +27,7 @@
         private static $data;
         const VAR_NAME = 'PagSeguroResources';
 
-        private function __construct()
-        {
+        private function __construct(){
             define('ALLOW_PAGSEGURO_RESOURCES', true);
             require_once PagSeguroLibrary::getPath() . DIRECTORY_SEPARATOR . "resources" . DIRECTORY_SEPARATOR . "PagSeguroResources.php";
             $varName = self::VAR_NAME;
@@ -40,16 +39,14 @@
             }
         }
 
-        public static function init()
-        {
+        public static function init(){
             if(self::$resources == null){
                 self::$resources = new PagSeguroResources();
             }
             return self::$resources;
         }
 
-        public static function getData($key1, $key2 = null)
-        {
+        public static function getData($key1, $key2 = null){
             if($key2 != null){
                 if(isset(self::$data[$key1][$key2])){
                     return self::$data[$key1][$key2];
@@ -65,8 +62,7 @@
             }
         }
 
-        public static function setData($key1, $key2, $value)
-        {
+        public static function setData($key1, $key2, $value){
             if(isset(self::$data[$key1][$key2])){
                 self::$data[$key1][$key2] = $value;
             } else{
@@ -74,8 +70,7 @@
             }
         }
 
-        public static function getWebserviceUrl($environment)
-        {
+        public static function getWebserviceUrl($environment){
             if(isset(self::$data['webserviceUrl']) && isset(self::$data['webserviceUrl'][$environment])){
                 return self::$data['webserviceUrl'][$environment];
             } else{
@@ -83,8 +78,7 @@
             }
         }
 
-        public static function getPaymentUrl($environment)
-        {
+        public static function getPaymentUrl($environment){
             if(isset(self::$data['paymentService']) && isset(self::$data['paymentService']['baseUrl']) && isset(self::$data['paymentService']['baseUrl'][$environment])){
                 return self::$data['paymentService']['baseUrl'][$environment];
             } else{
@@ -92,8 +86,7 @@
             }
         }
 
-        public static function getBaseUrl($environment)
-        {
+        public static function getBaseUrl($environment){
             if(isset(self::$data['baseUrl']) && isset(self::$data['baseUrl'][$environment])){
                 return self::$data['baseUrl'][$environment];
             } else{
@@ -101,8 +94,7 @@
             }
         }
 
-        public static function getStaticUrl($environment)
-        {
+        public static function getStaticUrl($environment){
             if(isset(self::$data['staticUrl']) && isset(self::$data['staticUrl'][$environment])){
                 return self::$data['staticUrl'][$environment];
             } else{
@@ -110,8 +102,7 @@
             }
         }
 
-        public static function getInstallmentUrl()
-        {
+        public static function getInstallmentUrl(){
             if(isset(self::$data['installmentService']) && isset(self::$data['installmentService']['url'])){
                 return self::$data['installmentService']['url'];
             } else{
@@ -119,8 +110,7 @@
             }
         }
 
-        public static function getAuthorizationUrl()
-        {
+        public static function getAuthorizationUrl(){
             if(isset(self::$data['authorizationService']) && isset(self::$data['authorizationService']['servicePath'])){
                 return self::$data['authorizationService']['servicePath'];
             } else{
@@ -128,8 +118,7 @@
             }
         }
 
-        public static function getSessionUrl()
-        {
+        public static function getSessionUrl(){
             if(isset(self::$data['sessionService']) && isset(self::$data['sessionService']['url'])){
                 return self::$data['sessionService']['url'];
             } else{

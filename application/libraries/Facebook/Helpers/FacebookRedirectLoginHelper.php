@@ -71,8 +71,7 @@
          * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
          * @param PseudoRandomStringGeneratorInterface|null $prsg The cryptographically secure pseudo-random string generator.
          */
-        public function __construct(OAuth2Client $oAuth2Client, PersistentDataInterface $persistentDataHandler = null, UrlDetectionInterface $urlHandler = null, PseudoRandomStringGeneratorInterface $prsg = null)
-        {
+        public function __construct(OAuth2Client $oAuth2Client, PersistentDataInterface $persistentDataHandler = null, UrlDetectionInterface $urlHandler = null, PseudoRandomStringGeneratorInterface $prsg = null){
             $this->oAuth2Client = $oAuth2Client;
             $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
             $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
@@ -84,8 +83,7 @@
          *
          * @return PersistentDataInterface
          */
-        public function getPersistentDataHandler()
-        {
+        public function getPersistentDataHandler(){
             return $this->persistentDataHandler;
         }
 
@@ -94,8 +92,7 @@
          *
          * @return UrlDetectionInterface
          */
-        public function getUrlDetectionHandler()
-        {
+        public function getUrlDetectionHandler(){
             return $this->urlDetectionHandler;
         }
 
@@ -104,8 +101,7 @@
          *
          * @return PseudoRandomStringGeneratorInterface
          */
-        public function getPseudoRandomStringGenerator()
-        {
+        public function getPseudoRandomStringGenerator(){
             return $this->pseudoRandomStringGenerator;
         }
 
@@ -116,8 +112,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function detectPseudoRandomStringGenerator()
-        {
+        public function detectPseudoRandomStringGenerator(){
             // Since openssl_random_pseudo_bytes() can sometimes return non-cryptographically
             // secure pseudo-random strings (in rare cases), we check for mcrypt_create_iv() first.
             if(function_exists('mcrypt_create_iv')){
@@ -142,8 +137,7 @@
          *
          * @return string
          */
-        private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&')
-        {
+        private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&'){
             $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
             $this->persistentDataHandler->set('state', $state);
             return $this->oAuth2Client->getAuthorizationUrl($redirectUrl, $state, $scope, $params, $separator);
@@ -158,8 +152,7 @@
          *
          * @return string
          */
-        public function getLoginUrl($redirectUrl, array $scope = [], $separator = '&')
-        {
+        public function getLoginUrl($redirectUrl, array $scope = [], $separator = '&'){
             return $this->makeUrl($redirectUrl, $scope, [], $separator);
         }
 
@@ -174,8 +167,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getLogoutUrl($accessToken, $next, $separator = '&')
-        {
+        public function getLogoutUrl($accessToken, $next, $separator = '&'){
             if(!$accessToken instanceof AccessToken){
                 $accessToken = new AccessToken($accessToken);
             }
@@ -195,8 +187,7 @@
          *
          * @return string
          */
-        public function getReRequestUrl($redirectUrl, array $scope = [], $separator = '&')
-        {
+        public function getReRequestUrl($redirectUrl, array $scope = [], $separator = '&'){
             $params = ['auth_type' => 'rerequest'];
             return $this->makeUrl($redirectUrl, $scope, $params, $separator);
         }
@@ -210,8 +201,7 @@
          *
          * @return string
          */
-        public function getReAuthenticationUrl($redirectUrl, array $scope = [], $separator = '&')
-        {
+        public function getReAuthenticationUrl($redirectUrl, array $scope = [], $separator = '&'){
             $params = ['auth_type' => 'reauthenticate'];
             return $this->makeUrl($redirectUrl, $scope, $params, $separator);
         }
@@ -225,8 +215,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getAccessToken($redirectUrl = null)
-        {
+        public function getAccessToken($redirectUrl = null){
             if(!$code = $this->getCode()){
                 return null;
             }
@@ -242,8 +231,7 @@
          *
          * @throws FacebookSDKException
          */
-        protected function validateCsrf()
-        {
+        protected function validateCsrf(){
             $state = $this->getState();
             $savedState = $this->persistentDataHandler->get('state');
             if(!$state || !$savedState){
@@ -268,8 +256,7 @@
          *
          * @return string|null
          */
-        protected function getCode()
-        {
+        protected function getCode(){
             return $this->getInput('code');
         }
 
@@ -278,8 +265,7 @@
          *
          * @return string|null
          */
-        protected function getState()
-        {
+        protected function getState(){
             return $this->getInput('state');
         }
 
@@ -288,8 +274,7 @@
          *
          * @return string|null
          */
-        public function getErrorCode()
-        {
+        public function getErrorCode(){
             return $this->getInput('error_code');
         }
 
@@ -298,8 +283,7 @@
          *
          * @return string|null
          */
-        public function getError()
-        {
+        public function getError(){
             return $this->getInput('error');
         }
 
@@ -308,8 +292,7 @@
          *
          * @return string|null
          */
-        public function getErrorReason()
-        {
+        public function getErrorReason(){
             return $this->getInput('error_reason');
         }
 
@@ -318,8 +301,7 @@
          *
          * @return string|null
          */
-        public function getErrorDescription()
-        {
+        public function getErrorDescription(){
             return $this->getInput('error_description');
         }
 
@@ -330,8 +312,7 @@
          *
          * @return string|null
          */
-        private function getInput($key)
-        {
+        private function getInput($key){
             return isset($_GET[$key]) ? $_GET[$key] : null;
         }
     }

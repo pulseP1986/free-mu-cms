@@ -40,8 +40,7 @@
          * @param $authorizationCode
          * @return string
          */
-        private static function buildSearchUrlByCode(PagSeguroConnectionData $connectionData, $authorizationCode)
-        {
+        private static function buildSearchUrlByCode(PagSeguroConnectionData $connectionData, $authorizationCode){
             $url = $connectionData->getServiceUrl();
             return "{$url}/{$authorizationCode}/?" . $connectionData->getCredentialsUrlQuery();
         }
@@ -51,8 +50,7 @@
          * @param $notificationCode
          * @return string
          */
-        private static function buildSearchUrlByNotification(PagSeguroConnectionData $connectionData, $notificationCode)
-        {
+        private static function buildSearchUrlByNotification(PagSeguroConnectionData $connectionData, $notificationCode){
             $url = $connectionData->getServiceUrl();
             return "{$url}/notifications/{$notificationCode}/?" . $connectionData->getCredentialsUrlQuery();
         }
@@ -62,8 +60,7 @@
          * @param null|array $options
          * @return string
          */
-        private static function buildSearchUrl(PagSeguroConnectionData $connectionData, $options = null)
-        {
+        private static function buildSearchUrl(PagSeguroConnectionData $connectionData, $options = null){
             if(!is_null($options)){
                 $options = http_build_query($options, '', '&');
                 return $connectionData->getServiceUrl() . "/?" . $connectionData->getCredentialsUrlQuery() . "&" . $options;
@@ -76,8 +73,7 @@
          * @param $reference
          * @return string
          */
-        private static function buildSearchUrlByReference(PagSeguroConnectionData $connectionData, $reference)
-        {
+        private static function buildSearchUrlByReference(PagSeguroConnectionData $connectionData, $reference){
             $url = $connectionData->getServiceUrl();
             return "{$url}?" . $connectionData->getCredentialsUrlQuery() . '&reference=' . $reference;
         }
@@ -92,8 +88,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchByCode(PagSeguroCredentials $credentials, $authorizationCode)
-        {
+        public static function searchByCode(PagSeguroCredentials $credentials, $authorizationCode){
             LogPagSeguro::info("PagSeguroAuthorizationSearchService.SearchByCode($authorizationCode) - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -119,8 +114,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchByNotificationCode(PagSeguroCredentials $credentials, $notificationCode)
-        {
+        public static function searchByNotificationCode(PagSeguroCredentials $credentials, $notificationCode){
             LogPagSeguro::info("PagSeguroAuthorizationSearchService.searchByNotificationCode($notificationCode) - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -146,8 +140,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchAuthorizations(PagSeguroCredentials $credentials, array $options = null)
-        {
+        public static function searchAuthorizations(PagSeguroCredentials $credentials, array $options = null){
             LogPagSeguro::info("PagSeguroAuthorizationSearchService.searchAuthorizations() - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -172,8 +165,7 @@
          * @throws PagSeguroServiceException
          * @throws Exception
          */
-        public static function searchByReference(PagSeguroCredentials $credentials, $reference)
-        {
+        public static function searchByReference(PagSeguroCredentials $credentials, $reference){
             LogPagSeguro::info("PagSeguroAuthorizationSearchService.SearchByReference($reference) - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{
@@ -195,8 +187,7 @@
          * @return bool|mixed|string
          * @throws PagSeguroServiceException
          */
-        private function searchReturn($connection, $code)
-        {
+        private function searchReturn($connection, $code){
             $httpStatus = new PagSeguroHttpStatus($connection->getStatus());
             switch($httpStatus->getType()){
                 case 'OK':
@@ -223,8 +214,7 @@
          * @return bool|mixed|string
          * @throws PagSeguroServiceException
          */
-        private function searchAuthorizationsReturn($connection)
-        {
+        private function searchAuthorizationsReturn($connection){
             $httpStatus = new PagSeguroHttpStatus($connection->getStatus());
             switch($httpStatus->getType()){
                 case 'OK':

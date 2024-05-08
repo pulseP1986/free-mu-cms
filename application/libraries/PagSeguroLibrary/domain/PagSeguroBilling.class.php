@@ -36,8 +36,7 @@
          * Initializes a new instance of the PagSeguroBilling class
          * @param $data
          */
-        public function __construct($data = null)
-        {
+        public function __construct($data = null){
             if(isset($data) and is_array($data)){
                 $this->setAddress(new PagSeguroAddress($data));
             } else if($data instanceof PagSeguroAddress){
@@ -50,8 +49,7 @@
          * @see PagSeguroAddress
          * @param PagSeguroAddress $address
          */
-        public function setAddress(PagSeguroAddress $address)
-        {
+        public function setAddress(PagSeguroAddress $address){
             $this->address = $address;
         }
 
@@ -59,8 +57,7 @@
          * @return PagSeguroAddress the billing address
          * @see PagSeguroAddress
          */
-        public function getAddress()
-        {
+        public function getAddress(){
             return $this->address;
         }
     }

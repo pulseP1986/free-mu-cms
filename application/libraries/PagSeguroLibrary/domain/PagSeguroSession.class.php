@@ -35,8 +35,7 @@
         /***
          * @return session id
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->id;
         }
 
@@ -45,16 +44,14 @@
          *
          * @param string id
          */
-        public function setId($id)
-        {
+        public function setId($id){
             $this->id = $id;
         }
 
         /***
          * @return String a string that represents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $session = [];
             $session['id'] = $this->id;
             $session = "Session: " . var_export($session, true);

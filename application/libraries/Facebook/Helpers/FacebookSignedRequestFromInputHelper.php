@@ -58,8 +58,7 @@
          * @param FacebookClient $client The client to make HTTP requests.
          * @param string|null $graphVersion The version of Graph to use.
          */
-        public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
-        {
+        public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null){
             $this->app = $app;
             $graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
             $this->oAuth2Client = new OAuth2Client($this->app, $client, $graphVersion);
@@ -71,8 +70,7 @@
          *
          * @param string|null
          */
-        public function instantiateSignedRequest($rawSignedRequest = null)
-        {
+        public function instantiateSignedRequest($rawSignedRequest = null){
             $rawSignedRequest = $rawSignedRequest ?: $this->getRawSignedRequest();
             if(!$rawSignedRequest){
                 return;
@@ -87,8 +85,7 @@
          *
          * @throws \Facebook\Exceptions\FacebookSDKException
          */
-        public function getAccessToken()
-        {
+        public function getAccessToken(){
             if($this->signedRequest && $this->signedRequest->hasOAuthData()){
                 $code = $this->signedRequest->get('code');
                 $accessToken = $this->signedRequest->get('oauth_token');
@@ -106,8 +103,7 @@
          *
          * @return SignedRequest|null
          */
-        public function getSignedRequest()
-        {
+        public function getSignedRequest(){
             return $this->signedRequest;
         }
 
@@ -116,8 +112,7 @@
          *
          * @return string|null
          */
-        public function getUserId()
-        {
+        public function getUserId(){
             return $this->signedRequest ? $this->signedRequest->getUserId() : null;
         }
 
@@ -133,8 +128,7 @@
          *
          * @return string|null
          */
-        public function getRawSignedRequestFromPost()
-        {
+        public function getRawSignedRequestFromPost(){
             if(isset($_POST['signed_request'])){
                 return $_POST['signed_request'];
             }
@@ -146,8 +140,7 @@
          *
          * @return string|null
          */
-        public function getRawSignedRequestFromCookie()
-        {
+        public function getRawSignedRequestFromCookie(){
             if(isset($_COOKIE['fbsr_' . $this->app->getId()])){
                 return $_COOKIE['fbsr_' . $this->app->getId()];
             }

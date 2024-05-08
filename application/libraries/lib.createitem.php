@@ -40,8 +40,7 @@
          *
          * @return void
          */
-        public function __construct($version = 2, $socket_type = 0, $item_size = 32)
-        {
+        public function __construct($version = 2, $socket_type = 0, $item_size = 32){
             $this->muVersion($version);
             $this->socket_type = $socket_type;
             $this->no_socket = ($socket_type == 1) ? 255 : 0;
@@ -62,8 +61,7 @@
          *
          * @return void
          */
-        public function muVersion($version)
-        {
+        public function muVersion($version){
             try{
                 if(!is_numeric($version))
                     throw new Exception('Parameter $version should be numeric value');
@@ -82,8 +80,7 @@
          *
          * @return void
          */
-        public function setItemData($data = [])
-        {
+        public function setItemData($data = []){
             try{
                 if(!is_array($data))
                     throw new Exception('Parameter $data should be array');
@@ -100,8 +97,7 @@
          *
          * @return createitem object
          */
-        public function id($id)
-        {
+        public function id($id){
             try{
                 if(!is_numeric($id))
                     throw new Exception('Parameter $id should be numeric value');
@@ -119,8 +115,7 @@
          *
          * @return createitem object
          */
-		public function cat($cat)
-        {
+		public function cat($cat){
             try{
                 if(!is_numeric($cat))
                     throw new Exception('Parameter $cat should be numeric value');
@@ -147,8 +142,7 @@
          *
          * @return createitem object
          */
-        public function refinery($ref = false)
-        {
+        public function refinery($ref = false){
             try{
                 if(!is_bool($ref))
                     throw new Exception('Parameter $ref should be true or false');
@@ -164,8 +158,7 @@
          *
          * @return createitem object
          */
-        public function expirable()
-        {
+        public function expirable(){
             $this->ref = 2;
             return $this;
         }
@@ -177,8 +170,7 @@
          *
          * @return createitem object
          */
-        public function harmony($hoption = [])
-        {
+        public function harmony($hoption = []){
             try{
                 if(!is_array($hoption))
                     throw new Exception('Parameter $hoption should be array');
@@ -196,8 +188,7 @@
          *
          * @return createitem object
          */
-        public function dur($dur)
-        {
+        public function dur($dur){
             try{
                 if(!is_numeric($dur))
                     throw new Exception('Parameter $dur should be numeric value');
@@ -208,8 +199,7 @@
             return $this;
         }
         
-        public function serialsFromHex($data)
-        {
+        public function serialsFromHex($data){
             try{
                 if(!is_bool($data))
                     throw new Exception('Parameter $data should be boolean');
@@ -227,8 +217,7 @@
          *
          * @return createitem object
          */
-        public function serial($serial)
-        {
+        public function serial($serial){
             try{
                 if(!is_numeric($serial))
                     throw new Exception('Parameter $serial should be number');
@@ -246,8 +235,7 @@
          *
          * @return createitem object
          */
-        public function serial2($serial = false)
-        {
+        public function serial2($serial = false){
             try{
                 if(!is_bool($serial))
                     throw new Exception('Parameter $serial should be true or false');
@@ -265,8 +253,7 @@
          *
          * @return createitem object
          */
-        public function lvl($lvl)
-        {
+        public function lvl($lvl){
             try{
                 if(!is_numeric($lvl))
                     throw new Exception('Parameter $lvl should be numeric value');
@@ -284,8 +271,7 @@
          *
          * @return createitem object
          */
-        public function stickLvl($lvl)
-        {
+        public function stickLvl($lvl){
             try{
                 if(!is_numeric($lvl))
                     throw new Exception('Parameter $lvl should be numeric value');
@@ -303,8 +289,7 @@
          *
          * @return createitem object
          */
-        public function skill($skill)
-        {
+        public function skill($skill){
             try{
                 if(!is_bool($skill))
                     throw new Exception('Parameter $skill should be true or false');
@@ -322,8 +307,7 @@
          *
          * @return createitem object
          */
-        public function luck($luck)
-        {
+        public function luck($luck){
             try{
                 if(!is_bool($luck))
                     throw new Exception('Parameter $luck should be true or false');
@@ -341,8 +325,7 @@
          *
          * @return createitem object
          */
-        public function opt($option)
-        {
+        public function opt($option){
             try{
                 if(!is_numeric($option))
                     throw new Exception('Parameter $option should be numeric value');
@@ -360,8 +343,7 @@
          *
          * @return createitem object
          */
-        public function exe($exe = [])
-        {
+        public function exe($exe = []){
             try{
                 if(!is_array($exe))
                     throw new Exception('Parameter $exe should be array');
@@ -379,8 +361,7 @@
          *
          * @return createitem object
          */
-        public function addStaticExe($exe)
-        {
+        public function addStaticExe($exe){
             try{
                 if(!is_numeric($exe))
                     throw new Exception('Parameter $exe should be integer');
@@ -399,8 +380,7 @@
          *
          * @return createitem object
          */
-        public function addExe($exe)
-        {
+        public function addExe($exe){
             try{
                 if(!is_numeric($exe))
                     throw new Exception('Parameter $exe should be integer');
@@ -411,8 +391,7 @@
             return $this;
         }
         
-        public function removeExe($exe)
-        {
+        public function removeExe($exe){
             try{
                 if(!is_numeric($exe))
                     throw new Exception('Parameter $exe should be integer');
@@ -430,8 +409,7 @@
          *
          * @return createitem object
          */
-        public function fenrir($fenrir)
-        {
+        public function fenrir($fenrir){
             try{
                 if(!is_numeric($fenrir))
                     throw new Exception('Parameter $fenrir should be numeric value');
@@ -449,8 +427,7 @@
          *
          * @return createitem object
          */
-        public function ancient($ancient)
-        {
+        public function ancient($ancient){
             try{
                 if(!is_numeric($ancient))
                     throw new Exception('Parameter $ancient should be numeric value');
@@ -468,8 +445,7 @@
          *
          * @return createitem object
          */
-        public function addAncient($ancient)
-        {
+        public function addAncient($ancient){
             try{
                 if(!is_numeric($ancient))
                     throw new Exception('Parameter $ancient should be numeric value');
@@ -487,8 +463,7 @@
          *
          * @return createitem object
          */
-        public function socket($sockets = [])
-        {
+        public function socket($sockets = []){
             try{
                 if(!is_array($sockets))
                     throw new Exception('Parameter $sockets should be array');
@@ -506,8 +481,7 @@
          *
          * @return createitem object
          */
-        public function elementType($element = false)
-        {
+        public function elementType($element = false){
             try{
                 if($element != false && !is_numeric($element))
                     throw new Exception('Parameter $element should be numeric value');
@@ -525,8 +499,7 @@
          *
          * @return createitem object
          */
-        public function elementRanks($ranks = [])
-        {
+        public function elementRanks($ranks = []){
             try{
                 if(!is_array($ranks))
                     throw new Exception('Parameter $ranks should be array');
@@ -544,8 +517,7 @@
          *
          * @return void
          */
-        public function elementCount($count = 1)
-        {
+        public function elementCount($count = 1){
             try{
                 if(!is_numeric($count))
                     throw new Exception('Parameter $count should be numeric value');
@@ -562,8 +534,7 @@
          *
          * @return createitem object
          */
-        public function elementLevels($levels = [])
-        {
+        public function elementLevels($levels = []){
             try{
                 if(!is_array($levels))
                     throw new Exception('Parameter $levels should be array');
@@ -596,8 +567,7 @@
          *
          * @return createitem object
          */
-        public function make($id, $cat, $ref = false, $hoption = [], $dur = 0, $serial = 0, $serial2 = false, $lvl = 0, $skill = false, $luck = false, $option = 0, $exellent = [], $fenrir = 0, $ancient = 0, $sockets = [], $element_type = false, $element_ranks = [], $element_levels = [])
-        {
+        public function make($id, $cat, $ref = false, $hoption = [], $dur = 0, $serial = 0, $serial2 = false, $lvl = 0, $skill = false, $luck = false, $option = 0, $exellent = [], $fenrir = 0, $ancient = 0, $sockets = [], $element_type = false, $element_ranks = [], $element_levels = []){
             $this->id($id)->cat($cat)->refinery($ref)->harmony($hoption)->dur($dur)->serial($serial)->serial2($serial2)->lvl($lvl)->skill($skill)->luck($luck)->opt($option)->exe($exellent)->fenrir($fenrir)->ancient($ancient)->socket($sockets)->elementType($element_type)->elementRanks($element_ranks)->elementLevels($element_levels);
             return $this;
         }
@@ -607,8 +577,7 @@
          *
          * @return string
          */
-		private function setId()
-        {
+		private function setId(){
             $id = $this->id;
             if(in_array($this->version, [0, 1]))
                 $id = ((($this->id & 31) | (($this->cat << 5) & 224)) & 255); 
@@ -625,8 +594,7 @@
          *
          * @return string
          */
-        private function setCategory()
-        {
+        private function setCategory(){
             if(in_array($this->version, [0, 1]))
                 return '';
             return sprintf("%01X", $this->cat, 0);
@@ -637,8 +605,7 @@
          *
          * @return string
          */
-        private function setOptions()
-        {
+        private function setOptions(){
             $opt = 0;
             if($this->lvl > 0 && $this->muun == 0){
                 $opt += $this->lvl * 8;
@@ -662,8 +629,7 @@
          *
          * @return string
          */
-        private function setDurability()
-        {
+        private function setDurability(){
 			
             if($this->dur != false){
                 $dur = $this->dur;
@@ -733,8 +699,7 @@
          *
          * @return string
          */
-        public function setSerial()
-        {
+        public function setSerial(){
             if($this->serials_from_hex == true){
                 if(isset($this->hex_serial[0])){
                     return $this->hex_serial[0];
@@ -754,8 +719,7 @@
          *
          * @return string
          */
-        private function setSerial2()
-        {
+        private function setSerial2(){
             if($this->serials_from_hex == true){
                 if(isset($this->hex_serial[1])){
                     return $this->hex_serial[1];
@@ -775,8 +739,7 @@
          *
          * @return string
          */
-		private function setExe()
-        {	
+		private function setExe(){	
             if($this->is_socket_exe){
                 if($this->opt >= 4){
                     $exe += 64;
@@ -822,8 +785,7 @@
          *
          * @return string
          */
-        private function setAncient()
-        {
+        private function setAncient(){
             if($this->version == 0)
                 $anc_data = 0; 
 			else{
@@ -840,8 +802,7 @@
          *
          * @return string
          */
-        private function setRefinery()
-        {
+        private function setRefinery(){
             if(in_array($this->version, [0, 1]))
                 $refinery_data = '00'; 
 			else{
@@ -869,8 +830,7 @@
          *
          * @return string
          */
-		private function setHarmony()
-        {
+		private function setHarmony(){
             if(in_array($this->version, [0, 1]))
                 return ''; 
 			else{
@@ -889,8 +849,7 @@
          *
          * @return string
          */
-        private function setElementOnHarmony()
-        {
+        private function setElementOnHarmony(){
             if($this->element_ranks['rank1'] != 0)
                 $this->elementCount(1);
             if($this->element_ranks['rank2'] != 0)
@@ -909,8 +868,7 @@
          *
          * @return string
          */
-        private function setSocket()
-        {
+        private function setSocket(){
             if(in_array($this->version, [0, 1]))
                 return ''; 
 			else{
@@ -967,8 +925,7 @@
          *
          * @return string
          */
-		private function setEmpty()
-        {
+		private function setEmpty(){
             if($this->serials_from_hex == true){
                 if(isset($this->hex_serial[1])){
                     return str_repeat('F', 24);
@@ -1010,8 +967,7 @@
          *
          * @return hex string
          */
-        public function to_hex()
-        {
+        public function to_hex(){
             return $this->setId() . $this->setOptions() . $this->setDurability() . $this->setSerial() . $this->setExe() . $this->setAncient() . $this->setCategory() . $this->setRefinery() . $this->setHarmony() . $this->setSocket() . $this->setSerial2() . $this->setEmpty();
         }
     }

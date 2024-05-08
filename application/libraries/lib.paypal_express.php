@@ -12,8 +12,7 @@
         private $sandbox = true;
         private $version = "93";
         
-        public function __construct($credentials = [])
-        {
+        public function __construct($credentials = []){
             if(isset($credentials['version'])){
                 $this->version = $credentials['version'];
             }
@@ -35,8 +34,7 @@
             }
         }
         
-        public function setExpressCheckout($ec_data = [], $custom_data = false)
-        {
+        public function setExpressCheckout($ec_data = [], $custom_data = false){
             $nvpstr = '';
             if($custom_data === false){
                 if(isset($ec_data['currency'])){
@@ -122,8 +120,7 @@
             return false;
         }
         
-        public function getExpressCheckoutDetails($token)
-        {
+        public function getExpressCheckoutDetails($token){
             $nvpstr = "&TOKEN=" . $token;
             $result = $this->callPaypal("GetExpressCheckoutDetails", $nvpstr);
             if(isset($result["ACK"])){
@@ -138,8 +135,7 @@
             return false;
         }
         
-        public function doExpressCheckoutPayment($ec_details = ['token' => '', 'payer_id' => '', 'currency' => '', 'amount' => '', 'IPN_URL' => '', 'type' => 'Sale'])
-        {
+        public function doExpressCheckoutPayment($ec_details = ['token' => '', 'payer_id' => '', 'currency' => '', 'amount' => '', 'IPN_URL' => '', 'type' => 'Sale']){
             $nvpstr = '';
             if(isset($ec_details['token'])){
                 $nvpstr .= '&TOKEN=' . urlencode($ec_details['token']);
@@ -170,8 +166,7 @@
             return $result;
         }
         
-        private function callPaypal($methodName, $nvpStr)
-        {
+        private function callPaypal($methodName, $nvpStr){
             $nvpreq = "METHOD=" . urlencode($methodName);
             $nvpreq .= "&VERSION=" . urlencode($this->version);
             $nvpreq .= "&PWD=" . urlencode($this->api_password);
@@ -211,8 +206,7 @@
             }
         }
         
-        public function redirectToPaypal($token)
-        {
+        public function redirectToPaypal($token){
             $this->load->lib('mobile');
             $payPalURL = ($this->mobile->isMobile() === true) ? str_replace("_express-checkout", "_express-checkout-mobile", $this->paypal_url) : $this->paypal_url;
             $payPalURL = $this->paypal_url . $token;
@@ -220,8 +214,7 @@
             exit;
         }
         
-        private function deformatNvp($nvpstr)
-        {
+        private function deformatNvp($nvpstr){
             $intial = 0;
             $nvpArray = [];
             while(strlen($nvpstr)){

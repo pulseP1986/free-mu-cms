@@ -4,15 +4,13 @@
     {
         private $registry, $rankings_config, $config, $load, $table_config, $last_month, $reward, $year, $formula = '', $players = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
         }
 
-        public function execute()
-        {
+        public function execute(){
             $this->load->helper('website');
             $this->load->model('account');
             $this->year = date('Y');
@@ -40,8 +38,7 @@
             }
         }
 
-        private function get_ranking($server, $player_count = 1, $table_config)
-        {
+        private function get_ranking($server, $player_count = 1, $table_config){
             if($table_config == false || $table_config['ds']['table'] == '')
                 return false;
 			unset($this->registry->game_db);
@@ -59,16 +56,14 @@
             return false;
         }
 
-        private function find_user_data($name, $server)
-        {
+        private function find_user_data($name, $server){
             $accountDb = ($this->registry->website->is_multiple_accounts() == true) ? $this->registry->website->get_db_from_server($server, true) : $this->registry->website->get_default_account_database();
             $stmt = $this->registry->website->db('game', $server)->prepare('SELECT TOP 1 c.AccountId, m.memb___id, m.memb_guid FROM Character AS c INNER JOIN [' . $accountDb . '].dbo.MEMB_INFO AS m ON (c.AccountId COLLATE Database_Default = m.memb___id) WHERE c.Name = :name');
             $stmt->execute([':name' => $name]);
             return $stmt->fetch();
         }
 
-        private function reset_ranking($server, $table_config)
-        {
+        private function reset_ranking($server, $table_config){
             if($table_config == false || $table_config['ds']['table'] == '')
                 return false;
             $this->registry->website->db($table_config['ds']['db'], $server)->query('UPDATE ' . $table_config['ds']['table'] . ' SET ' . $table_config['ds']['column'] . ' = 0');

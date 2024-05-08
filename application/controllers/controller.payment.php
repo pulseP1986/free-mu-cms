@@ -5,8 +5,7 @@
     {
         public $vars = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -15,13 +14,11 @@
 			$this->load->model('donate');
         }
 
-        public function index()
-        {
+        public function index(){
             throw new exception('Nothing to see here!');
         }
 
-        public function paypal($order = '')
-        {
+        public function paypal($order = ''){
             writelog('Paypal request initialized.', 'Paypal');
             if(count($_POST) > 0){
                 $post_data = $this->website->c(file_get_contents('php://input'));
@@ -101,8 +98,7 @@
             }
         }
 
-        public function paycall()
-        {
+        public function paycall(){
             if(count($_REQUEST) > 0){
                 $custom = isset($_REQUEST["custom_data"]) ? trim(($_REQUEST["custom_data"])) : '';
                 $total_amount = isset($_REQUEST["total"]) ? $_REQUEST["total"] : 0;
@@ -146,8 +142,7 @@
             }
         }
 
-        public function paymentwall()
-        {
+        public function paymentwall(){
             if(count($_GET) > 0){
                 if(!isset($_GET['uid'])){
                     writelog('Error: Uid is not set. Correct format username-server-servername', 'paymentwall');
@@ -252,8 +247,7 @@
             }
         }
 
-        public function two_checkout()
-        {
+        public function two_checkout(){
             $params = [];
             foreach($_REQUEST as $k => $v){
                 $params[$k] = $v;
@@ -288,8 +282,7 @@
             }
         }
 
-        public function cuenta_digital()
-        {
+        public function cuenta_digital(){
             if(count($_REQUEST) > 0){
                 $code = isset($_REQUEST['codigo']) ? $_REQUEST['codigo'] : '';
                 if($code != ''){
@@ -334,8 +327,7 @@
             }
         }
 
-        public function interkassa()
-        {
+        public function interkassa(){
             if(count($_POST) > 0){
                 if(isset($_POST['ik_x_userinfo'])){
                     if(preg_match('/\b-server-\b/i', $_POST['ik_x_userinfo'])){
@@ -406,8 +398,7 @@
             }
         }
 
-        public function pagseguro($server = '')
-        {
+        public function pagseguro($server = ''){
             if($server == ''){
                 echo 'Server variable is not set';
                 writelog('Server variable is not set', 'pagseguro_log');
@@ -499,23 +490,20 @@
             }
         }
 
-        private function _getStatusTranslation($status)
-        {
+        private function _getStatusTranslation($status){
             $order_status = ['INITIATED' => 'Initiated', 'WAITING_PAYMENT' => 'Waiting payment', 'IN_ANALYSIS' => 'In analysis', 'PAID' => 'Paid', 'AVAILABLE' => 'Available', 'IN_DISPUTE' => 'In dispute', 'REFUNDED' => 'Refunded', 'CANCELLED' => 'Cancelled'];
             if(isset($order_status[$status]))
                 return $order_status[$status];
             return 0;
         }
 
-        private function _getStatusString($statusPagSeguro)
-        {
+        private function _getStatusString($statusPagSeguro){
 			require_once(APP_PATH . DS . 'libraries' . DS . 'PagSeguroLibrary' . DS . 'PagSeguroLibrary.php');
             $transactionStatus = new PagSeguroTransactionStatus($statusPagSeguro);
             return $transactionStatus->getTypeFromValue();
         }
 
-        public function fortumo()
-        {
+        public function fortumo(){
             if(count($_GET) > 0){
                 //if($this->Mdonate->validate_ip_list($_GET['cuid'], 'fortumo')){
                     if($_GET['sig'] != $sigi = $this->Mdonate->fortumo_sig_check($_GET)){
@@ -551,8 +539,7 @@
             }
         }
 
-        public function paygol()
-        {
+        public function paygol(){
             if(count($_GET) > 0){
                 if(!in_array(ip(), ['109.70.3.48', '109.70.3.146', '109.70.3.58'])){
                     writelog('Error: Unknown IP', 'paygol');

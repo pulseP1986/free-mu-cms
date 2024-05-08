@@ -42,8 +42,7 @@
          * @param PagSeguroPaymentMethodType $type
          * @param PagSeguroPaymentMethodCode $code
          */
-        public function __construct($type = null, $code = null)
-        {
+        public function __construct($type = null, $code = null){
             if($type){
                 $this->setType($type);
             }
@@ -55,8 +54,7 @@
         /***
          * @return the payment method type
          */
-        public function getType()
-        {
+        public function getType(){
             return $this->type;
         }
 
@@ -64,8 +62,7 @@
          * Sets the payment method type
          * @param PagSeguroPaymentMethodType $type
          */
-        public function setType($type)
-        {
+        public function setType($type){
             if($type instanceof PagSeguroPaymentMethodType){
                 $this->type = $type;
             } else{
@@ -76,8 +73,7 @@
         /***
          * @return the code
          */
-        public function getCode()
-        {
+        public function getCode(){
             return $this->code;
         }
 
@@ -85,8 +81,7 @@
          * Sets the payment method code
          * @param PagSeguroPaymentMethodCode $code
          */
-        public function setCode($code)
-        {
+        public function setCode($code){
             if($code instanceof PagSeguroPaymentMethodCode){
                 $this->code = $code;
             } else{

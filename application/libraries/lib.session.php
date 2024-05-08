@@ -16,15 +16,13 @@
         protected $cookieSecure = false;
         protected $sidRegexp;
 
-        public function __construct($key, $name = 'dmncmssession', $params = [])
-        {
+        public function __construct($key, $name = 'dmncmssession', $params = []){
             $this->sessionCookieName = $name;
             $this->sessionSavePath = APP_PATH . DS . 'data' . DS . 'sessions';
             $this->start();
         }
 
-        public function start($id = '')
-        {
+        public function start($id = ''){
             if(isCommandLineInterface()){
                 return;
             } else if((bool)ini_get('session.auto_start')){
@@ -56,8 +54,7 @@
             }
         }
 
-        protected function configure()
-        {
+        protected function configure(){
 			if (session_status() !== PHP_SESSION_ACTIVE) {
 				ini_set('session.name', $this->sessionCookieName);
 				session_set_cookie_params($this->sessionExpiration, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
@@ -70,8 +67,7 @@
             $this->configureSidLength();
         }
 
-        protected function configureSidLength()
-        {
+        protected function configureSidLength(){
             if(PHP_VERSION_ID < 70100){
                 $bits = 160;
                 $hash_function = ini_get('session.hash_function');
@@ -112,19 +108,16 @@
             $this->sidRegexp .= '{' . $sid_length . '}';
         }
 
-        public function regenerate($destroy = false)
-        {
+        public function regenerate($destroy = false){
             //$_SESSION['last_regenerate'] = time();
 			//session_regenerate_id($destroy);
         }
 
-        public function destroy()
-        {
+        public function destroy(){
             session_destroy();
         }
 
-        public function userdata($key)
-        {
+        public function userdata($key){
             if(is_array($key)){
                 foreach($key as $k => $v){
                     if(isset($_SESSION[$k][$v]))
@@ -137,30 +130,25 @@
             return false;
         }
 
-        public function register($key, $val = null)
-        {
+        public function register($key, $val = null){
             $_SESSION[$key] = $val;
         }
 
-        public function session_key_overwrite($key, $value = [])
-        {
+        public function session_key_overwrite($key, $value = []){
             if(!empty($key) && is_array($value)){
                 $_SESSION[$key][$value[0]] = $value[1];
             }
         }
 
-        public function is_admin()
-        {
+        public function is_admin(){
             return $this->userdata(['admin' => 'is_admin']);
         }
 
-        public function is_user()
-        {
+        public function is_user(){
             return $this->userdata(['user' => 'logged_in']);
         }
 
-        public function unset_session_key($key)
-        {
+        public function unset_session_key($key){
             if(is_array($key)){
                 foreach($key as $k){
                     unset($_SESSION[$k]);
@@ -170,15 +158,13 @@
             unset($_SESSION[$key]);
         }
 
-        protected function setSaveHandler()
-        {
+        protected function setSaveHandler(){
 			if (session_status() !== PHP_SESSION_ACTIVE) {
 				session_set_save_handler($this->driver, true);
 			}
         }
 
-        protected function startSession()
-        {
+        protected function startSession(){
 			if (session_status() !== PHP_SESSION_ACTIVE) {
 				session_start();
 			}
@@ -208,8 +194,7 @@
 			}
 		}
 
-        public function setCookie()
-        {
+        public function setCookie(){
             setcookie($this->sessionCookieName, session_id(), (empty($this->sessionExpiration) ? 0 : time() + $this->sessionExpiration), $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
         }
 		
@@ -236,8 +221,7 @@
         protected $failure;
         protected $success;
 
-        public function __construct($config = [])
-        {
+        public function __construct($config = []){
             $this->cookiePrefix = $config['cookiePrefix'];
             $this->cookieDomain = $config['cookieDomain'];
             $this->cookiePath = $config['cookiePath'];
@@ -254,8 +238,7 @@
             }
         }
 
-        protected function destroyCookie()
-        {
+        protected function destroyCookie(){
             return setcookie($this->cookieName, null, 1, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
         }
     }
@@ -268,8 +251,7 @@
         protected $fileNew;
         protected $sidRegexp;
 
-        public function __construct($config = [])
-        {
+        public function __construct($config = []){
             parent::__construct($config);
             if(!empty($config['sessionSavePath'])){
                 $this->savePath = rtrim($config['sessionSavePath'], '/\\');

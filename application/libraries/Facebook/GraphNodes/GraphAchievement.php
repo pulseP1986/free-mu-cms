@@ -40,8 +40,7 @@
          *
          * @return string|null
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->getField('id');
         }
 
@@ -50,8 +49,7 @@
          *
          * @return GraphUser|null
          */
-        public function getFrom()
-        {
+        public function getFrom(){
             return $this->getField('from');
         }
 
@@ -60,8 +58,7 @@
          *
          * @return \DateTime|null
          */
-        public function getPublishTime()
-        {
+        public function getPublishTime(){
             return $this->getField('publish_time');
         }
 
@@ -70,8 +67,7 @@
          *
          * @return GraphApplication|null
          */
-        public function getApplication()
-        {
+        public function getApplication(){
             return $this->getField('application');
         }
 
@@ -80,8 +76,7 @@
          *
          * @return array|null
          */
-        public function getData()
-        {
+        public function getData(){
             return $this->getField('data');
         }
 
@@ -92,8 +87,7 @@
          *
          * @return string
          */
-        public function getType()
-        {
+        public function getType(){
             return 'game.achievement';
         }
 
@@ -102,8 +96,7 @@
          *
          * @return boolean|null
          */
-        public function isNoFeedStory()
-        {
+        public function isNoFeedStory(){
             return $this->getField('no_feed_story');
         }
     }

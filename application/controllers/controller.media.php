@@ -5,8 +5,7 @@
     {
         public $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -17,13 +16,11 @@
             $this->load->model('media');
         }
 
-        public function index()
-        {
+        public function index(){
             throw new Exception('Nothing to see in here.');
         }
 
-        public function wallpapers($page = 1)
-        {
+        public function wallpapers($page = 1){
             if(!$this->website->module_disabled('media')){
                 $this->vars['css'] = ['<link rel="stylesheet" href="' . $this->config->base_url . 'assets/' . $this->config->config_entry('main|template') . '/css/colorbox.css" type="text/css" />' . "\n"];
                 $this->vars['scripts'] = ['<script src="' . $this->config->base_url . 'assets/' . $this->config->config_entry('main|template') . '/js/jquery.colorbox.min.js"></script>'];
@@ -38,8 +35,7 @@
             }
         }
 
-        public function screenshots($page = 1)
-        {
+        public function screenshots($page = 1){
             if(!$this->website->module_disabled('media')){
                 $this->vars['css'] = ['<link rel="stylesheet" href="' . $this->config->base_url . 'assets/' . $this->config->config_entry('main|template') . '/css/colorbox.css" type="text/css" />' . "\n"];
                 $this->vars['scripts'] = ['<script src="' . $this->config->base_url . 'assets/' . $this->config->config_entry('main|template') . '/js/jquery.colorbox.min.js"></script>'];

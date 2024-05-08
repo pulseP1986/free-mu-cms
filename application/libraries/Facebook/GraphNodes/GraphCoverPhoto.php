@@ -35,8 +35,7 @@
          *
          * @return int|null
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->getField('id');
         }
 
@@ -45,8 +44,7 @@
          *
          * @return string|null
          */
-        public function getSource()
-        {
+        public function getSource(){
             return $this->getField('source');
         }
 
@@ -55,8 +53,7 @@
          *
          * @return int|null
          */
-        public function getOffsetX()
-        {
+        public function getOffsetX(){
             return $this->getField('offset_x');
         }
 
@@ -65,8 +62,7 @@
          *
          * @return int|null
          */
-        public function getOffsetY()
-        {
+        public function getOffsetY(){
             return $this->getField('offset_y');
         }
     }

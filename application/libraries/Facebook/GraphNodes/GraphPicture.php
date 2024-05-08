@@ -35,8 +35,7 @@
          *
          * @return bool|null
          */
-        public function isSilhouette()
-        {
+        public function isSilhouette(){
             return $this->getField('is_silhouette');
         }
 
@@ -45,8 +44,7 @@
          *
          * @return string|null
          */
-        public function getUrl()
-        {
+        public function getUrl(){
             return $this->getField('url');
         }
 
@@ -55,8 +53,7 @@
          *
          * @return int|null
          */
-        public function getWidth()
-        {
+        public function getWidth(){
             return $this->getField('width');
         }
 
@@ -65,8 +62,7 @@
          *
          * @return int|null
          */
-        public function getHeight()
-        {
+        public function getHeight(){
             return $this->getField('height');
         }
     }

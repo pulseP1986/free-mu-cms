@@ -38,16 +38,14 @@
         /**
          * @inheritdoc
          */
-        public function get($key)
-        {
+        public function get($key){
             return isset($this->sessionData[$key]) ? $this->sessionData[$key] : null;
         }
 
         /**
          * @inheritdoc
          */
-        public function set($key, $value)
-        {
+        public function set($key, $value){
             $this->sessionData[$key] = $value;
         }
     }

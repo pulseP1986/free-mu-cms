@@ -17,9 +17,8 @@
          *
          * @param array $options
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM   
-        public function __construct($options = [])
-        {
+           
+        public function __construct($options = []){
             $connected = false;
             $available_options = ['IP', 'PORT'];
             foreach($available_options as $name){
@@ -56,9 +55,8 @@
          * @param string $id
          * @param bool $delete_old_cache
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM   
-        public function get($id, $delete_old_cache = true)
-        {
+           
+        public function get($id, $delete_old_cache = true){
             $data = $this->memcached->get($id);
             if($data == false){
                 $this->cache_time[$id] = '';
@@ -74,8 +72,7 @@
             return $data[1];
         }
 
-        public function last_cached($id)
-        {
+        public function last_cached($id){
             return $this->cache_time[$id];
         }
 
@@ -86,8 +83,7 @@
          *
          * @return bool
          */
-        public function delete($id)
-        {
+        public function delete($id){
             return $this->memcached->delete($id);
         }
 
@@ -100,9 +96,8 @@
          *
          * @return bool
          */
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM   
-        public function save($id, $data, $lifetime = 3600)
-        {
+           
+        public function save($id, $data, $lifetime = 3600){
             $this->lifetime = time() + $lifetime;
             $storeData = [$this->lifetime, $data];
             if($this->isMemcache){

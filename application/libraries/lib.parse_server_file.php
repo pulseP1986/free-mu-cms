@@ -26,8 +26,7 @@
 		private $dom;
 		private $isMuEngine = false;
 
-        public function __construct($cache_time = '')
-        {
+        public function __construct($cache_time = ''){
             if($this->config->config_entry('main|cache_type') == 'file'){
                 $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'shop']]);
             } else{
@@ -178,7 +177,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_muun_info(){
 			if($this->check_file('MuunInfo.xml')){
 				$this->dom = new \DomDocument();
@@ -231,7 +230,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_skill(){
 			if($this->check_file('SkillList.xml')){
 				$this->dom = new \DomDocument();
@@ -249,7 +248,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_muun_option(){
 			if($this->check_file('MuunOption.xml')){
 				$this->dom = new \DomDocument();
@@ -278,7 +277,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_item_grade(){
 			if($this->check_file('ItemGradeOption.xml')){
 				$this->dom = new \DomDocument();
@@ -305,7 +304,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_set_type(){
 			if($this->check_file('ItemSetType.xml')){
 				$this->dom = new \DomDocument();
@@ -328,7 +327,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_set_options(){
 			if($this->check_file('ItemSetOption.xml')){
 				$this->dom = new \DomDocument();
@@ -383,7 +382,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_monster_list(){
 			if($this->check_file('Monsters' . DS . 'MonsterList.xml')){
 				$this->dom = new \DomDocument();
@@ -419,7 +418,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_socket_item_type(){
 			if($this->check_file('SocketItemType.xml')){
 				$this->dom = new \DomDocument();
@@ -435,7 +434,7 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function parse_xml_earring_attribute(){
 			if($this->check_file('EarringAttribute.xml')){
 				$this->dom = new \DomDocument();
@@ -473,9 +472,8 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		public function parse_xml($cat = [], $type = 1)
-        {
+		
+		public function parse_xml($cat = [], $type = 1){
 			$this->info = [];
 			$file = ($type == 1) ? 'ItemList.xml' : 'Item.xml';
             if($this->check_file($file)){
@@ -503,8 +501,7 @@
             return false;
         }
 		
-		public function parse_item_txt()
-        {
+		public function parse_item_txt(){
             $file_data = null;
             $items = [];
             if($this->check_file('Item.txt')){
@@ -671,7 +668,7 @@
 			return $items;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function load_item_attributes_mudevs($item)
 		{
 			$items = [
@@ -767,13 +764,11 @@
 			return $items;
 		}
 
-        private function set_language($lang)
-        {
+        private function set_language($lang){
             $this->lang = $lang;
         }
 
-        private function check_file($file)
-        {
+        private function check_file($file){
 			if($file == 'SkillList.xml'){
 				$this->file = APP_PATH . DS . 'data' . DS . 'ServerData/' . $file;
 			}
@@ -794,7 +789,7 @@
             return false;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		private function convertEncoding($file){
 			$ext = pathinfo($file, PATHINFO_EXTENSION);
 			if($ext == 'csv'){
@@ -807,8 +802,7 @@
 			}
 		}
 		
-		public function parse_all()
-        {
+		public function parse_all(){
 			$langs = [];
 			$dir = new \DirectoryIterator(APP_PATH . DS . 'data' . DS . 'ServerData');
 			foreach($dir as $fileinfo){

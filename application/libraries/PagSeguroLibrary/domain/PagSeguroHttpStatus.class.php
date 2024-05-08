@@ -42,8 +42,7 @@
         /***
          * @param $status
          */
-        public function __construct($status)
-        {
+        public function __construct($status){
             if($status){
                 $this->status = (int)$status;
                 $this->type = $this->getTypeByStatus($this->status);
@@ -53,16 +52,14 @@
         /***
          * @return bool
          */
-        public function getType()
-        {
+        public function getType(){
             return $this->type;
         }
 
         /***
          * @return int
          */
-        public function getStatus()
-        {
+        public function getStatus(){
             return $this->status;
         }
 
@@ -70,8 +67,7 @@
          * @param $status
          * @return bool
          */
-        private function getTypeByStatus($status)
-        {
+        private function getTypeByStatus($status){
             if(isset($this->typeList[(int)$status])){
                 return $this->typeList[(int)$status];
             } else{

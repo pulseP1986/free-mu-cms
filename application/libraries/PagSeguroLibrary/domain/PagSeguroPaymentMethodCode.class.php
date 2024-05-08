@@ -126,20 +126,17 @@
          */
         private $value;
 
-        public function __construct($value = null)
-        {
+        public function __construct($value = null){
             if($value){
                 $this->value = $value;
             }
         }
 
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = $value;
         }
 
-        public function setByType($type)
-        {
+        public function setByType($type){
             if(isset(self::$codeList[$type])){
                 $this->value = self::$codeList[$type];
             } else{
@@ -151,8 +148,7 @@
          * @return integer the payment method code value
          * Example: 101
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -160,8 +156,7 @@
          * @param $value
          * @return PagSeguroPaymentMethodCode the corresponding to the informed value
          */
-        public function getTypeFromValue($value = null)
-        {
+        public function getTypeFromValue($value = null){
             $value = ($value == null ? $this->value : $value);
             return array_search($value, self::$codeList);
         }

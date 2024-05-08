@@ -44,8 +44,7 @@
          */
         private $group;
 
-        public function __construct($group = null, $value = null, $key = null)
-        {
+        public function __construct($group = null, $value = null, $key = null){
             if(isset($key) && !PagSeguroHelper::isEmpty($key)){
                 $this->setKey($key);
             }
@@ -61,8 +60,7 @@
          * Gets the payment method config item key
          * @return string
          */
-        public function getKey()
-        {
+        public function getKey(){
             return $this->key;
         }
 
@@ -71,8 +69,7 @@
          *
          * @param string $key
          */
-        public function setKey($key)
-        {
+        public function setKey($key){
             $this->key = $key;
         }
 
@@ -80,8 +77,7 @@
          * Gets payment method config item value
          * @return string
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -90,8 +86,7 @@
          *
          * @param string $value
          */
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = PagSeguroHelper::decimalFormat($value);
         }
 
@@ -100,8 +95,7 @@
          *
          * @return int
          */
-        public function getGroup()
-        {
+        public function getGroup(){
             return $this->group;
         }
 
@@ -110,8 +104,7 @@
          *
          * @param int $group
          */
-        public function setGroup($group)
-        {
+        public function setGroup($group){
             $this->group = $group;
         }
     }

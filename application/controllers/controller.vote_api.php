@@ -5,20 +5,17 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->model('account');
         }
 
-        public function index()
-        {
+        public function index(){
             throw new exception('Nothing to see here!');
         }
 
-        public function xtremetop($key = '')
-        {
+        public function xtremetop($key = ''){
             if($this->checkApiKey($key, 'Xtremetop100')){
                 if(isset($_GET['custom'], $_GET['votingip'])){
                     if($_GET['custom'] != ''){
@@ -36,8 +33,7 @@
             }
         }
 
-        public function gametop100($key = '')
-        {
+        public function gametop100($key = ''){
             if($this->checkApiKey($key, 'GameTop100')){
                 if(isset($_POST['custom'], $_POST['ip'])){
                     if($_POST['custom'] != ''){
@@ -55,8 +51,7 @@
             }
         }
 
-        public function gtop100($key = '')
-        {
+        public function gtop100($key = ''){
             if($this->checkApiKey($key, 'Gtop100')){
                 if(isset($_POST['Successful']) && abs($_POST['Successful']) == 0){
                     if(isset($_POST['pingUsername'], $_POST['VoterIP'])){
@@ -74,8 +69,7 @@
             }
         }
 
-        public function topg($key = '')
-        {
+        public function topg($key = ''){
             if($this->checkApiKey($key, 'Topg')){
                 if(isset($_GET['p_resp'], $_GET['ip'])){
                     if($this->Maccount->add_topg_vote($_GET['p_resp'], $_GET['ip'])){
@@ -89,8 +83,7 @@
             }
         }
 
-        public function top100arena($key = '')
-        {
+        public function top100arena($key = ''){
             if($this->checkApiKey($key, 'Top100arena')){
                 if(isset($_GET['postback'])){
                     if($this->Maccount->add_top100arena_vote($_GET['postback'])){
@@ -104,8 +97,7 @@
             }
         }
 
-        public function mmoserver($key = '')
-        {
+        public function mmoserver($key = ''){
             if($this->checkApiKey($key, 'Mmoserver')){
                 if(isset($_POST['mod']) && $_POST['mod'] == 'reward'){
                     if($this->Maccount->add_mmoserver_vote($_POST['user'])){
@@ -119,8 +111,7 @@
             }
         }
 		
-		public function dmncms($key = '')
-        {
+		public function dmncms($key = ''){
             if($this->checkApiKey($key, 'Dmncms')){
                 if(isset($_POST['mod']) && $_POST['mod'] == 'reward'){
                     if($this->Maccount->add_dmncms_vote($_POST['user'], $_POST['ip'])){
@@ -134,8 +125,7 @@
             }
         }
 
-        private function checkApiKey($key = '', $site = '')
-        {
+        private function checkApiKey($key = '', $site = ''){
             $vote_site = ($site != '') ? $site : 'Undefined';
             if($key == ''){
                 writelog($vote_site . ' error - empty api key', 'vote_api');

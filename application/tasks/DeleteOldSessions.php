@@ -4,14 +4,12 @@
     {
         private $path, $ts;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->path = APP_PATH . DS . 'data' . DS . 'sessions';
             $this->ts = time() - 3600 * 12;
         }
 
-        public function execute()
-        {
+        public function execute(){
             if(!is_dir($this->path) || ($directory = opendir($this->path)) === false){
                 return false;
             }

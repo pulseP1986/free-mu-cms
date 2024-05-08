@@ -13,8 +13,7 @@
          * Method called to run job.
          * @since 1.0.0
          */
-        public function execute()
-        {
+        public function execute(){
             // TODO
         }
 
@@ -24,8 +23,7 @@
          *
          * @return mixed
          */
-        public function __get($property)
-        {
+        public function __get($property){
             if($property === 'task')
                 return $this->$property;
         }
@@ -36,8 +34,7 @@
          *
          * @return mixed
          */
-        public function __set($property, $value)
-        {
+        public function __set($property, $value){
             if($property === 'task' && is_a($value, 'Task'))
                 $this->$property = $value;
         }

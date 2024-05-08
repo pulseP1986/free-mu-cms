@@ -6,23 +6,19 @@
         public $error = false, $vars = [], $characters = [], $total;
         private $price, $per_page, $items, $char_list = [], $pos;
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
-        public function __set($key, $val)
-        {
+        public function __set($key, $val){
             $this->vars[$key] = $val;
         }
 
-        public function __isset($name)
-        {
+        public function __isset($name){
             return isset($this->vars[$name]);
         }
 
-        public function load_char_list($account, $server)
-        {
+        public function load_char_list($account, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, cLevel, Class FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
             $i = 0;
@@ -37,20 +33,17 @@
             }
         }       
 
-        public function check_char($char, $account, $server)
-        {
+        public function check_char($char, $account, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name FROM Character WHERE AccountId = :user AND Name = :char');
             $stmt->execute([':user' => $account, ':char' => $char]);
             return $stmt->fetch();
         }
 
-        public function count_total_zen($server)
-        {
+        public function count_total_zen($server){
             $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market WHERE active_till > GETDATE() AND sold != 1 AND removed != 1 AND reward_type = 3 AND server = '.$this->website->db('web')->escape($server).'');
         }
 		
-		public function count_total_credits($server)
-        {
+		public function count_total_credits($server){
 			$rewardType = '';
 			if(isset($_SESSION['filters'])){
 				$rewardType = 'reward_type IN ('.$this->website->db('web')->escape($_SESSION['filters']).') AND ';
@@ -58,8 +51,7 @@
             $this->total = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Currency_Market WHERE '.$rewardType.'active_till > GETDATE() AND sold != 1 AND removed != 1 AND reward_type IN(1,2) AND server = '.$this->website->db('web')->escape($server).'');
         }
 
-        public function load_market_zen($page, $per_page = 25, $server, $tax = 0)
-        {
+        public function load_market_zen($page, $per_page = 25, $server, $tax = 0){
             $this->per_page = ($page <= 1) ? 0 : (int)($per_page * ($page - 1));
 			$order = 'id DESC';
 			if(isset($_SESSION['zen_filder']) && $_SESSION['zen_filder'] == 1){
@@ -87,8 +79,7 @@
             return $data;
         }
 		
-		public function load_market_credits($page, $per_page = 25, $server, $tax = 0)
-        {
+		public function load_market_credits($page, $per_page = 25, $server, $tax = 0){
             $this->per_page = ($page <= 1) ? 0 : (int)($per_page * ($page - 1));
             $order = 'id DESC';
 			if(isset($_SESSION['credits_filder']) && $_SESSION['credits_filder'] == 1){
@@ -120,13 +111,11 @@
             return $data;
         }
 
-        public function load_market_history($account, $server)
-        {
+        public function load_market_history($account, $server){
             return $this->website->db('web')->query('SELECT id, add_date, active_till, price, price_type, reward, reward_type, seller, sold, removed FROM DmN_Currency_Market WHERE server = \'' . $this->web_db->escape($server) . '\' AND seller_acc = '.$this->website->db('web')->escape($account).' ORDER BY id DESC')->fetch_all();
         }
 
-        public function add_zen_into_market($amount, $mcharacter, $time, $payment_method, $price, $account, $server)
-        {
+        public function add_zen_into_market($amount, $mcharacter, $time, $payment_method, $price, $account, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Currency_Market (price, price_type, reward, reward_type, seller, add_date, active_till, seller_acc, server) VALUES (:price, :price_type, :reward, :reward_type, :seller, GETDATE(), :end_date, :seller_acc, :server)');
             return $stmt->execute([
 				':price' => $price, 
@@ -140,8 +129,7 @@
 			]);
         }
 		
-		public function add_credits_into_market($amount, $rtype, $mcharacter, $time, $ptype, $price, $account, $server)
-        {
+		public function add_credits_into_market($amount, $rtype, $mcharacter, $time, $ptype, $price, $account, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Currency_Market (price, price_type, reward, reward_type, seller, add_date, active_till, seller_acc, server) VALUES (:price, :price_type, :reward, :reward_type, :seller, GETDATE(), :end_date, :seller_acc, :server)');
             return $stmt->execute([
 				':price' => $price, 
@@ -155,42 +143,36 @@
 			]);
         }
 
-        public function update_sale_set_purchased($id, $buyer)
-        {
+        public function update_sale_set_purchased($id, $buyer){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Currency_Market SET sold = 1, buyer = :buyer, purchase_date = GETDATE() WHERE id = :id');
             return $stmt->execute([':buyer' => $buyer, ':id' => $id]);
         }
 
-        public function update_sale_set_removed($id, $buyer)
-        {
+        public function update_sale_set_removed($id, $buyer){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Currency_Market SET removed = 1, buyer = :buyer WHERE id = :id');
             return $stmt->execute([':buyer' => $buyer, ':id' => $id]);
         }
 
-        public function check_sale_in_market($id, $server)
-        {
+        public function check_sale_in_market($id, $server){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 add_date, active_till, server, price, price_type, reward, reward_type, sold, seller, removed, seller_acc FROM DmN_Currency_Market WITH (UPDLOCK) WHERE id = :id AND server = :server');
             $stmt->execute([':id' => $id, ':server' => $server]);
             return $stmt->fetch();
         }
 
-        public function get_guid($user = '', $server)
-        {
+        public function get_guid($user = '', $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :user');
             $stmt->execute([':user' => $user]);
             $info = $stmt->fetch();
             return $info['memb_guid'];
         }
 
-        public function add_account_log($log, $credits, $acc, $server)
-        {
+        public function add_account_log($log, $credits, $acc, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => $credits, ':acc' => $acc, ':server' => $server, ':ip' => ip()]);
             $stmt->close_cursor();
         }
 		
-		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+		public function load_logs($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
                 $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape((int)$per_page) . '  id, server, price, price_type, reward, reward_type, seller_acc, buyer, purchase_date FROM DmN_Currency_Market WHERE sold = 1 AND id Not IN (SELECT Top ' . $this->website->db('web')->escape((int)($per_page * ($page - 1))) . ' id FROM DmN_Currency_Market WHERE sold = 1 ORDER BY id DESC) ORDER BY id DESC'); 
 			else{
@@ -214,8 +196,7 @@
             return $logs;
         }
 
-        public function count_total_logs($acc = '', $server = 'All')
-        {
+        public function count_total_logs($acc = '', $server = 'All'){
             $sql = 'WHERE sold = 1';
             if($acc != '' && $acc != '-'){
                 $sql .= ' AND(seller_acc like \'%' . $this->website->db('web')->escape($acc) . '%\' OR buyer like \'%' . $this->website->db('web')->escape($acc) . '%\')';

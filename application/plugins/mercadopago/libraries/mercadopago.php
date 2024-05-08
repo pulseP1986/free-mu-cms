@@ -20,8 +20,7 @@
          * Summary: Constructor.
          * Description: Build an object with module version and credentials.
          */
-        function __construct()
-        {
+        function __construct(){
             $i = func_num_args();
             if($i > 3 || $i < 2){
                 throw new MercadoPagoException('Invalid arguments. Use CLIENT_ID and CLIENT SECRET, or ACCESS_TOKEN');
@@ -37,8 +36,7 @@
             }
         }
 
-        public function sandbox_mode($enable = null)
-        {
+        public function sandbox_mode($enable = null){
             if(!is_null($enable)){
                 $this->sandbox = $enable === true;
             }
@@ -50,8 +48,7 @@
          * Description: Get Access Token for API use.
          * @return a string that identifies the access token.
          */
-        public function get_access_token()
-        {
+        public function get_access_token(){
             if(isset($this->ll_access_token) && !is_null($this->ll_access_token)){
                 return $this->ll_access_token;
             }
@@ -70,8 +67,7 @@
          * @param string $id
          * @return array( json )
          */
-        public function search_paymentV1($id)
-        {
+        public function search_paymentV1($id){
             $request = ['uri' => '/v1/payments/' . $id, 'params' => ['access_token' => $this->get_access_token()]];
             $payment = MPRestClient::get($request, $this->version);
             return $payment;
@@ -85,8 +81,7 @@
          * @param string $payer_email
          * @return array( json )
          */
-        public function get_or_create_customer($payer_email)
-        {
+        public function get_or_create_customer($payer_email){
             $customer = $this->search_customer($payer_email);
             if($customer['status'] == 200 && $customer['response']['paging']['total'] > 0){
                 $customer = $customer['response']['results'][0];
@@ -103,8 +98,7 @@
          * @param string $payer_email
          * @return array( json )
          */
-        public function create_customer($email)
-        {
+        public function create_customer($email){
             $request = ['uri' => '/v1/customers', 'params' => ['access_token' => $this->get_access_token()], 'data' => ['email' => $email]];
             $customer = MPRestClient::post($request, $this->version);
             return $customer;
@@ -116,8 +110,7 @@
          * @param string $payer_email
          * @return array( json )
          */
-        public function search_customer($email)
-        {
+        public function search_customer($email){
             $request = ['uri' => '/v1/customers/search', 'params' => ['access_token' => $this->get_access_token(), 'email' => $email]];
             $customer = MPRestClient::get($request, $this->version);
             return $customer;
@@ -132,8 +125,7 @@
          * @param string $issuer_id
          * @return array( json )
          */
-        public function create_card_in_customer($customer_id, $token, $payment_method_id = null, $issuer_id = null)
-        {
+        public function create_card_in_customer($customer_id, $token, $payment_method_id = null, $issuer_id = null){
             $request = ['uri' => '/v1/customers/' . $customer_id . '/cards', 'params' => ['access_token' => $this->get_access_token()], 'data' => ['token' => $token, 'issuer_id' => $issuer_id, 'payment_method_id' => $payment_method_id]];
             $card = MPRestClient::post($request, $this->version);
             return $card;
@@ -146,8 +138,7 @@
          * @param string $token
          * @return array( json )
          */
-        public function get_all_customer_cards($customer_id, $token)
-        {
+        public function get_all_customer_cards($customer_id, $token){
             $request = ['uri' => '/v1/customers/' . $customer_id . '/cards', 'params' => ['access_token' => $this->get_access_token()]];
             $cards = MPRestClient::get($request, $this->version);
             return $cards;
@@ -163,8 +154,7 @@
          * @param string $coupon_code
          * @return array( json )
          */
-        public function check_discount_campaigns($transaction_amount, $payer_email, $coupon_code)
-        {
+        public function check_discount_campaigns($transaction_amount, $payer_email, $coupon_code){
             $request = ['uri' => '/discount_campaigns', 'params' => ['access_token' => $this->get_access_token(), 'transaction_amount' => $transaction_amount, 'payer_email' => $payer_email, 'coupon_code' => $coupon_code]];
             $discount_info = MPRestClient::get($request, $this->version);
             return $discount_info;
@@ -177,8 +167,7 @@
          * Description: Check the status of a account regarding its option to use two cards for pay.
          * @return array( json )
          */
-        public function check_two_cards()
-        {
+        public function check_two_cards(){
             $request = ['uri' => '/account/settings?access_token=' . $this->get_access_token()];
             $two_cards_info = MPRestClient::get($request, $this->version);
             if($two_cards_info['status'] == 200)
@@ -193,8 +182,7 @@
          * @param string $mode ( should be 'active' or 'inactive' string )
          * @return array( json )
          */
-        public function set_two_cards_mode($mode)
-        {
+        public function set_two_cards_mode($mode){
             $request = ['uri' => '/account/settings?access_token=' . $this->get_access_token(), 'data' => ['two_cards' => $mode], 'headers' => ['content-type' => 'application/json']];
             $two_cards_info = MPRestClient::put($request, $this->version);
             return $two_cards_info;
@@ -208,8 +196,7 @@
          * @param int $id
          * @return array( json )
          */
-        public function get_payment_info($id)
-        {
+        public function get_payment_info($id){
             $uri_prefix = $this->sandbox ? '/sandbox' : '';
             $request = ['uri' => $uri_prefix . '/collections/notifications/{$id}', 'params' => ['access_token' => $this->get_access_token()]];
             $payment_info = MPRestClient::get($request, $this->version);
@@ -224,8 +211,7 @@
          * @param int $limit
          * @return array( json )
          */
-        public function search_payment($filters, $offset = 0, $limit = 0)
-        {
+        public function search_payment($filters, $offset = 0, $limit = 0){
             $filters['offset'] = $offset;
             $filters['limit'] = $limit;
             $uri_prefix = $this->sandbox ? '/sandbox' : '';
@@ -240,8 +226,7 @@
          * @param id
          * @return array( json )
          */
-        public function get_authorized_payment($id)
-        {
+        public function get_authorized_payment($id){
             $request = ['uri' => '/authorized_payments/{$id}', 'params' => ['access_token' => $this->get_access_token()]];
             $authorized_payment_info = MPRestClient::get($request, $this->version);
             return $authorized_payment_info;
@@ -253,8 +238,7 @@
          * @param array $preference
          * @return array( json )
          */
-        public function create_preference($preference)
-        {
+        public function create_preference($preference){
             $request = ['uri' => '/checkout/preferences', 'params' => ['access_token' => $this->get_access_token()], 'headers' => ['user-agent' => 'platform:desktop,type:woocommerce,so:' . $this->version], 'data' => $preference];
             $preference_result = MPRestClient::post($request, $this->version);
             return $preference_result;
@@ -267,8 +251,7 @@
          * @param array $preference
          * @return array( json )
          */
-        public function update_preference($id, $preference)
-        {
+        public function update_preference($id, $preference){
             $request = ['uri' => '/checkout/preferences/{$id}', 'params' => ['access_token' => $this->get_access_token()], 'data' => $preference];
             $preference_result = MPRestClient::put($request, $this->version);
             return $preference_result;
@@ -280,8 +263,7 @@
          * @param string $id
          * @return array( json )
          */
-        public function get_preference($id)
-        {
+        public function get_preference($id){
             $request = ['uri' => '/checkout/preferences/{$id}', 'params' => ['access_token' => $this->get_access_token()]];
             $preference_result = MPRestClient::get($request, $this->version);
             return $preference_result;
@@ -293,8 +275,7 @@
          * @param array $preference
          * @return array( json )
          */
-        public function create_payment($preference)
-        {
+        public function create_payment($preference){
             $request = ['uri' => '/v1/payments', 'params' => ['access_token' => $this->get_access_token()], 'headers' => ['X-Tracking-Id' => 'platform:v1-whitelabel,type:woocommerce,so:' . $this->version], 'data' => $preference];
             $payment = MPRestClient::post($request, $this->version);
             return $payment;
@@ -306,8 +287,7 @@
          * @param array $preapproval_payment
          * @return array( json )
          */
-        public function create_preapproval_payment($preapproval_payment)
-        {
+        public function create_preapproval_payment($preapproval_payment){
             $request = ['uri' => '/preapproval', 'params' => ['access_token' => $this->get_access_token()], 'data' => $preapproval_payment];
             $preapproval_payment_result = MPRestClient::post($request, $this->version);
             return $preapproval_payment_result;
@@ -319,8 +299,7 @@
          * @param string $id
          * @return array( json )
          */
-        public function get_preapproval_payment($id)
-        {
+        public function get_preapproval_payment($id){
             $request = ['uri' => '/preapproval/' . $id, 'params' => ['access_token' => $this->get_access_token()]];
             $preapproval_payment_result = MPRestClient::get($request, $this->version);
             return $preapproval_payment_result;
@@ -332,8 +311,7 @@
          * @param string $preapproval_payment , $id
          * @return array( json )
          */
-        public function update_preapproval_payment($id, $preapproval_payment)
-        {
+        public function update_preapproval_payment($id, $preapproval_payment){
             $request = ['uri' => '/preapproval/' . $id, 'params' => ['access_token' => $this->get_access_token()], 'data' => $preapproval_payment];
             $preapproval_payment_result = MPRestClient::put($request, $this->version);
             return $preapproval_payment_result;
@@ -345,8 +323,7 @@
          * @param int $id
          * @return array( json )
          */
-        public function cancel_preapproval_payment($id)
-        {
+        public function cancel_preapproval_payment($id){
             $request = ['uri' => '/preapproval/' . $id, 'params' => ['access_token' => $this->get_access_token()], 'data' => ['status' => 'cancelled']];
             $response = MPRestClient::put($request, $this->version);
             return $response;
@@ -360,8 +337,7 @@
          * @param int $id
          * @return array( json )
          */
-        public function refund_payment($id)
-        {
+        public function refund_payment($id){
             $request = ['uri' => '/collections/' . $id, 'params' => ['access_token' => $this->get_access_token()], 'data' => '{"status":"refunded"}'];
             $response = MPRestClient::put($request, $this->version);
             return $response;
@@ -373,8 +349,7 @@
          * @param int $id
          * @return array( json )
          */
-        public function partial_refund_payment($id, $amount, $reason, $external_reference)
-        {
+        public function partial_refund_payment($id, $amount, $reason, $external_reference){
             $request = ['uri' => '/collections/' . $id . '/refunds?access_token=' . $this->get_access_token(), 'data' => ['amount' => $amount, 'metadata' => ['metadata' => $reason, 'external_reference' => $external_reference]]];
             $response = MPRestClient::post($request, $this->version);
             return $response;
@@ -386,8 +361,7 @@
          * @param int $id
          * @return array( json )
          */
-        public function cancel_payment($id)
-        {
+        public function cancel_payment($id){
             $request = ['uri' => '/collections/' . $id, 'params' => ['access_token' => $this->get_access_token()], 'data' => '{"status":"cancelled"}'];
             $response = MPRestClient::put($request, $this->version);
             return $response;
@@ -402,8 +376,7 @@
          * @param params (deprecated)
          * @param authenticate = true (deprecated)
          */
-        public function get($request, $params = null, $authenticate = true)
-        {
+        public function get($request, $params = null, $authenticate = true){
             if(is_string($request)){
                 $request = ['uri' => $request, 'params' => $params, 'authenticate' => $authenticate];
             }
@@ -422,8 +395,7 @@
          * @param data (deprecated)
          * @param params (deprecated)
          */
-        public function post($request, $data = null, $params = null)
-        {
+        public function post($request, $data = null, $params = null){
             if(is_string($request)){
                 $request = ['uri' => $request, 'data' => $data, 'params' => $params];
             }
@@ -442,8 +414,7 @@
          * @param data (deprecated)
          * @param params (deprecated)
          */
-        public function put($request, $data = null, $params = null)
-        {
+        public function put($request, $data = null, $params = null){
             if(is_string($request)){
                 $request = ['uri' => $request, 'data' => $data, 'params' => $params];
             }
@@ -462,8 +433,7 @@
          * @param data (deprecated)
          * @param params (deprecated)
          */
-        public function delete($request, $params = null)
-        {
+        public function delete($request, $params = null){
             if(is_string($request)){
                 $request = ['uri' => $request, 'params' => $params];
             }
@@ -483,8 +453,7 @@
          * @param array( json )
          * @return array( json )
          */
-        public function analytics_save_settings($module_info)
-        {
+        public function analytics_save_settings($module_info){
             $request = ['uri' => '/modules/tracking/settings?access_token=' . $this->get_access_token(), 'data' => $module_info];
             $result = MPRestClient::post($request, $this->version);
             return $result;
@@ -498,8 +467,7 @@
     {
         const API_BASE_URL = 'https://api.mercadopago.com';
 
-        private static function build_request($request, $version)
-        {
+        private static function build_request($request, $version){
             if(!extension_loaded('curl')){
                 throw new MercadoPagoException('cURL extension not found. You need to enable cURL in your php.ini or another configuration you have.');
             }
@@ -567,8 +535,7 @@
             return $connect;
         }
 
-        private static function exec($request, $version)
-        {
+        private static function exec($request, $version){
             $connect = self::build_request($request, $version);
             $api_result = curl_exec($connect);
             $api_http_code = curl_getinfo($connect, CURLINFO_HTTP_CODE);
@@ -580,8 +547,7 @@
             return $response;
         }
 
-        private static function build_query($params)
-        {
+        private static function build_query($params){
             if(function_exists('http_build_query')){
                 return http_build_query($params, '', '&');
             } else{
@@ -592,26 +558,22 @@
             }
         }
 
-        public static function get($request, $version)
-        {
+        public static function get($request, $version){
             $request['method'] = 'GET';
             return self::exec($request, $version);
         }
 
-        public static function post($request, $version)
-        {
+        public static function post($request, $version){
             $request['method'] = 'POST';
             return self::exec($request, $version);
         }
 
-        public static function put($request, $version)
-        {
+        public static function put($request, $version){
             $request['method'] = 'PUT';
             return self::exec($request, $version);
         }
 
-        public static function delete($request, $version)
-        {
+        public static function delete($request, $version){
             $request['method'] = 'DELETE';
             return self::exec($request, $version);
         }
@@ -621,8 +583,7 @@
     {
         const API_BASE_URL = 'https://api.mercadolibre.com';
 
-        private static function build_request($request, $version)
-        {
+        private static function build_request($request, $version){
             if(!extension_loaded('curl')){
                 throw new MercadoPagoException('cURL extension not found. You need to enable cURL in your php.ini or another configuration you have.');
             }
@@ -690,8 +651,7 @@
             return $connect;
         }
 
-        private static function exec($request, $version)
-        {
+        private static function exec($request, $version){
             $connect = self::build_request($request, $version);
             $api_result = curl_exec($connect);
             $api_http_code = curl_getinfo($connect, CURLINFO_HTTP_CODE);
@@ -703,8 +663,7 @@
             return $response;
         }
 
-        private static function build_query($params)
-        {
+        private static function build_query($params){
             if(function_exists('http_build_query')){
                 return http_build_query($params, '', '&');
             } else{
@@ -715,26 +674,22 @@
             }
         }
 
-        public static function get($request, $version)
-        {
+        public static function get($request, $version){
             $request['method'] = 'GET';
             return self::exec($request, $version);
         }
 
-        public static function post($request, $version)
-        {
+        public static function post($request, $version){
             $request['method'] = 'POST';
             return self::exec($request, $version);
         }
 
-        public static function put($request, $version)
-        {
+        public static function put($request, $version){
             $request['method'] = 'PUT';
             return self::exec($request, $version);
         }
 
-        public static function delete($request, $version)
-        {
+        public static function delete($request, $version){
             $request['method'] = 'DELETE';
             return self::exec($request, $version);
         }
@@ -742,8 +697,7 @@
 
     class MercadoPagoException extends Exception
     {
-        public function __construct($message, $code = 500, Exception $previous = null)
-        {
+        public function __construct($message, $code = 500, Exception $previous = null){
             // Default code 500
             parent::__construct($message, $code, $previous);
         }

@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -19,8 +18,7 @@
             $this->load->helper('meta');
         }
 
-        public function index()
-        {
+        public function index(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(isset($_POST['submit_ticket'])){
                     $this->upload->out_file_dir = BASEDIR . 'assets' . DS . 'uploads' . DS . 'attachment';
@@ -153,8 +151,7 @@
             }
         }
 
-        public function my_tickets()
-        {
+        public function my_tickets(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['ticket_list'] = $this->Msupport->load_my_ticket_list();
                 $this->load->view($this->config->config_entry('main|template') . DS . 'support' . DS . 'view.my_tickets', $this->vars);
@@ -163,8 +160,7 @@
             }
         }
 
-        public function read_ticket($id = '')
-        {
+        public function read_ticket($id = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($id == ''){
                     $this->vars['error'] = __('Ticket not found.');
@@ -201,8 +197,7 @@
             }
         }
 
-        private function add_reply($id, $text)
-        {
+        private function add_reply($id, $text){
 			
             if($this->Msupport->add_reply($id, $text)){
                 if($this->Msupport->set_replied_by_user($id)){
@@ -215,8 +210,7 @@
             }
         }
 
-        public function mark_resolved()
-        {
+        public function mark_resolved(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(isset($_POST['id'])){
                     $id = $_POST['id'];
@@ -237,8 +231,7 @@
             }
         }
 
-        public function check_unreplied_tickets()
-        {
+        public function check_unreplied_tickets(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $tickets = $this->Msupport->check_unreplied_tickets();
                 if(!empty($tickets)){
@@ -249,8 +242,7 @@
             }
         }
 
-        public function login()
-        {
+        public function login(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'support' . DS . 'view.login');
         }
     }

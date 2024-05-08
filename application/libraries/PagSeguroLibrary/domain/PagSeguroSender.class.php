@@ -42,8 +42,7 @@
          *
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['name'])){
                     $this->name = $data['name'];
@@ -72,16 +71,14 @@
          * Sets the sender name
          * @param String $name
          */
-        public function setName($name)
-        {
+        public function setName($name){
             $this->name = PagSeguroHelper::formatString($name, 50, '');
         }
 
         /***
          * @return String the sender name
          */
-        public function getName()
-        {
+        public function getName(){
             return $this->name;
         }
 
@@ -89,16 +86,14 @@
          * Sets the Sender e-mail
          * @param email
          */
-        public function setEmail($email)
-        {
+        public function setEmail($email){
             $this->email = $email;
         }
 
         /***
          * @return String the sender e-mail
          */
-        public function getEmail()
-        {
+        public function getEmail(){
             return $this->email;
         }
 
@@ -107,8 +102,7 @@
          * @param String $areaCode
          * @param String $number
          */
-        public function setPhone($areaCode, $number = null)
-        {
+        public function setPhone($areaCode, $number = null){
             $param = $areaCode;
             if($param instanceof PagSeguroPhone){
                 $this->phone = $param;
@@ -124,8 +118,7 @@
          * @return PagSeguroPhone the sender phone
          * @see PagSeguroPhone
          */
-        public function getPhone()
-        {
+        public function getPhone(){
             return $this->phone;
         }
 
@@ -134,8 +127,7 @@
          * @return array PagSeguroDocument List of PagSeguroDocument
          * @see PagSeguroDocument
          */
-        public function getDocuments()
-        {
+        public function getDocuments(){
             return $this->documents;
         }
 
@@ -144,8 +136,7 @@
          * @param array $documents
          * @see PagSeguroDocument
          */
-        public function setDocuments(array $documents)
-        {
+        public function setDocuments(array $documents){
             if(count($documents) > 0){
                 foreach($documents as $document){
                     if($document instanceof PagSeguroSenderDocument){
@@ -164,8 +155,7 @@
          * @param String $type
          * @param String $value
          */
-        public function addDocument($type, $value)
-        {
+        public function addDocument($type, $value){
             if($type && $value){
                 if(count($this->documents) == 0){
                     $document = new PagSeguroSenderDocument($type, $value);
@@ -177,8 +167,7 @@
         /***
          * Add an ip for Sender object
          */
-        public function getIP()
-        {
+        public function getIP(){
             if(function_exists('apache_request_headers')){
                 $headers = apache_request_headers();
             } else{

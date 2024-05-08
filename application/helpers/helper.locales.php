@@ -194,12 +194,12 @@
 			['zu', 'zul', 'zul', 'zul', 'Zulu', 'isiZulu'],
 		];
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function allLanguages(){
 			return $this->languages;
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function languageByCode1($code){
 			$code = strtolower($code);
 			$key = $this->findLanguage($this->languages, $code);
@@ -212,7 +212,7 @@
 			return 'Unknown';
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function nativeByCode1($code){
 			$code = strtolower($code);
 			$key = $this->findLanguage($this->languages, $code);
@@ -225,7 +225,7 @@
 			return 'Unknown';
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function findLanguage($array, $search, $keys = []){
 			foreach($array as $key => $value){
 				if(is_array($value)){
@@ -242,7 +242,7 @@
 			return [];
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function loadTranslation($lg = 'en'){
 			$this->file = APP_PATH . DS . 'localization' . DS . $lg . '.json';
 			if(file_exists($this->file)){

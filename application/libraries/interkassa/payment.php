@@ -120,8 +120,7 @@
          *
          * @return Interkassa_Payment
          */
-        public static function factory(Interkassa_Shop $shop, array $options)
-        {
+        public static function factory(Interkassa_Shop $shop, array $options){
             return new Interkassa_Payment($shop, $options);
         }
 
@@ -146,8 +145,7 @@
          *
          * @throws Interkassa_Exception if any required options are missing
          */
-        public function __construct(Interkassa_Shop $shop, array $options)
-        {
+        public function __construct(Interkassa_Shop $shop, array $options){
             $this->_shop = $shop;
             if(!isset($options['id'])){
                 throw new Interkassa_Exception('Payment id is required');
@@ -198,8 +196,7 @@
          *
          * @return string
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->_id;
         }
 
@@ -208,8 +205,7 @@
          *
          * @return float
          */
-        public function getAmount()
-        {
+        public function getAmount(){
             return $this->_amount;
         }
 
@@ -220,8 +216,7 @@
          *
          * @return string
          */
-        public function getAmountAsString($decimals = 2)
-        {
+        public function getAmountAsString($decimals = 2){
             return number_format($this->_amount, $decimals, '.', '');
         }
 
@@ -230,8 +225,7 @@
          *
          * @return string
          */
-        public function getDescription()
-        {
+        public function getDescription(){
             return $this->_description;
         }
 
@@ -240,8 +234,7 @@
          *
          * @return string
          */
-        public function getBaggage()
-        {
+        public function getBaggage(){
             return $this->_baggage;
         }
 
@@ -252,8 +245,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setBaggage($baggage)
-        {
+        public function setBaggage($baggage){
             if(!empty($baggage)){
                 $this->_baggage = (string)$baggage;
             }
@@ -265,8 +257,7 @@
          *
          * @return string
          */
-        public function getSuccessUrl()
-        {
+        public function getSuccessUrl(){
             return $this->_success_url;
         }
 
@@ -277,8 +268,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setSuccessUrl($url)
-        {
+        public function setSuccessUrl($url){
             if(!empty($url)){
                 $this->_success_url = (string)$url;
             }
@@ -293,8 +283,7 @@
          *
          * @return string
          */
-        public function getSuccessMethod()
-        {
+        public function getSuccessMethod(){
             return $this->_success_method;
         }
 
@@ -309,8 +298,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setSuccessMethod($method)
-        {
+        public function setSuccessMethod($method){
             if(empty($method)){
                 return $this;
             }
@@ -326,8 +314,7 @@
          *
          * @return string
          */
-        public function getFailUrl()
-        {
+        public function getFailUrl(){
             return $this->_fail_url;
         }
 
@@ -338,8 +325,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setFailUrl($url)
-        {
+        public function setFailUrl($url){
             if(!empty($url)){
                 $this->_fail_url = (string)$url;
             }
@@ -354,8 +340,7 @@
          *
          * @return string
          */
-        public function getFailMethod()
-        {
+        public function getFailMethod(){
             return $this->_fail_method;
         }
 
@@ -370,8 +355,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setFailMethod($method)
-        {
+        public function setFailMethod($method){
             if(empty($method)){
                 return $this;
             }
@@ -387,8 +371,7 @@
          *
          * @return string
          */
-        public function getStatusUrl()
-        {
+        public function getStatusUrl(){
             return $this->_status_url;
         }
 
@@ -399,8 +382,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setStatusUrl($url)
-        {
+        public function setStatusUrl($url){
             if(!empty($url)){
                 $this->_status_url = (string)$url;
             }
@@ -415,8 +397,7 @@
          *
          * @return string
          */
-        public function getStatusMethod()
-        {
+        public function getStatusMethod(){
             return $this->_status_method;
         }
 
@@ -431,8 +412,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setStatusMethod($method)
-        {
+        public function setStatusMethod($method){
             if(empty($method))
                 return $this;
             $methods = [Interkassa::METHOD_POST, Interkassa::METHOD_GET, Interkassa::METHOD_OFF];
@@ -452,8 +432,7 @@
          *
          * @return array
          */
-        public function getFormValues()
-        {
+        public function getFormValues(){
             $fields = ['ik_co_id' => $this->getShop()->getId(), 'ik_am' => $this->getAmountAsString(), 'ik_pm_no' => $this->getId(), 'ik_desc' => $this->getDescription()];
             $success_url = $this->getSuccessUrl();
             $fail_url = $this->getFailUrl();
@@ -485,8 +464,7 @@
          *
          * @return string
          */
-        public function getFormAction()
-        {
+        public function getFormAction(){
             return $this->_form_action;
         }
 
@@ -497,8 +475,7 @@
          *
          * @return Interkassa_Payment self
          */
-        public function setFormAction($url)
-        {
+        public function setFormAction($url){
             if($url)
                 $this->_form_action = (string)$url;
             return $this;
@@ -509,8 +486,7 @@
          *
          * @return Interkassa_Shop
          */
-        public function getShop()
-        {
+        public function getShop(){
             return $this->_shop;
         }
 
@@ -519,8 +495,7 @@
          * @param $locale
          * @return Interkassa_Payment self
          */
-        public function setLocale($locale)
-        {
+        public function setLocale($locale){
             $this->_locale = $locale;
             return $this;
         }
@@ -529,8 +504,7 @@
          * Get users interface locale
          * return string
          */
-        public function getLocale()
-        {
+        public function getLocale(){
             return $this->_locale;
         }
 
@@ -539,8 +513,7 @@
          * @param $currency
          * @return Interkassa_Payment self
          */
-        public function setCurrency($currency)
-        {
+        public function setCurrency($currency){
             $this->_currency = $currency;
             return $this;
         }
@@ -548,8 +521,7 @@
         /**
          * @return string
          */
-        public function getCurrency()
-        {
+        public function getCurrency(){
             return $this->_currency;
         }
     }

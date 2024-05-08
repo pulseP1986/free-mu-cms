@@ -4,8 +4,7 @@
     {
         private $characters = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
@@ -17,8 +16,7 @@
          *
          * @return mixed
          */
-        public function load_char_list($account, $server)
-        {
+        public function load_char_list($account, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT Name, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
             $i = 0;
@@ -42,8 +40,7 @@
          *
          * @return mixed
          */
-        public function check_char($account, $server, $id)
-        {
+        public function check_char($account, $server, $id){
             $stmt = $this->website->db('game', $server)->prepare('SELECT TOP 1 Name, Money, '.$this->website->get_char_id_col($server).' AS id FROM Character WHERE AccountId = :account AND '.$this->website->get_char_id_col($server).' = :id');
             $stmt->execute([':account' => $account, ':id' => $id]);
             return $stmt->fetch();
@@ -58,8 +55,7 @@
          *
          * @return mixed
          */
-        public function check_warehouse($account, $server)
-        {
+        public function check_warehouse($account, $server){
             $stmt = $this->website->db('game', $server)->prepare('SELECT TOP 1 Money FROM Warehouse WHERE AccountId = :account');
             $stmt->execute([':account' => $account]);
             return $stmt->fetch();
@@ -74,8 +70,7 @@
          *
          * @return mixed
          */
-        public function check_zen_wallet($account, $server)
-        {
+        public function check_zen_wallet($account, $server){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 credits3 AS Money FROM DmN_Shop_Credits WHERE memb___id = :account AND server = :server');
             $stmt->execute([':account' => $account, ':server' => $server]);
             return $stmt->fetch();
@@ -91,8 +86,7 @@
          *
          * @return bool
          */
-        public function update_zen($account, $server, $id, $money)
-        {
+        public function update_zen($account, $server, $id, $money){
             if($id == -1){
                 return $this->update_zen_warehouse($account, $server, $money);
             }
@@ -112,8 +106,7 @@
          *
          * @return bool
          */
-        private function update_zen_warehouse($account, $server, $money)
-        {
+        private function update_zen_warehouse($account, $server, $money){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Money = Money - :money WHERE AccountId = :account');
             return $stmt->execute([':money' => $money, ':account' => $account]);
         }
@@ -127,8 +120,7 @@
          *
          * @return bool
          */
-        private function update_zen_wallet($account, $server, $money)
-        {
+        private function update_zen_wallet($account, $server, $money){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Shop_Credits SET credits3 = credits3 - :money WHERE memb___id = :account AND server = :server');
             return $stmt->execute([':money' => $money, ':account' => $account, ':server' => $server]);
         }
@@ -141,8 +133,7 @@
          *
          * @return bool
          */
-        public function check_connect_stat($account, $server)
-        {
+        public function check_connect_stat($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = :user ' . $this->website->server_code($this->website->get_servercode($server)) . '');
             $stmt->execute([':user' => $account]);
             if($status = $stmt->fetch()){

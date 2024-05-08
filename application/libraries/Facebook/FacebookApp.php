@@ -41,8 +41,7 @@
          * @param string $id
          * @param string $secret
          */
-        public function __construct($id, $secret)
-        {
+        public function __construct($id, $secret){
             $this->id = $id;
             $this->secret = $secret;
         }
@@ -52,8 +51,7 @@
          *
          * @return string
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->id;
         }
 
@@ -62,8 +60,7 @@
          *
          * @return string
          */
-        public function getSecret()
-        {
+        public function getSecret(){
             return $this->secret;
         }
 
@@ -72,8 +69,7 @@
          *
          * @return AccessToken
          */
-        public function getAccessToken()
-        {
+        public function getAccessToken(){
             return new AccessToken($this->id . '|' . $this->secret);
         }
 
@@ -82,8 +78,7 @@
          *
          * @return string
          */
-        public function serialize()
-        {
+        public function serialize(){
             return serialize([$this->id, $this->secret]);
         }
 
@@ -92,8 +87,7 @@
          *
          * @param string $serialized
          */
-        public function unserialize($serialized)
-        {
+        public function unserialize($serialized){
             list($id, $secret) = unserialize($serialized);
             $this->__construct($id, $secret);
         }

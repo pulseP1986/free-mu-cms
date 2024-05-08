@@ -5,8 +5,7 @@
     {
         public $vars = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -17,8 +16,7 @@
             $this->load->model('donate');
         }
 
-        public function index()
-        {
+        public function index(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['pass'] = '';
                 if(isset($_GET['type'])){
@@ -82,8 +80,7 @@
             }
 		}
 
-        public function paypal()
-        {
+        public function paypal(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['pass'] = false;
                 $this->vars['keys'] = false;
@@ -128,8 +125,7 @@
             }
         }
 
-        public function paypal_checkout($id)
-        {
+        public function paypal_checkout($id){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paypal']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -176,8 +172,7 @@
             }	 
         }
 
-		public function paypal_complete()
-        {
+		public function paypal_complete(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paypal']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -289,16 +284,14 @@
             }
         }
 
-        private function paypal_error($data)
-        {
+        private function paypal_error($data){
             $data = "<div style=\"margin-left:20px;\">Error at Paypal Express Checkout<br />";
             $data .= "<pre>" . print_r($data, true) . "</pre>";
             $data .= $this->session->userdata('curl_error_msg') . "</div>";
             throw new Exception($data);
         }
 		
-        public function cuenta_digital($id = '')
-        {
+        public function cuenta_digital($id = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'cuenta_digital']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -343,8 +336,7 @@
             }
         }
 
-        public function paycall()
-        {
+        public function paycall(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paycall']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -359,8 +351,7 @@
             }
         }
 
-        public function paymentwall()
-        {
+        public function paymentwall(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paymentwall']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -389,8 +380,7 @@
             }
         }
 
-        public function fortumo()
-        {
+        public function fortumo(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'fortumo']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -403,8 +393,7 @@
             }
         }
 
-        public function paygol()
-        {
+        public function paygol(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'paygol']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -417,8 +406,7 @@
             }
         }
 
-        public function two_checkout($id = '')
-        {
+        public function two_checkout($id = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), '2checkout']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -444,8 +432,7 @@
             }
         }
 
-        public function pagseguro($id = '')
-        {
+        public function pagseguro($id = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'pagseguro']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -479,8 +466,7 @@
             }
         }
 
-        public function interkassa($id = '')
-        {
+        public function interkassa($id = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['donation_config'] = $this->config->values('donation_config', [$this->session->userdata(['user' => 'server']), 'interkassa']);
                 if($this->vars['donation_config'] != false && $this->vars['donation_config']['active'] == 1){
@@ -510,18 +496,15 @@
             }
         }
 
-        public function interkassa_success()
-        {
+        public function interkassa_success(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.interkassa_success', $this->vars);
         }
 
-        public function interkassa_fail()
-        {
+        public function interkassa_fail(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.interkassa_fail', $this->vars);
         }
 
-        public function method_1()
-        {
+        public function method_1(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.method_1');
             } else{
@@ -529,8 +512,7 @@
             }
         }
 
-        public function method_2()
-        {
+        public function method_2(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.method_2');
             } else{
@@ -538,8 +520,7 @@
             }
         }
 
-        public function method_3()
-        {
+        public function method_3(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.method_3');
             } else{
@@ -547,8 +528,7 @@
             }
         }
 
-        public function method_4()
-        {
+        public function method_4(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.method_4');
             } else{
@@ -556,18 +536,15 @@
             }
         }
 
-		public function other()
-        {
+		public function other(){
 			$this->load->view($this->config->config_entry('main|template') . DS . 'donate' . DS . 'view.other');
         }
 
-        public function login()
-        {
+        public function login(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.login');
         }
 
-        public function disabled()
-        {
+        public function disabled(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
         }
     }

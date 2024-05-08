@@ -18,8 +18,7 @@
          *
          * @param string $settings Settings.
          */
-        public function __construct($settings)
-        {
+        public function __construct($settings){
             parent::__construct();
             $this->jobsPath = $settings['jobs']['path'];
             switch($settings['session']['driver']){

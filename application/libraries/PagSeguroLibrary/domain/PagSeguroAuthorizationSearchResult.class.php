@@ -50,8 +50,7 @@
         /***
          * @return the current page number
          */
-        public function getCurrentPage()
-        {
+        public function getCurrentPage(){
             return $this->currentPage;
         }
 
@@ -59,16 +58,14 @@
          * Sets the current page number
          * @param integer $currentPage
          */
-        public function setCurrentPage($currentPage)
-        {
+        public function setCurrentPage($currentPage){
             $this->currentPage = $currentPage;
         }
 
         /***
          * @return the date/time when this search was executed
          */
-        public function getDate()
-        {
+        public function getDate(){
             return $this->date;
         }
 
@@ -76,16 +73,14 @@
          * Set the date/time when this search was executed
          * @param date
          */
-        public function setDate($date)
-        {
+        public function setDate($date){
             $this->date = $date;
         }
 
         /***
          * @return the number of authorizations summaries in the current page
          */
-        public function getResultsInThisPage()
-        {
+        public function getResultsInThisPage(){
             return $this->resultsInThisPage;
         }
 
@@ -94,16 +89,14 @@
          *
          * @param resultsInThisPage
          */
-        public function setResultsInThisPage($resultsInThisPage)
-        {
+        public function setResultsInThisPage($resultsInThisPage){
             $this->resultsInThisPage = $resultsInThisPage;
         }
 
         /***
          * @return the total number of pages
          */
-        public function getTotalPages()
-        {
+        public function getTotalPages(){
             return $this->totalPages;
         }
 
@@ -112,8 +105,7 @@
          *
          * @param totalPages
          */
-        public function setTotalPages($totalPages)
-        {
+        public function setTotalPages($totalPages){
             $this->totalPages = $totalPages;
         }
 
@@ -121,8 +113,7 @@
          * @return PagSeguroAuthorizations the authorizations summaries in this page
          * @see PagSeguroAuthorizations
          */
-        public function getAuthorizations()
-        {
+        public function getAuthorizations(){
             return $this->authorizations;
         }
 
@@ -130,16 +121,14 @@
          * Sets the authorizations summaries in this page
          * @param PagSeguroAuthorization $authorizations
          */
-        public function setAuthorizations($authorizations)
-        {
+        public function setAuthorizations($authorizations){
             $this->authorizations = $authorizations;
         }
 
         /***
          * @return String a string that represents the current object
          */
-        public function toString()
-        {
+        public function toString(){
             $authorizations = [];
             $authorizations['Date'] = $this->date;
             $authorizations['CurrentPage'] = $this->currentPage;

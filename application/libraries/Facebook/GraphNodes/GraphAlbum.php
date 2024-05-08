@@ -40,8 +40,7 @@
          *
          * @return string|null
          */
-        public function getId()
-        {
+        public function getId(){
             return $this->getField('id');
         }
 
@@ -50,8 +49,7 @@
          *
          * @return boolean|null
          */
-        public function getCanUpload()
-        {
+        public function getCanUpload(){
             return $this->getField('can_upload');
         }
 
@@ -60,8 +58,7 @@
          *
          * @return int|null
          */
-        public function getCount()
-        {
+        public function getCount(){
             return $this->getField('count');
         }
 
@@ -70,8 +67,7 @@
          *
          * @return string|null
          */
-        public function getCoverPhoto()
-        {
+        public function getCoverPhoto(){
             return $this->getField('cover_photo');
         }
 
@@ -80,8 +76,7 @@
          *
          * @return \DateTime|null
          */
-        public function getCreatedTime()
-        {
+        public function getCreatedTime(){
             return $this->getField('created_time');
         }
 
@@ -90,8 +85,7 @@
          *
          * @return \DateTime|null
          */
-        public function getUpdatedTime()
-        {
+        public function getUpdatedTime(){
             return $this->getField('updated_time');
         }
 
@@ -100,8 +94,7 @@
          *
          * @return string|null
          */
-        public function getDescription()
-        {
+        public function getDescription(){
             return $this->getField('description');
         }
 
@@ -110,8 +103,7 @@
          *
          * @return GraphUser|null
          */
-        public function getFrom()
-        {
+        public function getFrom(){
             return $this->getField('from');
         }
 
@@ -120,8 +112,7 @@
          *
          * @return GraphPage|null
          */
-        public function getPlace()
-        {
+        public function getPlace(){
             return $this->getField('place');
         }
 
@@ -130,8 +121,7 @@
          *
          * @return string|null
          */
-        public function getLink()
-        {
+        public function getLink(){
             return $this->getField('link');
         }
 
@@ -140,8 +130,7 @@
          *
          * @return string|null
          */
-        public function getLocation()
-        {
+        public function getLocation(){
             return $this->getField('location');
         }
 
@@ -150,8 +139,7 @@
          *
          * @return string|null
          */
-        public function getName()
-        {
+        public function getName(){
             return $this->getField('name');
         }
 
@@ -160,8 +148,7 @@
          *
          * @return string|null
          */
-        public function getPrivacy()
-        {
+        public function getPrivacy(){
             return $this->getField('privacy');
         }
 
@@ -172,8 +159,7 @@
          *
          * @return string|null
          */
-        public function getType()
-        {
+        public function getType(){
             return $this->getField('type');
         }
     }

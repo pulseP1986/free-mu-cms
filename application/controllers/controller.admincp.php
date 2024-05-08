@@ -20,8 +20,7 @@
         private $sockets = [];
         private $item_hex;
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             if(ACP_IP_CHECK == true){
                 check_ip_white_list(ACP_IP_WHITE_LIST);
@@ -33,8 +32,7 @@
             $this->load->model('admin');
         }
 
-        public function index()
-        {
+        public function index(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['total_acccounts'] = $this->Madmin->total_accounts();
@@ -52,8 +50,7 @@
             }
         }
 
-		public function login()
-        {
+		public function login(){
             if(count($_POST) > 0){
                 foreach($_POST as $key => $value){
                     $this->Madmin->$key = $value;
@@ -120,14 +117,12 @@
             $this->load->view('admincp' . DS . 'view.login', $this->vars);
         }
 
-        public function logout()
-        {
+        public function logout(){
             $this->session->unset_session_key('admin');
             header('Location: ' . $this->config->base_url . ACPURL . '');
         }
 
-		public function manage_settings($type = 'main')
-        {
+		public function manage_settings($type = 'main'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($type != 'reset' && $type != 'greset' && $type != 'donate' && $type != 'wcoin-exchange' && $type != 'referral' && $type != 'vip' && $type != 'event-timers' && $type != 'rankings' && $type != 'tables' && $type != 'buylevel' && $type != 'email' && $type != 'registration' && $type != 'security' && $type != 'lostpassword' && $type != 'changeclass' && $type != 'votereward' && $type != 'scheduler'){
@@ -239,8 +234,7 @@
             }
         }
 
-		public function run_cron_task($task = '')
-        {
+		public function run_cron_task($task = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($task != ''){
                     $this->vars['scheduler_config'] = $this->config->values('scheduler_config');
@@ -269,8 +263,7 @@
             }
         }
 
-		public function change_task_status()
-        {
+		public function change_task_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $task = isset($_POST['task']) ? $_POST['task'] : '';
                 $val = isset($_POST['val']) ? (int)$_POST['val'] : 0;
@@ -294,8 +287,7 @@
             }
         }
 
-		public function edit_task_schedule()
-        {
+		public function edit_task_schedule(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $task = isset($_POST['task']) ? $_POST['task'] : '';
                 $min = isset($_POST['minute']) ? trim($_POST['minute']) : '*';
@@ -324,24 +316,21 @@
             }
         }
 
-        private function write_scheduler_key($config)
-        {
+        private function write_scheduler_key($config){
             if(!$this->Madmin->save_config_data($config, 'scheduler_config', false)){
                 return false;
             }
             return true;
         }
 
-        private function write_votereward_api_key($config)
-        {
+        private function write_votereward_api_key($config){
             if(!$this->Madmin->save_config_data($config, 'votereward_config', false)){
                 return false;
             }
             return true;
         }
 
-		public function change_class_allowed_class_list()
-        {
+		public function change_class_allowed_class_list(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['changeclass_config'] = $this->config->values('change_class_config');
@@ -363,8 +352,7 @@
             }
         }
 
-        public function change_class_skill_tree()
-        {
+        public function change_class_skill_tree(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['changeclass_config'] = $this->config->values('change_class_config');
@@ -386,8 +374,7 @@
             }
         }
 
-        public function load_donation_settings()
-        {
+        public function load_donation_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -412,8 +399,7 @@
             }
         }
 
-		public function load_ranking_settings()
-        {
+		public function load_ranking_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
                     $this->vars['rankings_config'] = $this->config->values('rankings_config');
@@ -438,8 +424,7 @@
             }
         }
 
-		public function load_table_settings()
-        {
+		public function load_table_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
                     $this->vars['table_config'] = $this->config->values('table_config');
@@ -454,8 +439,7 @@
             }
         }
 
-		public function load_pre_defined_table_settings()
-        {
+		public function load_pre_defined_table_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['team'])){
                     $this->vars['pre_defined_table_config'] = $this->config->values('pre_defined_table_config');
@@ -472,8 +456,7 @@
             }
         }
 
-        public function load_wcoin_settings()
-        {
+        public function load_wcoin_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
                     $this->vars['wcoin_config'] = $this->config->values('wcoin_exchange_config');
@@ -488,8 +471,7 @@
             }
         }
 
-        public function load_referral_settings()
-        {
+        public function load_referral_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['load_settings'])){
                     $this->vars['referral_config'] = $this->config->values('referral_config');
@@ -504,8 +486,7 @@
             }
         }
 
-        public function save_wcoin_settings()
-        {
+        public function save_wcoin_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['wcoin_config'] = $this->config->values('wcoin_exchange_config');
@@ -534,8 +515,7 @@
             }
         }
 
-        public function save_rankings_status()
-        {
+        public function save_rankings_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'], $_POST['status'])){
                     $this->vars['rankings_config'] = $this->config->values('rankings_config');
@@ -565,8 +545,7 @@
             }
         }
 
-        public function reload_rankings_status()
-        {
+        public function reload_rankings_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(isset($_POST['server'])){
                     $this->vars['rankings_config'] = $this->config->values('rankings_config');
@@ -587,8 +566,7 @@
             }
         }
 
-        public function save_ranking_settings()
-        {
+        public function save_ranking_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     if(isset($_POST['rankings_type']) && in_array($_POST['rankings_type'], ['player', 'guild', 'gens', 'voter', 'killer', 'online', 'online_list', 'bc', 'ds', 'cc', 'cs', 'duels'])){
@@ -622,8 +600,7 @@
             }
         }
 
-        public function save_table_settings()
-        {
+        public function save_table_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['table_config'] = $this->config->values('table_config');
@@ -676,8 +653,7 @@
             }
         }
 
-        public function save_timer_settings()
-        {
+        public function save_timer_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['event_config'] = $this->config->values('event_config');
@@ -703,8 +679,7 @@
             }
         }
 
-        public function delete_event_timer()
-        {
+        public function delete_event_timer(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['event_config'] = $this->config->values('event_config');
@@ -732,8 +707,7 @@
             }
         }
 
-        public function add_event_timers()
-        {
+        public function add_event_timers(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['add_event_timer'])){
@@ -885,8 +859,7 @@
             }
         }
 
-        public function edit_event_timer($id = '')
-        {
+        public function edit_event_timer($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id == ''){
@@ -1040,8 +1013,7 @@
             }
         }
 		
-		public function save_event_order()
-        {
+		public function save_event_order(){
 			if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['event_config'] = $this->config->values('event_config');
                 $new_array = [];
@@ -1061,8 +1033,7 @@
             }
         }
 
-        private function validate_timers($time)
-        {
+        private function validate_timers($time){
             if(strpos($time, ',') !== false){
                 $timers = explode(',', $time);
             } else{
@@ -1078,8 +1049,7 @@
             return $is_valid;
         }
 
-        public function save_vip_settings()
-        {
+        public function save_vip_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['vip_config'] = ['active' => (int)$_POST['active']];
@@ -1094,8 +1064,7 @@
             }
         }
 
-        public function save_email_settings()
-        {
+        public function save_email_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['email_config'] = [
@@ -1125,8 +1094,7 @@
             }
         }
 
-        public function save_security_settings()
-        {
+        public function save_security_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['security_config'] = ['captcha_type' => (int)$_POST['captcha_type'], 'recaptcha_pub_key' => $_POST['recaptcha_pub_key'], 'recaptcha_priv_key' => $_POST['recaptcha_priv_key'], 'captcha_on_login' => $_POST['captcha_on_login']];
@@ -1141,8 +1109,7 @@
             }
         }
 
-        public function save_registration_settings()
-        {
+        public function save_registration_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['registration_config'] = ['active' => (int)$_POST['active'], 'req_email' => (int)$_POST['req_email'], 'req_secret' => (int)$_POST['req_secret'], 'min_username' => (int)$_POST['min_username'], 'max_username' => (int)$_POST['max_username'], 'min_password' => (int)$_POST['min_password'], 'max_password' => (int)$_POST['max_password'], 'password_strength' => ['atleast_one_lowercase' => (int)$_POST['atleast_one_lowercase'], 'atleast_one_uppercase' => (int)$_POST['atleast_one_uppercase'], 'atleast_one_number' => (int)$_POST['atleast_one_number'], 'atleast_one_symbol' => (int)$_POST['atleast_one_symbol']], 'email_validation' => (int)$_POST['email_validation'], 'generate_password' => (int)$_POST['generate_password'], 'email_domain_check' => (int)$_POST['email_domain_check'], 'domain_whitelist' => trim($_POST['domain_whitelist']), 'accounts_per_email' => (int)$_POST['accounts_per_email']];
@@ -1157,8 +1124,7 @@
             }
         }
 
-        public function save_lostpassword_settings()
-        {
+        public function save_lostpassword_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['lostpassword_config'] = ['active' => (int)$_POST['active'], 'method' => (int)$_POST['method']];
@@ -1173,8 +1139,7 @@
             }
         }
 
-        public function add_vip()
-        {
+        public function add_vip(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(count($_POST) > 0){
@@ -1238,8 +1203,7 @@
             }
         }
 
-        public function edit_vip($id = '')
-        {
+        public function edit_vip($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($this->vars['package_data'] = $this->Madmin->check_vip_status($id)){
@@ -1307,8 +1271,7 @@
             }
         }
 
-        public function add_vip_on_registration($id = '')
-        {
+        public function add_vip_on_registration($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $id = (preg_match('/^\d*$/', $id)) ? $id : '';
@@ -1331,8 +1294,7 @@
             }
         }
 
-        public function remove_vip_from_registration($id = '')
-        {
+        public function remove_vip_from_registration($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $id = (preg_match('/^\d*$/', $id)) ? $id : '';
@@ -1354,8 +1316,7 @@
             }
         }
 
-        public function change_vip_status()
-        {
+        public function change_vip_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -1376,8 +1337,7 @@
             }
         }
 
-        public function delete_vip_package()
-        {
+        public function delete_vip_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -1394,8 +1354,7 @@
             }
         }
 
-        public function save_referral_settings()
-        {
+        public function save_referral_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['referral_config'] = [
@@ -1418,8 +1377,7 @@
             }
         }
 
-        public function save_scheduler_settings()
-        {
+        public function save_scheduler_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['scheduler_config'] = $this->config->values('scheduler_config');
@@ -1435,8 +1393,7 @@
             }
         }
 
-        public function save_votereward_settings()
-        {
+        public function save_votereward_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['votereward_config'] = $this->config->values('votereward_config');
@@ -1457,8 +1414,7 @@
             }
         }
 
-        public function save_paypal_settings()
-        {
+        public function save_paypal_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1479,8 +1435,7 @@
             }
         }
 
-        public function save_paymentwall_settings()
-        {
+        public function save_paymentwall_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1501,8 +1456,7 @@
             }
         }
 
-        public function save_fortumo_settings()
-        {
+        public function save_fortumo_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1523,8 +1477,7 @@
             }
         }
 
-        public function save_paygol_settings()
-        {
+        public function save_paygol_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1545,8 +1498,7 @@
             }
         }
 
-        public function save_twocheckout_settings()
-        {
+        public function save_twocheckout_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1567,8 +1519,7 @@
             }
         }
 
-        public function save_pagseguro_settings()
-        {
+        public function save_pagseguro_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1589,8 +1540,7 @@
             }
         }
 
-        public function save_paycall_settings()
-        {
+        public function save_paycall_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1611,8 +1561,7 @@
             }
         }
 
-        public function save_interkassa_settings()
-        {
+        public function save_interkassa_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1633,8 +1582,7 @@
             }
         }
 
-        public function save_cuenta_digital_settings()
-        {
+        public function save_cuenta_digital_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
                     $this->vars['donation_config'] = $this->config->values('donation_config');
@@ -1655,8 +1603,7 @@
             }
         }
 
-        public function list_guides()
-        {
+        public function list_guides(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['guides'] = $this->Madmin->list_guides();
@@ -1667,8 +1614,7 @@
             }
         }
 		
-		public function list_drops()
-        {
+		public function list_drops(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['guides'] = $this->Madmin->list_drops();
@@ -1679,8 +1625,7 @@
             }
         }
 
-        public function delete_guide($id = '')
-        {
+        public function delete_guide($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id == ''){
@@ -1701,8 +1646,7 @@
             }
         }
 		
-		public function delete_drop($id = '')
-        {
+		public function delete_drop($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id == ''){
@@ -1723,8 +1667,7 @@
             }
         }
 
-        public function edit_guide($id = '')
-        {
+        public function edit_guide($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id == ''){
@@ -1763,8 +1706,7 @@
             }
         }
 		
-		public function edit_drop($id = '')
-        {
+		public function edit_drop($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
 				$this->vars['cats'] = $this->config->values('drop_config');
@@ -1804,8 +1746,7 @@
             }
         }
 
-        public function add_guide()
-        {
+        public function add_guide(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(count($_POST) > 0){
@@ -1834,8 +1775,7 @@
             }
         }
 		
-		public function add_drop()
-        {
+		public function add_drop(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
 				$this->vars['cats'] = $this->config->values('drop_config');
@@ -1865,8 +1805,7 @@
             }
         }
 
-        public function bulk_mail()
-        {
+        public function bulk_mail(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['bulk_emails'] = $this->Madmin->load_bulk_emails();
@@ -1877,8 +1816,7 @@
             }
         }
 
-        public function create_bulk_email()
-        {
+        public function create_bulk_email(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(count($_POST) > 0){
@@ -1917,8 +1855,7 @@
             }
         }
 
-        public function edit_bulk_email($subject = '')
-        {
+        public function edit_bulk_email($subject = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($subject == ''){
@@ -1970,8 +1907,7 @@
             }
         }
 
-        public function delete_bulk_email($subject)
-        {
+        public function delete_bulk_email($subject){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($subject == ''){
@@ -1994,8 +1930,7 @@
             }
         }
 
-        public function resend_bulk_email($subject)
-        {
+        public function resend_bulk_email($subject){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($subject == ''){
@@ -2022,8 +1957,7 @@
             }
         }
 
-        public function news_composer()
-        {
+        public function news_composer(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
 				
@@ -2090,8 +2024,7 @@
             }
         }
 
-        public function edit_news($id = '')
-        {
+        public function edit_news($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(!isset($id))
@@ -2159,8 +2092,7 @@
             }
         }
 
-        public function delete_news($id = '')
-        {
+        public function delete_news($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(!isset($id))
@@ -2181,8 +2113,7 @@
             }
         }
 
-        public function clear_news_cache()
-        {
+        public function clear_news_cache(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->Madmin->clear_news_cache();
@@ -2194,8 +2125,7 @@
             }
         }
 
-        public function manage_gallery()
-        {
+        public function manage_gallery(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($gallery = $this->Madmin->load_gallery())
@@ -2240,8 +2170,7 @@
             }
         }
 
-        public function delete_image()
-        {
+        public function delete_image(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->delete_gallery_image($_POST['id']);
                 json(['success' => 1]);
@@ -2250,8 +2179,7 @@
             }
         }
 
-        public function manage_downloads()
-        {
+        public function manage_downloads(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(count($_POST) > 0){
@@ -2302,8 +2230,7 @@
             }
         }
 
-        public function edit_download($id = '')
-        {
+        public function edit_download($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(!isset($id))
@@ -2360,8 +2287,7 @@
             }
         }
 
-        public function save_downloads_order()
-        {
+        public function save_downloads_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_downloads_order($_POST['order']);
             } else{
@@ -2369,8 +2295,7 @@
             }
         }
 
-        public function delete_file($id = '')
-        {
+        public function delete_file($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(!isset($id))
@@ -2391,8 +2316,7 @@
             }
         }
 
-        public function gm_manager()
-        {
+        public function gm_manager(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(count($_POST) > 0){
@@ -2459,8 +2383,7 @@
             }
         }
 
-        public function edit_gm($name, $server)
-        {
+        public function edit_gm($name, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($name == '')
@@ -2584,8 +2507,7 @@
             }
         }
 
-        public function delete_gm($name = '', $server = '')
-        {
+        public function delete_gm($name = '', $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($name == '')
@@ -2612,8 +2534,7 @@
             }
         }
 
-        public function gm_announcement()
-        {
+        public function gm_announcement(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['add_anouncement'])){
@@ -2632,8 +2553,7 @@
             }
         }
 		
-		public function logs_partner($page = 1, $coupon = '-')
-        {
+		public function logs_partner($page = 1, $coupon = '-'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->load->lib('iteminfo');
@@ -2661,8 +2581,7 @@
             }
         }
 
-        public function logs_shop($page = 1, $acc = '-', $server = 'All', $from = '', $to = '')
-        {
+        public function logs_shop($page = 1, $acc = '-', $server = 'All', $from = '', $to = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->load->lib('iteminfo');
@@ -2702,8 +2621,7 @@
             }
         }
 
-        public function logs_market($page = 1, $acc = '-', $server = 'All', $from = '', $to = '')
-        {
+        public function logs_market($page = 1, $acc = '-', $server = 'All', $from = '', $to = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->load->lib('iteminfo');
@@ -2743,8 +2661,7 @@
             }
         }
 
-        public function gm_logs($page = 1, $acc = '-', $server = 'All', $from = '', $to = '')
-        {
+        public function gm_logs($page = 1, $acc = '-', $server = 'All', $from = '', $to = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_account_logs'])){
@@ -2853,8 +2770,7 @@
 			echo json(['success' => 'filters reset']);	
 		}
 
-        public function logs_account($page = 1, $acc = '-', $server = 'All', $from = '', $to = '')
-        {
+        public function logs_account($page = 1, $acc = '-', $server = 'All', $from = '', $to = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
 				if(isset($_COOKIE['account_filter_date_1']) && $_COOKIE['account_filter_date_1'] != ''){
@@ -2871,8 +2787,7 @@
             }
         }
 
-        public function logs_paypal_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_paypal_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_paypal_transactions'])){
@@ -2901,8 +2816,7 @@
             }
         }
 
-        public function logs_twocheckout_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_twocheckout_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_2checkout_transactions'])){
@@ -2931,8 +2845,7 @@
             }
         }
 
-        public function logs_paymentwall_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_paymentwall_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_pw_transactions'])){
@@ -2961,8 +2874,7 @@
             }
         }
 
-        public function logs_pagseguro_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_pagseguro_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_pagseguro_transactions'])){
@@ -2991,8 +2903,7 @@
             }
         }
 
-        public function logs_fortumo_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_fortumo_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_fortumo_transactions'])){
@@ -3021,8 +2932,7 @@
             }
         }
 
-        public function logs_paygol_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_paygol_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_paygol_transactions'])){
@@ -3051,8 +2961,7 @@
             }
         }
 
-        public function logs_paycall_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_paycall_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_paycall_transactions'])){
@@ -3081,8 +2990,7 @@
             }
         }
 
-        public function logs_interkassa_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_interkassa_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_interkassa_transactions'])){
@@ -3111,8 +3019,7 @@
             }
         }
 
-        public function logs_cuenta_digital_transactions($page = 1, $acc = '-', $server = 'All')
-        {
+        public function logs_cuenta_digital_transactions($page = 1, $acc = '-', $server = 'All'){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['search_cuenta_digital_transactions'])){
@@ -3141,8 +3048,7 @@
             }
         }
 
-        public function find_item($server = '', $serial = '')
-        {
+        public function find_item($server = '', $serial = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($server != '' && $serial != ''){
@@ -3197,8 +3103,7 @@
             }
         }
 
-        public function remove_item_inventory($name, $serial, $server)
-        {
+        public function remove_item_inventory($name, $serial, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(array_key_exists($server, $this->website->server_list())){
@@ -3232,8 +3137,7 @@
             }
         }
 
-        public function remove_item_warehouse($name, $serial, $server)
-        {
+        public function remove_item_warehouse($name, $serial, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(array_key_exists($server, $this->website->server_list())){
@@ -3263,8 +3167,7 @@
             }
         }
 
-        public function add_item()
-        {
+        public function add_item(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['add_item'])){
@@ -3323,8 +3226,7 @@
             }
         }
 
-        public function item_list($page = 1, $category = '')
-        {
+        public function item_list($page = 1, $category = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['items'] = $this->Madmin->load_item_list($page, 25, $category);
@@ -3337,8 +3239,7 @@
             }
         }
 
-        public function set_item_price($id)
-        {
+        public function set_item_price($id){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id != ''){
@@ -3364,8 +3265,7 @@
             }
         }
 
-        public function custom_price_list()
-        {
+        public function custom_price_list(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(!$this->vars['items'] = $this->Madmin->load_custom_price_list()){
@@ -3378,8 +3278,7 @@
             }
         }
 
-        public function delete_from_custom_price_list($id)
-        {
+        public function delete_from_custom_price_list($id){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(!$this->Madmin->delete_from_price_list($id)){
@@ -3394,8 +3293,7 @@
             }
         }
 
-        public function edit_item($id = '')
-        {
+        public function edit_item($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id != ''){
@@ -3459,8 +3357,7 @@
             }
         }
 
-        public function save_item_price($id = '')
-        {
+        public function save_item_price($id = ''){
             if($id != ''){
                 if(!$this->vars['info'] = $this->Madmin->check_item($id)){
                     json(['error' => 'Item not found.']);
@@ -3478,8 +3375,7 @@
             }
         }
 
-        public function delete_item($id = '')
-        {
+        public function delete_item($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id == '' || !$this->Madmin->check_item($id)){
@@ -3495,8 +3391,7 @@
             }
         }
 
-        public function import_items($cat = 0, $server = '')
-        {
+        public function import_items($cat = 0, $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->load->lib('iteminfo');
@@ -3526,8 +3421,7 @@
             }
         }
 
-        public function edit_category_list()
-        {
+        public function edit_category_list(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['edit_cat'])){
@@ -3585,8 +3479,7 @@
             }
         }
 
-        public function edit_ancient_sets()
-        {
+        public function edit_ancient_sets(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['edit_set'])){
@@ -3629,8 +3522,7 @@
             }
         }
 
-        public function edit_socket_options()
-        {
+        public function edit_socket_options(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['sockets'] = $this->Madmin->load_socket_list();
@@ -3641,8 +3533,7 @@
             }
         }
 
-        public function save_socket_order()
-        {
+        public function save_socket_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_socket_order($_POST['order']);
             } else{
@@ -3650,8 +3541,7 @@
             }
         }
 
-        public function edit_socket_package()
-        {
+        public function edit_socket_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $name = !empty($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
@@ -3680,8 +3570,7 @@
             }
         }
 
-        public function change_socket_status()
-        {
+        public function change_socket_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -3702,8 +3591,7 @@
             }
         }
 
-        public function edit_harmony_options()
-        {
+        public function edit_harmony_options(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['harmony'] = $this->Madmin->load_harmony_list();
@@ -3714,8 +3602,7 @@
             }
         }
 
-        public function change_harmony_status()
-        {
+        public function change_harmony_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -3736,8 +3623,7 @@
             }
         }
 
-        public function edit_harmony_package()
-        {
+        public function edit_harmony_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $name = !empty($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
@@ -3762,8 +3648,7 @@
             }
         }
 
-        public function save_paypal_order()
-        {
+        public function save_paypal_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_paypal_order($_POST['order']);
             } else{
@@ -3771,8 +3656,7 @@
             }
         }
 
-        public function save_twocheckout_order()
-        {
+        public function save_twocheckout_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_twocheckout_order($_POST['order']);
             } else{
@@ -3780,8 +3664,7 @@
             }
         }
 
-        public function save_pagseguro_order()
-        {
+        public function save_pagseguro_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_pagseguro_order($_POST['order']);
             } else{
@@ -3789,8 +3672,7 @@
             }
         }
 
-        public function save_paycall_order()
-        {
+        public function save_paycall_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_paycall_order($_POST['order']);
             } else{
@@ -3798,8 +3680,7 @@
             }
         }
 
-        public function save_interkassa_order()
-        {
+        public function save_interkassa_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_interkassa_order($_POST['order']);
             } else{
@@ -3807,8 +3688,7 @@
             }
         }
 
-        public function save_cuenta_digital_order()
-        {
+        public function save_cuenta_digital_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->save_cuenta_digital_order($_POST['order']);
             } else{
@@ -3816,8 +3696,7 @@
             }
         }
 
-        public function edit_paypal_package()
-        {
+        public function edit_paypal_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
@@ -3854,8 +3733,7 @@
             }
         }
 
-        public function edit_twocheckout_package()
-        {
+        public function edit_twocheckout_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
@@ -3892,8 +3770,7 @@
             }
         }
 
-        public function edit_pagseguro_package()
-        {
+        public function edit_pagseguro_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
@@ -3930,8 +3807,7 @@
             }
         }
 
-        public function edit_paycall_package()
-        {
+        public function edit_paycall_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
@@ -3964,8 +3840,7 @@
             }
         }
 
-        public function edit_interkassa_package()
-        {
+        public function edit_interkassa_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
@@ -4002,8 +3877,7 @@
             }
         }
 
-        public function edit_cuenta_digital_package()
-        {
+        public function edit_cuenta_digital_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
@@ -4040,8 +3914,7 @@
             }
         }
 
-        public function add_paypal_package()
-        {
+        public function add_paypal_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
                 $price = (isset($_POST['price']) && is_numeric($_POST['price'])) ? $_POST['price'] : '';
@@ -4073,8 +3946,7 @@
             }
         }
 
-        public function add_twocheckout_package()
-        {
+        public function add_twocheckout_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
                 $price = (isset($_POST['price']) && is_numeric($_POST['price'])) ? $_POST['price'] : '';
@@ -4106,8 +3978,7 @@
             }
         }
 
-        public function add_pagseguro_package()
-        {
+        public function add_pagseguro_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
                 $price = (isset($_POST['price']) && is_numeric($_POST['price'])) ? $_POST['price'] : '';
@@ -4139,8 +4010,7 @@
             }
         }
 
-        public function add_paycall_package()
-        {
+        public function add_paycall_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
                 $price = (isset($_POST['price']) && is_numeric($_POST['price'])) ? $_POST['price'] : '';
@@ -4168,8 +4038,7 @@
             }
         }
 
-        public function add_interkassa_package()
-        {
+        public function add_interkassa_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
                 $price = (isset($_POST['price']) && is_numeric($_POST['price'])) ? $_POST['price'] : '';
@@ -4201,8 +4070,7 @@
             }
         }
 
-        public function add_cuenta_digital_package()
-        {
+        public function add_cuenta_digital_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $title = !empty($_POST['title']) ? htmlspecialchars($_POST['title']) : '';
                 $price = (isset($_POST['price']) && is_numeric($_POST['price'])) ? $_POST['price'] : '';
@@ -4234,8 +4102,7 @@
             }
         }
 
-        public function delete_paypal_package()
-        {
+        public function delete_paypal_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4252,8 +4119,7 @@
             }
         }
 
-        public function delete_twocheckout_package()
-        {
+        public function delete_twocheckout_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4270,8 +4136,7 @@
             }
         }
 
-        public function delete_pagseguro_package()
-        {
+        public function delete_pagseguro_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4288,8 +4153,7 @@
             }
         }
 
-        public function delete_paycall_package()
-        {
+        public function delete_paycall_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4306,8 +4170,7 @@
             }
         }
 
-        public function delete_interkassa_package()
-        {
+        public function delete_interkassa_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4324,8 +4187,7 @@
             }
         }
 
-        public function delete_cuenta_digital_package()
-        {
+        public function delete_cuenta_digital_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4342,8 +4204,7 @@
             }
         }
 
-        public function change_paypal_status()
-        {
+        public function change_paypal_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4364,8 +4225,7 @@
             }
         }
 
-        public function change_twocheckout_status()
-        {
+        public function change_twocheckout_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4386,8 +4246,7 @@
             }
         }
 
-        public function change_pagseguro_status()
-        {
+        public function change_pagseguro_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4408,8 +4267,7 @@
             }
         }
 
-        public function change_paycall_status()
-        {
+        public function change_paycall_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4430,8 +4288,7 @@
             }
         }
 
-        public function change_interkassa_status()
-        {
+        public function change_interkassa_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4452,8 +4309,7 @@
             }
         }
 
-        public function change_cuenta_digital_status()
-        {
+        public function change_cuenta_digital_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4474,8 +4330,7 @@
             }
         }
 
-        public function add_referral_package()
-        {
+        public function add_referral_package(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $req_lvl = (isset($_POST['req_lvl']) && preg_match('/^\d*$/', $_POST['req_lvl'])) ? $_POST['req_lvl'] : '';
                 $req_res = (isset($_POST['req_res']) && preg_match('/^\d*$/', $_POST['req_res'])) ? $_POST['req_res'] : '';
@@ -4515,8 +4370,7 @@
             }
         }
 
-        public function change_referral_reward_status()
-        {
+        public function change_referral_reward_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 $status = (isset($_POST['status']) && preg_match('/^\d*$/', $_POST['status'])) ? $_POST['status'] : '';
@@ -4537,8 +4391,7 @@
             }
         }
 
-        public function delete_referral_reward()
-        {
+        public function delete_referral_reward(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $id = (isset($_POST['id']) && preg_match('/^\d*$/', $_POST['id'])) ? $_POST['id'] : '';
                 if($id == '')
@@ -4555,8 +4408,7 @@
             }
         }
 
-        public function credits_editor($acc = '')
-        {
+        public function credits_editor($acc = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['acc'] = $acc;
@@ -4651,8 +4503,7 @@
             }
         }
 
-        public function vote_links()
-        {
+        public function vote_links(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['votereward_config'] = $this->config->values('votereward_config');
@@ -4692,8 +4543,7 @@
             }
         }
 
-        public function edit_vote($id)
-        {
+        public function edit_vote($id){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['votereward_config'] = $this->config->values('votereward_config');
@@ -4741,8 +4591,7 @@
             }
         }
 
-        public function delete_vote($id = '')
-        {
+        public function delete_vote($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($id == '')
@@ -4761,8 +4610,7 @@
             }
         }
 
-        public function top_voters()
-        {
+        public function top_voters(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->load->view('admincp' . DS . 'vote_manager' . DS . 'view.top_voters', $this->vars);
@@ -4772,8 +4620,7 @@
             }
         }
 
-		public function languages()
-        {
+		public function languages(){
 			if ($this->session->userdata(array('admin' => 'is_admin'))) {
 				$this->load_header();
 				$this->load->helper('locales');
@@ -4785,8 +4632,7 @@
 			}
         }
 
-		public function translate($lang = 'en')
-        {
+		public function translate($lang = 'en'){
             if($this->session->userdata(array('admin'=>'is_admin'))){
 				$this->load_header();
 				$this->load->helper('locales');
@@ -4811,9 +4657,8 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function edit_string()
-        {
+				
+		public function edit_string(){
             if($this->session->userdata(array('admin'=>'is_admin'))){				
 				$lang = $_POST['lang'];
 				$lkey = $_POST['key'];
@@ -4855,9 +4700,8 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function add_string()
-        {
+				
+		public function add_string(){
             if($this->session->userdata(array('admin'=>'is_admin'))){
 				$lang = $_POST['lang'];
 				$lkey = $_POST['key'];
@@ -4911,9 +4755,8 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function add_language()
-        {  
+				
+		public function add_language(){  
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->load_header();
 				$this->load->helper('locales');
@@ -4950,8 +4793,7 @@
 			}
         }
 
-		public function import_language()
-        {
+		public function import_language(){
 			if ($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->load_header();
 				$this->load->helper('locales');
@@ -4995,8 +4837,7 @@
 			}
         }
 
-		public function export_language($lang)
-        {
+		public function export_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$languages = $this->config->values('locale_config');
 				if(array_key_exists($lang, $languages['localizations'])){
@@ -5022,9 +4863,8 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
-		public function import_missing_translations($lang)
-        {
+				
+		public function import_missing_translations($lang){
 			if ($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->load_header();
 				$this->load->helper('locales');
@@ -5074,8 +4914,7 @@
 			}
         }
 
-		public function delete_language()
-        {
+		public function delete_language(){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
 				$this->vars['lang'] = htmlspecialchars($_POST['id']);
@@ -5110,7 +4949,7 @@
 			}
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function disable_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
@@ -5127,7 +4966,7 @@
 			}
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function enable_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
@@ -5144,7 +4983,7 @@
 			}
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function set_default_language($lang){
 			if($this->session->userdata(array('admin' => 'is_admin'))){
 				$this->vars['languages'] = $this->config->values('locale_config');
@@ -5161,8 +5000,7 @@
 			}
 		}     
 
-		public function item_category_generator()
-        {
+		public function item_category_generator(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 json(['category' => $this->webshop->load_cat_list(true)]);
             } 
@@ -5171,9 +5009,8 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM        
-        public function warehouse_editor()
-        {
+		        
+        public function warehouse_editor(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['show_vault'] = false;
@@ -5223,8 +5060,7 @@
             }
         }
 
-		public function del_item()
-        {
+		public function del_item(){
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
                     $slot = (isset($_POST['slot']) ? ctype_digit($_POST['slot']) ? $_POST['slot'] : '' : '');
@@ -5267,8 +5103,7 @@
             }
         }
 
-		public function load_items()
-        {
+		public function load_items(){
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
                     $cat = isset($_POST['cat']) ? $_POST['cat'] : '';
@@ -5282,8 +5117,7 @@
             }
         }
 
-        public function check_item()
-        {
+        public function check_item(){
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
                     $id = isset($_POST['id']) ? $_POST['id'] : '';
@@ -5300,8 +5134,7 @@
             }
         }
 
-        public function loadharmonylist()
-        {
+        public function loadharmonylist(){
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
                     $cat = isset($_POST['cat']) ? (int)$_POST['cat'] : '';
@@ -5316,8 +5149,7 @@
             }
         }
 
-		public function add_wh_item()
-        {
+		public function add_wh_item(){
             if(is_ajax()){
                 if($this->session->userdata(['admin' => 'is_admin'])){
                     if($this->website->is_multiple_accounts() == true){
@@ -5434,8 +5266,7 @@
             }
         }
 
-		private function generate_item()
-        {
+		private function generate_item(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->iteminfo->setItemData($this->item_info['item_id'], $this->item_info['original_item_cat'], $this->website->get_value_from_server($_SESSION['vault_server'], 'item_size'));
                 $this->createitem->setItemData($this->iteminfo->item_data);
@@ -5465,8 +5296,7 @@
             }
         }
 
-		public function load_accounts()
-        {
+		public function load_accounts(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['servers'] = $this->website->server_list();
                 $this->vars['start'] = (isset($_POST['start']) && is_numeric($_POST['start'])) ? $_POST['start'] : 0;
@@ -5544,8 +5374,7 @@
             }
         }
 
-		public function filter_account_list()
-        {
+		public function filter_account_list(){
             $time = time() + (86400 * 3);
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($_POST['joined1'] != ''){
@@ -5579,8 +5408,7 @@
             }
         }
 
-		public function filter_account_reset()
-        {
+		public function filter_account_reset(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 setcookie("filter_joined", '', time() - 3600, '/');
                 setcookie("filter_joined_end", '', time() - 3600, '/');
@@ -5593,8 +5421,7 @@
             }
         }
 
-        public function account_manager($page = 1, $server = '')
-        {
+        public function account_manager($page = 1, $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -5605,7 +5432,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function partner_editor($account = '', $server = ''){
 			if($this->session->userdata(['admin' => 'is_admin'])){
 				 $this->load_header();
@@ -5672,7 +5499,7 @@
 			}
 		}
     
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM    
+		    
 		public function vip_editor($account = '', $server = ''){
 			if($this->session->userdata(['admin' => 'is_admin'])){
 				 $this->load_header();
@@ -5739,8 +5566,7 @@
             }
 		}
 
-		public function character_manager($page = 1, $server = '')
-        {
+		public function character_manager($page = 1, $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['current_page'] = $this->config->base_url . ACPURL . '/character-manager/1';
@@ -5782,8 +5608,7 @@
             }
         }
 
-		public function activate_account($id, $server)
-        {
+		public function activate_account($id, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -5814,8 +5639,7 @@
             }
         }
 
-        public function edit_account($id = -1, $server = '')
-        {
+        public function edit_account($id = -1, $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -5865,8 +5689,7 @@
             }
         }
 
-		public function edit_character($id = -1, $server = '')
-        {
+		public function edit_character($id = -1, $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -5927,8 +5750,7 @@
             }
         }
 
-        public function ban_account($id, $server)
-        {
+        public function ban_account($id, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -5973,8 +5795,7 @@
             }
         }
 
-        public function ban_character($id, $server)
-        {
+        public function ban_character($id, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6015,8 +5836,7 @@
             }
         }
 
-        public function unban($type = 'account', $name = '', $server = '')
-        {
+        public function unban($type = 'account', $name = '', $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6058,8 +5878,7 @@
             }
         }
 
-        public function delete_account($id, $server = '')
-        {
+        public function delete_account($id, $server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6096,8 +5915,7 @@
             }
         }
 
-        public function search_ip($ip = '')
-        {
+        public function search_ip($ip = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['ip'])){
@@ -6118,8 +5936,7 @@
             }
         }
 
-        public function support_departments()
-        {
+        public function support_departments(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['department_list'] = $this->Madmin->load_department_list();
@@ -6130,8 +5947,7 @@
             }
         }
 
-        public function add_support_department()
-        {
+        public function add_support_department(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['add_department'])){
@@ -6162,8 +5978,7 @@
             }
         }
 
-        public function edit_support_department($id)
-        {
+        public function edit_support_department($id){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['edit_department'])){
@@ -6197,8 +6012,7 @@
             }
         }
 
-        public function delete_support_department($id)
-        {
+        public function delete_support_department($id){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($this->Madmin->check_department($id) != false){
@@ -6214,8 +6028,7 @@
             }
         }
 
-		public function support_requests($page = 1)
-        {
+		public function support_requests($page = 1){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(isset($_POST['filter_tickets'])){
@@ -6272,8 +6085,7 @@
             }
         }
 
-        public function view_request($id)
-        {
+        public function view_request($id){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if($this->vars['ticket_data'] = $this->Madmin->check_ticket($id)){
@@ -6321,8 +6133,7 @@
             }
         }
 
-        public function change_department()
-        {
+        public function change_department(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($this->Madmin->check_ticket($_POST['id'])){
                     $this->Madmin->change_department($_POST['id'], $_POST['department']);
@@ -6335,8 +6146,7 @@
             }
         }
 
-        public function change_status()
-        {
+        public function change_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($this->Madmin->check_ticket($_POST['id'])){
                     $this->Madmin->change_status($_POST['id'], $_POST['status']);
@@ -6352,8 +6162,7 @@
             }
         }
 
-        public function edit_buylevel_settings($key, $server)
-        {
+        public function edit_buylevel_settings($key, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6389,8 +6198,7 @@
             }
         }
 
-        public function add_buylevel_settings()
-        {
+        public function add_buylevel_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6436,8 +6244,7 @@
             }
         }
 
-        public function change_buylevel_status()
-        {
+        public function change_buylevel_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
                 if($server == '')
@@ -6456,8 +6263,7 @@
             }
         }
 
-        public function delete_buylevel_settings()
-        {
+        public function delete_buylevel_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $key = isset($_POST['key']) ? $_POST['key'] : '';
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
@@ -6488,8 +6294,7 @@
             }
         }
 
-        public function buylevel_save_max_level()
-        {
+        public function buylevel_save_max_level(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $data = (isset($_POST['max_level']) && is_numeric($_POST['max_level'])) ? $_POST['max_level'] : '';
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
@@ -6512,8 +6317,7 @@
             }
         }
 		
-		public function add_reset_settings()
-        {
+		public function add_reset_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6636,8 +6440,7 @@
             }
         }
 
-		public function add_greset_settings()
-        {
+		public function add_greset_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -6754,7 +6557,7 @@
             }
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function change_class_req_items(){
 			 if($this->session->userdata(['admin' => 'is_admin'])){
 				$this->load_header();
@@ -6858,7 +6661,7 @@
             }
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function edit_reset_items($key, $server){
 			 if($this->session->userdata(['admin' => 'is_admin'])){
 				$this->load_header();
@@ -6962,7 +6765,7 @@
             }
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function edit_greset_items($key, $server){
 			 if($this->session->userdata(['admin' => 'is_admin'])){
 				$this->load_header();
@@ -7066,8 +6869,7 @@
             }
 		}
 
-		public function edit_reset_settings($key, $server)
-        {
+		public function edit_reset_settings($key, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -7173,8 +6975,7 @@
             }
         }
 
-		public function edit_greset_settings($key, $server)
-        {
+		public function edit_greset_settings($key, $server){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['servers'] = $this->website->server_list();
@@ -7276,8 +7077,7 @@
             }
         }
 
-        public function change_reset_status()
-        {
+        public function change_reset_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
                 if($server == '')
@@ -7296,8 +7096,7 @@
             }
         }
 
-        public function change_greset_status()
-        {
+        public function change_greset_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
                 if($server == '')
@@ -7316,8 +7115,7 @@
             }
         }
 
-        public function delete_reset_settings()
-        {
+        public function delete_reset_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $key = isset($_POST['key']) ? $_POST['key'] : '';
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
@@ -7344,8 +7142,7 @@
             }
         }
 
-        public function delete_greset_settings()
-        {
+        public function delete_greset_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $key = isset($_POST['key']) ? $_POST['key'] : '';
                 $server = isset($_POST['server']) ? $_POST['server'] : '';
@@ -7372,8 +7169,7 @@
             }
         }
 
-        public function server_list_manager()
-        {
+        public function server_list_manager(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['server_list'] = $this->website->server_list();
@@ -7384,8 +7180,7 @@
             }
         }
 
-        public function save_plugin_order()
-        {
+        public function save_plugin_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['plugin_list'] = $this->config->values('plugin_config');
                 $new_array = [];
@@ -7404,8 +7199,7 @@
             }
         }
 
-        public function save_server_order()
-        {
+        public function save_server_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['server_list'] = $this->website->server_list();
                 $new_array = [];
@@ -7436,8 +7230,7 @@
             }
         }
 
-        public function change_server_status()
-        {
+        public function change_server_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['server_list'] = $this->website->server_list();
                 if($this->website->is_multiple_accounts()){
@@ -7460,8 +7253,7 @@
             }
         }
 
-        public function delete_server()
-        {
+        public function delete_server(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['server_list'] = $this->website->server_list();
                 if($this->website->is_multiple_accounts()){
@@ -7501,8 +7293,7 @@
             }
         }
 
-        public function change_multi_account_db()
-        {
+        public function change_multi_account_db(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['server_list'] = $this->website->server_list();
                 if(isset($_POST['status']) && $_POST['status'] == 1){
@@ -7524,8 +7315,7 @@
             }
         }
 		
-		public function add_server()
-        {
+		public function add_server(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 if(count($_POST) > 0){
@@ -7691,8 +7481,7 @@
             }
         }
 		
-		public function edit_server($server = '')
-        {
+		public function edit_server($server = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['server_list'] = $this->website->server_list();
@@ -7859,8 +7648,7 @@
             }
         }
 
-		public function manage_plugins()
-        {
+		public function manage_plugins(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['plugin_list'] = $this->Madmin->get_plugin_list();
@@ -7885,8 +7673,7 @@
             }
         }
 		
-		public function release_license()
-        {
+		public function release_license(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if($this->session->userdata(['admin' => 'username']) == 'demo_admin'){
                     throw new Exception('Demo account does not have permission for this action.');
@@ -7900,14 +7687,12 @@
             }
         }
 
-        private function load_header()
-        {
+        private function load_header(){
             $this->load->view('admincp' . DS . 'view.header', $this->vars);
             $this->load->view('admincp' . DS . 'view.sidebar', $this->vars);
         }
 
-        private function load_footer()
-        {
+        private function load_footer(){
             $this->load->view('admincp' . DS . 'view.footer', $this->vars);
         }
     }

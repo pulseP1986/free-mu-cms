@@ -33,8 +33,7 @@
         private static $cms_version;
         private static $php_version;
 
-        private function __construct()
-        {
+        private function __construct(){
             self::$path = (dirname(__FILE__));
             PagSeguroAutoloader::init();
             self::$resources = PagSeguroResources::init();
@@ -42,8 +41,7 @@
             self::$log = LogPagSeguro::init();
         }
 
-        public static function init()
-        {
+        public static function init(){
             require_once "loader" . DIRECTORY_SEPARATOR . "PagSeguroAutoLoader.class.php";
             self::verifyDependencies();
             if(self::$library == null){
@@ -52,8 +50,7 @@
             return self::$library;
         }
 
-        private static function verifyDependencies()
-        {
+        private static function verifyDependencies(){
             $dependencies = true;
             try{
                 if(!function_exists('curl_init')){
@@ -70,43 +67,35 @@
             return $dependencies;
         }
 
-        final public static function getVersion()
-        {
+        final public static function getVersion(){
             return self::VERSION;
         }
 
-        final public static function getPath()
-        {
+        final public static function getPath(){
             return self::$path;
         }
 
-        final public static function getModuleVersion()
-        {
+        final public static function getModuleVersion(){
             return self::$module_version;
         }
 
-        final public static function setModuleVersion($version)
-        {
+        final public static function setModuleVersion($version){
             self::$module_version = $version;
         }
 
-        final public static function getPHPVersion()
-        {
+        final public static function getPHPVersion(){
             return self::$php_version = phpversion();
         }
 
-        final public static function setPHPVersion($version)
-        {
+        final public static function setPHPVersion($version){
             self::$php_version = $version;
         }
 
-        final public static function getCMSVersion()
-        {
+        final public static function getCMSVersion(){
             return self::$cms_version;
         }
 
-        final public static function setCMSVersion($version)
-        {
+        final public static function setCMSVersion($version){
             self::$cms_version = $version;
         }
     }

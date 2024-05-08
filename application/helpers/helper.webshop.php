@@ -6,18 +6,17 @@
         protected $registry, $config, $load;
         public $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
         }
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function full_category_data(){
 			return file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
 		}
         
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM        
+		        
 		public function load_cat_list_array(){
 			$load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
 			$arr = [];
@@ -28,8 +27,7 @@
 			return $arr;
 		}
 
-		public function load_cat_list($select = false, $cat = '', $only_original = false, $style = '', $load_all = false)
-        {
+		public function load_cat_list($select = false, $cat = '', $only_original = false, $style = '', $load_all = false){
             $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
             $list = '';
             $i = 0;
@@ -59,8 +57,7 @@
             return ($select != true) ? substr($list, 0, -2) : $list;
         }
 
-		public function load_cat_list_input()
-        {
+		public function load_cat_list_input(){
             $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
             $list = '';
             foreach($load_cat_list as $cat_list){
@@ -70,8 +67,7 @@
             return $list;
         }
 
-		public function load_cat_list_table($checked = false)
-        {
+		public function load_cat_list_table($checked = false){
             $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
             $list = '';
             $i = 0;
@@ -102,8 +98,7 @@
             return $list;
         }
 
-		public function category_to_id($name)
-        {
+		public function category_to_id($name){
             $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
             foreach($load_cat_list as $key => $category){
                 $cat = explode('|', $category);
@@ -114,8 +109,7 @@
             return false;
         }
 
-		public function category_to_name($name)
-        {
+		public function category_to_name($name){
             $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
             foreach($load_cat_list as $key => $category){
                 $cat = explode('|', $category);
@@ -126,8 +120,7 @@
             return false;
         }
 
-		public function category_from_id($id)
-        {
+		public function category_from_id($id){
             $load_cat_list = file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_cat_list.dmn', FILE_SKIP_EMPTY_LINES);
             foreach($load_cat_list as $key => $category){
                 $cat = explode('|', $category);
@@ -138,8 +131,7 @@
             return false;
         }
 
-        public function load_ancient_settings()
-        {
+        public function load_ancient_settings(){
             return file(APP_PATH . DS . 'data' . DS . 'shop' . DS . 'shop_anc_opt.dmn', FILE_SKIP_EMPTY_LINES);
         }
     }

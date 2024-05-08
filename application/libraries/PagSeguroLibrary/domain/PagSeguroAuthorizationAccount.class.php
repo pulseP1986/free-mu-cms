@@ -36,8 +36,7 @@
          * @param null|string $account
          * @throws string Exception
          */
-        public function __construct($account = null)
-        {
+        public function __construct($account = null){
             if(isset($account)){
                 $this->setPublicKey($account);
             } else{
@@ -48,8 +47,7 @@
         /***
          * @return string of public key
          */
-        public function getPublicKey()
-        {
+        public function getPublicKey(){
             return $this->publicKey;
         }
 
@@ -57,8 +55,7 @@
          * Sets the authorization account public key
          * @param string $value
          */
-        public function setPublicKey($value)
-        {
+        public function setPublicKey($value){
             if(isset($value)){
                 $this->publicKey = $value;
             }

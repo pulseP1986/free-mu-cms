@@ -47,8 +47,7 @@
          * Initializes a new instance of the PagSeguroCreditCardHolder class
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['name'])){
                     $this->setName($data['name']);
@@ -75,16 +74,14 @@
          * Set the credit card holder name
          * @param $name string
          */
-        public function setName($name)
-        {
+        public function setName($name){
             $this->name = $name;
         }
 
         /***
          * @return string the credit card holder name
          */
-        public function getName()
-        {
+        public function getName(){
             return $this->name;
         }
 
@@ -93,8 +90,7 @@
          * @param array $documents
          * @see PagSeguroDocument
          */
-        public function setDocuments(array $documents)
-        {
+        public function setDocuments(array $documents){
             if($documents instanceof PagSeguroDocument){
                 $this->documents = $documents;
             } else{
@@ -109,8 +105,7 @@
          * @param String $type
          * @param String $value
          */
-        public function addDocument($type, $value)
-        {
+        public function addDocument($type, $value){
             if($type && $value){
                 if(count($this->documents) == 0){
                     $data = ['type' => $type, 'value' => $value];
@@ -125,8 +120,7 @@
          * @return array PagSeguroDocument List of PagSeguroDocument
          * @see PagSeguroDocument
          */
-        public function getDocuments()
-        {
+        public function getDocuments(){
             return $this->documents;
         }
 
@@ -134,16 +128,14 @@
          * Set the credit card holder birth date
          * @param $birthDate date
          */
-        public function setBirthDate($birthDate)
-        {
+        public function setBirthDate($birthDate){
             $this->birthDate = $birthDate;
         }
 
         /***
          * @return date the credit card holder birth date
          */
-        public function getBirthDate()
-        {
+        public function getBirthDate(){
             return $this->birthDate;
         }
 
@@ -152,8 +144,7 @@
          * @param String $areaCode
          * @param String $number
          */
-        public function setPhone($areaCode, $number = null)
-        {
+        public function setPhone($areaCode, $number = null){
             $param = $areaCode;
             if($param instanceof PagSeguroPhone){
                 $this->phone = $param;
@@ -167,8 +158,7 @@
          * @return PagSeguroPhone the holder phone
          * @see PagSeguroPhone
          */
-        public function getPhone()
-        {
+        public function getPhone(){
             return $this->phone;
         }
     }

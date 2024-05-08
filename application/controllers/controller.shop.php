@@ -50,8 +50,7 @@
         private $wing_additional5_element_lvl;
 		private $mastery_bonus_opt;
 		
-		public function __construct()
-        {
+		public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -69,8 +68,7 @@
             $this->load->model('shop');
         }
 
-		public function index($page = 1)
-        {
+		public function index($page = 1){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     $this->vars['items'] = $this->Mshop->load_items($this->session->userdata(['user' => 'server']), $page, $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|item_per_page'), $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|columns'));
@@ -84,7 +82,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function show_sub_cats(){
 			if(!$this->website->module_disabled('shop_'.$this->session->userdata(array('user' => 'server')))){
 				if($this->session->userdata(array('user'=>'logged_in'))){
@@ -134,7 +132,7 @@
 			}
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM		
+				
 		public function show_sub_sub_cats(){
 			if(!$this->website->module_disabled('shop_'.$this->session->userdata(array('user' => 'server')))){
 				if($this->session->userdata(array('user'=>'logged_in'))){
@@ -192,7 +190,7 @@
 			}
 		}
 
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function show_items(){
 			if(!$this->website->module_disabled('shop_'.$this->session->userdata(array('user' => 'server')))){
 				if($this->session->userdata(array('user'=>'logged_in'))){
@@ -269,7 +267,7 @@
 		}
 
 	
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function show_cat_items(){
 			if(!$this->website->module_disabled('shop_'.$this->session->userdata(array('user' => 'server')))){
 				if($this->session->userdata(array('user'=>'logged_in'))){
@@ -291,8 +289,7 @@
 			}
 		}
 
-		public function category($cat = '', $page = 1)
-        {
+		public function category($cat = '', $page = 1){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     $category = $this->webshop->category_to_id($cat);
@@ -311,8 +308,7 @@
             }
         }
 
-		public function get_item_data()
-        {
+		public function get_item_data(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     if(isset($_POST['id'])){
@@ -342,8 +338,7 @@
             }
         }
 
-		public function senditem($id = -1, $type = 'direct')
-        {
+		public function senditem($id = -1, $type = 'direct'){
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     if($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|module_status') == 1){
@@ -631,8 +626,7 @@
             }
         }
 
-        public function cart()
-        {
+        public function cart(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     $this->vars['credits_items'] = $this->Mshop->load_card_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), 1);
@@ -644,8 +638,7 @@
             }
         }
 
-        public function remove_item_from_cart()
-        {
+        public function remove_item_from_cart(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('shop_' . $this->session->userdata(['user' => 'server']))){
                     $id = (isset($_POST['id']) && ctype_digit($_POST['id'])) ? (int)$_POST['id'] : '';
@@ -661,8 +654,7 @@
             }
         }
 
-		public function senditems()
-        {
+		public function senditems(){
             if(is_ajax()){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->load->model('account');
@@ -758,8 +750,7 @@
             }
         }
 
-        public function loadharmonylist()
-        {
+        public function loadharmonylist(){
             $cat = (isset($_POST['cat']) && ctype_digit($_POST['cat'])) ? (int)$_POST['cat'] : '';
             $hopt = (isset($_POST['hopt']) && ctype_digit($_POST['hopt'])) ? (int)$_POST['hopt'] : '';
             if(is_ajax()){
@@ -771,8 +762,7 @@
             }
         }
 
-        public function getharmonyprice()
-        {
+        public function getharmonyprice(){
             $cat = (isset($_POST['cat']) && ctype_digit($_POST['cat'])) ? (int)$_POST['cat'] : '';
             $hopt = (isset($_POST['hopt']) && ctype_digit($_POST['hopt'])) ? (int)$_POST['hopt'] : '';
             $hval = (isset($_POST['hval']) && ctype_digit($_POST['hval'])) ? (int)$_POST['hval'] : '';
@@ -787,8 +777,7 @@
             }
         }
 
-        public function getsocketprice()
-        {
+        public function getsocketprice(){
             $option = (isset($_POST['option']) && ctype_digit($_POST['option'])) ? (int)$_POST['option'] : '';
             if(is_ajax()){
                 if($option === '')
@@ -797,8 +786,7 @@
             }
         }
 
-		private function calculate_price()
-        {
+		private function calculate_price(){
             $this->price = $this->Mshop->discount($this->item_info['price'], $this->session->userdata(['user' => 'server']));
             if($this->item_info['original_item_cat'] == 12 && in_array($this->item_info['item_id'], $this->errtel_ids)){
                 if($this->element_type != 0){
@@ -927,8 +915,7 @@
             }
         }
 	
-		private function generate_item()
-        {
+		private function generate_item(){
             if($this->iteminfo->setItemData($this->item_info['item_id'], $this->item_info['original_item_cat'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'))){
                 $this->createitem->setItemData($this->iteminfo->item_data);
                 $this->createitem->id($this->item_info['item_id']);
@@ -1017,8 +1004,7 @@
             return false;
         }
 
-        public function buy_level()
-        {
+        public function buy_level(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('character');
                 $this->vars['level_config'] = $this->config->values('buylevel_config', $this->session->userdata(['user' => 'server']));
@@ -1033,8 +1019,7 @@
             }
         }
 
-        public function buy_gm()
-        {
+        public function buy_gm(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('buygm')){
                     $this->load->model('character');
@@ -1046,8 +1031,7 @@
             }
         }
 
-        public function buy_stats()
-        {
+        public function buy_stats(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(!$this->website->module_disabled('buypoints')){
                     $this->load->model('character');
@@ -1059,8 +1043,7 @@
             }
         }
 
-        public function change_class()
-        {
+        public function change_class(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['changeclass_config'] = $this->config->values('change_class_config');
                 if(!$this->vars['changeclass_config']){
@@ -1079,8 +1062,7 @@
             }
         }
 
-        public function vip()
-        {
+        public function vip(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $vip_config = $this->config->values('vip_config');
@@ -1099,8 +1081,7 @@
             }
         }
 
-		public function buy_vip($id = '')
-        {
+		public function buy_vip($id = ''){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
 				$this->load->model('character');
@@ -1203,8 +1184,7 @@
             }
         }
 
-        public function change_name()
-        {
+        public function change_name(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('character');
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -1214,8 +1194,7 @@
             }
         }
 
-        public function change_name_history()
-        {
+        public function change_name_history(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['change_history'] = $this->Mshop->change_name_history($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.change_name_history', $this->vars);
@@ -1224,13 +1203,11 @@
             }
         }
 
-        public function login()
-        {
+        public function login(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'shop' . DS . 'view.login');
         }
 
-        public function disabled()
-        {
+        public function disabled(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
         }
     }

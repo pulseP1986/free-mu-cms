@@ -35,8 +35,7 @@
          *
          * @return string|null
          */
-        public function getStreet()
-        {
+        public function getStreet(){
             return $this->getField('street');
         }
 
@@ -45,8 +44,7 @@
          *
          * @return string|null
          */
-        public function getCity()
-        {
+        public function getCity(){
             return $this->getField('city');
         }
 
@@ -55,8 +53,7 @@
          *
          * @return string|null
          */
-        public function getState()
-        {
+        public function getState(){
             return $this->getField('state');
         }
 
@@ -65,8 +62,7 @@
          *
          * @return string|null
          */
-        public function getCountry()
-        {
+        public function getCountry(){
             return $this->getField('country');
         }
 
@@ -75,8 +71,7 @@
          *
          * @return string|null
          */
-        public function getZip()
-        {
+        public function getZip(){
             return $this->getField('zip');
         }
 
@@ -85,8 +80,7 @@
          *
          * @return float|null
          */
-        public function getLatitude()
-        {
+        public function getLatitude(){
             return $this->getField('latitude');
         }
 
@@ -95,8 +89,7 @@
          *
          * @return float|null
          */
-        public function getLongitude()
-        {
+        public function getLongitude(){
             return $this->getField('longitude');
         }
     }

@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -16,8 +15,7 @@
             $this->load->helper('meta');
         }
 
-        public function index($ref = '', $server = '')
-        {
+        public function index($ref = '', $server = ''){
             $this->vars['config'] = $this->config->values('registration_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->vars['security_config'] = $this->config->values('security_config');
@@ -43,8 +41,7 @@
             }
         }
 
-        public function create_account()
-        {
+        public function create_account(){
             $this->vars['config'] = $this->config->values('registration_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->vars['security_config'] = $this->config->values('security_config');
@@ -317,8 +314,7 @@
 			return true;
 		}
 
-        public function create_account_with_fb($server, $email)
-        {
+        public function create_account_with_fb($server, $email){
             $this->vars['config'] = $this->config->values('registration_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->vars['server'] = $server;
@@ -394,8 +390,7 @@
             }
         }
 
-        public function success()
-        {
+        public function success(){
             $this->vars['config'] = $this->config->values('registration_config');
             if($this->vars['config'] && $this->vars['config']['active'] == 1){
                 $this->load->view($this->config->config_entry('main|template') . DS . 'registration' . DS . 'view.successfull', $this->vars);
@@ -404,8 +399,7 @@
             }
         }
 
-        public function activation($code = '', $server = '')
-        {
+        public function activation($code = '', $server = ''){
             $servers = $this->website->server_list();
 			$default = array_keys($servers)[0];
 			if($server == ''){
@@ -446,8 +440,7 @@
             }
         }
 
-        public function resend_activation()
-        {
+        public function resend_activation(){
             $this->vars['config'] = $this->config->values('registration_config');
             $this->vars['security_config'] = $this->config->values('security_config');
             if($this->vars['security_config'] != false){
@@ -531,8 +524,7 @@
             }
         }
 
-        public function disabled()
-        {
+        public function disabled(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'view.module_disabled');
         }
     }

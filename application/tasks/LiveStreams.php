@@ -4,8 +4,7 @@
     {
         private $registry, $load, $config, $vars = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->registry = controller::get_instance();
             $this->config = $this->registry->config;
             $this->load = $this->registry->load;
@@ -14,8 +13,7 @@
 			
         }
         
-        public function execute()
-        {
+        public function execute(){
 			
             $this->load->helper('website');
             $this->load->lib('cache', ['File', ['cache_dir' => APP_PATH . DS . 'data' . DS . 'cache']]);

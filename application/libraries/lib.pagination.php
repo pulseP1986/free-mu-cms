@@ -13,8 +13,7 @@
          * Class Constructor
          *
          */
-        public function __construct()
-        {
+        public function __construct(){
         }
 
         /**
@@ -25,8 +24,7 @@
          * @param integer $total_records
          * @param string $link
          */
-        public function initialize($page = 0, $size = 0, $total_records = 0, $link = '')
-        {
+        public function initialize($page = 0, $size = 0, $total_records = 0, $link = ''){
             $this->page = $page;
             $this->size = $size;
             $this->total_records = $total_records;
@@ -38,8 +36,7 @@
          *
          * @return string
          */
-        public function getLimit()
-        {
+        public function getLimit(){
             $this->lastpage = ($this->total_records == 0) ? 0 : ceil($this->total_records / $this->size);
             //$page = $this->page;
             if($this->page < 1){
@@ -58,8 +55,7 @@
          *
          * @return    string
          */
-        public function create_links()
-        {
+        public function create_links(){
             $totalPages = floor($this->total_records / $this->size);
             $totalPages += ($this->total_records % $this->size != 0) ? 1 : 0;
             if($totalPages < 1 || $totalPages == 1)

@@ -47,8 +47,7 @@
          * Initializes a new instance of the PagSeguroCreditCard class
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['number'])){
                     $this->number = $data['number'];
@@ -69,16 +68,14 @@
          * Sets the card number
          * @param int $number
          */
-        public function setNumber($number)
-        {
+        public function setNumber($number){
             $this->number = $number;
         }
 
         /***
          * @return int the card number
          */
-        public function getNumber()
-        {
+        public function getNumber(){
             return $this->number;
         }
 
@@ -86,16 +83,14 @@
          * Sets the card cvv
          * @param int $cvv
          */
-        public function setCvv($cvv)
-        {
+        public function setCvv($cvv){
             $this->cvv = $cvv;
         }
 
         /***
          * @return int the card cvv
          */
-        public function getCvv()
-        {
+        public function getCvv(){
             return $this->cvv;
         }
 
@@ -103,16 +98,14 @@
          * Sets the card expirationMonth
          * @param int $expirationMonth
          */
-        public function setExpirationMonth($expirationMonth)
-        {
+        public function setExpirationMonth($expirationMonth){
             $this->expirationMonth = $expirationMonth;
         }
 
         /***
          * @return int expirationMonth from credit card
          */
-        public function getExpirationMonth()
-        {
+        public function getExpirationMonth(){
             return $this->expirationMonth;
         }
 
@@ -120,16 +113,14 @@
          * Sets the card expirationYear
          * @param int $expirationYear
          */
-        public function setExpirationYear($expirationYear)
-        {
+        public function setExpirationYear($expirationYear){
             $this->expirationYear = $expirationYear;
         }
 
         /***
          * @return int expirationYear from credit card
          */
-        public function getExpirationYear()
-        {
+        public function getExpirationYear(){
             return $this->expirationYear;
         }
     }

@@ -2,8 +2,7 @@
 
     class Twocheckout_Sale extends Twocheckout
     {
-        public static function retrieve($params = [])
-        {
+        public static function retrieve($params = []){
             $request = new Twocheckout_Api_Requester();
             if(array_key_exists("sale_id", $params) || array_key_exists("invoice_id", $params)){
                 $urlSuffix = '/api/sales/detail_sale';
@@ -14,8 +13,7 @@
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function refund($params = [])
-        {
+        public static function refund($params = []){
             $request = new Twocheckout_Api_Requester();
             if(array_key_exists("lineitem_id", $params)){
                 $urlSuffix = '/api/sales/refund_lineitem';
@@ -29,8 +27,7 @@
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function stop($params = [])
-        {
+        public static function stop($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/sales/stop_lineitem_recurring';
             if(array_key_exists("lineitem_id", $params)){
@@ -63,8 +60,7 @@
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function active($params = [])
-        {
+        public static function active($params = []){
             if(array_key_exists("sale_id", $params)){
                 $result = Twocheckout_Sale::retrieve($params);
                 if(!is_array($result)){
@@ -82,24 +78,21 @@
             }
         }
 
-        public static function comment($params = [])
-        {
+        public static function comment($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/sales/create_comment';
             $result = $request->doCall($urlSuffix, $params);
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function ship($params = [])
-        {
+        public static function ship($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/sales/mark_shipped';
             $result = $request->doCall($urlSuffix, $params);
             return Twocheckout_Util::returnResponse($result);
         }
 
-        public static function reauth($params = [])
-        {
+        public static function reauth($params = []){
             $request = new Twocheckout_Api_Requester();
             $urlSuffix = '/api/sales/reauth';
             $result = $request->doCall($urlSuffix, $params);

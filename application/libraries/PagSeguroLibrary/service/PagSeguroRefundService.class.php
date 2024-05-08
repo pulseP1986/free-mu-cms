@@ -28,8 +28,7 @@
     {
         const SERVICE_NAME = 'refundService';
 
-        private static function buildRefundURL($connectionData, $transactionCode, $refundValue = null)
-        {
+        private static function buildRefundURL($connectionData, $transactionCode, $refundValue = null){
             if(is_null($refundValue)){
                 return $connectionData->getServiceUrl() . '?' . $connectionData->getCredentialsUrlQuery() . "&transactionCode=" . $transactionCode;
             } else{
@@ -37,8 +36,7 @@
             }
         }
 
-        public static function createRefundRequest(PagSeguroCredentials $credentials, $transactionCode, $refundValue = null)
-        {
+        public static function createRefundRequest(PagSeguroCredentials $credentials, $transactionCode, $refundValue = null){
             LogPagSeguro::info("PagSeguroRefundService.Register(" . $transactionCode . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             if(is_null($refundValue)){

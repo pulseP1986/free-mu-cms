@@ -39,8 +39,7 @@
          * Initializes a new instance of the PagSeguroInstallment class
          * @param array $data
          */
-        public function __construct(array $data = null)
-        {
+        public function __construct(array $data = null){
             if($data){
                 if(isset($data['quantity'])){
                     $this->quantity = $data['quantity'];
@@ -55,16 +54,14 @@
          * Set installment quantity
          * @param $quantity int
          */
-        public function setQuantity($quantity)
-        {
+        public function setQuantity($quantity){
             $this->quantity = $quantity;
         }
 
         /***
          * @return int installment quantity
          */
-        public function getQuantity()
-        {
+        public function getQuantity(){
             return $this->quantity;
         }
 
@@ -72,16 +69,14 @@
          * Set installment value
          * @param $value float
          */
-        public function setValue($value)
-        {
+        public function setValue($value){
             $this->value = $value;
         }
 
         /***
          * @return float installment value
          */
-        public function getValue()
-        {
+        public function getValue(){
             return $this->value;
         }
 
@@ -90,8 +85,7 @@
          * @param $quantity int
          * @param $value float
          */
-        public function setInstallment($quantity, $value = null)
-        {
+        public function setInstallment($quantity, $value = null){
             $param = $quantity;
             if(isset($param) && is_array($param) || is_object($param)){
                 $this->quantity = $param['quantity'];

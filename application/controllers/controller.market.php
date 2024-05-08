@@ -5,8 +5,7 @@
     {
         public $vars = [], $errors = [], $charge_credits = false, $updated_vault = null, $price_type = 0, $status = 0, $price_with_tax = 0;
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -23,8 +22,7 @@
             $this->load->model('market');
         }
 
-        public function index($page = 1, $server = '')
-        {
+        public function index($page = 1, $server = ''){
             if(!$this->website->module_disabled('market')){
                 if($server == ''){
                     if($this->session->userdata(['user' => 'logged_in'])){
@@ -112,13 +110,11 @@
 			}
 		}
 
-        public function update()
-        {
+        public function update(){
             $this->Mmarket->update_item_names();
         }
 
-        public function buy($id = '')
-        {
+        public function buy($id = ''){
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
 					$this->load->model('account');
@@ -241,8 +237,7 @@
             }
         }
 
-        public function success()
-        {
+        public function success(){
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->vars['success'] = __('You have bought new item successfully.');
@@ -253,8 +248,7 @@
             }
         }
 
-        public function history($page = 1)
-        {
+        public function history($page = 1){
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
                     $this->Mmarket->count_total_history_items($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
@@ -268,8 +262,7 @@
             }
         }
 
-        public function remove($id = '')
-        {
+        public function remove($id = ''){
             if(!$this->website->module_disabled('market')){
                 if($this->session->userdata(['user' => 'logged_in'])){
 					$this->load->model('account');
@@ -346,8 +339,7 @@
             }
         }
 
-        public function latest_items()
-        {
+        public function latest_items(){
             if(isset($_POST['server'], $_POST['item_count'], $_POST['text_limit'])){
                 $server = $_POST['server'];
                 $item_count = $_POST['item_count'];
@@ -364,8 +356,7 @@
             }
         }
 
-        public function login()
-        {
+        public function login(){
             $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.login');
         }
     }

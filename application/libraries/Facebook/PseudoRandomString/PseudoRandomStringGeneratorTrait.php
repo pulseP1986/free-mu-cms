@@ -32,8 +32,7 @@
          *
          * @throws \InvalidArgumentException
          */
-        public function validateLength($length)
-        {
+        public function validateLength($length){
             if(!is_int($length)){
                 throw new \InvalidArgumentException('getPseudoRandomString() expects an integer for the string length');
             }
@@ -50,8 +49,7 @@
          *
          * @return string
          */
-        public function binToHex($binaryData, $length)
-        {
+        public function binToHex($binaryData, $length){
             return mb_substr(bin2hex($binaryData), 0, $length);
         }
     }

@@ -38,8 +38,7 @@
          *
          * @return string The URL with the params removed.
          */
-        public static function removeParamsFromUrl($url, array $paramsToFilter)
-        {
+        public static function removeParamsFromUrl($url, array $paramsToFilter){
             $parts = parse_url($url);
             $query = '';
             if(isset($parts['query'])){
@@ -69,8 +68,7 @@
          *
          * @return string
          */
-        public static function appendParamsToUrl($url, array $newParams = [])
-        {
+        public static function appendParamsToUrl($url, array $newParams = []){
             if(!$newParams){
                 return $url;
             }
@@ -94,8 +92,7 @@
          *
          * @return array
          */
-        public static function getParamsAsArray($url)
-        {
+        public static function getParamsAsArray($url){
             $query = parse_url($url, PHP_URL_QUERY);
             if(!$query){
                 return [];
@@ -115,8 +112,7 @@
          *
          * @return string The $urlToAddTo with any new params from $urlToStealFrom.
          */
-        public static function mergeUrlParams($urlToStealFrom, $urlToAddTo)
-        {
+        public static function mergeUrlParams($urlToStealFrom, $urlToAddTo){
             $newParams = static::getParamsAsArray($urlToStealFrom);
             // Nothing new to add, return as-is
             if(!$newParams){
@@ -132,8 +128,7 @@
          *
          * @return string|null
          */
-        public static function forceSlashPrefix($string)
-        {
+        public static function forceSlashPrefix($string){
             if(!$string){
                 return $string;
             }
@@ -147,8 +142,7 @@
          *
          * @return string The $urlToTrim with the hostname and Graph version removed.
          */
-        public static function baseGraphUrlEndpoint($urlToTrim)
-        {
+        public static function baseGraphUrlEndpoint($urlToTrim){
             return '/' . preg_replace('/^https:\/\/.+\.facebook\.com(\/v.+?)?\//', '', $urlToTrim);
         }
     }

@@ -5,8 +5,7 @@
         public $order_details = [];
         private $logs = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 
@@ -18,8 +17,7 @@
          *
          * @return mixed
          */
-        public function load_packages($status = false)
-        {
+        public function load_packages($status = false){
             $where = ($status == true) ? 'WHERE status = 1' : '';
             return $this->website->db('web')->query('SELECT id, package, reward, price, currency, orders, status, server FROM DmN_Donate_CoinBase_Packages ' . $where . ' ORDER BY orders ASC')->fetch_all();
         }
@@ -32,8 +30,7 @@
          *
          * @return mixed
          */
-        public function check_package($id)
-        {
+        public function check_package($id){
             $stmt = $this->website->db('web')->prepare('SELECT id, reward, price, currency FROM DmN_Donate_CoinBase_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
             return $stmt->fetch();
@@ -51,8 +48,7 @@
          * @return mixed
          *
          */
-        public function add_package($title, $price, $currency, $reward, $server)
-        {
+        public function add_package($title, $price, $currency, $reward, $server){
             $max_orders = $this->website->db('web')->query('SELECT ISNULL(MAX(orders), 0) AS max_orders FROM DmN_Donate_CoinBase_Packages')->fetch();
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_CoinBase_Packages (package, reward, price, currency, orders, status, server) VALUES (:title, :reward, :price, :currency, :count, 1, :server)');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':count' => $max_orders['max_orders'], ':server' => $server]);
@@ -71,8 +67,7 @@
          *
          *
          */
-        public function edit_package($id, $title, $price, $currency, $reward, $server)
-        {
+        public function edit_package($id, $title, $price, $currency, $reward, $server){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_CoinBase_Packages SET package = :title, reward = :reward, price = :price, currency = :currency, server = :server WHERE id = :id');
             $stmt->execute([':title' => $title, ':reward' => $reward, ':price' => $price, ':currency' => $currency, ':server' => $server, ':id' => $id]);
         }
@@ -84,8 +79,7 @@
          *
          *
          */
-        public function delete_package($id)
-        {
+        public function delete_package($id){
             $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Donate_CoinBase_Packages WHERE id = :id');
             $stmt->execute([':id' => $id]);
         }
@@ -98,8 +92,7 @@
          *
          *
          */
-        public function change_status($id, $status)
-        {
+        public function change_status($id, $status){
             $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_CoinBase_Packages SET status = :status WHERE id = :id');
             $stmt->execute([':status' => $status, ':id' => $id]);
         }
@@ -110,8 +103,7 @@
          * @param array $orders
          *
          */
-        public function save_order($orders)
-        {
+        public function save_order($orders){
             foreach($orders as $key => $value){
                 $id = explode('_', $value);
                 $stmt = $this->website->db('web')->prepare('UPDATE DmN_Donate_CoinBase_Packages SET orders = :order WHERE id = :id');
@@ -129,8 +121,7 @@
          *
          *
          */
-        public function load_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All')
-        {
+        public function load_transactions($page = 1, $per_page = 25, $acc = '', $server = 'All'){
             if(($acc == '' || $acc == '-') && $server == 'All')
                 $items = $this->website->db('web')->query('SELECT Top ' . $this->website->db('web')->escape($per_page) . ' transaction_id, amount, currency, acc, server, credits, order_date FROM DmN_Donate_CoinBase_Transactions WHERE id Not IN (SELECT Top ' . $this->website->db('web')->escape($per_page * ($page - 1)) . ' id FROM DmN_Donate_CoinBase_Transactions ORDER BY id DESC) ORDER BY id DESC'); else{
                 if(($acc != '' && $acc != '-') && $server == 'All')
@@ -152,8 +143,7 @@
          *
          * @return int
          */
-        public function count_total_transactions($acc = '', $server = 'All')
-        {
+        public function count_total_transactions($acc = '', $server = 'All'){
             $sql = '';
             if($acc != '' && $acc != '-'){
                 $sql .= 'WHERE acc like \'%' . $this->website->db('web')->escape($acc) . '%\'';
@@ -178,8 +168,7 @@
          *
          * @return mixed
          */
-        public function insert_order($price, $currency, $reward, $item, $user, $server)
-        {
+        public function insert_order($price, $currency, $reward, $item, $user, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_CoinBase_Orders (amount, currency, credits, account, server, hash) VALUES(:amount, :currency, :credits, :account, :server, :hash)');
             return $stmt->execute([':amount' => $price, ':currency' => $currency, ':credits' => $reward, ':account' => $user, ':server' => $server, ':hash' => $item]);
         }
@@ -192,8 +181,7 @@
          *
          * @return mixed
          */
-        public function check_order_number($item)
-        {
+        public function check_order_number($item){
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_CoinBase_Orders where hash = '.$this->website->db('web')->escape($item).'');
             if($count == 1){
                 $this->order_details = $this->website->db('web')->query('SELECT amount, currency, account, server, credits FROM DmN_Donate_CoinBase_Orders where hash = '.$this->website->db('web')->escape($item).'')->fetch();
@@ -211,8 +199,7 @@
          *
          * @return bool
          */
-        public function check_completed_transaction($item)
-        {
+        public function check_completed_transaction($item){
             $count = $this->website->db('web')->snumrows('SELECT COUNT(id) AS count FROM DmN_Donate_CoinBase_Transactions where order_hash = '.$this->website->db('web')->escape($item).'');
             if($count > 0){
                 return true;
@@ -228,8 +215,7 @@
          *
          * @return bool
          */
-        public function insert_transaction_status($id, $item)
-        {
+        public function insert_transaction_status($id, $item){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Donate_CoinBase_Transactions (transaction_id, amount, currency, acc, server, credits, order_date, order_hash) VALUES (:trans_id, :gross, :currency, :account, :server, :credits, :time, :order_hash)');
             return $stmt->execute([':trans_id' => $id, ':gross' => $this->order_details['amount'], ':currency' => $this->order_details['currency'], ':account' => $this->order_details['account'], ':server' => $this->order_details['server'], ':credits' => $this->order_details['credits'], ':time' => time(), ':order_hash' => $item]);
         }
@@ -243,8 +229,7 @@
          *
          * @return bool
          */
-        public function get_guid($account, $server)
-        {
+        public function get_guid($account, $server){
             $stmt = $this->website->db('account', $server)->prepare('SELECT memb_guid FROM MEMB_INFO WHERE memb___id = :account');
             $stmt->execute([':account' => $account]);
             $guid = $stmt->fetch();
@@ -258,7 +243,7 @@
 			return $this->website->db('web')->query('SELECT refferer FROM DmN_Refferals WHERE refferal = '.$this->website->db('web')->escape($acc).'')->fetch()['refferer'];
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function add_total_recharge($account, $server, $credits)
 		{
 			if($this->website->db('web')->check_if_table_exists('DmN_Total_Recharge')){
@@ -266,9 +251,8 @@
 			}
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function insert_recharge($account, $server, $credits)
-        {
+		
+		private function insert_recharge($account, $server, $credits){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Total_Recharge (account, server, points, date) VALUES (:account, :server, :points, GETDATE())');
             $stmt->execute([':account' => $account, ':server' => $server, ':points' => $credits]);
         }

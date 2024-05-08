@@ -48,8 +48,7 @@
          * @param FacebookResponse $response The response that threw the exception.
          * @param FacebookSDKException $previousException The more detailed exception.
          */
-        public function __construct(FacebookResponse $response, FacebookSDKException $previousException = null)
-        {
+        public function __construct(FacebookResponse $response, FacebookSDKException $previousException = null){
             $this->response = $response;
             $this->responseData = $response->getDecodedBody();
             $errorMessage = $this->get('message', 'Unknown error from Graph.');
@@ -64,8 +63,7 @@
          *
          * @return FacebookResponseException
          */
-        public static function create(FacebookResponse $response)
-        {
+        public static function create(FacebookResponse $response){
             $data = $response->getDecodedBody();
             if(!isset($data['error']['code']) && isset($data['code'])){
                 $data = ['error' => $data];
@@ -132,8 +130,7 @@
          *
          * @return mixed
          */
-        private function get($key, $default = null)
-        {
+        private function get($key, $default = null){
             if(isset($this->responseData['error'][$key])){
                 return $this->responseData['error'][$key];
             }
@@ -145,8 +142,7 @@
          *
          * @return int
          */
-        public function getHttpStatusCode()
-        {
+        public function getHttpStatusCode(){
             return $this->response->getHttpStatusCode();
         }
 
@@ -155,8 +151,7 @@
          *
          * @return int
          */
-        public function getSubErrorCode()
-        {
+        public function getSubErrorCode(){
             return $this->get('error_subcode', -1);
         }
 
@@ -165,8 +160,7 @@
          *
          * @return string
          */
-        public function getErrorType()
-        {
+        public function getErrorType(){
             return $this->get('type', '');
         }
 
@@ -175,8 +169,7 @@
          *
          * @return string
          */
-        public function getRawResponse()
-        {
+        public function getRawResponse(){
             return $this->response->getBody();
         }
 
@@ -185,8 +178,7 @@
          *
          * @return array
          */
-        public function getResponseData()
-        {
+        public function getResponseData(){
             return $this->responseData;
         }
 
@@ -195,8 +187,7 @@
          *
          * @return FacebookResponse
          */
-        public function getResponse()
-        {
+        public function getResponse(){
             return $this->response;
         }
     }

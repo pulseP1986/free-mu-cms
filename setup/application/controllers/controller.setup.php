@@ -6,16 +6,14 @@
         protected $vars = [], $errors = [];
         private $after_install_key = 'a953feaec195bba04c142bc38ec283df';
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
-        {
+        
+        public function __construct(){
             parent::__construct();
             $this->load->model('setup/application/models/setup');
             $this->check_lock();
         }
         
-        public function index()
-        {
+        public function index(){
             $this->Msetup->get_extension_data();
             $this->Msetup->check_writable_files_folders();
             if((isset($this->Msetup->vars['extensionsOK']) && $this->Msetup->vars['extensionsOK'] == false) || (isset($this->Msetup->vars['filesOK']) && $this->Msetup->vars['filesOK'] == false)){
@@ -26,9 +24,8 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.step1', $this->vars);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function step2()
-        {
+        
+        public function step2(){
             if(isset($_SESSION['allow_step_2']) && $_SESSION['allow_step_2'] == false){
                 $this->vars['errors'][] = 'Please complete step 1 before continue.';
             } else{
@@ -39,9 +36,8 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.step2', $this->vars);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function step3()
-        {
+        
+        public function step3(){
             if(defined('HOST')){
                 if(preg_match('/,|:/', HOST, $matches)){
                     list($this->vars['ip'], $this->vars['port']) = explode($matches[0], HOST);
@@ -112,8 +108,7 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.step3', $this->vars);
         }
 
-        public function step4()
-        {
+        public function step4(){
             if(isset($_SESSION['allow_step_2']) && $_SESSION['allow_step_2'] == false){
                 $this->vars['errors'][] = 'Please complete step 1 before continue.';
             }
@@ -146,8 +141,7 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.step4', $this->vars);
         }
 
-        public function step5()
-        {
+        public function step5(){
             if(isset($_SESSION['allow_step_2']) && $_SESSION['allow_step_2'] == false){
                 $this->vars['errors'][] = 'Please complete step 1 before continue.';
             }
@@ -165,8 +159,7 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.step5', $this->vars);
         }
 		
-		private function check_steps_ajax()
-        {
+		private function check_steps_ajax(){
 								
             if(isset($_SESSION['allow_step_2']) && $_SESSION['allow_step_2'] == false){
                 echo json_encode(['error' => 'Please complete step 1 before continue.']);
@@ -186,8 +179,7 @@
             }
         }
 
-        public function step6()
-        {
+        public function step6(){
             $this->check_steps_ajax();							  
             if(!isset($_POST['mu_version']) || $_POST['mu_version'] == -1){
                 echo json_encode(['error' => 'Please select your mu server version.']);
@@ -202,9 +194,8 @@
             }
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_tables($version)
-        {
+        
+        public function add_tables($version){
             if(array_key_exists($version, $_SESSION['setup_versions'])){
                 $version_data = $_SESSION['setup_versions'][$version];
                 if(is_array($version_data)){
@@ -268,9 +259,8 @@
             echo json_encode(['step6' => 1, 'progress' => '60%', 'message' => 'SQL Table Adding Completed']);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function add_sql_tables($tables_info, $overwrite_old_tables)
-        {
+        
+        private function add_sql_tables($tables_info, $overwrite_old_tables){
             if(is_array($tables_info) && count($tables_info) > 0){
                 $this->load->lib(['web_db', 'db'], [$_SESSION['db']['host'], $_SESSION['db']['user'], $_SESSION['db']['pass'], $_SESSION['db']['web_db'], $_SESSION['db']['driver']], $_SESSION['db']['driver']);
                 $this->load->lib(['account_db', 'db'], [$_SESSION['db']['host'], $_SESSION['db']['user'], $_SESSION['db']['pass'], $_SESSION['db']['acc_db'], $_SESSION['db']['driver']], $_SESSION['db']['driver']);
@@ -290,16 +280,14 @@
             }
         }
 
-        public function step7()
-        {
+        public function step7(){
             $this->check_steps_ajax();
             $_SESSION['setup_versions'] = $this->Msetup->get_all_cms_versions();
             $this->add_columns(key($_SESSION['setup_versions']));
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function add_columns($version)
-        {
+        
+        public function add_columns($version){
             $this->check_steps_ajax();
             if(array_key_exists($version, $_SESSION['setup_versions'])){
                 $version_data = $_SESSION['setup_versions'][$version];
@@ -362,9 +350,8 @@
             echo json_encode(['step7' => 1, 'progress' => '70%', 'message' => 'SQL Column Adding Completed']);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function add_sql_columns($columns_info)
-        {
+        
+        private function add_sql_columns($columns_info){
             if(is_array($columns_info) && count($columns_info) > 0){
 				set_time_limit(0);				  
                 $this->load->lib(['web_db', 'db'], [$_SESSION['db']['host'], $_SESSION['db']['user'], $_SESSION['db']['pass'], $_SESSION['db']['web_db'], $_SESSION['db']['driver']], $_SESSION['db']['driver']);
@@ -408,8 +395,7 @@
             }
         }
 
-        public function step8()
-        {
+        public function step8(){
             $this->check_steps_ajax();
             set_time_limit(0);
             $this->load->lib(['web_db', 'db'], [$_SESSION['db']['host'], $_SESSION['db']['user'], $_SESSION['db']['pass'], $_SESSION['db']['web_db'], $_SESSION['db']['driver']], $_SESSION['db']['driver']);
@@ -429,9 +415,8 @@
             echo json_encode(['step8' => 1, 'progress' => '80%', 'message' => 'SQL Table Data Insert Completed']);
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function step9()
-        {
+        
+        public function step9(){
 			$this->check_steps_ajax();						  
             set_time_limit(0);
             $this->load->lib(['web_db', 'db'], [$_SESSION['db']['host'], $_SESSION['db']['user'], $_SESSION['db']['pass'], $_SESSION['db']['web_db'], $_SESSION['db']['driver']], $_SESSION['db']['driver']);
@@ -472,8 +457,7 @@
             echo json_encode(['step9' => 1, 'progress' => '85%', 'message' => 'SQL Stored Procedures Adding Completed. Redirecting...', 'redirect' => $this->config->base_url . 'index.php?action=setup/step10']);
         }
 
-        public function step10()
-        {					
+        public function step10(){					
             if(isset($_SESSION['allow_step_2']) && $_SESSION['allow_step_2'] == false){
                 $this->vars['errors'][] = 'Please complete step 1 before continue.';
             }
@@ -543,17 +527,15 @@
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.step10', $this->vars);
         }
 
-        public function completed()
-        {
+        public function completed(){
             session_destroy();
             setcookie("dmn_language", "", 1);
             $this->create_lock();
             $this->load->view('setup' . DS . 'application' . DS . 'views' . DS . 'setup' . DS . 'view.completed', $this->vars);
         }
     
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function write_config()
-        {
+        
+        private function write_config(){
             $data = "<?PHP\r\n";
             $data .= "\r\n";
             $data .= "\tdefine('DMNCMS',		true);\r\n";
@@ -644,9 +626,8 @@
             }			 
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function write_server_data()
-        {
+        
+        private function write_server_data(){
 			$item_size = 20;
             if($this->vars['wh_size'] > 1200){
                 $item_size = 32;
@@ -699,8 +680,7 @@
             }					 
         }
 		
-		private function create_localization_list()
-        {
+		private function create_localization_list(){
             $new_data = [
 				'default_localization' => 'en',
 				'localizations' => [
@@ -716,8 +696,7 @@
             return true;
         }
 
-        private function create_social_list()
-        {
+        private function create_social_list(){
             $new_data = ['providers' => ['Facebook' => ['enabled' => false, 'keys' => ['id' => '', 'secret' => '']]]];
             $data = json_encode($new_data, JSON_PRETTY_PRINT);
             if(is_writable(BASEDIR . 'application' . DS . 'config')){
@@ -728,8 +707,7 @@
             return true;
         }
 
-        private function create_meta_list()
-        {
+        private function create_meta_list(){
             $new_data = ['en' => ['default' => ['title' => '%server_title%', 'keywords' => '%server_title%, DmNMu CMS ' . $this->Msetup->get_cms_version() . ', MuOnline, Website', 'description' => 'Content Management System For MuOnline'], 'home' => ['title' => '%server_title% Home', 'keywords' => '%server_title%, DmN MuCMS ' . $this->Msetup->get_cms_version() . ', MuOnline, Website', 'description' => 'Content Management System For MuOnline'], 'registration' => ['title' => '%server_title% Registration', 'keywords' => '%server_title%, DmN MuCMS ' . $this->Msetup->get_cms_version() . ', MuOnline, Website', 'description' => 'Content Management System For MuOnline']]];
             $data = json_encode($new_data, JSON_PRETTY_PRINT);
             if(is_writable(BASEDIR . 'application' . DS . 'config')){
@@ -740,8 +718,7 @@
             return true;
         }
 		
-		private function create_cms_config()
-        {
+		private function create_cms_config(){
 			$new_data = ['package' => 'DmN MuCMS', "version" => $this->Msetup->get_cms_version()];
 			$data = json_encode($new_data, JSON_PRETTY_PRINT);
             if(is_writable(BASEDIR . 'application' . DS . 'config')){
@@ -752,9 +729,8 @@
             return true;
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function add_cron_task($task, $time, $desc, $owerwrite = 0, $status = 1)
-        {
+        
+        private function add_cron_task($task, $time, $desc, $owerwrite = 0, $status = 1){
             $file = BASEDIR . 'application' . DS . 'config' . DS . 'scheduler_config.json';
             $data = file_get_contents($file);
             $tasks = json_decode($data, true);
@@ -778,16 +754,14 @@
             file_put_contents($file, json_encode($tasks, JSON_PRETTY_PRINT));
         }
         
-        // @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function check_lock()
-        {
+        
+        private function check_lock(){
             if(file_exists(INSTALL_DIR . 'data' . DS . 'install.lock')){
                 throw new Exception('Installation blocked! Please remove setup' . DS . 'data' . DS . 'install.lock before starting.');
             }
         }
 
-        private function create_lock()
-        {
+        private function create_lock(){
             if(is_writable(INSTALL_DIR . 'data')){
                 $fp = @fopen(INSTALL_DIR . 'data' . DS . 'install.lock', 'w');
                 @fwrite($fp, '1');

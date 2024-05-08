@@ -6,8 +6,7 @@
         protected $vars = [], $errors = [];
 		protected $resetSkillTreeClass = [2, 3, 7, 18, 19, 23, 34, 35, 39, 49, 50, 51, 54, 65, 66, 67, 70, 82, 83, 84, 87, 97, 98, 99, 102, 114, 115, 118, 130, 131, 135, 147, 151, 163, 167, 178, 179, 183, 194, 195, 199, 210, 211, 215, 15, 31, 47, 62, 78, 95, 110, 126, 143, 159, 175, 191, 207, 223];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -22,13 +21,11 @@
             }
         }
 
-        public function index()
-        {
+        public function index(){
             throw new exception('Nothing to see in here');
         }
 
-		public function checkcaptcha()
-        {
+		public function checkcaptcha(){
             if(isset($_POST['act'], $_POST['qaptcha_key'])){
                 $_SESSION['qaptcha_key'] = false;
                 if(htmlentities($_POST['act'], ENT_QUOTES, 'UTF-8') == 'qaptcha'){
@@ -42,8 +39,7 @@
             }
         }
 
-		public function login()
-        {
+		public function login(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 json(['error' => __('You are already logged in. Please logout first.')]);
             } else{
@@ -156,8 +152,7 @@
             }
         }
 
-		public function switch_server()
-        {
+		public function switch_server(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if(isset($_POST['server'])){
                     $server_list = $this->website->server_list();
@@ -198,15 +193,13 @@
             }
         }
 
-		private function change_user_session_server($user, $server)
-        {
+		private function change_user_session_server($user, $server){
             $this->session->session_key_overwrite('user', [0 => 'server', 1 => $server]);
             $this->session->session_key_overwrite('user', [0 => 'server_t', 1 => $this->website->get_value_from_server($server, 'title')]);
             setcookie("DmN_Current_User_Server_" . $user, $server, strtotime('+1 days', time()), "/");
         }
 
-		private function change_user_vip_session($user, $server)
-        {
+		private function change_user_vip_session($user, $server){
 			$this->vars['config'] = $this->config->values('vip_config');
 			
 			if(!empty($this->vars['config']) && $this->vars['config']['active'] == 1){
@@ -227,8 +220,7 @@
 			}
         }
 
-		public function change_password()
-        {
+		public function change_password(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['config'] = $this->config->values('registration_config');
                 $this->load->model('account');
@@ -280,8 +272,7 @@
             }
         }
 
-        public function change_email()
-        {
+        public function change_email(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($this->config->config_entry('account|allow_mail_change') == 1){
                     $this->load->model('account');
@@ -316,8 +307,7 @@
             }
         }
 
-        public function set_new_email()
-        {
+        public function set_new_email(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($this->config->config_entry('account|allow_mail_change') == 1){
                     $this->load->model('account');
@@ -353,8 +343,7 @@
             }
         }
 
-        public function status()
-        {
+        public function status(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 json(['success' => true]);
             } else{
@@ -362,8 +351,7 @@
             }
         }
 
-		public function checkcredits()
-        {
+		public function checkcredits(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $payment_method = (isset($_POST['payment_method']) && ctype_digit($_POST['payment_method'])) ? (int)$_POST['payment_method'] : '';
@@ -397,8 +385,7 @@
             }
         }
 
-		public function vote()
-        {
+		public function vote(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['votereward_config'] = $this->config->values('votereward_config', $this->session->userdata(['user' => 'server']));
                 if($this->vars['votereward_config']['active'] == 1){
@@ -863,8 +850,7 @@
 			}  
         }
 		
-		public function greset_character()
-        {
+		public function greset_character(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				try{
 					$this->load->model('account');
@@ -1076,8 +1062,7 @@
             }
         }
 
-		public function add_ref_reward()
-        {
+		public function add_ref_reward(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->load->model('character');
@@ -1151,8 +1136,7 @@
             }
         }
 
-        private function check_ref_req_resets($req, $char_info)
-        {
+        private function check_ref_req_resets($req, $char_info){
             if($req > 0){
                 if($req > $char_info['resets']){
                     return false;
@@ -1161,8 +1145,7 @@
             return true;
         }
 
-        private function check_ref_req_gresets($req, $char_info)
-        {
+        private function check_ref_req_gresets($req, $char_info){
             if($req > 0){
                 if($req > $char_info['grand_resets']){
                     return false;
@@ -1171,8 +1154,7 @@
             return true;
         }
 
-        public function pk_clear()
-        {
+        public function pk_clear(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->load->model('character');
@@ -1244,8 +1226,7 @@
             }
         }
 
-        public function reset_stats()
-        {
+        public function reset_stats(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_stats') == 1){
                     $this->load->model('account');
@@ -1291,8 +1272,7 @@
             }
         }
 
-		public function reset_skilltree()
-        {
+		public function reset_skilltree(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				if($this->config->config_entry('character_' . $this->session->userdata(['user' => 'server']) . '|allow_reset_skilltree') == 1){
 					$this->load->model('account');
@@ -1345,8 +1325,7 @@
             }
         }
 
-		public function clear_inventory()
-        {
+		public function clear_inventory(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -1376,8 +1355,7 @@
             }
         }
 
-        public function buy_level()
-        {
+        public function buy_level(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -1424,8 +1402,7 @@
             }
         }
 
-        private function check_max_level_allowed($level_config, $levels_to_add, $char_level)
-        {
+        private function check_max_level_allowed($level_config, $levels_to_add, $char_level){
             if($level_config != false){
                 if(isset($level_config['max_level'])){
                     $new_char_level = $levels_to_add + $char_level;
@@ -1436,8 +1413,7 @@
             return false;
         }
 
-        public function buy_points()
-        {
+        public function buy_points(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -1479,8 +1455,7 @@
             }
         }
 
-        public function buy_gm()
-        {
+        public function buy_gm(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -1697,8 +1672,7 @@
 			}  
 		}
 
-		public function load_class_list()
-        {
+		public function load_class_list(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -1893,8 +1867,7 @@
             }
         }
 
-		public function buy_class()
-        {
+		public function buy_class(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -2216,8 +2189,7 @@
             }
         }
 
-        public function change_name()
-        {
+        public function change_name(){
             if($this->session->userdata(['user' => 'logged_in'])){
 				$this->load->model('account');
                 $this->load->model('character');
@@ -2401,8 +2373,7 @@
             }
         }
 
-		public function exchange_wcoins()
-        {
+		public function exchange_wcoins(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->load->model('character');
@@ -2466,8 +2437,7 @@
             }
         }
 
-        public function switch_language()
-        {
+        public function switch_language(){
             if(isset($_POST['lang'])){
                 setcookie("dmn_language", $this->website->c($_POST['lang']), strtotime('+5 days', time()), "/");
 				json(['success' => true]);																								
@@ -2477,8 +2447,7 @@
 			}
         }
 		
-		public function switch_theme()
-        {
+		public function switch_theme(){
             if(isset($_POST['theme'])){
                 setcookie("dmn_template", $this->website->c($_POST['theme']), strtotime('+5 days', time()), "/");
 				json(['success' => true]);																								
@@ -2486,8 +2455,7 @@
 			json(['error' => true]); 
         }
 
-		public function paypal()
-        {
+		public function paypal(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('donate');
                 if(isset($_POST['proccess_paypal'])){
@@ -2533,8 +2501,7 @@
             }
         }
 
-        public function paycall()
-        {
+        public function paycall(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('donate');
                 if(isset($_POST['proccess_paycall'])){
@@ -2554,8 +2521,7 @@
             }
         }
 
-        public function hide_chars()
-        {
+        public function hide_chars(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 if($this->config->config_entry('account|hide_char_enabled') == 1){														
@@ -2586,8 +2552,7 @@
             }
         }
 		
-		public function hide_chars_pk()
-        {
+		public function hide_chars_pk(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 if(defined('ELITE_KILLER_HIDE') && ELITE_KILLER_HIDE == true){												
@@ -2615,8 +2580,7 @@
             }
         }
 
-        public function download()
-        {
+        public function download(){
             $this->load->model('admin');
             if(!isset($_POST['image'])){
                 exit;

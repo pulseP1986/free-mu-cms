@@ -30,8 +30,7 @@
          * @param $installment HttpGet Installments
          * @return mixed
          */
-        public static function readInstallments($str_json)
-        {
+        public static function readInstallments($str_json){
             if(self::decode(preg_replace('/[^a-z_\:\{}\ \"\.\,\-0-9]/i', '', $str_json))){
                 $arr = self::decode(preg_replace('/[^a-z_\:\{}\ \"\.\,\-0-9]/i', '', $str_json));
             } else{
@@ -53,8 +52,7 @@
          * @param $error Installment error
          * @return object()
          */
-        private static function readError($error)
-        {
+        private static function readError($error){
             $err = new stdClass();
             $err->message = key($error);
             $err->status = true;
@@ -65,8 +63,7 @@
          * @param $installments Installments
          * @return object installments
          */
-        private static function decode($installments)
-        {
+        private static function decode($installments){
             return json_decode($installments);
         }
     }

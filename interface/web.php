@@ -18,9 +18,8 @@
         private static $_instance;
         public $translator;
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function __construct()
-        {
+		
+        public function __construct(){
             self::$_instance = $this;
             foreach(is_loaded() as $key => $class){
                 $this->$key = load_class($class);
@@ -31,8 +30,7 @@
             $this->translator->register();
         }
 
-        public static function get_instance()
-        {
+        public static function get_instance(){
             if(!self::$_instance instanceof self){
                 self::$_instance = new controller;
             }
@@ -48,8 +46,7 @@
         private $after_upgrade_key = 'a953feaec195bba04c142bc38ec2846c';
         private $after_install_key = 'a953feaec195bba04c142bc38ec283df';
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->config = load_class('config');
             $this->scheduler_config = $this->config->values('scheduler_config');
             if(($this->scheduler_config['type'] == 2 || $this->scheduler_config['type'] == 3) || (isset($_GET['key']) && $_GET['key'] == $this->after_upgrade_key || isset($_GET['key']) && $_GET['key'] == $this->after_install_key || isset($_GET['custom']))){
@@ -62,9 +59,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        public function run($key = '', $custom = '')
-        {
+		
+        public function run($key = '', $custom = ''){
             if($key == $this->after_upgrade_key){
                 $this->run_after_upgrade();
             } else if($key == $this->after_install_key){
@@ -105,9 +101,8 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-        private function run_after_upgrade()
-        {
+		
+        private function run_after_upgrade(){
 			
         }
     }

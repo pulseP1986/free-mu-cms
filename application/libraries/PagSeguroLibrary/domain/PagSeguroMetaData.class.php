@@ -34,8 +34,7 @@
         /***
          * @param array $items
          */
-        public function __construct(array $items = null)
-        {
+        public function __construct(array $items = null){
             if(!is_null($items) && count($items) > 0){
                 $this->setItems($items);
             }
@@ -44,24 +43,21 @@
         /***
          * @param PagSeguroMetaDataItem $metaDataItem
          */
-        public function addItem(PagSeguroMetaDataItem $metaDataItem)
-        {
+        public function addItem(PagSeguroMetaDataItem $metaDataItem){
             $this->items[] = $metaDataItem;
         }
 
         /***
          * @param array $items
          */
-        public function setItems(array $items)
-        {
+        public function setItems(array $items){
             $this->items = $items;
         }
 
         /***
          * @return array
          */
-        public function getItems()
-        {
+        public function getItems(){
             if($this->items == null){
                 $this->items = [];
             }

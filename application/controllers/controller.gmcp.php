@@ -5,8 +5,7 @@
     {
         protected $vars = [], $errors = [];
 
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->helper('website');
             $this->load->lib('session', ['DmNCMS']);
@@ -15,8 +14,7 @@
             $this->load->model('gm');
         }
 
-        public function index()
-        {
+        public function index(){
             if($this->session->userdata(['user' => 'is_gm'])){
                 $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -28,8 +26,7 @@
             }
         }
 
-        public function login()
-        {
+        public function login(){
             if(count($_POST) > 0){
                 if($this->website->is_multiple_accounts() == true){
                     $this->load->lib(['account_db', 'db'], [HOST, USER, PASS, $this->website->get_db_from_server($_POST['server'], true)]);
@@ -74,14 +71,12 @@
             $this->load->view('gmcp' . DS . 'view.login', $this->vars);
         }
 
-        public function logout()
-        {
+        public function logout(){
             $this->session->destroy();
             header('Location: ' . $this->config->base_url . 'gmcp');
         }
 
-        public function search()
-        {
+        public function search(){
             if($this->session->userdata(['user' => 'is_gm'])){
                 $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -127,8 +122,7 @@
             }
         }
 
-        public function ban()
-        {
+        public function ban(){
             if($this->session->userdata(['user' => 'is_gm'])){
                 $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -196,8 +190,7 @@
             }
         }
 
-        public function unban($type = '', $name = '')
-        {
+        public function unban($type = '', $name = ''){
             if($this->session->userdata(['user' => 'is_gm'])){
                 $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -234,8 +227,7 @@
             }
         }
 
-        public function credits_adder()
-        {
+        public function credits_adder(){
             if($this->session->userdata(['user' => 'is_gm'])){
                 $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -286,8 +278,7 @@
             }
         }
 		
-		public function support_requests($page = 1)
-        {
+		public function support_requests($page = 1){
             if($this->session->userdata(['user' => 'is_gm'])){
                 $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -347,8 +338,7 @@
             }
         }
 
-        public function view_request($id)
-        {
+        public function view_request($id){
            if($this->session->userdata(['user' => 'is_gm'])){
                $this->load->view('gmcp' . DS . 'view.header');
                 $this->load->view('gmcp' . DS . 'view.sidebar');
@@ -398,8 +388,7 @@
             }
         }
 
-        public function change_department()
-        {
+        public function change_department(){
             if($this->session->userdata(['user' => 'is_gm'])){
 				$this->load->model('admin');
                 if($this->Madmin->check_ticket($_POST['id'])){
@@ -413,8 +402,7 @@
             }
         }
 
-        public function change_status()
-        {
+        public function change_status(){
             if($this->session->userdata(['user' => 'is_gm'])){
 				$this->load->model('admin');
                 if($this->Madmin->check_ticket($_POST['id'])){

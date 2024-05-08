@@ -55,7 +55,7 @@ class _plugin_gerencianet extends controller implements pluginInterface{
 	 * return mixed
 	 *
 	 */
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	private function user_module(){
 		//check if visitor has user privilleges
 		if($this->pluginaizer->session->is_user()){
@@ -104,7 +104,7 @@ class _plugin_gerencianet extends controller implements pluginInterface{
 	 *
 	 */
 	
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	public function checkout($id = -1){
 		//check if visitor has user privilleges
 		if($this->pluginaizer->session->is_user()){
@@ -205,7 +205,7 @@ class _plugin_gerencianet extends controller implements pluginInterface{
 		}
 	}
 	
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	public function notify(){
 		$payload = file_get_contents('php://input');
         $webhookCall = json_decode($payload, true);
@@ -633,7 +633,7 @@ class _plugin_gerencianet extends controller implements pluginInterface{
 	 * Set plugin data, create plugin config template, create sql schemes
 	 *
 	 */
-	// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+	
 	public function install(){
 		//check if visitor has administrator privilleges
 		if($this->pluginaizer->session->is_admin()){

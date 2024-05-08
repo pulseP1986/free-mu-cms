@@ -9,8 +9,7 @@
         private $sid;
         private $privateKey;
 
-        function __construct()
-        {
+        function __construct(){
             $this->user = Twocheckout::$username;
             $this->pass = Twocheckout::$password;
             $this->sid = Twocheckout::$sid;
@@ -19,8 +18,7 @@
             $this->privateKey = Twocheckout::$privateKey;
         }
 
-        function doCall($urlSuffix, $data = [])
-        {
+        function doCall($urlSuffix, $data = []){
             $url = $this->baseUrl . $urlSuffix;
             $ch = curl_init($url);
             if(isset($data['api'])){

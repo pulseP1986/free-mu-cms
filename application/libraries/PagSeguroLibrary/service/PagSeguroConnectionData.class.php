@@ -79,8 +79,7 @@
          * @param PagSeguroCredentials $credentials
          * @param $serviceName
          */
-        public function __construct(PagSeguroCredentials $credentials, $serviceName)
-        {
+        public function __construct(PagSeguroCredentials $credentials, $serviceName){
             $this->credentials = $credentials;
             $this->serviceName = $serviceName;
             try{
@@ -107,136 +106,119 @@
         /***
          * @return PagSeguroCredentials
          */
-        public function getCredentials()
-        {
+        public function getCredentials(){
             return $this->credentials;
         }
 
         /***
          * @param PagSeguroCredentials $credentials
          */
-        public function setCredentials(PagSeguroCredentials $credentials)
-        {
+        public function setCredentials(PagSeguroCredentials $credentials){
             $this->credentials = $credentials;
         }
 
         /***
          * @return string
          */
-        public function getCredentialsUrlQuery()
-        {
+        public function getCredentialsUrlQuery(){
             return http_build_query($this->credentials->getAttributesMap(), '', '&');
         }
 
         /***
          * @return mixed
          */
-        public function getEnvironment()
-        {
+        public function getEnvironment(){
             return $this->environment;
         }
 
         /***
          * @param $environment
          */
-        public function setEnvironment($environment)
-        {
+        public function setEnvironment($environment){
             $this->environment = $environment;
         }
 
         /***
          * @return mixed
          */
-        public function getWebserviceUrl()
-        {
+        public function getWebserviceUrl(){
             return $this->webserviceUrl;
         }
 
         /***
          * @param $webserviceUrl
          */
-        public function setWebserviceUrl($webserviceUrl)
-        {
+        public function setWebserviceUrl($webserviceUrl){
             $this->webserviceUrl = $webserviceUrl;
         }
 
         /***
          * @return mixed
          */
-        public function getPaymentUrl()
-        {
+        public function getPaymentUrl(){
             return $this->paymentUrl;
         }
 
         /***
          * @param $paymentUrl
          */
-        public function setPaymentUrl($paymentUrl)
-        {
+        public function setPaymentUrl($paymentUrl){
             $this->paymentUrl = $paymentUrl;
         }
 
         /***
          * @return mixed
          */
-        public function getBaseUrl()
-        {
+        public function getBaseUrl(){
             return $this->baseUrl;
         }
 
         /***
          * @param $baseUrl
          */
-        public function setBaseUrl($baseUrl)
-        {
+        public function setBaseUrl($baseUrl){
             $this->baseUrl = $baseUrl;
         }
 
         /***
          * @return mixed
          */
-        public function getInstallmentUrl()
-        {
+        public function getInstallmentUrl(){
             return $this->installmentUrl;
         }
 
         /***
          * @param $installmentUrl
          */
-        public function setInstallmentUrl($installmentUrl)
-        {
+        public function setInstallmentUrl($installmentUrl){
             $this->installmentUrl = $installmentUrl;
         }
 
         /***
          * @return mixed
          */
-        public function getAuthorizationUrl()
-        {
+        public function getAuthorizationUrl(){
             return $this->authorizationUrl;
         }
 
         /***
          * @param $installmentUrl
          */
-        public function setAuthorizationUrl($authorizationUrl)
-        {
+        public function setAuthorizationUrl($authorizationUrl){
             $this->authorizationUrl = $authorizationUrl;
         }
 
         /***
          * @return mixed
          */
-        public function getSessionUrl()
-        {
+        public function getSessionUrl(){
             return $this->sessionUrl;
         }
 
         /***
          * @param $installmentUrl
          */
-        public function setSessionUrl($sessionUrl)
-        {
+        public function setSessionUrl($sessionUrl){
             $this->sessionUrl = $sessionUrl;
         }
 
@@ -244,8 +226,7 @@
          * @param mixed $version
          * @return mixed
          */
-        public function getServicePath($version = null)
-        {
+        public function getServicePath($version = null){
             if($version){
                 return $this->servicePath[$version];
             } else{
@@ -256,24 +237,21 @@
         /***
          * @param $servicePath
          */
-        public function setServicePath($servicePath)
-        {
+        public function setServicePath($servicePath){
             $this->servicePath = $servicePath;
         }
 
         /***
          * @return mixed
          */
-        public function getServiceTimeout()
-        {
+        public function getServiceTimeout(){
             return $this->serviceTimeout;
         }
 
         /***
          * @param $serviceTimeout
          */
-        public function setServiceTimeout($serviceTimeout)
-        {
+        public function setServiceTimeout($serviceTimeout){
             $this->serviceTimeout = $serviceTimeout;
         }
 
@@ -281,8 +259,7 @@
          * @param mixed $version
          * @return string
          */
-        public function getServiceUrl($version = null)
-        {
+        public function getServiceUrl($version = null){
             if($version){
                 return $this->getWebserviceUrl() . $this->getServicePath($version);
             } else{
@@ -294,24 +271,21 @@
          * @param $resource
          * @return mixed
          */
-        public function getResource($resource)
-        {
+        public function getResource($resource){
             return $this->resources[$resource];
         }
 
         /***
          * @return mixed
          */
-        public function getCharset()
-        {
+        public function getCharset(){
             return $this->charset;
         }
 
         /***
          * @param $charset
          */
-        public function setCharset($charset)
-        {
+        public function setCharset($charset){
             $this->charset = $charset;
         }
     }

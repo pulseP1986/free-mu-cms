@@ -25,13 +25,11 @@
         private $gens_data = ['vanert' => 0, 'duprian' => 0, 'perc_d' => 0];
         public $error = false, $vars = [];
 
-        public function __contruct()
-        {
+        public function __contruct(){
             parent::__construct();
         }
 		
-		public function get_ranking_data($type, $server, $config, $table_config, $top = false, $pageNumber = 1)
-        {
+		public function get_ranking_data($type, $server, $config, $table_config, $top = false, $pageNumber = 1){
             switch($type){
                 case 'players':
                     return $this->load_player_rankings($server, $config, $table_config, $top, $pageNumber);
@@ -72,7 +70,7 @@
             }
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
+		
 		public function kill_stats($page = 1, $per_page = 25, $server = '', $order_column = 2, $order_dir = 'desc'){
 			if($this->website->db('game', $server)->check_if_table_exists('C_PlayerKiller_Info')){
 				$dir = ($order_dir == 'desc') ? 'DESC' : 'ASC';
@@ -93,9 +91,8 @@
 			return false;
 		}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		public function count_total_kill_stats($server)
-        {
+		
+		public function count_total_kill_stats($server){
             if($this->website->db('game', $server)->check_if_table_exists('C_PlayerKiller_Info')){
 				$count = $this->website->db('game', $server)->snumrows('SELECT COUNT(Killer) AS count FROM C_PlayerKiller_Info');
 				return $count;
@@ -105,15 +102,13 @@
 			}
         }
 		
-		private function check_cache($name, $identifier, $server, $time = 360)
-        {
+		private function check_cache($name, $identifier, $server, $time = 360){
             $this->cache_name = ($this->class_filter == true) ? $name . '#' . $server . '#' . $this->c_class . '#' . $this->top : $name . '#' . $server . '#' . $this->top;
             $this->website->check_cache($this->cache_name, $identifier, $time);
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function load_player_rankings($server, $config, $table_config, $top, $pageNumber = 1)
-        {
+		
+		private function load_player_rankings($server, $config, $table_config, $top, $pageNumber = 1){
             if(!isset($config['player']) || $table_config == false)
                 return false;
             $this->top = ($top != false) ? $top : $config['player']['count'];
@@ -239,9 +234,8 @@
             return $this->website->players;
         }
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		public function check_guild($name, $server)
-        {
+		
+		public function check_guild($name, $server){
             $stmt = $this->website->db('game', $server)->query('SELECT gm.G_Name, g.G_Mark FROM GuildMember AS gm INNER JOIN Guild AS g ON (gm.G_Name Collate Database_Default = g.G_Name Collate Database_Default) WHERE gm.Name = '.$this->website->db('game', $server)->escape($name).'');
 			$guild = $stmt->fetch();
             if($guild != false){
@@ -279,9 +273,8 @@
 		//	return $sql;
 		//}
 		
-		// @ioncube.dk cmsVersion('g8LU2sewjnwUpNnBTm9t85c3Xgf/0Y9V+rZWvw94O3A=', '009869451363953188238779430856374927754') -> "NewDmNIonCubeDynKeySecurityAlgo" RANDOM
-		private function check_vip($account, $server)
-        {
+		
+		private function check_vip($account, $server){
 			/*$stmt = $this->website->db('account', $server)->prepare('SELECT AccountLevel FROM MEMB_INFO WHERE memb___id = :account AND AccountExpireDate >= \''.date('Y-m-d H:i:s', time()).'\'');
             $stmt->execute([':account' => $account]);
 			if($row = $stmt->fetch()){
@@ -297,8 +290,7 @@
 			return 0;
         }
 		
-		public function load_found_chars($name, $server)
-        {
+		public function load_found_chars($name, $server){
             $status = $this->join_memb_stat(1, 'c.AccountId', ', m.IP,  m.ConnectStat', $server);
             $query = $this->website->db('game', $server)->query('SELECT c.Name, c.AccountId ' . $status[0] . ' FROM Character AS c ' . $status[1] . ' WHERE c.Name LIKE \'%' . $this->website->db('game', $server)->escape($name) . '%\'');
             if($query){
@@ -315,8 +307,7 @@
             return false;
         }
 		
-		public function load_found_guilds($name, $server)
-        {
+		public function load_found_guilds($name, $server){
             $query = $this->website->db('game', $server)->query('SELECT G_Name FROM Guild WHERE G_Name LIKE \'%' . $this->website->db('game', $server)->escape($name) . '%\'');
             if($query){
                 $i = 0;
@@ -332,8 +323,7 @@
             return false;
         }
 		
-		private function load_guild_rankings($server, $config, $top, $table_config)
-        {
+		private function load_guild_rankings($server, $config, $top, $table_config){
             if(!isset($config['guild']))
                 return false;
             $this->top = ($top != false) ? $top : $config['guild']['count'];
@@ -463,8 +453,7 @@
             return $this->website->guilds;
         }
 		
-		private function load_killers_rankings($server, $config, $table_config, $top)
-        {
+		private function load_killers_rankings($server, $config, $table_config, $top){
             if(!isset($config['killer']) || $table_config == false)
                 return false;
             $this->top = ($top != false) ? $top : $config['killer']['count'];
@@ -522,8 +511,7 @@
             return $this->website->killers;
         }
 		
-		private function load_vote_rankings($server, $config, $top)
-        {
+		private function load_vote_rankings($server, $config, $top){
             if(!isset($config['voter']))
                 return false;
             $this->top = ($top != false) ? $top : $config['voter']['count'];
@@ -555,8 +543,7 @@
             return $this->website->voters;
         }
 		
-		private function load_online_rankings($server, $config, $top)
-        {
+		private function load_online_rankings($server, $config, $top){
             if(!isset($config['online']))
                 return false;
             $this->top = ($top != false) ? $top : $config['online']['count'];
@@ -586,8 +573,7 @@
             return $this->website->online;
         }
 		
-		private function load_gens_rankings($server, $config, $top)
-        {
+		private function load_gens_rankings($server, $config, $top){
             if(!isset($config['gens']))
                 return false;
             $this->top = ($top != false) ? $top : $config['gens']['count'];
@@ -621,8 +607,7 @@
             return $this->website->gens;
         }
 		
-		private function gens_query($type, $server)
-        {
+		private function gens_query($type, $server){
             switch($type){
                 case 'scf':
                     return $this->website->db('game', $server)->query('SELECT TOP ' . (int)$this->top . ' Name, SCFGensContribution AS contribution, SCFGensFamily AS family, SCFGensRank AS rank, (SELECT COALESCE(SUM(SCFGensContribution),1) FROM Character WHERE SCFGensFamily = 1) AS scored, (SELECT COALESCE(SUM(SCFGensContribution),1) FROM Character WHERE SCFGensFamily = 2) AS scorev FROM Character WHERE SCFGensFamily = 1 OR SCFGensFamily = 2 ORDER BY SCFGensContribution DESC')->fetch_all();
@@ -660,13 +645,11 @@
             }
         }
 		
-		private function gens_family_from_id($type)
-        {
+		private function gens_family_from_id($type){
             return ($type == 1) ? 'duprian' : 'vanert';
         }
 		
-		private function gens_data($varent, $duprian)
-        {
+		private function gens_data($varent, $duprian){
 			if($varent == 0 && $duprian == 0){
 				$varent = 1;
 				$duprian = 1;
@@ -674,8 +657,7 @@
             $this->gens_data = ['vanert' => $varent, 'duprian' => $duprian, 'perc_d' => ($duprian / ($varent + $duprian)) * 100];
         }
 		
-		private function gens_rank($points, $rank)
-        {
+		private function gens_rank($points, $rank){
             if($points < 1000)
                 $gens_rank = __('Private'); 
 			else if($points >= 1000 && $points < 5000)
@@ -709,8 +691,7 @@
             return $gens_rank;
         }
 		
-		private function load_bc_rankings($server, $config, $table_config, $top)
-        {
+		private function load_bc_rankings($server, $config, $table_config, $top){
             if(!isset($config['bc']) || ($table_config == false || $table_config['bc']['table'] == ''))
                 return false;
             $this->top = ($top != false) ? $top : $config['bc']['count'];
@@ -763,8 +744,7 @@
             return $this->website->bc;
         }
 		
-		private function load_ds_rankings($server, $config, $table_config, $top)
-        {
+		private function load_ds_rankings($server, $config, $table_config, $top){
             if(!isset($config['ds']) || ($table_config == false || $table_config['ds']['table'] == ''))
                 return false;
             $this->top = ($top != false) ? $top : $config['ds']['count'];
@@ -816,8 +796,7 @@
             return $this->website->ds;
         }
 		
-		private function load_cc_rankings($server, $config, $table_config, $top)
-        {
+		private function load_cc_rankings($server, $config, $table_config, $top){
 			
             if(!isset($config['cc']) || ($table_config == false || $table_config['cc']['table'] == ''))
                 return false;
@@ -872,8 +851,7 @@
             return $this->website->cc;
         }
 		
-		private function load_cs_rankings($server, $config, $table_config, $top)
-        {
+		private function load_cs_rankings($server, $config, $table_config, $top){
             if(!isset($config['cs']) || ($table_config == false || $table_config['cs']['table'] == ''))
                 return false;
             $this->top = ($top != false) ? $top : $config['cs']['count'];
@@ -905,8 +883,7 @@
             return $this->website->cs;
         }
 		
-		private function load_duel_rankings($server, $config, $table_config, $top)
-        {
+		private function load_duel_rankings($server, $config, $table_config, $top){
             if(!isset($config['duels']) || ($table_config == false || $table_config['duels']['table'] == ''))
                 return false;
             $this->top = ($top != false) ? $top : $config['duels']['count'];
@@ -952,8 +929,7 @@
             return $this->website->duels;
         }
 		
-		private function duel_ratio($win, $lose)
-        {
+		private function duel_ratio($win, $lose){
             for($x = $lose; $x > 1; $x--){
                 if(($win % $x) == 0 && ($lose % $x) == 0){
                     $win = $win / $x;
@@ -963,8 +939,7 @@
             return $win . ':' . $lose;
         }
 		
-		public function load_online_players($config, $table_config, $server)
-        {
+		public function load_online_players($config, $table_config, $server){
             if($table_config != false){
                 $accountDb = ($this->website->is_multiple_accounts() == true) ? $this->website->get_db_from_server($server, true) : $this->website->get_default_account_database();
                 $res = $this->join_resets($config['display_resets'], $table_config);
@@ -1007,13 +982,11 @@
             return false;
         }
 		
-		private function online_time($memb___id, $server)
-        {
+		private function online_time($memb___id, $server){
             return $this->website->db('web')->query('SELECT SUM(TotalTime) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = '.$this->website->db('web')->escape($memb___id).' ' . $this->website->server_code($this->website->get_servercode($server)) . '')->fetch();
         }
 		
-		private function join_resets($status, $table_config, $bound = 'a.GameIDC')
-        {
+		private function join_resets($status, $table_config, $bound = 'a.GameIDC'){
             $sql = ['', ''];
             if($status == 1){
                 if($table_config && isset($table_config['resets']) && (isset($table_config['resets']['column']) && $table_config['resets']['column'] != '')){
@@ -1023,8 +996,7 @@
             return $sql;
         }
 
-		private function join_gresets($status, $table_config, $bound = 'a.GameIDC')
-        {
+		private function join_gresets($status, $table_config, $bound = 'a.GameIDC'){
             $sql = ['', ''];
             if($status == 1){
                 if($table_config && isset($table_config['grand_resets']) && (isset($table_config['grand_resets']['column']) && $table_config['grand_resets']['column'] != '')){
@@ -1034,13 +1006,11 @@
             return $sql;
         }
 		
-		private function join_account_character($bound = 'a.GameIDC')
-        {
+		private function join_account_character($bound = 'a.GameIDC'){
             return [', a.GameIDC', ' FULL JOIN AccountCharacter AS a ON (' . $bound . ' Collate Database_Default = a.GameIDC Collate Database_Default)'];
         }
 		
-		private function join_master_level($status, $table_config, $bound = 'a.GameIDC')
-        {
+		private function join_master_level($status, $table_config, $bound = 'a.GameIDC'){
             $sql = ['', ''];
             if($status == 1){
                 if($table_config && isset($table_config['master_level']) && (isset($table_config['master_level']['column']) && $table_config['master_level']['column'] != '')){
@@ -1050,8 +1020,7 @@
             return $sql;
         }
 		
-		private function join_memb_stat($status, $bound = 'c.AccountId', $columns = ', m.IP,  m.ConnectStat', $server = '', $joinType = 'FULL JOIN')
-        {
+		private function join_memb_stat($status, $bound = 'c.AccountId', $columns = ', m.IP,  m.ConnectStat', $server = '', $joinType = 'FULL JOIN'){
             $sql = ['', ''];
             if($status == 1){
                 $accountDb = ($this->website->is_multiple_accounts() == true) ? $this->website->get_db_from_server($server, true) : $this->website->get_default_account_database();
@@ -1060,8 +1029,7 @@
             return $sql;
         }
 		
-		private function create_order($data = [])
-        {
+		private function create_order($data = []){
             $this->order = 'ORDER BY ';
             if(!empty($data)){
                 foreach($data AS $order){
@@ -1073,21 +1041,18 @@
             $this->order = substr_replace($this->order, '', -1);
         }
 		
-		private function include_gms($status, $bound = 'c.Ctlcode')
-        {
+		private function include_gms($status, $bound = 'c.Ctlcode'){
             return ($status == 0) ? $this->exclude_list('8,16,32', $bound, false) : '';
         }
 		
-		private function exclude_list($list, $bound = 'c.Name', $quote = true, $stmt = 'NOT IN')
-        {
+		private function exclude_list($list, $bound = 'c.Name', $quote = true, $stmt = 'NOT IN'){
             $data = implode(',', array_map(function($value) use ($quote){
                 return ($quote) ? "'" . $this->website->db('web')->escape($value) . "'" : $this->website->db('web')->escape($value);
             }, explode(',', $list)));
             return ($list != '') ? ' AND ' . $bound . ' ' . $stmt . ' (' . $data . ')' : '';
         }
 
-        public function load_gm_list($server)
-        {
+        public function load_gm_list($server){
             $query = $this->website->db('web')->query('SELECT character, contact FROM DmN_Gm_List WHERE server = '.$this->website->db('web')->escape($server).'');
             if($query){
                 while($row = $query->fetch()){
@@ -1098,8 +1063,7 @@
             return false;
         }
 
-        public function load_ban_list($type, $server)
-        {
+        public function load_ban_list($type, $server){
             $query = $this->website->db('web')->query('SELECT name, time, is_permanent, reason FROM DmN_Ban_List WHERE type = ' . $this->get_ban_type($type) . ' AND server = '.$this->website->db('web')->escape($server).' ORDER BY time ASC, is_permanent ASC');
             if($query){
                 while($row = $query->fetch()){
@@ -1110,8 +1074,7 @@
             return false;
         }
 		
-		private function get_ban_type($type)
-        {
+		private function get_ban_type($type){
             switch($type){
                 default:
                 case 'chars':
@@ -1123,14 +1086,12 @@
             }
         }
 
-        public function class_filter($class)
-        {
+        public function class_filter($class){
             $this->class_filter = true;
             $this->c_class = $class;
         }
 
-        private function gen_rank_by_class($class, $bound = 'c.Class')
-        {
+        private function gen_rank_by_class($class, $bound = 'c.Class'){
             if($class != ''){
                 switch($class){
                     case 'dk':

@@ -7,8 +7,7 @@
         private $name = 'Unknown';
         private $id = -1;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->load->lib('serverfile');
             $this->npc_list = $this->serverfile->monster_list()->get('mlist');
         }
@@ -17,8 +16,7 @@
 			return $this->npc_list;
 		}
 
-        public function name_by_id($id)
-        {
+        public function name_by_id($id){
             foreach($this->npc_list AS $key => $npc){
                 if($key == (int)$id){
 					$this->name = $npc['name'];
@@ -28,8 +26,7 @@
             return $this->name;
         }
 
-        public function id_by_name($name)
-        {
+        public function id_by_name($name){
             foreach($this->npc_list AS $key => $npc){
                 if($npc['name'] === $name){
 					$this->id = $key;

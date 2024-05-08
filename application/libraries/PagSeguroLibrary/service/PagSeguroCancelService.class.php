@@ -36,8 +36,7 @@
          * @param $transactionCode
          * @return string
          */
-        private static function buildCancelURL($connectionData, $transactionCode)
-        {
+        private static function buildCancelURL($connectionData, $transactionCode){
             return $connectionData->getServiceUrl() . '?' . $connectionData->getCredentialsUrlQuery() . "&transactionCode=" . $transactionCode;
         }
 
@@ -47,8 +46,7 @@
          * @throws Exception
          * @throws PagSeguroServiceException
          */
-        public static function createRequest(PagSeguroCredentials $credentials, $transactionCode)
-        {
+        public static function createRequest(PagSeguroCredentials $credentials, $transactionCode){
             LogPagSeguro::info("PagSeguroCancelService.Register(" . $transactionCode . ") - begin");
             $connectionData = new PagSeguroConnectionData($credentials, self::SERVICE_NAME);
             try{

@@ -54,8 +54,7 @@
          * @param AccessToken|string|null $accessToken
          * @param string|null $graphVersion
          */
-        public function __construct(FacebookApp $app = null, array $requests = [], $accessToken = null, $graphVersion = null)
-        {
+        public function __construct(FacebookApp $app = null, array $requests = [], $accessToken = null, $graphVersion = null){
             parent::__construct($app, $accessToken, 'POST', '', [], null, $graphVersion);
             $this->add($requests);
         }
@@ -70,8 +69,7 @@
          *
          * @throws \InvalidArgumentException
          */
-        public function add($request, $name = null)
-        {
+        public function add($request, $name = null){
             if(is_array($request)){
                 foreach($request as $key => $req){
                     $this->add($req, $key);
@@ -99,8 +97,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function addFallbackDefaults(FacebookRequest $request)
-        {
+        public function addFallbackDefaults(FacebookRequest $request){
             if(!$request->getApp()){
                 $app = $this->getApp();
                 if(!$app){
@@ -126,8 +123,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function extractFileAttachments(FacebookRequest $request)
-        {
+        public function extractFileAttachments(FacebookRequest $request){
             if(!$request->containsFileUploads()){
                 return null;
             }
@@ -148,8 +144,7 @@
          *
          * @return array
          */
-        public function getRequests()
-        {
+        public function getRequests(){
             return $this->requests;
         }
 
@@ -158,8 +153,7 @@
          *
          * @return string
          */
-        public function prepareRequestsForBatch()
-        {
+        public function prepareRequestsForBatch(){
             $this->validateBatchRequestCount();
             $params = ['batch' => $this->convertRequestsToJson(), 'include_headers' => true,];
             $this->setParams($params);
@@ -170,8 +164,7 @@
          *
          * @return string
          */
-        public function convertRequestsToJson()
-        {
+        public function convertRequestsToJson(){
             $requests = [];
             foreach($this->requests as $request){
                 $attachedFiles = isset($request['attached_files']) ? $request['attached_files'] : null;
@@ -185,8 +178,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function validateBatchRequestCount()
-        {
+        public function validateBatchRequestCount(){
             $batchCount = count($this->requests);
             if($batchCount === 0){
                 throw new FacebookSDKException('There are no batch requests to send.');
@@ -205,8 +197,7 @@
          *
          * @return array
          */
-        public function requestEntityToBatchArray(FacebookRequest $request, $requestName = null, $attachedFiles = null)
-        {
+        public function requestEntityToBatchArray(FacebookRequest $request, $requestName = null, $attachedFiles = null){
             $compiledHeaders = [];
             $headers = $request->getHeaders();
             foreach($headers as $name => $value){
@@ -236,40 +227,35 @@
          *
          * @return ArrayIterator
          */
-        public function getIterator()
-        {
+        public function getIterator(){
             return new ArrayIterator($this->requests);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetSet($offset, $value)
-        {
+        public function offsetSet($offset, $value){
             $this->add($value, $offset);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetExists($offset)
-        {
+        public function offsetExists($offset){
             return isset($this->requests[$offset]);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetUnset($offset)
-        {
+        public function offsetUnset($offset){
             unset($this->requests[$offset]);
         }
 
         /**
          * @inheritdoc
          */
-        public function offsetGet($offset)
-        {
+        public function offsetGet($offset){
             return isset($this->requests[$offset]) ? $this->requests[$offset] : null;
         }
     }

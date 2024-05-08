@@ -40,8 +40,7 @@
          * @param null|array $permissions
          * @throws string Exception
          */
-        public function __construct($permissions = null)
-        {
+        public function __construct($permissions = null){
             if(isset($permissions)){
                 $this->permissions = $permissions;
             }
@@ -50,16 +49,14 @@
         /***
          * @return array of permissions
          */
-        public function getPermissions()
-        {
+        public function getPermissions(){
             return $this->permissions;
         }
 
         /***
          * @param array $permissions
          */
-        public function setPermissions($permissions)
-        {
+        public function setPermissions($permissions){
             if(isset($permissions)){
                 $this->permissions = $permissions;
             }

@@ -61,8 +61,7 @@
          * @param string|null $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
          * @param string|null $subclassName The subclass of the child GraphNode's.
          */
-        public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
-        {
+        public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null){
             $this->request = $request;
             $this->metaData = $metaData;
             $this->parentEdgeEndpoint = $parentEdgeEndpoint;
@@ -75,8 +74,7 @@
          *
          * @return string|null
          */
-        public function getParentGraphEdge()
-        {
+        public function getParentGraphEdge(){
             return $this->parentEdgeEndpoint;
         }
 
@@ -85,8 +83,7 @@
          *
          * @return string|null
          */
-        public function getSubClassName()
-        {
+        public function getSubClassName(){
             return $this->subclassName;
         }
 
@@ -95,8 +92,7 @@
          *
          * @return array
          */
-        public function getMetaData()
-        {
+        public function getMetaData(){
             return $this->metaData;
         }
 
@@ -105,8 +101,7 @@
          *
          * @return string|null
          */
-        public function getNextCursor()
-        {
+        public function getNextCursor(){
             return $this->getCursor('after');
         }
 
@@ -115,8 +110,7 @@
          *
          * @return string|null
          */
-        public function getPreviousCursor()
-        {
+        public function getPreviousCursor(){
             return $this->getCursor('before');
         }
 
@@ -127,8 +121,7 @@
          *
          * @return string|null
          */
-        public function getCursor($direction)
-        {
+        public function getCursor($direction){
             if(isset($this->metaData['paging']['cursors'][$direction])){
                 return $this->metaData['paging']['cursors'][$direction];
             }
@@ -144,8 +137,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getPaginationUrl($direction)
-        {
+        public function getPaginationUrl($direction){
             $this->validateForPagination();
             // Do we have a paging URL?
             if(isset($this->metaData['paging'][$direction])){
@@ -178,8 +170,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function validateForPagination()
-        {
+        public function validateForPagination(){
             if($this->request->getMethod() !== 'GET'){
                 throw new FacebookSDKException('You can only paginate on a GET request.', 720);
             }
@@ -194,8 +185,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getPaginationRequest($direction)
-        {
+        public function getPaginationRequest($direction){
             $pageUrl = $this->getPaginationUrl($direction);
             if(!$pageUrl){
                 return null;
@@ -212,8 +202,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getNextPageRequest()
-        {
+        public function getNextPageRequest(){
             return $this->getPaginationRequest('next');
         }
 
@@ -224,8 +213,7 @@
          *
          * @throws FacebookSDKException
          */
-        public function getPreviousPageRequest()
-        {
+        public function getPreviousPageRequest(){
             return $this->getPaginationRequest('previous');
         }
 
@@ -236,8 +224,7 @@
          *
          * @return int|null
          */
-        public function getTotalCount()
-        {
+        public function getTotalCount(){
             if(isset($this->metaData['summary']['total_count'])){
                 return $this->metaData['summary']['total_count'];
             }
