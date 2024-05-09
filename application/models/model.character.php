@@ -976,7 +976,7 @@
         }
 
         private function get_master_level_igcn($user, $server){
-            $stmt = $$this->website->db('game', $server)->prepare('SELECT mLevel FROM Character WHERE AccountId = :user AND Name = :char');
+            $stmt = $this->website->db('game', $server)->prepare('SELECT mLevel FROM Character WHERE AccountId = :user AND Name = :char');
             $stmt->execute([':user' => $user, ':char' => $this->vars['character']]);
             $points = $stmt->fetch();
             if($points != false){
