@@ -162,7 +162,7 @@
                     }
                 } else{
                     $code = $this->Maccount->create_reminder_entry_for_name($data['memb___id']);
-                    if($this->Maccount->send_lostpassword_email_for_name($data['memb___id'], $data['mail_addr'], $code, $this->session->userdata(['lost_password' => 'server'])$data['sno__numb'])){
+                    if($this->Maccount->send_lostpassword_email_for_name($data['memb___id'], $data['mail_addr'], $code, $this->session->userdata(['lost_password' => 'server']), $data['sno__numb'])){
 						$this->Maccount->add_account_log('Used lost password.', 0, $this->session->userdata(['lost_password' => 'user']), $this->session->userdata(['lost_password' => 'server']));
                         $this->vars['success'] = __('An eMail was sent to your eMail-adress containing information on how to retrieve a new password.');
                     } else{
