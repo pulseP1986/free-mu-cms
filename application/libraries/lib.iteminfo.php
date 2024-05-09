@@ -1,5 +1,5 @@
 <?php
-   // in_file();
+	in_file();
 
     class iteminfo extends library
     {
@@ -63,6 +63,7 @@
 		private $isMuun = false;
 		private $muunExpirationTime = false;
 		private $expiretime = null;
+		public $tooltip_options;
 
         public function __construct(){
             $this->load->lib('serverfile');

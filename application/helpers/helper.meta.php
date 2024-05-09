@@ -3,7 +3,7 @@
 
     class meta
     {
-        protected $request, $meta = [], $lang, $data = [];
+        protected $request, $meta = [], $lang, $data = [], $registry, $config;
 
         public function __construct(){
             $this->registry = controller::get_instance();

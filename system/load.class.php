@@ -1,7 +1,7 @@
 <?php
     in_file();
 
-    class load
+    class load extends \stdClass
     {
         private $registry;
         private $elements;

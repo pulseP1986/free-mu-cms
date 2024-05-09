@@ -2274,7 +2274,7 @@
 					}
 				}
 			}		
-            $accounts = $this->account_db->query('SELECT TOP ' . $per_page . ' m.memb_guid, m.memb___id, m.appl_days, m.dmn_country, m.activated, '.$partner.' d.viptime FROM MEMB_INFO AS m LEFT JOIN ['.WEB_DB.'].dbo.DmN_Vip_Users AS d ON(m.memb___id Collate Database_Default = d.memb___id Collate Database_Default) WHERE memb_guid NOT IN (SELECT Top ' . $this->website->db('web')->escape((int)$page) . ' memb_guid FROM MEMB_INFO ' . $condition2 . ' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . '');
+            $accounts = $this->account_db->query('SELECT TOP ' . (int)$per_page . ' m.memb_guid, m.memb___id, m.appl_days, m.dmn_country, m.activated, '.$partner.' d.viptime FROM MEMB_INFO AS m LEFT JOIN ['.WEB_DB.'].dbo.DmN_Vip_Users AS d ON(m.memb___id Collate Database_Default = d.memb___id Collate Database_Default) WHERE memb_guid NOT IN (SELECT Top ' . $this->website->db('web')->escape((int)$page) . ' memb_guid FROM MEMB_INFO ' . $condition2 . ' ORDER BY ' . $column . ' ' . $dir . ') ' . $this->sql_condition . ' ORDER BY ' . $column . ' ' . $dir . '');
             foreach($accounts->fetch_all() as $row){
                 $this->accounts[] = ['id' => $row['memb_guid'], 'memb___id' => htmlspecialchars($row['memb___id']), 'reg_date' => $row['appl_days'], 'country' => $this->website->codeToCountryName($row['dmn_country']), 'server' => $server, 'activated' => $row['activated']];
             }

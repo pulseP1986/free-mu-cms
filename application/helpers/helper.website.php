@@ -1,7 +1,7 @@
 <?php
     in_file();
 
-    class website
+    class website extends \stdClass
     {
         private $registry, $config, $load, $feeds;
         protected $servers = [], $servers_list = [];
@@ -1101,6 +1101,7 @@
 			unset($this->vars['languages']['default_localization']);
 			
 			$country_list = [];
+			
             foreach($this->vars['languages']['localizations'] AS $lang => $status){
 				if($status == 1){
 					$country_list[$lang] = $this->registry->locales->nativeByCode1($lang);

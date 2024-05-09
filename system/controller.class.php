@@ -68,7 +68,7 @@
         }
     }
 
-    class controller
+    class controller extends \stdClass
     {
         private static $_instance;
         public $translations;

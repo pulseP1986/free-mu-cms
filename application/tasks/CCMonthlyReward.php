@@ -38,7 +38,7 @@
             }
         }
 
-        private function get_ranking($server, $player_count = 1, $table_config){
+        private function get_ranking($server, $player_count, $table_config){
             if($table_config == false || $table_config['cc']['table'] == '')
                 return false;
 			unset($this->registry->game_db);

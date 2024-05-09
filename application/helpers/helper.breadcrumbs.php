@@ -4,6 +4,8 @@
     class breadcrumbs
     {
         protected $request;
+        protected $registry;
+        protected $config;
         protected $breadcrumbs = '';
 
         public function __construct($request){

@@ -18,7 +18,7 @@
     use Gettext\Translations;
     use Gettext\Generators;
 
-    class controller
+    class controller extends \stdClass
     {
         private static $_instance;
         public $translator;
