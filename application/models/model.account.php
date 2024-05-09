@@ -561,7 +561,7 @@
 						'logged_in' => true,
 						'salt' => $salt,
 						'partner' => (defined('PARTNER_SYSTEM') && PARTNER_SYSTEM == true) ? $info['dmn_partner'] : 0,
-						'is_merchant' => $this->checkMerchant($info['memb___id'], $this->vars['server'])
+						'is_merchant' => $this->checkMerchant($info['memb___id'], $server)
                     ]);
 					
 					if($this->check_user_salt($info['memb___id'])){
