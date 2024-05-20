@@ -73,7 +73,7 @@
 										$ref = $this->Mdonate->findReferral($this->Mdonate->order_details['account']);
 										if($ref != false){
 											$ref_reward = floor(($this->config->values('referral_config', 'reward_on_donation') / 100) * $this->Mdonate->order_details['credits']);
-											$this->Mdonate->reward_user($ref, $this->Mdonate->order_details['server'], $ref_reward, $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($ref, $this->Mdonate->order_details['server'])));
+											$this->Mdonate->reward_user($ref, $this->Mdonate->order_details['server'], $ref_reward, $this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Maccount->get_guid($ref, $this->Mdonate->order_details['server']));	
 											$this->Maccount->add_account_log('Friend donation bonus ' . $this->website->translate_credits($this->config->values('donation_config', [$this->Mdonate->order_details['server'], 'paypal', 'reward_type']), $this->Mdonate->order_details['server']) . '', $ref_reward, $ref, $this->Mdonate->order_details['server']);
 										}
 									}
