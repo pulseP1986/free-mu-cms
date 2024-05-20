@@ -1,5 +1,5 @@
 <?php
-    //in_file();
+    in_file();
 
     class parse_server_file extends library
     {
@@ -506,24 +506,24 @@
             $items = [];
             if($this->check_file('Item.txt')){
                 $keys = [];
-                $keys[0] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'mindmg', 'maxdmg', 'attspeed', 'dur', 'magdur', 'magpower', 'lvlreq', 'strreq', 'agireq', 'enereq', 'vitreq', 'cmdreq', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
+                $keys[0] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'mindmg', 'maxdmg', 'attspeed', 'dur', 'magdur', 'magpower', 'lvlreq', 'strreq', 'agireq', 'enereq', 'vitreq', 'cmdreq', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
                 $keys[1] = $keys[0];
                 $keys[2] = $keys[0];
                 $keys[3] = $keys[0];
                 $keys[4] = $keys[0];
                 $keys[5] = $keys[0];
-                $keys[6] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'def', 'successblock', 'dur', 'lvlreq', 'strreq', 'agireq', 'enereq', 'vitreq', 'cmdreq', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
-                $keys[7] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'def', 'magdef', 'dur', 'lvlreq', 'strreq', 'agireq', 'enereq', 'vitreq', 'cmdreq', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
+                $keys[6] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'def', 'successblock', 'dur', 'lvlreq', 'strreq', 'agireq', 'enereq', 'vitreq', 'cmdreq', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
+                $keys[7] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'def', 'magdef', 'dur', 'lvlreq', 'strreq', 'agireq', 'enereq', 'vitreq', 'cmdreq', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
                 $keys[8] = $keys[7];
                 $keys[9] = $keys[7];
                 $keys[10] = $keys[7];
                 $keys[11] = $keys[7];
-                $keys[12] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'def', 'dur', 'lvlreq', 'enereq', 'strreq', 'dexreq', 'comreq', 'buymoney', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
-                $keys[13] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvlreq', 'dur', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
+                $keys[12] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'def', 'dur', 'lvlreq', 'enereq', 'strreq', 'dexreq', 'comreq', 'buymoney', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
+                $keys[13] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvlreq', 'dur', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
                 $keys[14] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'value', 'lvldrop'];
-                $keys[15] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'lvlreq', 'enereq', 'buymoney', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
+                $keys[15] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvldrop', 'lvlreq', 'enereq', 'buymoney', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
                 if(MU_VERSION >= 11){
-					$keys[16] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvlreq', 'dur', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm'];
+					$keys[16] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'lvlreq', 'dur', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'setattribute', 'dw/sm', 'dk/bk', 'elf/me', 'mg', 'dl', 'sum', 'rf', 'gl', 'rw', 'sl', 'gc', 'km', 'lm', 'ik'];
 					$keys[19] = ['id', 'slot', 'skill', 'x', 'y', 'serial', 'option', 'drop', 'name', 'value', 'lvlreq'];
 					$keys[20] = $keys[16];
 				}
