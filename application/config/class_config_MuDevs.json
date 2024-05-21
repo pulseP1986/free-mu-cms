@@ -1,0 +1,288 @@
+{
+  "class_codes": {
+    "0": {
+      "long": "Dark Wizard",
+      "short": "DW"
+    },
+    "1": {
+      "long": "Soul Master",
+      "short": "SM"
+    },
+    "2": {
+      "long": "Grand Master",
+      "short": "GM"
+    },
+    "3": {
+      "long": "Soul Wizard",
+      "short": "SW"
+    },
+	"4": {
+      "long": "Darkness Wizard",
+      "short": "DAK"
+    },
+    "16": {
+      "long": "Dark Knight",
+      "short": "DK"
+    },
+    "17": {
+      "long": "Blade Knight",
+      "short": "BK"
+    },
+    "18": {
+      "long": "Blade Master",
+      "short": "BM"
+    },
+	"19": {
+      "long": "Dragon Knight",
+      "short": "DrK"
+    },
+    "20": {
+      "long": "Ignition Knight",
+      "short": "IGK"
+    },
+    "32": {
+      "long": "Fairy Elf",
+      "short": "FE"
+    },
+    "33": {
+      "long": "Muse Elf",
+      "short": "ME"
+    },
+    "34": {
+      "long": "High Elf",
+      "short": "HE"
+    },
+    "35": {
+      "long": "Noble Elves",
+      "short": "NE"
+    },
+    "36": {
+      "long": "Royal Elf",
+      "short": "ROE"
+    },
+    "48": {
+      "long": "Magic Gladiator",
+      "short": "MG"
+    },
+    "49": {
+      "long": "Duel Master",
+      "short": "DM"
+    },
+    "50": {
+      "long": "Duel Master",
+      "short": "DM"
+    },
+	"51": {
+      "long": "Magic Knight",
+      "short": "MK"
+    },
+	"51": {
+      "long": "Magic Knight",
+      "short": "MK"
+    },
+    "52": {
+      "long": "Duple Knight",
+      "short": "DUK"
+    },
+    "64": {
+      "long": "Dark Lord",
+      "short": "DL"
+    },
+    "65": {
+      "long": "Lord Emperor",
+      "short": "LE"
+    },
+    "66": {
+      "long": "Lord Emperor",
+      "short": "LE"
+    },
+	"67": {
+      "long": "Empire Lord",
+      "short": "EL"
+    },
+	"68": {
+      "long": "Force Empire",
+      "short": "FOE"
+    },
+    "80": {
+      "long": "Summoner",
+      "short": "SU"
+    },
+    "81": {
+      "long": "Bloody Summoner",
+      "short": "BS"
+    },
+    "82": {
+      "long": "Dimension Master",
+      "short": "DIM"
+    },
+	"83": {
+      "long": "Dimension Summoner",
+      "short": "DS"
+    },
+    "84": {
+      "long": "Endless Summoner",
+      "short": "ENS"
+    },
+    "96": {
+      "long": "Rage Fighter",
+      "short": "RF"
+    },
+    "97": {
+      "long": "Fist Master",
+      "short": "FM"
+    },
+    "98": {
+      "long": "Fist Master",
+      "short": "FM"
+    },
+	"99": {
+      "long": "Fist Blazer",
+      "short": "FB"
+    },
+    "100": {
+      "long": "Bloody Fighter",
+      "short": "BLF"
+    },
+    "112": {
+      "long": "Grow Lancer",
+      "short": "GL"
+    },
+    "113": {
+      "long": "Miracle Lancer",
+      "short": "ML"
+    },
+	"114": {
+      "long": "Miracle Lancer",
+      "short": "ML"
+    },
+	"115": {
+      "long": "Shining Lancer",
+      "short": "SL"
+    },
+    "116": {
+      "long": "Arcane Lancer",
+      "short": "ARL"
+    },
+	"128": {
+      "long": "Rune Wizard",
+      "short": "RW"
+    },
+	"129": {
+      "long": "Rune Spell Master",
+      "short": "RSM"
+    },
+	"130": {
+      "long": "Grand Rune Master",
+      "short": "GRM"
+    },
+	"131": {
+      "long": "Majestic Rune Wizard",
+      "short": "RW4"
+    },
+    "132": {
+      "long": "Infinity Rune Wizard",
+      "short": "IRW"
+    },
+	"144": {
+      "long": "Slayer",
+      "short": "SLR"
+    },
+	"145": {
+      "long": "Royal Slayer",
+      "short": "RSL"
+    },
+	"146": {
+      "long": "Master Slayer",
+      "short": "MSL"
+    },
+	"147": {
+      "long": "Slaughterer",
+      "short": "SLT"
+    },
+    "148": {
+      "long": "Rogue Slayer",
+      "short": "ROS"
+    },
+	"160": {
+      "long": "Gun Crusher",
+      "short": "GC"
+    },
+	"161": {
+      "long": "Gun Breaker",
+      "short": "GB"
+    },
+	"162": {
+      "long": "Master Gun Breaker",
+      "short": "MGB"
+    },
+	"163": {
+      "long": "Heist Gun Crusher",
+      "short": "HGC"
+    },
+    "164": {
+      "long": "Magnus Gun Crusher",
+      "short": "MGC"
+    },
+	"176": {
+      "long": "White Wizard",
+      "short": "WM"
+    },
+	"177": {
+      "long": "Light Master",
+      "short": "LM"
+    },
+	"178": {
+      "long": "Shine Wizard",
+      "short": "SHW"
+    },
+	"179": {
+      "long": "Luminous Wizard",
+      "short": "LW"
+    },
+    "180": {
+      "long": "Glory Wizard",
+      "short": "GLW"
+	},
+	"192": {
+      "long": "Lemuria Mage",
+      "short": "LR"
+    },
+	"193": {
+      "long": "War Mage",
+      "short": "WAM"
+    },
+	"194": {
+      "long": "Arch Mage",
+      "short": "AM"
+    },
+	"195": {
+      "long": "Mystic Mage",
+      "short": "MM"
+    },
+    "196": {
+      "long": "Battle Mage",
+      "short": "BAM"  
+    },
+    "208": {
+      "long": "Illusion Knight",
+      "short": "IK"
+    },
+    "209": {
+      "long": "Mirage Knight",
+      "short": "MIK"
+    },
+    "210": {
+      "long": "Illusion Master",
+      "short": "IM"
+    },
+    "211": {
+      "long": "Mystic Knight",
+      "short": "MYK"
+    },
+    "212": {
+      "long": "Phantom Pain Knight",
+      "short": "PPK"
+    }
+  }
+}
