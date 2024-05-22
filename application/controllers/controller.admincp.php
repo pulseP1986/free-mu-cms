@@ -7180,8 +7180,7 @@
             }
         }
         
-        public function game_server_list_manager()
-        {
+        public function game_server_list_manager(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
                 $this->vars['server_list'] = $this->website->server_list();
@@ -7243,8 +7242,7 @@
             }
         }
         
-        public function save_game_server_order()
-        {
+        public function save_game_server_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->Madmin->reorder_server_in_config('gameserver_config', $_POST['order']);
 				json(['success' => 'GameServer order changed.']);
@@ -7277,8 +7275,7 @@
             }
         }
         
-        public function change_game_server_status()
-        {
+        public function change_game_server_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->vars['game_server_list'] = $this->config->values('gameserver_config');
                 if(array_key_exists($_POST['id'], $this->vars['game_server_list'])){
@@ -7336,8 +7333,7 @@
             }
         }
         
-        public function delete_game_server()
-        {
+        public function delete_game_server(){
             if($this->session->userdata(['admin' => 'is_admin'])){
 				$this->vars['game_server_list'] = $this->config->values('gameserver_config');
                 if(array_key_exists($_POST['id'], $this->vars['game_server_list'])){
@@ -7761,8 +7757,7 @@
             }
         }
         
-        public function edit_game_server($id = '')
-        {
+        public function edit_game_server($id = ''){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 $this->load_header();
 				

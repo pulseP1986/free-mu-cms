@@ -171,7 +171,7 @@
                                                 $select_server = 0;
                                                 $status = $this->website->check_server_status();
                                                 if(!empty($status)){
-                                                    foreach($this->website->check_server_status() as $key => $value){
+                                                    foreach($status as $key => $value){
                                                         if($value['visible'] == 1){
                                                             $i++;
                                                             if($this->session->userdata(['user' => 'logged_in'])):
