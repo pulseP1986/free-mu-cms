@@ -1097,7 +1097,13 @@
         public function save_security_settings(){
             if($this->session->userdata(['admin' => 'is_admin'])){
                 if(count($_POST) > 0){
-                    $this->vars['security_config'] = ['captcha_type' => (int)$_POST['captcha_type'], 'recaptcha_pub_key' => $_POST['recaptcha_pub_key'], 'recaptcha_priv_key' => $_POST['recaptcha_priv_key'], 'captcha_on_login' => $_POST['captcha_on_login']];
+                    $this->vars['security_config'] = [
+                        'captcha_type' => (int)$_POST['captcha_type'], 
+                        'recaptcha_pub_key' => $_POST['recaptcha_pub_key'], 
+                        'recaptcha_priv_key' => $_POST['recaptcha_priv_key'], 
+                        'captcha_on_login' => $_POST['captcha_on_login'],
+                        '2fa' => $_POST['2fa']
+                    ];
                     if(!$this->Madmin->save_config_data($this->vars['security_config'], 'security_config', false)){
                         json(['error' => 'Unable to save configuration.']);
                     } else{

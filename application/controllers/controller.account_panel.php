@@ -928,58 +928,6 @@
                 $this->login();
             }
         }
-
-		public function two_factor_auth(){
-			$this->load->model('account');
-			$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_SESSION['tfa_temp_user']);
-			
-			if($this->vars['is_auth_enabled'] != false){
-				$tfa = new \RobThree\Auth\TwoFactorAuth;
-				$_SESSION['2fa_secret'] = $this->vars['is_auth_enabled']['secret'];
-				
-				if(isset($_POST['check_2fa'])){
-					if($tfa->verifyCode($_SESSION['2fa_secret'], $_POST['code'])){
-						$this->Maccount->username = $_SESSION['tfa_temp_user'];
-						$this->Maccount->password = $_SESSION['tfa_temp_password'];
-						$this->Maccount->server = $_SESSION['tfa_temp_server'];
-						$this->Maccount->servers = $_SESSION['tfa_temp_servers'];
-						$login = $this->Maccount->login_user($_SESSION['tfa_temp_server']);
-						$this->Maccount->log_user_ip();
-						$this->Maccount->clear_login_attemts();
-						$this->change_user_vip_session($_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_server']);
-						setcookie("DmN_Current_User_Server_" . $_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_server'], strtotime('+1 days', time()), "/");	
-						
-						unset($_SESSION['2fa_secret'], $_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_password'], $_SESSION['tfa_temp_server']);
-						header('Location: '.$this->config->base_url.'account-panel');
-					}
-					else{
-						$this->vars['tfa_error'] = __('The entered code is incorrect! Please retry.');
-					}
-				}
-			}
-			
-			$this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.two_factor_auth', $this->vars);
-		}
-
-		public function reset_two_factor_auth(){
-			$this->load->model('account');
-			$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_SESSION['tfa_temp_user']);
-			
-			if($this->vars['is_auth_enabled'] != false){
-				if(isset($_POST['check_backup_code'])){
-					if($this->vars['is_auth_enabled']['backup_code'] == $_POST['code']){
-						$this->Maccount->remove2FA($_SESSION['tfa_temp_user']);
-						unset($_SESSION['2fa_secret'], $_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_password'], $_SESSION['tfa_temp_server']);
-						$this->vars['tfa_success'] = __('Code has been reset, you can now login.');
-					}
-					else{
-						$this->vars['tfa_error'] = __('The entered code is incorrect! Please retry.');
-					}
-				}
-			}
-			
-			$this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.reset_two_factor_auth', $this->vars);
-		}
 		
 		private function change_user_vip_session($user, $server){
 			$this->vars['config'] = $this->config->values('vip_config');
@@ -1005,6 +953,7 @@
 		public function settings(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['config'] = $this->config->values('registration_config');
+				$this->vars['security_config'] = $this->config->values('security_config');
 				
 				$this->load->model('account');
 				
@@ -1027,7 +976,7 @@
                     }
                 }
 				
-				if(defined('GOOGLE_2FA') && GOOGLE_2FA == true){
+				if(isset($this->vars['security_config']['2fa']) && $this->vars['security_config']['2fa'] == 1){
 					$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($this->session->userdata(['user' => 'username']));
 					
 					if($this->vars['is_auth_enabled'] == false){
@@ -1080,6 +1029,60 @@
                 $this->login();
             }
         }
+		
+		public function two_factor_auth(){
+			$this->load->model('account');
+			$this->vars['security_config'] = $this->config->values('security_config');
+			$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_SESSION['tfa_temp_user']);
+			
+			if($this->vars['is_auth_enabled'] != false){
+				$tfa = new \RobThree\Auth\TwoFactorAuth;
+				$_SESSION['2fa_secret'] = $this->vars['is_auth_enabled']['secret'];
+				
+				if(isset($_POST['check_2fa'])){
+					if($tfa->verifyCode($_SESSION['2fa_secret'], $_POST['code'])){
+						$this->Maccount->username = $_SESSION['tfa_temp_user'];
+						$this->Maccount->password = $_SESSION['tfa_temp_password'];
+						$this->Maccount->server = $_SESSION['tfa_temp_server'];
+						$this->Maccount->servers = $_SESSION['tfa_temp_servers'];
+						$login = $this->Maccount->login_user( $_SESSION['tfa_temp_server']);
+						$this->Maccount->log_user_ip();
+						$this->Maccount->clear_login_attemts();
+						$this->change_user_vip_session($_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_server']);
+						setcookie("DmN_Current_User_Server_" . $_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_server'], strtotime('+1 days', time()), "/");	
+						
+						unset($_SESSION['2fa_secret'], $_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_password'], $_SESSION['tfa_temp_server']);
+						header('Location: '.$this->config->base_url.'account-panel');
+					}
+					else{
+						$this->vars['tfa_error'] = __('The entered code is incorrect! Please retry.');
+					}
+				}
+			}
+			
+			$this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.two_factor_auth', $this->vars);
+		}
+		
+		public function reset_two_factor_auth(){
+			$this->load->model('account');
+			$this->vars['security_config'] = $this->config->values('security_config');
+			$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_SESSION['tfa_temp_user']);
+			
+			if($this->vars['is_auth_enabled'] != false){
+				if(isset($_POST['check_backup_code'])){
+					if($this->vars['is_auth_enabled']['backup_code'] == $_POST['code']){
+						$this->Maccount->remove2FA($_SESSION['tfa_temp_user']);
+						unset($_SESSION['2fa_secret'], $_SESSION['tfa_temp_user'], $_SESSION['tfa_temp_password'], $_SESSION['tfa_temp_server']);
+						$this->vars['tfa_success'] = __('Code has been reset, you can now login.');
+					}
+					else{
+						$this->vars['tfa_error'] = __('The entered code is incorrect! Please retry.');
+					}
+				}
+			}
+			
+			$this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.reset_two_factor_auth', $this->vars);
+		}
 
 		public function email_confirm($code){
             if($this->session->userdata(['user' => 'logged_in'])){

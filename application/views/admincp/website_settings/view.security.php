@@ -78,6 +78,22 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label class="control-label" for="2fa">Two Factor Auth</label>
+
+                            <div class="controls">
+                                <select id="2fa" name="2fa">
+                                    <option value="0" <?php if(isset($security_config['2fa']) && $security_config['2fa'] == 0){
+                                        echo 'selected="selected"';
+                                    } ?>>No
+                                    </option>
+                                    <option value="1" <?php if(isset($security_config['2fa']) && $security_config['2fa'] == 1){
+                                        echo 'selected="selected"';
+                                    } ?>>Yes
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary" name="edit_security_settings"
                                     id="edit_security_settings">Save changes

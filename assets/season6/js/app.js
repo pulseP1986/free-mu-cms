@@ -427,17 +427,22 @@ var App = {
 						App.notice(App.lc.translate('Error').fetch(), 'error', data.error, stycky);
 					}
 				}
-				if (data.success) {
-					App.notice(App.lc.translate('Success').fetch(), 'success', data.success, 1);
-					setTimeout(function () {
-						if(window.location.href.indexOf("return") > -1){
-							var $return = location.search.split('return=')[1];
-							location.href = DmNConfig.base_url + $return;
-						}
-						else{
-							location.href = DmNConfig.base_url + 'account-panel';
-						}
-					}, 2000);
+				if(data.tfa){
+					location.href = DmNConfig.base_url + 'account-panel/two-factor-auth';
+				}
+				else{
+					if (data.success) {
+						App.notice(App.lc.translate('Success').fetch(), 'success', data.success, 1);
+						setTimeout(function () {
+							if(window.location.href.indexOf("return") > -1){
+								var $return = location.search.split('return=')[1];
+								location.href = DmNConfig.base_url + $return;
+							}
+							else{
+								location.href = DmNConfig.base_url + 'account-panel';
+							}
+						}, 2000);
+					}
 				}
 			}
 		});

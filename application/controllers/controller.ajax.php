@@ -108,7 +108,7 @@
 								$this->session->unset_session_key('user');
 								throw new Exception(sprintf(__('Please activate your account first. <a id="repeat_activation" href="%s">Did not receive activation email?</a>'), $this->config->base_url . 'registration/resend-activation'));
 							} else{
-								if(defined('GOOGLE_2FA') && GOOGLE_2FA == true){
+								if(isset($this->vars['security_config']['2fa']) && $this->vars['security_config']['2fa'] == 1){
 									$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($_POST['username']);
 									if($this->vars['is_auth_enabled'] != false && !isset($_SESSION['tfa_complete'])){
 										$this->session->unset_session_key('user');
