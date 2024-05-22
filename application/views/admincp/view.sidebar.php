@@ -71,6 +71,7 @@
             <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/character-manager"><i class="icon-pencil"></i><span class="hidden-tablet"> Character Manager</span></a></li>
             <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/search-ip"><i class="icon-pencil"></i><span class="hidden-tablet"> Search IP</span></a></li>
             <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/server-list-manager"><i class="icon-pencil"></i><span class="hidden-tablet"> Server List Manager</span></a></li>
+			<li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/game-server-list-manager"><i class="icon-pencil"></i><span class="hidden-tablet"> Game Server List Manager</span></a></li>
             <li class="nav-header hidden-tablet">Bulk Mailer</li>
             <li><a class="ajax-link" href="<?php echo $this->config->base_url . ACPURL; ?>/bulk-mail"><i class="icon-star"></i><span class="hidden-tablet"> Bulk Mail</span></a></li>
             <li class="nav-header hidden-tablet">Shop Editor</li>
