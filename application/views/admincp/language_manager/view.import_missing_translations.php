@@ -1,8 +1,8 @@
 <div id="content" class="span10">
     <div>
         <ul class="breadcrumb">
-            <li><a href="<?php echo $this->config->base_url; ?>admincp">Home</a> <span class="divider">/</span></li>
-            <li><a href="<?php echo $this->config->base_url; ?>admincp/languages">Languages</a></li>
+            <li><a href="<?php echo $this->config->base_url . ACPURL; ?>">Home</a> <span class="divider">/</span></li>
+            <li><a href="<?php echo $this->config->base_url . ACPURL; ?>/languages">Languages</a></li>
         </ul>
     </div>
     <div class="row-fluid">

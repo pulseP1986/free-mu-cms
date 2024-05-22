@@ -36,6 +36,9 @@
 								}
 								echo '<tr id="language_' . $key . '"> <td>' . $this->locales->nativeByCode1($key) . '['.$key.'] '.$default.' '.$st.'</td><td>';
 								echo '&nbsp;<a class="btn btn-info" href="' . $this->config->base_url . ACPURL . '/translate/' . $key . '"><i class="icon-edit icon-white"></i> Translate</a>';
+								if($key != 'en'){
+									echo '&nbsp;<a class="btn btn-info" href="' . $this->config->base_url . ACPURL . '/import-missing-translations/' . $key . '"><i class="icon-edit icon-white"></i> Import Missing strings</a>';
+								}
 								echo '&nbsp;<a class="btn btn-primary" href="' . $this->config->base_url . ACPURL . '/export-language/' . $key . '"><i class="icon-edit icon-white"></i> Export</a>';
 								echo '&nbsp;<a class="btn btn-warning" href="#" onclick="App.deleteLanguage(\'' . $key . '\');"><i class="icon-trash icon-white"></i> Delete</a>';
 								if($status == 1){
