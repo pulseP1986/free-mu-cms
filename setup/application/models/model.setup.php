@@ -354,10 +354,6 @@
             return $this->game_db->query('SELECT character_maximum_length AS length FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = \'Character\' AND column_name = \'Inventory\'')->fetch();
         }
 
-        public function get_skill_size(){
-            return $this->game_db->query('SELECT character_maximum_length AS length FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = \'Character\' AND column_name = \'MagicList\'')->fetch();
-        }
-
         public function mu_versions(){
             return [0 => 'Below Season 1', 1 => 'Season 1', 2 => 'Season 2 and higher', 3 => 'Ex700 and higher', 4 => 'Season 8 and higher', 5 => 'Season 10 and higher', 6 => 'Season 11 and higher', 7 => 'Season 12 and higher', 8 => 'Season 13 and higher', 9 => 'Season 14 and higher', 10 => 'Season 15', 11 => 'Season 16 and higher', 12 => 'Season 17 and higher', 13 => 'Season 18 and higher', 14 => 'Season 19 and higher'];
         }

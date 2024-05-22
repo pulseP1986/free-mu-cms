@@ -51,48 +51,56 @@
             return $this->server;
         }
 
-		public function check_server_status($cache_time = 120){
-            $serverlist = $this->server_list();
+		public function check_server_status($cache_time = 120)
+        {
+            $gsList = $this->config->values('gameserver_config');
+			$serverlist = $this->server_list();
 			$this->check_cache('servers_status#'.$this->config->language(), 'servers', $cache_time);
 			
             if(!$this->cached){
-				$this->servers = [];
-				foreach($serverlist as $key => $servers){
-					if($servers['visible'] == 1){
-						$check = @fsockopen($servers['gs_ip'], $servers['gs_port'], $errno, $errmsg, 1.5);
-						if(!$check){
-							$this->servers[] = [
-								'server' => $key, 
-								'status' => __('Offline') . ': ', 
-								'status_with_style' => '<span class="offline">' . __('Offline') . '</span>', 
-								'image' => 'off', 
-								'load' => 0, 
-								'players' => '0', 
-								'title' => $servers['title'], 
-								'version' => $servers['version'], 
-								'exp' => $servers['exp'], 
-								'drop' => $servers['drop'], 
-								'visible' => $servers['visible'],
-								'max_players' => $servers['max_players']
-							];
-						} else{
-							@fclose($check);
-							$server_load = $this->db($servers['db_acc'])->cached_query('online_count_' . $key, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 ' . $this->server_code($servers['gs_list']) . '', [], $cache_time);
-							$percentage = floor(100 * $server_load[0]['count'] / (int)$servers['max_players']);
-							$this->servers[] = [
-								'server' => $key, 
-								'status' => __('Online') . ': ', 
-								'status_with_style' => '<span class="online">' . __('Online') . '</span>', 
-								'image' => 'on', 
-								'load' => $percentage, 
-								'players' => $server_load[0]['count'], 
-								'title' => $servers['title'], 
-								'version' => $servers['version'], 
-								'exp' => $servers['exp'], 
-								'drop' => $servers['drop'], 
-								'visible' => $servers['visible'],
-								'max_players' => $servers['max_players']
-							];
+				if(!empty($gsList)){
+					$this->servers = [];
+					foreach($gsList as $key => $server){
+						if($server['visible'] == 1){
+							$check = @fsockopen($server['ip'], $server['port'], $errno, $errmsg, 0.3);
+							if(!$check){
+								
+								$this->servers[] = [
+									'server' => $key, 
+									'bound_to' => $server['bound_to'],
+									'status' => __('Offline') . ': ', 
+									'status_with_style' => '<span class="offline">' . __('Offline') . '</span>', 
+									'image' => 'off', 
+									'load' => 0, 
+									'players' => '0', 
+									'title' => $server['name'], 
+									'version' => $serverlist[$server['bound_to']]['version'], 
+									'exp' => $serverlist[$server['bound_to']]['exp'], 
+									'drop' => $serverlist[$server['bound_to']]['drop'], 
+									'visible' => $server['visible'],
+									'max_players' => $server['max_online']
+								];
+							} 
+							else{
+								@fclose($check);
+								$server_load = $this->db($serverlist[$server['bound_to']]['db_acc'])->cached_query('online_count_' . $key, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1 ' . $this->server_code($server['gs_list']) . '', [], $cache_time);
+								$percentage = floor(100 * $server_load[0]['count'] / (int)$server['max_online']);
+								$this->servers[] = [
+									'server' => $key, 
+									'bound_to' => $server['bound_to'],
+									'status' => __('Online') . ': ', 
+									'status_with_style' => '<span class="online">' . __('Online') . '</span>', 
+									'image' => 'on', 
+									'load' => $percentage, 
+									'players' => $server_load[0]['count'], 
+									'title' => $server['name'], 
+									'version' => $serverlist[$server['bound_to']]['version'], 
+									'exp' => $serverlist[$server['bound_to']]['exp'], 
+									'drop' => $serverlist[$server['bound_to']]['drop'], 
+									'visible' => $server['visible'],
+									'max_players' => $server['max_online']
+								];
+							}
 						}
 					}
 				}
@@ -101,21 +109,25 @@
             return $this->servers;
         }
 
-		public function total_online($cached_query = 60){
+		public function total_online($cached_query = 60)
+        {
             $serverlist = $this->server_list();
+			$gsList = $this->config->values('gameserver_config');
             $max_online = 0;
             $online = 0;
             if($this->is_multiple_accounts()){
-                foreach($serverlist as $servers){
-                    $max_online += (int)$servers['max_players'];
-                    $server_load = $this->db($servers['db_acc'])->cached_query('total_online_' . $servers['db_acc'], 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1', [], $cached_query);
+                foreach($gsList as $servers){
+                    $max_online += (int)$servers['max_online'];
+                    $server_load = $this->db($serverlist[$servers['bound_to']]['db_acc'])->cached_query('total_online_' . $serverlist[$servers['bound_to']]['db_acc'], 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1', [], $cached_query);
                     $online += $server_load[0]['count'];
                 }
-            } else{
-                foreach($serverlist as $servers){
-                    $max_online += $servers['max_players'];
+            } 
+			else{
+                foreach($gsList as $servers){
+                    $max_online += (int)$servers['max_online'];
                 }
-                $server_load = $this->db($this->get_default_account_database())->cached_query('total_online_' . $servers['db_acc'], 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1', [], $cached_query);
+				$db = $this->get_default_account_database();
+                $server_load = $this->db($db)->cached_query('total_online_' . $db, 'SELECT COUNT(memb___id) as count FROM MEMB_STAT WHERE ConnectStat = 1', [], $cached_query);
                 $online += $server_load[0]['count'];
             }
             return ['online' => $online, 'percentage' => floor(100 * $online / $max_online)];
@@ -147,13 +159,22 @@
             }
             return 0;
         }
-
-        public function status_by_server($sv){
-            $serverlist = $this->server_list($sv);
-            if(is_array($serverlist)){
-                $check = @fsockopen($serverlist['gs_ip'], $serverlist['gs_port'], $errno, $errmsg, 0.5);
+		
+		public function status_by_server($sv){
+			$gsList = $this->config->values('gameserver_config');
+			$data = [];
+			$key = -1;
+			foreach($gsList AS $k => $server){
+				if($server['bound_to'] == $sv){
+					$key = $k;
+					break;
+				}
+			}
+            if($key != -1){
+                $check = @fsockopen($gsList[$key]['ip'], $gsList[$key]['port'], $errno, $errmsg, 0.5);
                 if(!$check)
-                    return '<span class="offline">' . __('Offline') . '</span>'; else
+                    return '<span class="offline">' . __('Offline') . '</span>'; 
+				else
                     return '<span class="online">' . __('Online') . '</span>';
             }
         }
@@ -179,21 +200,38 @@
         }
 
 		public function get_first_server_code($sv){
-            $serverlist = $this->server_list($sv);
-            if(is_array($serverlist)){
-                if(strpos($serverlist['gs_list'], ',') !== false){
-                    $server_array = explode(',', $serverlist['gs_list']);
+			$gsList = $this->config->values('gameserver_config');
+			$data = [];
+			$key = -1;
+			foreach($gsList AS $k => $server){
+				if($server['bound_to'] == $sv){
+					$key = $k;
+					break;
+				}
+			}
+            if($key != -1){
+                if(strpos($gsList[$key]['gs_list'], ',') !== false){
+                    $server_array = explode(',', $gsList[$key]['gs_list']);
                     return $server_array[0];
-                } else{
-                    return $serverlist['gs_list'];
+                } 
+				else{
+                    return $gsList[$key]['gs_list'];
                 }
             }
         }
 
         public function get_servercode($sv){
-            $serverlist = $this->server_list($sv);
-            if(is_array($serverlist)){
-                return $serverlist['gs_list'];
+            $gsList = $this->config->values('gameserver_config');
+			$data = [];
+			$key = -1;
+			foreach($gsList AS $k => $server){
+				if($server['bound_to'] == $sv){
+					$key = $k;
+					break;
+				}
+			}
+            if($key != -1){
+                return $gsList[$key]['gs_list'];
             }
         }
 

@@ -721,12 +721,7 @@
 					'wh_multiplier' => $server['wh_multiplier'], 
 					'wh_hor_size' => 8, 
 					'wh_ver_size' => 15, 
-					'item_size' => $server['item_size'], 
-					'skill_size' => isset($server['skill_size']) ? $server['skill_size'] : '180', 
-					'gs_list' => $server['gs_list'], 
-					'gs_ip' => $server['gs_ip'], 
-					'gs_port' => $server['gs_port'], 
-					'max_players' => $server['max_players'], 
+					'item_size' => $server['item_size'],  
 					'version' => $server['version'], 
 					'exp' => $server['exp'], 
 					'drop' => $server['drop']

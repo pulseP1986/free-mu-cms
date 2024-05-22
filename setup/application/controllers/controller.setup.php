@@ -494,7 +494,6 @@
                             } else{
                                 $this->vars['wh_size'] = $this->Msetup->get_wh_size()['length'];
                                 $this->vars['inv_size'] = $this->Msetup->get_inv_size()['length'];
-                                $this->vars['skill_size'] = $this->Msetup->get_skill_size()['length'];
                                 $this->vars['md5'] = $this->Msetup->get_md5();
                                 $this->vars['identity_column_character'] = $this->Msetup->get_identity_column('Character', 'game');
                                 if($this->vars['identity_column_character'] == false){
@@ -659,11 +658,6 @@
 					'wh_hor_size' => 8, 
 					'wh_ver_size' => 15, 
 					'item_size' => $item_size, 
-					'skill_size' => $this->vars['skill_size'], 
-					'gs_list' => 'main', 
-					'gs_ip' => '127.0.0.1', 
-					'gs_port' => '55901', 
-					'max_players' => 500, 
 					'version' => 'Season X', 
 					'exp' => '1x', 
 					'drop' => '1%'

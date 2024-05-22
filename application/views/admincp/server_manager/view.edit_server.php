@@ -85,43 +85,6 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="gs_ip">GameServer IP <span
-                                                style="color:red;">*</span></label>
-
-                                    <div class="controls">
-                                        <input type="text" class="input-xlarge" name="gs_ip" id="gs_ip"
-                                               value="<?php if(isset($data['gs_ip'])): echo $data['gs_ip']; endif; ?>"/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="gs_port">GameServer Port <span
-                                                style="color:red;">*</span></label>
-
-                                    <div class="controls">
-                                        <input type="text" class="input-xlarge" name="gs_port" id="gs_port"
-                                               value="<?php if(isset($data['gs_port'])): echo $data['gs_port']; endif; ?>"/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="gs_names">GameServer Names</label>
-
-                                    <div class="controls">
-                                        <input type="text" class="input-xlarge" data-role="tagsinput" name="gs_names"
-                                               id="gs_names"
-                                               value="<?php if(isset($data['gs_list'])): echo $data['gs_list']; endif; ?>"/>
-
-                                        <p>Can be located in ServerInfo.dat or GameServer.ini</p>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="max_players">Max Players</label>
-
-                                    <div class="controls">
-                                        <input type="text" class="input-xlarge" name="max_players" id="max_players"
-                                               value="<?php if(isset($data['max_players'])): echo $data['max_players']; endif; ?>"/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
                                     <label class="control-label" for="version">Version</label>
 
                                     <div class="controls">

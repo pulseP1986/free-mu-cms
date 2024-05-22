@@ -7179,6 +7179,19 @@
                 $this->login();
             }
         }
+        
+        public function game_server_list_manager()
+        {
+            if($this->session->userdata(['admin' => 'is_admin'])){
+                $this->load_header();
+                $this->vars['server_list'] = $this->website->server_list();
+				$this->vars['game_server_list'] = $this->config->values('gameserver_config');
+                $this->load->view('admincp' . DS . 'server_manager' . DS . 'view.game_server_list_manager', $this->vars);
+                $this->load_footer();
+            } else{
+                $this->login();
+            }
+        }
 
         public function save_plugin_order(){
             if($this->session->userdata(['admin' => 'is_admin'])){
@@ -7229,6 +7242,17 @@
                 json(['error' => 'Please login first.']);
             }
         }
+        
+        public function save_game_server_order()
+        {
+            if($this->session->userdata(['admin' => 'is_admin'])){
+                $this->Madmin->reorder_server_in_config('gameserver_config', $_POST['order']);
+				json(['success' => 'GameServer order changed.']);
+
+            } else{
+                json(['error' => 'Please login first.']);
+            }
+        }
 
         public function change_server_status(){
             if($this->session->userdata(['admin' => 'is_admin'])){
@@ -7247,6 +7271,25 @@
                     }
                 } else{
                     json(['error' => 'Server not found.']);
+                }
+            } else{
+                json(['error' => 'Please login first.']);
+            }
+        }
+        
+        public function change_game_server_status()
+        {
+            if($this->session->userdata(['admin' => 'is_admin'])){
+                $this->vars['game_server_list'] = $this->config->values('gameserver_config');
+                if(array_key_exists($_POST['id'], $this->vars['game_server_list'])){
+                    $this->vars['game_server_list'][$_POST['id']]['visible'] = $_POST['status'];
+                    if(!$this->Madmin->save_config_data($this->vars['game_server_list'], 'gameserver_config', false)){
+                        json(['error' => 'Unable to save gameserver status.']);
+                    } else{
+                        json(['success' => 'Gameserver status changed.']);
+                    }
+                } else{
+                    json(['error' => 'Gameserver not found.']);
                 }
             } else{
                 json(['error' => 'Please login first.']);
@@ -7292,6 +7335,21 @@
                 json(['error' => 'Please login first.']);
             }
         }
+        
+        public function delete_game_server()
+        {
+            if($this->session->userdata(['admin' => 'is_admin'])){
+				$this->vars['game_server_list'] = $this->config->values('gameserver_config');
+                if(array_key_exists($_POST['id'], $this->vars['game_server_list'])){
+                    $this->Madmin->remove_server_from_config('gameserver_config', $_POST['id']);
+                    json(['success' => 'Gameserver removed.']);
+                } else{
+                    json(['error' => 'Gameserver not found.']);
+                }
+            } else{
+                json(['error' => 'Please login first.']);
+            }
+        }
 
         public function change_multi_account_db(){
             if($this->session->userdata(['admin' => 'is_admin'])){
@@ -7323,145 +7381,151 @@
                     $title = isset($_POST['title']) ? $_POST['title'] : '';
                     $char_db = isset($_POST['char_db']) ? $_POST['char_db'] : '';
                     $account_db = isset($_POST['account_db']) ? $_POST['account_db'] : '';
-                    $gs_ip = isset($_POST['gs_ip']) ? $_POST['gs_ip'] : '';
-                    $gs_port = isset($_POST['gs_port']) ? $_POST['gs_port'] : '';
-                    $gs_names = isset($_POST['gs_names']) ? $_POST['gs_names'] : '';
-                    $max_players = isset($_POST['max_players']) ? $_POST['max_players'] : '0';
                     $version = isset($_POST['version']) ? $_POST['version'] : '0';
                     $exp = isset($_POST['exp']) ? $_POST['exp'] : '0';
                     $drop = isset($_POST['drop']) ? $_POST['drop'] : '0';
-                    $job_rate = isset($_POST['job_rate']) ? $_POST['job_rate'] : '0';
-                    $jos_rate = isset($_POST['jos_rate']) ? $_POST['jos_rate'] : '0';
-                    $jol_rate = isset($_POST['jol_rate']) ? $_POST['jol_rate'] : '0';
-                    $cm_rate = isset($_POST['cm_rate']) ? $_POST['cm_rate'] : '0';
                     $this->vars['server_list'] = $this->website->server_list();
                     if($skey == '')
-                        $this->vars['error'] = 'Please enter server key'; else{
+                        $this->vars['error'] = 'Please enter server key'; 
+                    else{
                         if(!preg_match("/^[a-zA-Z0-9\_\@$&amp;\%\[\]\(\)\-\,\<]+$/i", $skey))
-                            $this->vars['error'] = 'Please enter valid server key'; else{
+                            $this->vars['error'] = 'Please enter valid server key'; 
+                        else{
                             if(array_key_exists(strtoupper($this->website->seo_string($skey)), $this->vars['server_list']))
-                                $this->vars['error'] = 'Server with this key already exists.'; else{
+                                $this->vars['error'] = 'Server with this key already exists.'; 
+                            else{
                                 if($title == '')
-                                    $this->vars['error'] = 'Please enter server title'; else{
+                                    $this->vars['error'] = 'Please enter server title'; 
+                                else{
                                     if(!preg_match("/[\w\W]/", $title))
-                                        $this->vars['error'] = 'Please enter valid server title'; else{
+                                        $this->vars['error'] = 'Please enter valid server title'; 
+                                    else{
                                         if($char_db == '')
-                                            $this->vars['error'] = 'Please select character database'; else{
+                                            $this->vars['error'] = 'Please select character database'; 
+                                        else{
                                             $this->load->lib([$char_db, 'db'], [HOST, USER, PASS, $char_db]);
                                             if(!$this->Madmin->check_character($char_db))
-                                                $this->vars['error'] = 'Char database does not contain any character table.'; else{
+                                                $this->vars['error'] = 'Char database does not contain any character table.'; 
+                                            else{
                                                 if($account_db == '')
-                                                    $this->vars['error'] = 'Please select account database'; else{
+                                                    $this->vars['error'] = 'Please select account database'; 
+                                                else{
                                                     $this->load->lib([$account_db, 'db'], [HOST, USER, PASS, $account_db]);
                                                     if(!$this->Madmin->check_memb_info($account_db))
-                                                        $this->vars['error'] = 'Account database does not contain any account table.'; else{
-                                                        if($gs_ip == '')
-                                                            $this->vars['error'] = 'Please enter gameserver ip'; else{
-                                                            if(!filter_var($gs_ip, FILTER_VALIDATE_IP))
-                                                                $this->vars['error'] = 'Please enter valid gameserver ip'; else{
-                                                                if($gs_port == '')
-                                                                    $this->vars['error'] = 'Please enter gameserver port'; else{
-                                                                    if(!is_numeric($gs_port) || ($gs_port < 0 || $gs_port > 65535)){
-                                                                        $this->vars['error'] = 'Please enter valid gameserver port';
-                                                                    } else{
-                                                                        if($this->website->is_multiple_accounts() == true){
-                                                                            $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => true], $this->vars['server_list']);
-                                                                        } else{
-                                                                            $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => false], $this->vars['server_list']);
-                                                                        }
-                                                                        $this->vars['columns'] = $this->Madmin->required_columns();
-                                                                        foreach($this->vars['columns']['account_db'] AS $key => $columns){
-                                                                            foreach($columns AS $col => $info){
-                                                                                if($this->Madmin->check_if_column_exists($col, $key, $account_db) == false){
-                                                                                    $this->Madmin->add_column($col, $key, $info, $account_db);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        foreach($this->vars['columns']['char_db'] AS $key => $columns){
-                                                                            foreach($columns AS $col => $info){
-                                                                                if($this->Madmin->check_if_column_exists($col, $key, $char_db) == false){
-                                                                                    $this->Madmin->add_column($col, $key, $info, $char_db);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        
-                                                                        $procedureFile = BASEDIR . 'setup' . DS . 'data' . DS . 'procedures' . DS . 'required_stored_procedures[20.05.2015].json';
-                                                                        if(file_exists($procedureFile)){
-                                                                            $procedures_info = json_decode(file_get_contents($procedureFile), true);
-                                                                            if($this->Madmin->check_procedure('WZ_CONNECT_MEMB', $account_db) != false){
-                                                                                $this->Madmin->drop_procedure('WZ_CONNECT_MEMB', $account_db);
-                                                                            }
-                                                                            if($this->Madmin->check_procedure('WZ_DISCONNECT_MEMB', $account_db) != false){
-                                                                                $this->Madmin->drop_procedure('WZ_DISCONNECT_MEMB', $account_db);
-                                                                            }
-																			if(MD5 == 1){
-																				if($this->Madmin->check_procedure('DmN_Check_Acc_MD5', $account_db) != false){
-																					$this->Madmin->drop_procedure('DmN_Check_Acc_MD5', $account_db);
-																				}
-																			}
-																			if($this->Madmin->check_if_column_exists('HWID', 'MEMB_STAT', $account_db) != false){
-																				$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), $account_db);
-                                                                                $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), $account_db);
-                                                                            }
-																			else{
-																				$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), $account_db);
-                                                                                $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
-                                                                            }
-                                                                            
-                                                                            if(MD5 == 1){
-																				$this->Madmin->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], $account_db);
-																			}
-                                                                        }
-                                                                        
-																		$this->vars['identity_column_character'] = $this->Madmin->get_identity_column('Character', $char_db);
-																		if($this->vars['identity_column_character'] == false){
-																			if($this->Madmin->check_if_column_exists('id', 'Character', $char_db) == false){
-																				$this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
-																				$this->vars['identity_column_character']['name'] = 'id';
-																			} else{
-																				$this->Madmin->drop_column('id', 'Character', $char_db);
-																				$this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
-																				$this->vars['identity_column_character']['name'] = 'id';
-																			}
-																		}
-																		$this->Madmin->dropTriggerPKCount($char_db);
-																		$this->Madmin->createTriggerPKCount($char_db);
-                                                                        
-																		$wh_size = $this->Madmin->get_wh_size($char_db);
-                                                                        $inv_size = $this->Madmin->get_inv_size($char_db);
-                                                                        $item_size = 20;
-                                                                        if($wh_size['length'] > 1200){
-                                                                            $item_size = 32;
-                                                                        }
-                                                                        if($wh_size['length'] > 3840){
-                                                                            $item_size = 50;
-                                                                        }
-																		if($wh_size['length'] == 4800){
-																			$item_size = 40;
-																		}
-																		if($wh_size['length'] > 6000){
-                                                                            $item_size = 64;
-                                                                        }
-																		if($wh_size['length'] == 6960){
-                                                                            $item_size = 58;
-                                                                        }
-                                                                        $new_server = [strtoupper($this->website->seo_string($skey)) => ['db' => $char_db, 'db_acc' => $account_db, 'title' => $title, 'visible' => 1, 'identity_column_character' => $this->vars['identity_column_character']['name'], 'inv_size' => $inv_size['length'], 'wh_size' => $wh_size['length'], 'inv_multiplier' => ($inv_size['length'] > 1728) ? 236 : 108, 'wh_multiplier' => ($wh_size['length'] > 1920) ? 240 : 120, 'wh_hor_size' => 8, 'wh_ver_size' => 15, 'item_size' => $item_size, 'gs_list' => $gs_names, 'gs_ip' => $gs_ip, 'gs_port' => $gs_port, 'max_players' => $max_players, 'version' => $version, 'exp' => $exp, 'drop' => $drop, 'job_rate' => $job_rate, 'jos_rate' => $jos_rate, 'jol_rate' => $jol_rate, 'cm_rate' => $cm_rate]];
-                                                                        $this->vars['server_list'] = array_merge($this->vars['server_list'], $new_server);
-                                                                        if(!$this->Madmin->save_server_data($this->vars['server_list'], false)){
-                                                                            $this->vars['error'] = 'Unable to add new server.';
-                                                                        } else{
-                                                                            $this->Madmin->copy_settings('buylevel_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->Madmin->copy_settings('donation_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->Madmin->copy_settings('rankings_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->Madmin->copy_settings('reset_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->Madmin->copy_settings('greset_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->Madmin->copy_settings('table_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->Madmin->copy_settings('wcoin_exchange_config', strtoupper($this->website->seo_string($skey)));
-                                                                            $this->vars['success'] = 'Server added successfully';
-                                                                        }
-                                                                    }
+                                                        $this->vars['error'] = 'Account database does not contain any account table.'; 
+                                                    else{
+                                                        if($this->website->is_multiple_accounts() == true){
+                                                            $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => true], $this->vars['server_list']);
+                                                        } else{
+                                                            $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => false], $this->vars['server_list']);
+                                                        }
+                                                        $this->vars['columns'] = $this->Madmin->required_columns();
+                                                        foreach($this->vars['columns']['account_db'] AS $key => $columns){
+                                                            foreach($columns AS $col => $info){
+                                                                if($this->Madmin->check_if_column_exists($col, $key, $account_db) == false){
+                                                                    $this->Madmin->add_column($col, $key, $info, $account_db);
                                                                 }
                                                             }
+                                                        }
+                                                        foreach($this->vars['columns']['char_db'] AS $key => $columns){
+                                                            foreach($columns AS $col => $info){
+                                                                if($this->Madmin->check_if_column_exists($col, $key, $char_db) == false){
+                                                                    $this->Madmin->add_column($col, $key, $info, $char_db);
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                        $procedureFile = BASEDIR . 'setup' . DS . 'data' . DS . 'procedures' . DS . 'required_stored_procedures[20.05.2015].json';
+                                                        if(file_exists($procedureFile)){
+                                                            $procedures_info = json_decode(file_get_contents($procedureFile), true);
+                                                            if($this->Madmin->check_procedure('WZ_CONNECT_MEMB', $account_db) != false){
+                                                                $this->Madmin->drop_procedure('WZ_CONNECT_MEMB', $account_db);
+                                                            }
+                                                            if($this->Madmin->check_procedure('WZ_DISCONNECT_MEMB', $account_db) != false){
+                                                                $this->Madmin->drop_procedure('WZ_DISCONNECT_MEMB', $account_db);
+                                                            }
+                                                            if(MD5 == 1){
+                                                                if($this->Madmin->check_procedure('DmN_Check_Acc_MD5', $account_db) != false){
+                                                                    $this->Madmin->drop_procedure('DmN_Check_Acc_MD5', $account_db);
+                                                                }
+                                                            }
+                                                            if($this->Madmin->check_if_column_exists('HWID', 'MEMB_STAT', $account_db) != false){
+                                                                $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), $account_db);
+                                                                $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), $account_db);
+                                                            }
+                                                            else{
+                                                                $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), $account_db);
+                                                                $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
+                                                            }
+                                                            
+                                                            if(MD5 == 1){
+                                                                $this->Madmin->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], $account_db);
+                                                            }
+                                                        }
+                                                        
+                                                        $this->vars['identity_column_character'] = $this->Madmin->get_identity_column('Character', $char_db);
+                                                        if($this->vars['identity_column_character'] == false){
+                                                            if($this->Madmin->check_if_column_exists('id', 'Character', $char_db) == false){
+                                                                $this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
+                                                                $this->vars['identity_column_character']['name'] = 'id';
+                                                            } else{
+                                                                $this->Madmin->drop_column('id', 'Character', $char_db);
+                                                                $this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
+                                                                $this->vars['identity_column_character']['name'] = 'id';
+                                                            }
+                                                        }
+                                                        $this->Madmin->dropTriggerPKCount($char_db);
+                                                        $this->Madmin->createTriggerPKCount($char_db);
+                                                        
+                                                        $wh_size = $this->Madmin->get_wh_size($char_db);
+                                                        $inv_size = $this->Madmin->get_inv_size($char_db);
+                                                        $item_size = 20;
+                                                        if($wh_size['length'] > 1200){
+                                                            $item_size = 32;
+                                                        }
+                                                        if($wh_size['length'] > 3840){
+                                                            $item_size = 50;
+                                                        }
+                                                        if($wh_size['length'] == 4800){
+                                                            $item_size = 40;
+                                                        }
+                                                        if($wh_size['length'] > 6000){
+                                                            $item_size = 64;
+                                                        }
+                                                        if($wh_size['length'] == 6960){
+                                                            $item_size = 58;
+                                                        }
+                                                        $new_server = [
+                                                            strtoupper($this->website->seo_string($skey)) => [
+                                                                'db' => $char_db, 
+                                                                'db_acc' => $account_db, 
+                                                                'title' => $title, 
+                                                                'visible' => 1, 
+                                                                'identity_column_character' => $this->vars['identity_column_character']['name'], 
+                                                                'inv_size' => $inv_size['length'], 
+                                                                'wh_size' => $wh_size['length'], 
+                                                                'inv_multiplier' => ($inv_size['length'] > 1728) ? 236 : 108, 
+                                                                'wh_multiplier' => ($wh_size['length'] > 1920) ? 240 : 120, 
+                                                                'wh_hor_size' => 8, 
+                                                                'wh_ver_size' => 15, 
+                                                                'item_size' => $item_size,  
+                                                                'version' => $version,
+                                                                'exp' => $exp, 
+                                                                'drop' => $drop
+                                                            ]
+                                                        ];
+                                                        $this->vars['server_list'] = array_merge($this->vars['server_list'], $new_server);
+                                                        if(!$this->Madmin->save_server_data($this->vars['server_list'], false)){
+                                                            $this->vars['error'] = 'Unable to add new server.';
+                                                        } else{
+                                                            $this->Madmin->copy_settings('buylevel_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->Madmin->copy_settings('donation_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->Madmin->copy_settings('rankings_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->Madmin->copy_settings('reset_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->Madmin->copy_settings('greset_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->Madmin->copy_settings('table_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->Madmin->copy_settings('wcoin_exchange_config', strtoupper($this->website->seo_string($skey)));
+                                                            $this->vars['success'] = 'Server added successfully';
                                                         }
                                                     }
                                                 }
@@ -7475,6 +7539,62 @@
                 }
                 $this->vars['databases'] = $this->Madmin->list_databases();
                 $this->load->view('admincp' . DS . 'server_manager' . DS . 'view.add_server', $this->vars);
+                $this->load_footer();
+            } else{
+                $this->login();
+            }
+        }
+        
+        public function add_game_server(){
+            if($this->session->userdata(['admin' => 'is_admin'])){
+                $this->load_header();
+				
+				$this->vars['server_list'] = $this->website->server_list();
+				$this->vars['game_server_list'] = $this->config->values('gameserver_config');
+				
+                if(count($_POST) > 0){
+                    $this->vars['name'] = isset($_POST['name']) ? $_POST['name'] : '';
+					$this->vars['ip'] = isset($_POST['ip']) ? $_POST['ip'] : '';
+					$this->vars['port'] = isset($_POST['port']) ? $_POST['port'] : '';
+					$this->vars['gs_list'] = isset($_POST['gs_list']) ? $_POST['gs_list'] : '';
+					$this->vars['bound_to'] = isset($_POST['bound_to']) ? $_POST['bound_to'] : '';
+					$this->vars['max_online'] = (isset($_POST['max_online']) && $_POST['max_online'] != '') ? (int)$_POST['max_online'] : 1000;
+					
+					if($this->vars['name'] == '')
+						$this->vars['error'] = 'Please enter server title'; 
+					if($this->vars['ip'] == '')
+						$this->vars['error'] = 'Please enter gameserver ip'; 
+					if(!filter_var($this->vars['ip'], FILTER_VALIDATE_IP))
+						$this->vars['error'] = 'Please enter valid gameserver ip'; 
+					if($this->vars['port'] == '')
+						$this->vars['error'] = 'Please enter gameserver port'; 
+					if(!is_numeric($this->vars['port']) || ($this->vars['port'] < 0 || $this->vars['port'] > 65535))
+						$this->vars['error'] = 'Please enter valid gameserver port';    
+					if($this->vars['bound_to'] == '')
+						$this->vars['error'] = 'Please select server bound to'; 
+					if(!isset($this->vars['error'])){
+						$newData = [
+							'name' => $this->vars['name'],
+							'ip' => $this->vars['ip'],
+							'port' => $this->vars['port'],
+							'gs_list' => $this->vars['gs_list'],
+							'bound_to' => $this->vars['bound_to'],
+							'max_online' => $this->vars['max_online'],
+							'visible' => 1
+						];
+						
+						array_push($this->vars['game_server_list'], $newData);
+
+						if(!$this->Madmin->save_config_data($this->vars['game_server_list'], 'gameserver_config', false)){
+							$this->vars['error'] = 'Unable to add gameserver.';
+						} 
+						else{
+							$this->vars['success'] = 'Gameserver added successfully.';
+							$_POST['name'] = $_POST['ip'] = $_POST['port'] = $_POST['gs_list'] = $_POST['max_online'] = '';
+						}
+					}
+                }
+                $this->load->view('admincp' . DS . 'server_manager' . DS . 'view.add_game_server', $this->vars);
                 $this->load_footer();
             } else{
                 $this->login();
@@ -7495,17 +7615,9 @@
                         $title = isset($_POST['title']) ? $_POST['title'] : '';
                         $char_db = isset($_POST['char_db']) ? $_POST['char_db'] : '';
                         $account_db = isset($_POST['account_db']) ? $_POST['account_db'] : '';
-                        $gs_ip = isset($_POST['gs_ip']) ? $_POST['gs_ip'] : '';
-                        $gs_port = isset($_POST['gs_port']) ? $_POST['gs_port'] : '';
-                        $gs_names = isset($_POST['gs_names']) ? $_POST['gs_names'] : '';
-                        $max_players = isset($_POST['max_players']) ? $_POST['max_players'] : '0';
                         $version = isset($_POST['version']) ? $_POST['version'] : '0';
                         $exp = isset($_POST['exp']) ? $_POST['exp'] : '0';
                         $drop = isset($_POST['drop']) ? $_POST['drop'] : '0';
-                        $job_rate = isset($_POST['job_rate']) ? $_POST['job_rate'] : '0';
-                        $jos_rate = isset($_POST['jos_rate']) ? $_POST['jos_rate'] : '0';
-                        $jol_rate = isset($_POST['jol_rate']) ? $_POST['jol_rate'] : '0';
-                        $cm_rate = isset($_POST['cm_rate']) ? $_POST['cm_rate'] : '0';
                         if($title == '')
                             $this->vars['error'] = 'Please enter server title'; 
 						else{
@@ -7526,113 +7638,114 @@
                                             if(!$this->Madmin->check_memb_info($account_db))
                                                 $this->vars['error'] = 'Account database does not contain any account table.'; 
 											else{
-                                                if($gs_ip == '')
-                                                    $this->vars['error'] = 'Please enter gameserver ip'; 
-												else{
-                                                    if(!filter_var($gs_ip, FILTER_VALIDATE_IP))
-                                                        $this->vars['error'] = 'Please enter valid gameserver ip'; 
-													else{
-                                                        if($gs_port == '')
-                                                            $this->vars['error'] = 'Please enter gameserver port'; 
-														else{
-                                                            if(!is_numeric($gs_port) || ($gs_port < 0 || $gs_port > 65535)){
-                                                                $this->vars['error'] = 'Please enter valid gameserver port';
-                                                            } 
-															else{
-                                                                if($this->website->is_multiple_accounts() == true){
-                                                                    $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => true], $this->vars['server_list']);
-                                                                } 
-																else{
-                                                                    $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => false], $this->vars['server_list']);
-                                                                }
-                                                                $this->vars['columns'] = $this->Madmin->required_columns();
-                                                                foreach($this->vars['columns']['account_db'] AS $key => $columns){
-                                                                    foreach($columns AS $col => $info){
-                                                                        if($this->Madmin->check_if_column_exists($col, $key, $account_db) == false){
-                                                                            $this->Madmin->add_column($col, $key, $info, $account_db);
-                                                                        }
-                                                                    }
-                                                                }
-                                                                foreach($this->vars['columns']['char_db'] AS $key => $columns){
-                                                                    foreach($columns AS $col => $info){
-                                                                        if($this->Madmin->check_if_column_exists($col, $key, $char_db) == false){
-                                                                            $this->Madmin->add_column($col, $key, $info, $char_db);
-                                                                        }
-                                                                    }
-                                                                }
-                                                                
-                                                                $procedureFile = BASEDIR . 'setup' . DS . 'data' . DS . 'procedures' . DS . 'required_stored_procedures[20.05.2015].json';
-                                                                if(file_exists($procedureFile)){
-                                                                    $procedures_info = json_decode(file_get_contents($procedureFile), true);
-                                                                    if($this->Madmin->check_procedure('WZ_CONNECT_MEMB', $account_db) != false){
-                                                                        $this->Madmin->drop_procedure('WZ_CONNECT_MEMB', $account_db);
-                                                                    }
-                                                                    if($this->Madmin->check_procedure('WZ_DISCONNECT_MEMB', $account_db) != false){
-                                                                        $this->Madmin->drop_procedure('WZ_DISCONNECT_MEMB', $account_db);
-                                                                    }
-																	if(MD5 == 1){
-																		if($this->Madmin->check_procedure('DmN_Check_Acc_MD5', $account_db) != false){
-																			$this->Madmin->drop_procedure('DmN_Check_Acc_MD5', $account_db);
-																		}
-																	}
-																	if($this->Madmin->check_if_column_exists('HWID', 'MEMB_STAT', $account_db) != false){
-																		$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), $account_db);
-                                                                        $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), $account_db);
-                                                                    }
-																	else{
-																		$this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), $account_db);
-                                                                        $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
-																	}
-                                                                    
-                                                                    if(MD5 == 1){
-																		$this->Madmin->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], $account_db);
-																	}
-                                                                }
-																
-																$this->vars['identity_column_character'] = $this->Madmin->get_identity_column('Character', $char_db);
-																if($this->vars['identity_column_character'] == false){
-																	if($this->Madmin->check_if_column_exists('id', 'Character', $char_db) == false){
-																		$this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
-																		$this->vars['identity_column_character']['name'] = 'id';
-																	} else{
-																		$this->Madmin->drop_column('id', 'Character', $char_db);
-																		$this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
-																		$this->vars['identity_column_character']['name'] = 'id';
-																	}
-																}
-																$this->Madmin->dropTriggerPKCount($char_db);
-																$this->Madmin->createTriggerPKCount($char_db);
-																
-																$wh_size = $this->Madmin->get_wh_size($char_db);
-                                                                $inv_size = $this->Madmin->get_inv_size($char_db);
-                                                                $item_size = 20;
-                                                                if($wh_size['length'] > 1200){
-                                                                    $item_size = 32;
-                                                                }
-                                                                if($wh_size['length'] > 3840){
-                                                                    $item_size = 50;
-                                                                }
-																if($wh_size['length'] == 4800){
-																	$item_size = 40;
-																}
-																if($wh_size['length'] > 6000){
-                                                                    $item_size = 64;
-                                                                }
-                                                                if($wh_size['length'] == 6960){
-                                                                    $item_size = 58;
-                                                                }
-                                                                $new_server = [strtoupper(seo_string($server)) => ['db' => $char_db, 'db_acc' => $account_db, 'title' => $title, 'visible' => 1, 'identity_column_character' => $this->vars['identity_column_character']['name'], 'inv_size' => $inv_size['length'], 'wh_size' => $wh_size['length'], 'inv_multiplier' => ($inv_size['length'] > 1728) ? 236 : 108, 'wh_multiplier' => ($wh_size['length'] > 1920) ? 240 : 120, 'wh_hor_size' => 8, 'wh_ver_size' => 15, 'item_size' => $item_size, 'gs_list' => $gs_names, 'gs_ip' => $gs_ip, 'gs_port' => $gs_port, 'max_players' => $max_players, 'version' => $version, 'exp' => $exp, 'drop' => $drop, 'job_rate' => $job_rate, 'jos_rate' => $jos_rate, 'jol_rate' => $jol_rate, 'cm_rate' => $cm_rate]];
-                                                                $this->vars['server_list'] = array_merge($this->vars['server_list'], $new_server);
-                                                                if(!$this->Madmin->save_server_data($this->vars['server_list'])){
-                                                                    $this->vars['error'] = 'Unable to edit server.';
-                                                                } else{
-																	$this->vars['data'] = $this->vars['server_list'][$server];
-                                                                    $this->vars['success'] = 'Server edited successfully';
-                                                                }
-                                                            }
+                                                if($this->website->is_multiple_accounts() == true){
+                                                    $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => true], $this->vars['server_list']);
+                                                } 
+                                                else{
+                                                    $this->vars['server_list'] = array_merge(['USE_MULTI_ACCOUNT_DB' => false], $this->vars['server_list']);
+                                                }
+                                                $this->vars['columns'] = $this->Madmin->required_columns();
+                                                foreach($this->vars['columns']['account_db'] AS $key => $columns){
+                                                    foreach($columns AS $col => $info){
+                                                        if($this->Madmin->check_if_column_exists($col, $key, $account_db) == false){
+                                                            $this->Madmin->add_column($col, $key, $info, $account_db);
                                                         }
                                                     }
                                                 }
+                                                foreach($this->vars['columns']['char_db'] AS $key => $columns){
+                                                    foreach($columns AS $col => $info){
+                                                        if($this->Madmin->check_if_column_exists($col, $key, $char_db) == false){
+                                                            $this->Madmin->add_column($col, $key, $info, $char_db);
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                $procedureFile = BASEDIR . 'setup' . DS . 'data' . DS . 'procedures' . DS . 'required_stored_procedures[20.05.2015].json';
+                                                if(file_exists($procedureFile)){
+                                                    $procedures_info = json_decode(file_get_contents($procedureFile), true);
+                                                    if($this->Madmin->check_procedure('WZ_CONNECT_MEMB', $account_db) != false){
+                                                        $this->Madmin->drop_procedure('WZ_CONNECT_MEMB', $account_db);
+                                                    }
+                                                    if($this->Madmin->check_procedure('WZ_DISCONNECT_MEMB', $account_db) != false){
+                                                        $this->Madmin->drop_procedure('WZ_DISCONNECT_MEMB', $account_db);
+                                                    }
+                                                    if(MD5 == 1){
+                                                        if($this->Madmin->check_procedure('DmN_Check_Acc_MD5', $account_db) != false){
+                                                            $this->Madmin->drop_procedure('DmN_Check_Acc_MD5', $account_db);
+                                                        }
+                                                    }
+                                                    if($this->Madmin->check_if_column_exists('HWID', 'MEMB_STAT', $account_db) != false){
+                                                        $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB_MUDEVS']), $account_db);
+                                                        $this->Msetup->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB_MUDEVS']), $account_db);
+                                                    }
+                                                    else{
+                                                        $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_CONNECT_MEMB']), $account_db);
+                                                        $this->Madmin->insert_sql_data(str_replace('dmncms', '[' . WEB_DB . ']', $procedures_info['account']['WZ_DISCONNECT_MEMB']), $account_db);
+                                                    }
+                                                    
+                                                    if(MD5 == 1){
+                                                        $this->Madmin->insert_sql_data($procedures_info['account']['DmN_Check_Acc_MD5'], $account_db);
+                                                    }
+                                                }
+                                                
+                                                $this->vars['identity_column_character'] = $this->Madmin->get_identity_column('Character', $char_db);
+                                                if($this->vars['identity_column_character'] == false){
+                                                    if($this->Madmin->check_if_column_exists('id', 'Character', $char_db) == false){
+                                                        $this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
+                                                        $this->vars['identity_column_character']['name'] = 'id';
+                                                    } else{
+                                                        $this->Madmin->drop_column('id', 'Character', $char_db);
+                                                        $this->Madmin->add_column('id', 'Character', ['type' => 'int', 'identity' => 1, 'is_primary_key' => 0, 'null' => 0, 'default' => ''], $char_db);
+                                                        $this->vars['identity_column_character']['name'] = 'id';
+                                                    }
+                                                }
+                                                $this->Madmin->dropTriggerPKCount($char_db);
+                                                $this->Madmin->createTriggerPKCount($char_db);
+                                                
+                                                $wh_size = $this->Madmin->get_wh_size($char_db);
+                                                $inv_size = $this->Madmin->get_inv_size($char_db);
+                                                $item_size = 20;
+                                                if($wh_size['length'] > 1200){
+                                                    $item_size = 32;
+                                                }
+                                                if($wh_size['length'] > 3840){
+                                                    $item_size = 50;
+                                                }
+                                                if($wh_size['length'] == 4800){
+                                                    $item_size = 40;
+                                                }
+                                                if($wh_size['length'] > 6000){
+                                                    $item_size = 64;
+                                                }
+                                                if($wh_size['length'] == 6960){
+                                                    $item_size = 58;
+                                                }
+                                                $new_server = [
+                                                    strtoupper(seo_string($server)) => [
+                                                        'db' => $char_db, 
+                                                        'db_acc' => $account_db, 
+                                                        'title' => $title, 
+                                                        'visible' => 1, 
+                                                        'identity_column_character' => $this->vars['identity_column_character']['name'], 
+                                                        'inv_size' => $inv_size['length'], 
+                                                        'wh_size' => $wh_size['length'], 
+                                                        'inv_multiplier' => ($inv_size['length'] > 1728) ? 236 : 108, 
+                                                        'wh_multiplier' => ($wh_size['length'] > 1920) ? 240 : 120, 
+                                                        'wh_hor_size' => 8, 
+                                                        'wh_ver_size' => 15, 
+                                                        'item_size' => $item_size, 
+                                                        'version' => $version, 
+                                                        'exp' => $exp, 
+                                                        'drop' => $drop
+                                                    ]
+                                                ];
+                                                $this->vars['server_list'] = array_merge($this->vars['server_list'], $new_server);
+                                                if(!$this->Madmin->save_server_data($this->vars['server_list'])){
+                                                    $this->vars['error'] = 'Unable to edit server.';
+                                                } else{
+                                                    $this->vars['data'] = $this->vars['server_list'][$server];
+                                                    $this->vars['success'] = 'Server edited successfully';
+                                                } 
                                             }
                                         }
                                     }
@@ -7642,6 +7755,69 @@
                     }
                 }
                 $this->load->view('admincp' . DS . 'server_manager' . DS . 'view.edit_server', $this->vars);
+                $this->load_footer();
+            } else{
+                $this->login();
+            }
+        }
+        
+        public function edit_game_server($id = '')
+        {
+            if($this->session->userdata(['admin' => 'is_admin'])){
+                $this->load_header();
+				
+				$this->vars['server_list'] = $this->website->server_list();
+				$this->vars['game_server_list'] = $this->config->values('gameserver_config');
+				
+                if(array_key_exists($id, $this->vars['game_server_list'])){
+					foreach($this->vars['game_server_list'][$id] AS $k => $v){
+						$this->vars[$k] = $v;
+					}
+					if(count($_POST) > 0){
+						$this->vars['name'] = isset($_POST['name']) ? $_POST['name'] : '';
+						$this->vars['ip'] = isset($_POST['ip']) ? $_POST['ip'] : '';
+						$this->vars['port'] = isset($_POST['port']) ? $_POST['port'] : '';
+						$this->vars['gs_list'] = isset($_POST['gs_list']) ? $_POST['gs_list'] : '';
+						$this->vars['bound_to'] = isset($_POST['bound_to']) ? $_POST['bound_to'] : '';
+						$this->vars['max_online'] = (isset($_POST['max_online']) && $_POST['max_online'] != '') ? (int)$_POST['max_online'] : 1000;
+						$this->vars['visible'] = (isset($_POST['visible']) && $_POST['visible'] != '') ? (int)$_POST['visible'] : 1;
+						
+						if($this->vars['name'] == '')
+							$this->vars['error'] = 'Please enter server title'; 
+						if($this->vars['ip'] == '')
+							$this->vars['error'] = 'Please enter gameserver ip'; 
+						if(!filter_var($this->vars['ip'], FILTER_VALIDATE_IP))
+							$this->vars['error'] = 'Please enter valid gameserver ip'; 
+						if($this->vars['port'] == '')
+							$this->vars['error'] = 'Please enter gameserver port'; 
+						if(!is_numeric($this->vars['port']) || ($this->vars['port'] < 0 || $this->vars['port'] > 65535))
+							$this->vars['error'] = 'Please enter valid gameserver port';    
+						if($this->vars['bound_to'] == '')
+							$this->vars['error'] = 'Please select server bound to'; 
+						if(!isset($this->vars['error'])){
+							$this->vars['game_server_list'][$id] = [
+								'name' => $this->vars['name'],
+								'ip' => $this->vars['ip'],
+								'port' => $this->vars['port'],
+								'gs_list' => $this->vars['gs_list'],
+								'bound_to' => $this->vars['bound_to'],
+								'max_online' => $this->vars['max_online'],
+								'visible' => $this->vars['visible']
+							];
+
+							if(!$this->Madmin->save_config_data($this->vars['game_server_list'], 'gameserver_config', false)){
+								$this->vars['error'] = 'Unable to edit gameserver.';
+							} 
+							else{
+								$this->vars['success'] = 'Gameserver edited successfully.';
+							}
+						}
+					}
+				}
+				else{
+					$this->vars['error'] = 'GameServer not found'; 
+				}
+                $this->load->view('admincp' . DS . 'server_manager' . DS . 'view.edit_game_server', $this->vars);
                 $this->load_footer();
             } else{
                 $this->login();

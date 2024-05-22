@@ -167,13 +167,15 @@
                                         <table class="info-button">
                                             <tr>
                                                 <?php
-                                                    $i = -1;
-                                                    $select_server = 0;
-                                                    foreach($this->website->check_server_status() as $key => $value):
+                                                $i = -1;
+                                                $select_server = 0;
+                                                $status = $this->website->check_server_status();
+                                                if(!empty($status)){
+                                                    foreach($this->website->check_server_status() as $key => $value){
                                                         if($value['visible'] == 1){
                                                             $i++;
                                                             if($this->session->userdata(['user' => 'logged_in'])):
-                                                                if($this->session->userdata(['user' => 'server']) == $value['server']):
+                                                                if($this->session->userdata(['user' => 'server']) == $value['bound_to']):
                                                                     $select_server = $i;
                                                                 endif;
                                                             endif;
@@ -181,38 +183,29 @@
                                                             <td onclick="App.changeServerInfo(<?php echo $i; ?>);"
                                                                 id="sButton-<?php echo $i; ?>">
                                                                 <?php echo $value['title']; ?>
-                                                                <div id="online-<?php echo $i; ?>" style="display: none;"
-                                                                     data-server="<?php echo $value['server']; ?>"><?php echo $value['players']; ?></div>
-                                                                <div id="status-<?php echo $i; ?>" style="display: none;"
-                                                                     data-server="<?php echo $value['server']; ?>"><?php echo $value['status_with_style']; ?></div>
-                                                                <div id="version-<?php echo $i; ?>" style="display: none;"
-                                                                     data-server="<?php echo $value['server']; ?>"><?php echo $value['version']; ?></div>
+                                                                <div id="online-<?php echo $i; ?>" style="display: none;" data-server="<?php echo $value['bound_to']; ?>"><?php echo $value['players']; ?></div>
+                                                                <div id="status-<?php echo $i; ?>" style="display: none;" data-server="<?php echo $value['bound_to']; ?>"><?php echo $value['status_with_style']; ?></div>
+                                                                <div id="version-<?php echo $i; ?>" style="display: none;" data-server="<?php echo $value['bound_to']; ?>"><?php echo $value['version']; ?></div>
                                                             </td>
                                                             <?php
                                                         }
-                                                    endforeach;
+                                                    }
                                                 ?>
                                                 <script>
                                                     $(document).ready(function () {
                                                         App.changeServerInfo(<?php echo $select_server;?>);
                                                     });
                                                 </script>
+                                                <?php } ?>
                                             </tr>
                                         </table>
-                                        <p><?php echo __('Status'); ?>:<span
-                                                    id="sStatus">&nbsp;</span></p>
-
-                                        <p><?php echo __('In Game'); ?>:<span
-                                                    id="sOnline">&nbsp;</span></p>
-                                        <p><?php echo __('Top Player'); ?>:<a
-                                                    id="sPlayerLink" href="#"><span id="sPlayer">&nbsp;</span></a></p>
-
-                                        <p><?php echo __('Top Guild'); ?>:<a
-                                                    id="sGuildLink" href="#"><span id="sGuild">&nbsp;</span></a></p>
-
-                                        <p><?php echo __('Server Time'); ?>
-                                            :<span id="ServerTime">&nbsp;</span></p>
-
+                                        <?php if(!empty($status)){ ?>
+                                        <p><?php echo __('Status'); ?>:<span id="sStatus">&nbsp;</span></p>
+                                        <p><?php echo __('In Game'); ?>:<span id="sOnline">&nbsp;</span></p>
+                                        <p><?php echo __('Top Player'); ?>:<a id="sPlayerLink" href="#"><span id="sPlayer">&nbsp;</span></a></p>
+                                        <p><?php echo __('Top Guild'); ?>:<a id="sGuildLink" href="#"><span id="sGuild">&nbsp;</span></a></p>
+                                        <?php } ?>
+                                        <p><?php echo __('Server Time'); ?>:<span id="ServerTime">&nbsp;</span></p>
                                         <p><?php echo __('Language'); ?>:
                                             <span>
                                                 <?php
