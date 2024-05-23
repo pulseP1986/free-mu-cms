@@ -7203,8 +7203,10 @@
                 $this->vars['plugin_list'] = $this->config->values('plugin_config');
                 $new_array = [];
                 foreach($_POST['order'] AS $value){
-                    if(array_key_exists($value, $this->vars['plugin_list'])){
-                        $new_array[$value] = $this->vars['plugin_list'][$value];
+                    if($value != ''){
+                        if(array_key_exists($value, $this->vars['plugin_list'])){
+                            $new_array[$value] = $this->vars['plugin_list'][$value];
+                        }
                     }
                 }
                 if($this->config->save_config_data($new_array, 'plugin_config', false)){
@@ -7831,10 +7833,7 @@
                 $this->vars['plugin_list'] = $this->Madmin->get_plugin_list();
                 $this->vars['plugin_config'] = $this->config->values('plugin_config');
                 foreach($this->vars['plugin_list'] AS $key => $plugin){
-                    if(array_key_exists($plugin, $this->vars['plugin_config'])){
-                        $this->vars['plugin_data'][$plugin] = $this->vars['plugin_config'][$plugin];
-                    } 
-					else{
+                    if(!array_key_exists($plugin, $this->vars['plugin_config'])){    
                         $about_file = APP_PATH . DS . 'plugins' . DS . $plugin . DS . 'about.json';
                         if(file_exists($about_file)){
                             $this->vars['available_data'][$plugin] = ['installed' => 0, 'about' => json_decode(file_get_contents($about_file), true)];

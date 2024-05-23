@@ -595,8 +595,8 @@ $(document).ready(function() {
     $("#current_plugin_sortable").find("tbody#current_plugin_sortable_content").sortable({
         placeholder: 'ui-state-highlight',
         opacity: 0.6,
-        cursor: 'move',
-
+        cursor: 'move', 
+        cancel: ".not-sort",
         update: function() {
             App.savePluginOrder();
         }
