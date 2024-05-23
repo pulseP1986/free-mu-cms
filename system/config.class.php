@@ -282,129 +282,93 @@
                 }
             }
         }
+        
+        public function handle_json_error($errno, $file){
+            match(json_last_error()){
+                JSON_ERROR_DEPTH => throw new Exception('JSON - Maximum stack depth exceeded. FILE - '.$file),
+                JSON_ERROR_STATE_MISMATCH => throw new Exception('JSON - Underflow or the modes mismatch. FILE - '.$file),
+                JSON_ERROR_CTRL_CHAR => throw new Exception('JSON - Unexpected control character found. FILE - '.$file),
+                JSON_ERROR_SYNTAX => throw new Exception('JSON - Syntax error, malformed JSON. FILE - '.$file),
+                JSON_ERROR_UTF8 => throw new Exception('JSON - Malformed UTF-8 characters, possibly incorrectly encoded. FILE - '.$file),
+                default => throw new Exception('JSON - Unknown error. FILE - '.$file)
+            };
+        }
+        
+        public function from_json($data, $file = null, $is_array = true){
+            $json_data = json_decode($data, $is_array);
+            if($json_data == NULL && json_last_error() !== JSON_ERROR_NONE){
+                $this->handle_json_error(json_last_error(), $file);
+            }
+            return $json_data;
+        }
+        
+        public function to_json($data, $file = null, $pretty_print = JSON_PRETTY_PRINT){
+            header('Content-Type: application/json');
+            $json_data = json_encode($data, $pretty_print);
+            if($json_data == NULL && json_last_error() !== JSON_ERROR_NONE){
+                $this->handle_json_error(json_last_error(), $file);
+            }
+            return $json_data;
+        }
 
-        public function values($file_name = '', $key = false, $ext = '.json'){
-            if($file_name != ''){
+        public function values($file_name = null, $key = false, $ext = '.json'){
+            try{
+                if($file_name == null){
+                    throw new \Exception('Config file name cannot be empty');
+                }
+                 
                 $file = APP_PATH . DS . 'config' . DS . $file_name . $ext;
+                 
                 if(!file_exists($file)){
                     if(is_writable(APP_PATH . DS . 'config')){
                         file_put_contents($file, '{}');
-                    } else{
+                    } 
+                    else{
                         throw new Exception('Folder application' . DS . 'config is not writable');
                     }
                 }
-                $file_data = file_get_contents($file);
-                if(empty($file_data)){
-                    file_put_contents($file, '{}');
-                    $file_data = '{}';
-                }
-                $config = json_decode($file_data, true);
-                if(is_array($config)){
-                    if($key){
-                        if(is_array($key)){
-                            if(count($key) == 3){
-                                if(array_key_exists($key[0], $config)){
-                                    if(array_key_exists($key[1], $config[$key[0]])){
-                                        if(array_key_exists($key[2], $config[$key[0]][$key[1]])){
-                                            return $config[$key[0]][$key[1]][$key[2]];
-                                        } else{
-                                            return false;
-                                        }
-                                    } else{
-                                        return false;
-                                    }
-                                } else{
+                
+                static $configData = [];
+                
+                if(!isset($configData[$file_name]))
+                    $configData[$file_name] = $this->from_json(file_get_contents($file), $file_name);
+                
+                if($key != false){
+                    if(is_array($key)){
+                        if(count($key) == 3){
+                            if(array_key_exists($key[0], $configData[$file_name])){
+                                if(array_key_exists($key[1], $configData[$file_name][$key[0]])){
+                                    if(array_key_exists($key[2], $configData[$file_name][$key[0]][$key[1]])){
+                                        return $configData[$file_name][$key[0]][$key[1]][$key[2]];
+                                    } 
                                     return false;
-                                }
-                            } else{
-                                if(array_key_exists($key[0], $config)){
-                                    if(array_key_exists($key[1], $config[$key[0]])){
-                                        return $config[$key[0]][$key[1]];
-                                    } else{
-                                        return false;
-                                    }
-                                } else{
-                                    return false;
-                                }
-                            }
-                        } else{
-                            if(array_key_exists($key, $config)){
-                                return $config[$key];
-                            } else{
+                                } 
                                 return false;
-                            }
-                        }
-                    } else{
-                        return $config;
-                    }
-                } else{
-                    throw new Exception('Unable to load ' . $file_name . $ext . '. Please check if file is in valid json format.');
-                }
-            } else{
-                throw new Exception('Config value can not be empty.');
-            }
-        }
-
-        public function pvalues($file_name = '', $key = false, $ext = '.json'){
-            if($file_name != ''){
-                $config_file = explode('/', $file_name);
-                $file = APP_PATH . DS . 'plugins' . DS . $config_file[0] . DS . 'config' . DS . $config_file[1] . $ext;
-                if(!file_exists($file)){
-                    if(is_writable(APP_PATH . DS . 'plugins' . DS . $config_file[0] . DS . 'config')){
-                        file_put_contents($file, '{}');
-                    } else{
-                        throw new Exception('Folder application' . DS . 'plugins' . DS . 'config' . DS . $config_file[0] . ' is not writable');
-                    }
-                }
-                $file_data = file_get_contents($file);
-                if(empty($file_data)){
-                    file_put_contents($file, '{}');
-                    $file_data = '{}';
-                }
-                $config = json_decode($file_data, true);
-                if(is_array($config)){
-                    if($key){
-                        if(is_array($key)){
-                            if(count($key) == 3){
-                                if(array_key_exists($key[0], $config)){
-                                    if(array_key_exists($key[1], $config[$key[0]])){
-                                        if(array_key_exists($key[2], $config[$key[0]][$key[1]])){
-                                            return $config[$key[0]][$key[1]][$key[2]];
-                                        } else{
-                                            return false;
-                                        }
-                                    } else{
-                                        return false;
-                                    }
-                                } else{
-                                    return false;
-                                }
-                            } else{
-                                if(array_key_exists($key[0], $config)){
-                                    if(array_key_exists($key[1], $config[$key[0]])){
-                                        return $config[$key[0]][$key[1]];
-                                    } else{
-                                        return false;
-                                    }
-                                } else{
-                                    return false;
-                                }
-                            }
-                        } else{
-                            if(array_key_exists($key, $config)){
-                                return $config[$key];
-                            } else{
+                            } 
+                            return false;
+                        } 
+                        else{
+                            if(array_key_exists($key[0], $configData[$file_name])){
+                                if(array_key_exists($key[1], $configData[$file_name][$key[0]])){
+                                    return $configData[$file_name][$key[0]][$key[1]];
+                                } 
                                 return false;
-                            }
+                            } 
+                            return false;
                         }
-                    } else{
-                        return $config;
+                    } 
+                    else{
+                        if(array_key_exists($key, $configData[$file_name])){
+                            return $configData[$file_name][$key];
+                        } 
+                        return false;
                     }
-                } else{
-                    throw new Exception('Unable to load ' . $config_file[1] . $ext . '. Please check if file is in valid json format.');
                 }
-            } else{
-                throw new Exception('Config value can not be empty.');
+                
+                return $configData[$file_name];
+                 
+            } catch(\Exception $e){
+                throw new \Exception($e->getMessage());
             }
         }
 
@@ -412,22 +376,26 @@
             if($sort){
                 ksort($array);
             }
-            if($file != ''){
-                if(is_array($array)){
-                    $data = json_encode($array, JSON_PRETTY_PRINT);
-                    if(is_writable(APP_PATH . DS . 'config')){
-                        $fp = @fopen(APP_PATH . DS . 'config' . DS . $file . $ext, 'w');
-                        @fwrite($fp, $data);
-                        @fclose($fp);
-                        return true;
-                    } else{
-                        throw new Exception('Folder application' . DS . 'config is not writable');
-                    }
-                } else{
-                    throw new Exception('Config data for saving should be formated as array.');
+            
+            try{
+                if($file == ''){
+                   throw new Exception('Config file name can not be empty.'); 
                 }
-            } else{
-                throw new Exception('Config file name can not be empty.');
+                if(!is_array($array)){
+                   throw new Exception('Config data for saving should be formated as array.'); 
+                }
+                
+                $data = $this->to_json($array, $file);
+                
+                if(!is_writable(APP_PATH . DS . 'config')){
+                    throw new Exception('Folder application' . DS . 'config is not writable');
+                }
+                $fp = fopen(APP_PATH . DS . 'config' . DS . $file . $ext, 'w');
+                fwrite($fp, $data);
+                fclose($fp);
+                return true;
+            } catch(\Exception $e){
+                throw new \Exception($e->getMessage());
             }
         }
 
@@ -435,7 +403,8 @@
             static $plugin_config = [];
             if(!empty($plugin_config)){
                 return $plugin_config;
-            } else{
+            } 
+            else{
                 $plugin_config = $this->values('plugin_config');
                 if(!empty($plugin_config)){
                     return $plugin_config;
@@ -446,7 +415,7 @@
         
         public function is_plugin_installed($plugin){
             $plugins = $this->plugins();
-            if(array_key_exists($plugin, $plugins) && $plugins[$plugin]['installed'] == 1){
+            if($plugins != false && array_key_exists($plugin, $plugins) && $plugins[$plugin]['installed'] == 1){
                 return true;
             }
             return false;

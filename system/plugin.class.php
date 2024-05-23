@@ -299,18 +299,7 @@
         }
 
         public function save_config($config){
-            try{
-                $config_file = APP_PATH . DS . 'config' . DS . $this->plugin_class . '.json';
-                if(file_exists($config_file)){
-                    if($this->config->save_config_data($config, $this->plugin_class, false)){
-                        return true;
-                    }
-                } else{
-                    throw new Exception('Config file not found.');
-                }
-            } catch(Exception $e){
-                $this->error[] = $e->getMessage();
-            }
+            return $this->config->save_config_data($config, $this->plugin_class);
         }
 
         public function redirect($module){
@@ -318,34 +307,11 @@
         }
 
         public function jsond($data, $array = true){
-            $json_data = json_decode($data, (bool)$array);
-            if($json_data == null){
-                $this->handle_json_error(json_last_error());
-            } else{
-                return $json_data;
-            }
+            return $this->config->from_json($data, 'plugin data', $array);
         }
 
         public function jsone($data, $pretty_print = JSON_PRETTY_PRINT){
-			header('Content-Type: application/json');
-            $json_data = json_encode($data, $pretty_print);
-            if($json_data == null){
-                $this->handle_json_error(json_last_error());
-            } else{
-                return $json_data;
-            }
-        }
-
-        private function handle_json_error($errno){
-            $messages = [
-				JSON_ERROR_NONE => 'JSON - No errors', 
-				JSON_ERROR_DEPTH => 'JSON - Maximum stack depth exceeded', 
-				JSON_ERROR_STATE_MISMATCH => 'JSON - Underflow or the modes mismatch', 
-				JSON_ERROR_CTRL_CHAR => 'JSON - Unexpected control character found', 
-				JSON_ERROR_SYNTAX => 'JSON - Syntax error, malformed JSON', 
-				JSON_ERROR_UTF8 => 'JSON - Malformed UTF-8 characters, possibly incorrectly encoded'
-			];
-            throw new Exception(isset($messages[$errno]) ? $messages[$errno] : 'Unknown JSON error: ' . $errno);
+            return $this->config->to_json($data, 'plugin data', $pretty_print);
         }
 
         public function __get($var){
