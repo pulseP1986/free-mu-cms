@@ -171,6 +171,11 @@
 				
 			    if($query){
                     $i = 0;
+                    $is_hide_module = false;
+					if($this->config->is_plugin_installed('hide_info')){
+						$this->load->model('application/plugins/hide_info/models/hide_info'); 
+                        $is_hide_module = true;
+					}
                     while($row = $query->fetch()){
 						$cntrCode = 'us';
 						$cntrLong = 'United States';
@@ -198,9 +203,7 @@
 						}
 						//$guild = $this->check_guild($row['Name'], $server);
                         $this->players[] = [
-							//'name' => $row['Name'],
-							//'name' => mb_convert_encoding($row['Name'], 'UTF-8', 'auto'),
-							'name' => (!mb_detect_encoding($row['Name'], 'utf-8', true)) ? utf8_encode($row['Name']) : $row['Name'],
+							'name' => (!mb_detect_encoding($row['Name'], 'utf-8', true)) ? mb_convert_encoding($row['Name'], "UTF-8") : $row['Name'],
 							'name_hex' => bin2hex($row['Name']), 
 							'level' => $row['cLevel'], 
 							'exp' => $row['Experience'],
@@ -210,7 +213,7 @@
 							'class' => $this->website->get_char_class($row['Class']), 'class_small' => $this->website->get_char_class($row['Class'], true), 
 							'loc' => $this->website->get_map_name($row['MapNumber']), 
 							'status' => ($config['player']['display_status'] == 1) ? ($row['ConnectStat'] == 1 && ($row['GameIDC'] == $row['Name'])) ? 1 : 0 : 0, 
-							'hidden' => $this->Mcharacter->check_hidden_char($row['AccountId'], $server, $row['ServerName']), 
+							'hidden' => ($is_hide_module == true) ? $this->Mhide_info->check_hide_time($row['AccountId'], $server) : false,
 							'mlevel' => ($config['player']['display_master_level'] == 1) ? $row[$table_config['master_level']['column']] : 0,
 							//'mnexexp' => $mlExpNeed,	
 							'country' => $cntrCode,

@@ -35,18 +35,23 @@
             } else{
                 $this->Mcharacter->load_character_info($this->website->hex2bin($name), $server);
                 if($this->Mcharacter->char_info != false){
-                    $this->vars['hidden'] = $this->Mcharacter->check_hidden_char($this->Mcharacter->char_info['AccountId'], $server);
+					$this->vars['hidden'] = false;
+					if($this->config->is_plugin_installed('hide_info')){
+						$this->load->model('application/plugins/hide_info/models/hide_info'); 
+						$this->vars['hidden'] = $this->Mhide_info->check_hide_time($this->Mcharacter->char_info['AccountId'], $server);
+					}
                     $this->vars['status'] = $this->Mcharacter->get_status($this->Mcharacter->char_info['AccountId'], $server);
-                    if($this->vars['status']['GameIDC'] != $this->Mcharacter->char_info['Name'] && $this->vars['status']['ConnectStat'] == 1){
+                    if($this->vars['status'] != false && $this->vars['status']['GameIDC'] != $this->Mcharacter->char_info['Name'] && $this->vars['status']['ConnectStat'] == 1){
                         $this->vars['status']['ConnectStat'] = 0;
                     }
-                    $this->vars['country_code'] = $this->website->get_country_code($this->vars['status']['IP']);
+                    $this->vars['country_code'] = ($this->vars['status'] != false) ? $this->website->get_country_code($this->vars['status']['IP']) : 'us';
                     $this->vars['country'] = $this->website->codeToCountryName($this->vars['country_code']);
                     $this->vars['char_list'] = $this->Mcharacter->load_chars($this->Mcharacter->char_info['AccountId'], $server);
                     if($this->vars['guild_check'] = $this->Mcharacter->check_guild($this->Mcharacter->char_info['Name'], $server)){
                         $this->vars['guild_info'] = $this->Mcharacter->load_guild_info($this->vars['guild_check']['G_Name'], $server);
                         $this->vars['member_count'] = $this->Mcharacter->guild_member_count($this->vars['guild_check']['G_Name'], $server);
-                    } else{
+                    } 
+					else{
                         $this->vars['no_guild'] = true;
                     }
 					$this->vars['vote_count'] = $this->Mstats->count_total_votes($this->Mcharacter->char_info['AccountId'], $server);
@@ -64,19 +69,6 @@
                     }
                     $this->vars['inventory'] = $this->Mcharacter->load_inventory(1, $server);
 					$this->vars['artifacts'] = $this->Mcharacter->load_artifacts($this->Mcharacter->char_info['Name'], $server);
-					
-					if(defined('ELITE_KILLER_INFO') && ELITE_KILLER_INFO == true){
-						$this->load->model('stats');
-						$this->vars['kill_stats'] = $this->Mstats->getKillStats($this->Mcharacter->char_info['Name'], $server);
-						$this->vars['hunting_log'] = $this->Mstats->getHuntingLog($this->Mcharacter->char_info['Name'], $server);
-						if(defined('ELITE_KILLER_HIDE') && ELITE_KILLER_HIDE == true){
-							$this->vars['hidden_pk'] = $this->Mcharacter->check_hidden_char_pk($this->Mcharacter->char_info['AccountId'], $server);
-							$this->vars['hidden_killers'] = $this->Mstats->findHiddenKillers($server, 120);
-						}
-						else{
-							$this->vars['hidden_killers'] = [];
-						}
-					}
                 } else{
                     $this->vars['error'] = __('Invalid Character');
                 }

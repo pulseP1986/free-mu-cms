@@ -1386,45 +1386,6 @@
             return $stmt->fetch();
         }
 
-        public function check_hidden_char($name, $server, $gs = null){
-			if($gs != null && defined('HIDE_CHARS_GS') && in_array($gs, HIDE_CHARS_GS[$server])){
-				return true;
-			}
-			
-			$stmt = $this->website->db('web')->prepare('SELECT until_date FROM DmN_Hidden_Chars WHERE account = :name AND server = :server');
-			$stmt->execute([':name' => $name, ':server' => $server]);
-			if($info = $stmt->fetch()){
-				if($info['until_date'] > time()){
-					return true;
-				} else{
-					$this->delete_expired_hide($name, $server);
-					return false;
-				}
-			} else{
-				return false;
-			}
-        }
-		
-		public function check_hidden_char_PK($name, $server){
-            $stmt = $this->website->db('web')->prepare('SELECT until_date FROM DmN_Hidden_Chars_PK WHERE account = :name AND server = :server');
-            $stmt->execute([':name' => $name, ':server' => $server]);
-            if($info = $stmt->fetch()){
-                if($info['until_date'] > time()){
-                    return true;
-                } else{
-                    $this->delete_expired_hide($name, $server);
-                    return false;
-                }
-            } else{
-                return false;
-            }
-        }
-
-        public function delete_expired_hide($name, $server){
-            $stmt = $this->website->db('web')->prepare('DELETE FROM DmN_Hidden_Chars WHERE account = :name AND server = :server');
-            $stmt->execute([':name' => $name, ':server' => $server]);
-        }
-
         public function add_account_log($log, $credits, $acc, $server){
             $stmt = $this->website->db('web')->prepare('INSERT INTO DmN_Account_Logs (text, amount, date, account, server, ip) VALUES (:text, :amount, GETDATE(), :acc, :server, :ip)');
             $stmt->execute([':text' => $log, ':amount' => round($credits), ':acc' => $acc, ':server' => $server, ':ip' => ip()]);

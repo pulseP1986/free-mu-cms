@@ -235,12 +235,6 @@ var App = {
 				App.switchServer($(this).val());
 			}
 		});
-		$('#hide_chars').on('click', function () {
-			App.hideChars();
-		});
-		$('#hide_chars_pk').on('click', function () {
-			App.hideCharsPK();
-		});
 		$('#exchange_wcoins').on('click', function (e) {
 			e.preventDefault();
 			App.exchangeWCoins($('#credits').val());
@@ -1562,52 +1556,6 @@ var App = {
 							$('#sGuild').html('&nbsp;');
 						}
 					}
-				}
-			}
-		});
-	},
-	hideChars: function () {
-		if(App.isSending) 
-			return false;
-		$.ajax({
-			url: DmNConfig.base_url + 'ajax/hide_chars',
-			beforeSend: function () {
-				App.showLoader();
-				App.isSending = true;
-			},
-			complete: function () {
-				App.hideLoader();
-				App.setIsSending();
-			},
-			success: function (data) {
-				if (data.error) {
-					App.notice(App.lc.translate('Error').fetch(), 'error', data.error);
-				}
-				else {
-					App.notice(App.lc.translate('Success').fetch(), 'success', data.success);
-				}
-			}
-		});
-	},
-	hideCharsPK: function () {
-		if(App.isSending) 
-			return false;
-		$.ajax({
-			url: DmNConfig.base_url + 'ajax/hide_chars_pk',
-			beforeSend: function () {
-				App.showLoader();
-				App.isSending = true;
-			},
-			complete: function () {
-				App.hideLoader();
-				App.setIsSending();
-			},
-			success: function (data) {
-				if (data.error) {
-					App.notice(App.lc.translate('Error').fetch(), 'error', data.error);
-				}
-				else {
-					App.notice(App.lc.translate('Success').fetch(), 'success', data.success);
 				}
 			}
 		});

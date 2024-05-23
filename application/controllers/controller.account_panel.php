@@ -734,19 +734,6 @@
             }
         }
 
-        public function hide_info(){
-            if($this->session->userdata(['user' => 'logged_in'])){
-                $this->load->model('account');
-                $this->vars['hide_time'] = $this->Maccount->check_hide_time($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-				if(defined('ELITE_KILLER_HIDE') && ELITE_KILLER_HIDE == true){
-					 $this->vars['hide_time_pk'] = $this->Maccount->check_hide_time_pk($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-				}
-                $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.hide_info', $this->vars);
-            } else{
-                $this->login();
-            }
-        }
-
         public function clear_skilltree(){
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));

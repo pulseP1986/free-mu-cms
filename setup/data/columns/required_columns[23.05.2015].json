@@ -146,36 +146,6 @@
         "default": ""
       }
     },
-    "DmN_Hidden_Chars": {
-      "id": {
-        "type": "int",
-        "is_primary_key": 0,
-        "null": 0,
-        "identity": 1,
-        "default": ""
-      },
-      "account": {
-        "type": "varchar(10)",
-        "is_primary_key": 0,
-        "null": 1,
-        "identity": 0,
-        "default": ""
-      },
-      "until_date": {
-        "type": "varchar(50)",
-        "is_primary_key": 0,
-        "null": 1,
-        "identity": 0,
-        "default": ""
-      },
-      "server": {
-        "type": "varchar(50)",
-        "is_primary_key": 0,
-        "null": 1,
-        "identity": 0,
-        "default": ""
-      }
-    },
     "DmN_IP_Log": {
       "id": {
         "type": "int",
