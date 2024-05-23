@@ -134,7 +134,7 @@
 									$this->pluginaizer->{'M' . $this->pluginaizer->get_plugin_class()}->add_hide($this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']), $this->vars['plugin_config']['days']);
 									$this->website->charge_credits($this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']), $this->vars['plugin_config']['price'], $this->vars['plugin_config']['payment_method']);
 									$this->pluginaizer->Maccount->add_account_log('Bought character hide', -$this->vars['plugin_config']['price'], $this->pluginaizer->session->userdata(['user' => 'username']), $this->pluginaizer->session->userdata(['user' => 'server']));
-									echo $this->pluginaizer->jsone(['success' => __('You have successfully hidden your chars PK stats'), 'hide_time' => date(DATETIME_FORMAT, time() + (3600 * 24) * $this->vars['plugin_config']['days'])]);
+									echo $this->pluginaizer->jsone(['success' => __('You have successfully hidden your chars'), 'hide_time' => date(DATETIME_FORMAT, time() + (3600 * 24) * $this->vars['plugin_config']['days'])]);
 								} 
 								else{   
 									$this->pluginaizer->{'M' . $this->pluginaizer->get_plugin_class()}->extend_hide($this->pluginaizer->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $check_hide, $this->vars['plugin_config']['days']);

@@ -341,37 +341,18 @@
                 if($key != false){
                     if(is_array($key)){
                         if(count($key) == 3){
-                            if(array_key_exists($key[0], $configData[$file_name])){
-                                if(array_key_exists($key[1], $configData[$file_name][$key[0]])){
-                                    if(array_key_exists($key[2], $configData[$file_name][$key[0]][$key[1]])){
-                                        return $configData[$file_name][$key[0]][$key[1]][$key[2]];
-                                    } 
-                                    return false;
-                                } 
-                                return false;
-                            } 
-                            return false;
+                            return $configData[$file_name][$key[0]][$key[1]][$key[2]] ?? false;
                         } 
                         else{
-                            if(array_key_exists($key[0], $configData[$file_name])){
-                                if(array_key_exists($key[1], $configData[$file_name][$key[0]])){
-                                    return $configData[$file_name][$key[0]][$key[1]];
-                                } 
-                                return false;
-                            } 
-                            return false;
+                            return $configData[$file_name][$key[0]][$key[1]] ?? false;
                         }
                     } 
                     else{
-                        if(array_key_exists($key, $configData[$file_name])){
-                            return $configData[$file_name][$key];
-                        } 
-                        return false;
+                        return $configData[$file_name][$key] ?? false;
                     }
                 }
                 
-                return $configData[$file_name];
-                 
+                return $configData[$file_name] ?? false;
             } catch(\Exception $e){
                 throw new \Exception($e->getMessage());
             }
