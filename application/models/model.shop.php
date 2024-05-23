@@ -135,14 +135,14 @@
             return [];
         }
 
-        public function get_harmony_price($cat = 0, $hopt = 0, $hval = 0){
+        public function get_harmony_price($cat, $hopt, $hval, $server){
             $info = $this->website->db('web')->query('SELECT TOP 1 price FROM DmN_Shop_Harmony WHERE itemtype = ' . $this->website->db('web')->escape($this->get_type($cat)) . ' AND hoption = ' . $this->website->db('web')->escape($hopt) . ' AND hvalue = ' . $this->website->db('web')->escape($hval) . ' AND status = 1')->fetch();
-            return $this->discount($info['price']);
+            return $this->discount($info['price'], $server);
         }
 
-        public function get_socket_price($socket){
+        public function get_socket_price($socket, $server){
             $info = $this->website->db('web')->query('SELECT TOP 1 socket_price FROM DmN_Shop_Sockets WHERE socket_id = ' . $this->website->db('web')->escape($socket) . ' AND status != 0')->fetch();
-            return $this->discount($info['socket_price']);
+            return $this->discount($info['socket_price'], $server);
         }
 
 		public function socket_list($use_sockets, $check_part, $exe_type, $cat){

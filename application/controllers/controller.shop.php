@@ -773,7 +773,7 @@
                 else if($hval === '')
                     json(['error' => __('Invalid Harmony Value')]);
                 else
-                    json(['hprice' => $this->Mshop->get_harmony_price($cat, $hopt, $hval)]);
+                    json(['hprice' => $this->Mshop->get_harmony_price($cat, $hopt, $hval, $this->session->userdata(['user' => 'server']))]);
             }
         }
 
@@ -782,7 +782,7 @@
             if(is_ajax()){
                 if($option === '')
                     json(['error' => __('Invalid Socket Option')]); else
-                    json(['socket_price' => $this->Mshop->get_socket_price($option)]);
+                    json(['socket_price' => $this->Mshop->get_socket_price($option, $this->session->userdata(['user' => 'server']))]);
             }
         }
 
@@ -879,7 +879,7 @@
             if(count($this->exe) > 0)
                 $this->price += $this->Mshop->discount($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|exe_price') * count($this->exe), $this->session->userdata(['user' => 'server']));
             if(count($this->harmony) > 0){
-                $this->price += $this->Mshop->get_harmony_price($this->item_info['original_item_cat'], $this->harmony[0], $this->harmony[1]);
+                $this->price += $this->Mshop->get_harmony_price($this->item_info['original_item_cat'], $this->harmony[0], $this->harmony[1], $this->session->userdata(['user' => 'server']));
             }
 			
 			if($this->mastery_bonus_opt != 0){
@@ -904,7 +904,7 @@
             }
             if($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|use_socket') == 1 && $this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|allow_select_socket') == 1){
                 foreach($this->sockets as $socket){
-                    $this->price += $this->Mshop->get_socket_price($socket);
+                    $this->price += $this->Mshop->get_socket_price($socket, $this->session->userdata(['user' => 'server']));
                 }
             }
             if($this->payment_method == 2){

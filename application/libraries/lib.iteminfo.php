@@ -1595,7 +1595,7 @@
 		
 		
 		public function isMasteryItem(){
-			return isset($this->item_data['kindA']) ? $this->item_data['kindA'] : false;
+			return $this->item_data['kindA'] ?? false;
 		}
 		
 		public function realSocketId($id, $isNewSocket = false){
@@ -1906,7 +1906,7 @@
 						}
                         
    
-                        return (isset($set)) ? $this->findAncientOption($set_type[$this->type][$this->id][$set]) : '';
+                        return $this->findAncientOption($set_type[$this->type][$this->id][$set]) ?? '';
                     }
                 }
             }
@@ -2051,7 +2051,7 @@
                     $this->item_data['lvlreq'] += 20;
                 }
             }
-            return $this->item_data['lvlreq'];
+            return $this->item_data['lvlreq'] ?? 0;
         }
 		
 		public function getClass(){
@@ -2400,16 +2400,16 @@
 				}
 				
 				$compare = preg_replace('/,$/', '', preg_replace('/[,,]/', ',', '0,1,2,7,15,16,17,18,23,31,32,33,34,39,47,48,49,51,62,64,65,67,78,80,81,82,84,95,96,98,99,110,' . $gl . $rw . $sl . $gc . $km . $lm . $ik));
-                if($this->item_for == $compare){
+                $this->item_for = preg_replace('/,$/', '', preg_replace('/[,,]/', ',', $this->item_for));
+				if($this->item_for == $compare){
 					if($short){
 						return __('Can be used by all classes');
 					}
 					else{
-						$this->class = '';
+						$this->class = '<div class="item_white item_dark_red_background">'.__('Can be used by all classes').'</div>';
 					}
                 } 
 				else{
-                    $this->item_for = preg_replace('/,$/', '', preg_replace('/[,,]/', ',', $this->item_for));
                     $item_for = (strstr($this->item_for, ',')) ? explode(',', $this->item_for) : [$this->item_for];
 					$this->item_for = '';
 
