@@ -77,9 +77,7 @@
 
 		}
 
-		public function get_item_info($server, $id = ''){
-            if($id == '')
-                return false;
+		public function get_item_info($server, $id){
             $stmt = $this->website->db('web')->prepare('SELECT TOP 1 id, item_id, item_cat, exetype, name, luck, price, max_item_lvl, max_item_opt, use_sockets, use_harmony, use_refinary, payment_type, original_item_cat, total_bought, stick_level FROM DmN_Shopp WHERE id = :id AND price >= 1');
             $stmt->execute([':id' => (int)$id]);
             if($item = $stmt->fetch()){
@@ -261,7 +259,7 @@
 
 		public function update_warehouse($user, $server){
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_vault . ' WHERE AccountId = :user');
-            $stmt->execute([':user' => $this->website->c($user)]);
+            $stmt->execute([':user' => $user]);
         }
 
         public function set_total_bought($id, $cat){

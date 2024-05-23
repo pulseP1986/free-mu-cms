@@ -1039,7 +1039,7 @@
         }
 
         public function get_vault_content($user, $server){
-			$stmt = $this->game_db->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM Warehouse WHERE AccountId = :user');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Items) AS Items FROM Warehouse WHERE AccountId = :user');
 			$stmt->execute([':user' => $user]);
 			if($this->vault_items = $stmt->fetch()){
                 $unpack = unpack('H*', $this->vault_items['Items']);
@@ -1051,7 +1051,7 @@
         }
 
         public function create_vault($acc, $server){
-            $stmt = $this->game_db->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff), ' . $this->website->get_value_from_server($server, 'wh_size') . ') AS VARBINARY(' . $this->website->get_value_from_server($server, 'wh_size') . ')), 0, getdate())');
+            $stmt = $this->website->db('game', $server)->prepare('INSERT INTO warehouse (AccountID, Items, Money, EndUseDate) VALUES (:user, cast(REPLICATE(char(0xff), ' . $this->website->get_value_from_server($server, 'wh_size') . ') AS VARBINARY(' . $this->website->get_value_from_server($server, 'wh_size') . ')), 0, getdate())');
             $this->vault_items['Items'] = str_pad("F", $this->website->get_value_from_server($server, 'wh_size'), "F");
             return $stmt->execute([':user' => $acc]);
         }
@@ -1126,8 +1126,8 @@
             $this->new_hex = implode('', $new_items);
         }
 
-        public function update_warehouse($user = ''){
-            $stmt = $this->game_db->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_hex . ' WHERE AccountId = :user');
+        public function update_warehouse($user, $server){
+            $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Items = 0x' . $this->new_hex . ' WHERE AccountId = :user');
             $stmt->execute([':user' => $user]);
         }
 
@@ -1137,7 +1137,7 @@
         }
 
         public function get_inventory_content($char, $server){
-			$stmt = $this->game_db->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
+			$stmt = $this->website->db('game', $server)->prepare('SELECT CONVERT(IMAGE, Inventory) AS Inventory FROM Character WHERE Name = :char');
 			$stmt->execute([':char' => $char]);
 			if($this->inventory_items = $stmt->fetch()){
                 $unpack = unpack('H*', $this->inventory_items['Inventory']);
@@ -1156,7 +1156,7 @@
                 }
             }
             if($found){
-                $stmt = $this->game_db->prepare('UPDATE Warehouse SET Items = 0x' . implode('', $items_array) . ' WHERE AccountId = :user');
+                $stmt = $this->website->db('game', $server)->prepare('UPDATE Warehouse SET Items = 0x' . implode('', $items_array) . ' WHERE AccountId = :user');
                 return $stmt->execute([':user' => $acc]);
             }
             return false;
@@ -1173,7 +1173,7 @@
                 }
             }
             if($found){
-                $stmt = $this->game_db->prepare('UPDATE Character SET Inventory = 0x' . implode('', $items_array) . ' WHERE Name = :char');
+                $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Inventory = 0x' . implode('', $items_array) . ' WHERE Name = :char');
                 return $stmt->execute([':char' => $char]);
             }
             return false;

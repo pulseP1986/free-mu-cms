@@ -5091,7 +5091,7 @@
                                         if($this->Madmin->find_item_by_slot($slot, $server)){
                                             $this->Madmin->log_deleted_item($acc, $server, 1);
                                             $this->Madmin->generate_new_item_by_slot($slot, $server);
-                                            $this->Madmin->update_warehouse($acc);
+                                            $this->Madmin->update_warehouse($acc, $server);
                                             json(['success' => 'Item successfully removed from warehouse.']);
                                         } else{
                                             json(['error' => 'Item not found.']);
@@ -5222,7 +5222,7 @@
                                         json(['error' => $this->Mshop->errors[0]]);
                                     } else{
                                         $this->vars['new_items'] = $this->Mshop->generate_new_items($this->item_hex, $space, $this->website->get_value_from_server($_SESSION['vault_server'], 'wh_multiplier'), $this->website->get_value_from_server($_SESSION['vault_server'], 'item_size'), $vault['Items'], true);
-                                        $this->Mshop->update_warehouse($_SESSION['vault_user']);
+                                        $this->Mshop->update_warehouse($_SESSION['vault_user'], $_SESSION['vault_server']);
                                         $hex = str_split($this->vars['new_items'], $this->website->get_value_from_server($_SESSION['vault_server'], 'item_size'));
                                         $items = [];
                                         $i = 0;

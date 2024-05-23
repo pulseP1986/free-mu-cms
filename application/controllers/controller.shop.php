@@ -343,7 +343,7 @@
                 if($this->session->userdata(['user' => 'logged_in'])){
                     if($this->config->config_entry('shop_' . $this->session->userdata(['user' => 'server']) . '|module_status') == 1){
                         $this->load->model('account');
-                        $this->item_info = $this->Mshop->get_item_info($id);
+                        $this->item_info = $this->Mshop->get_item_info($this->session->userdata(['user' => 'server']), $id);
                         if(!$this->item_info)
                             $this->errors[] = __('Invalid item.');
                         if(!$this->item_info == 'disabled')
