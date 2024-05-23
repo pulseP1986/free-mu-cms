@@ -47,12 +47,12 @@
                                     </td>
                                     <td>
                                         <?php if($plugin['installed'] == 1){ ?>
-                                        <a id="status_button" class="btn btn-warning" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
+                                        <a id="status_button" class="btn btn-warning not-sort" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
                                         <?php } else { ?>
-                                        <a id="status_button" class="btn btn-success" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
+                                        <a id="status_button" class="btn btn-success not-sort" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
                                         <?php } ?>
-                                        <a id="uninstall_button" class="btn btn-danger" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
-                                        <a id="about_button" class="btn btn-inverse" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
+                                        <a id="uninstall_button" class="btn btn-danger not-sort" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
+                                        <a id="about_button" class="btn btn-inverse not-sort" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -88,12 +88,12 @@
                                     </td>
                                     <td>
                                         <?php if($plugin['installed'] == 1){ ?>
-                                        <a id="status_button" class="btn btn-warning" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
+                                        <a id="status_button" class="btn btn-warning not-sort" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
                                         <?php } else { ?>
-                                        <a id="status_button" class="btn btn-success" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
+                                        <a id="status_button" class="btn btn-success not-sort" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
                                         <?php } ?>
-                                        <a id="uninstall_button" class="btn btn-danger" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
-                                        <a id="about_button" class="btn btn-inverse" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
+                                        <a id="uninstall_button" class="btn btn-danger not-sort" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
+                                        <a id="about_button" class="btn btn-inverse not-sort" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -129,12 +129,12 @@
                                     </td>
                                     <td>
                                         <?php if($plugin['installed'] == 1){ ?>
-                                        <a id="status_button" class="btn btn-warning" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
+                                        <a id="status_button" class="btn btn-warning not-sort" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
                                         <?php } else { ?>
-                                        <a id="status_button" class="btn btn-success" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
+                                        <a id="status_button" class="btn btn-success not-sort" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
                                         <?php } ?>
-                                        <a id="uninstall_button" class="btn btn-danger" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
-                                        <a id="about_button" class="btn btn-inverse" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
+                                        <a id="uninstall_button" class="btn btn-danger not-sort" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
+                                        <a id="about_button" class="btn btn-inverse not-sort" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -170,12 +170,12 @@
                                     </td>
                                     <td>
                                         <?php if($plugin['installed'] == 1){ ?>
-                                        <a id="status_button" class="btn btn-warning" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
+                                        <a id="status_button" class="btn btn-warning not-sort" href="#" onclick="App.disablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Disable</a>
                                         <?php } else { ?>
-                                        <a id="status_button" class="btn btn-success" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
+                                        <a id="status_button" class="btn btn-success not-sort" href="#" onclick="App.enablePlugin('<?php echo $name; ?>');"><i class="icon-edit icon-white"></i>Enable</a>
                                         <?php } ?>
-                                        <a id="uninstall_button" class="btn btn-danger" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
-                                        <a id="about_button" class="btn btn-inverse" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
+                                        <a id="uninstall_button" class="btn btn-danger not-sort" href="#" onclick="App.uninstallPlugin('<?php echo $name; ?>');"><i class="icon-remove icon-white"></i>Remove</a>
+                                        <a id="about_button" class="btn btn-inverse not-sort" href="#" onclick="App.aboutPlugin('<?php echo $name; ?>');"><i class="icon-leaf icon-white"></i> About</a>
                                     </td>
                                 </tr>
                                 <?php } ?>

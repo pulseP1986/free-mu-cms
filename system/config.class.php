@@ -311,8 +311,15 @@
             return $json_data;
         }
 
-        public function values($file_name = null, $key = false, $ext = '.json'){
+        public function values($file_name = null, $key = false, $ext = '.json', $reset = false){
             try{
+                static $configData = [];
+                
+                if($reset && isset($configData[$file_name])){
+                    unset($configData[$file_name]);
+                    return;
+                }
+                
                 if($file_name == null){
                     throw new \Exception('Config file name cannot be empty');
                 }
@@ -327,8 +334,6 @@
                         throw new Exception('Folder application' . DS . 'config is not writable');
                     }
                 }
-                
-                static $configData = [];
                 
                 if(!isset($configData[$file_name]))
                     $configData[$file_name] = $this->from_json(file_get_contents($file), $file_name);
@@ -373,16 +378,16 @@
         }
 
         public function save_config_data($array = [], $file = '', $sort = false, $ext = '.json'){
-            if($sort){
-                ksort($array);
-            }
-            
             try{
                 if($file == ''){
                    throw new Exception('Config file name can not be empty.'); 
                 }
                 if(!is_array($array)){
                    throw new Exception('Config data for saving should be formated as array.'); 
+                }
+                
+                if($sort){
+                    ksort($array);
                 }
                 
                 $data = $this->to_json($array, $file);
@@ -393,6 +398,7 @@
                 $fp = fopen(APP_PATH . DS . 'config' . DS . $file . $ext, 'w');
                 fwrite($fp, $data);
                 fclose($fp);
+                $this->values($file, false, '.json', true);
                 return true;
             } catch(\Exception $e){
                 throw new \Exception($e->getMessage());
