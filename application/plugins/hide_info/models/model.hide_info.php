@@ -3,8 +3,7 @@
 
     class Mhide_info extends model
     {
-        public $error = false, $vars = [], $characters = [], $total_characters, $char_info = [], $gens_family;
-        private $price, $per_page, $chars, $char_list = [], $pos;
+        public $vars = [];
 
         public function __contruct(){
             parent::__construct();
