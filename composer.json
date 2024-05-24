@@ -1,7 +1,7 @@
 {
   "name": "pulsep1986/free-mu-cms",
   "description": "A professional content management system for MuOnline private servers",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "homepage": "https://github.com/pulseP1986/free-mu-cms",
   "minimum-stability": "stable",
   "license": "proprietary",
