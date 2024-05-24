@@ -21,7 +21,7 @@
         public function paypal($order = ''){
             writelog('Paypal request initialized.', 'Paypal');
             if(count($_POST) > 0){
-                $post_data = $this->website->c(file_get_contents('php://input'));
+                $post_data = file_get_contents('php://input');
                 $this->Mdonate->set_ipn_listeners($_POST['custom']);
                 $this->Mdonate->gen_post_fields($post_data);
                 if(function_exists('curl_init')){

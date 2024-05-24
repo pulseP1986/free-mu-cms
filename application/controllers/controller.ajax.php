@@ -2441,7 +2441,7 @@
 
         public function switch_language(){
             if(isset($_POST['lang'])){
-                setcookie("dmn_language", $this->website->c($_POST['lang']), strtotime('+5 days', time()), "/");
+                setcookie("dmn_language", htmlspecialchars($_POST['lang']), strtotime('+5 days', time()), "/");
 				json(['success' => true]);																								
             }
 			else{
@@ -2451,7 +2451,7 @@
 		
 		public function switch_theme(){
             if(isset($_POST['theme'])){
-                setcookie("dmn_template", $this->website->c($_POST['theme']), strtotime('+5 days', time()), "/");
+                setcookie("dmn_template", htmlspecialchars($_POST['theme']), strtotime('+5 days', time()), "/");
 				json(['success' => true]);																								
             }
 			json(['error' => true]); 
