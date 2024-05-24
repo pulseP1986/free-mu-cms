@@ -614,11 +614,6 @@
             $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET Class = CASE WHEN Class IN(50, 66, 98) THEN Class - 2 ELSE Class - 1 END WHERE Name = :char AND AccountId = :user');
             $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
         }
-
-        public function restore_master_level($user, $server){
-            $stmt = $this->website->db('game', $server)->prepare('UPDATE Character SET mLevel = Master, Class = CASE WHEN Class IN(48, 64, 96) THEN Class + 2 ELSE Class + 1 END, mlPoint = Master + (' . $this->config->values('table_config', [$server, 'resets', 'column']) . '*150) WHERE Name = :char AND AccountId = :user');
-            $stmt->execute([':char' => $this->vars['character'], ':user' => $user]);
-        }
 		
 		private function questToReadable($quest){
             $quest = substr($quest, 0, 100);

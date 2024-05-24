@@ -692,20 +692,27 @@
 						else{
                             $this->Mcharacter->check_stats();
                             if(!preg_match('/^(\s*|[0-9]+)$/', $this->Mcharacter->vars['str_stat']))
-                                $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Strength') . '.'; else{
+                                $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Strength') . '.'; 
+							else{
                                 if(!preg_match('/^(\s*|[0-9]+)$/', $this->Mcharacter->vars['agi_stat']))
-                                    $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Agility') . '.'; else{
+                                    $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Agility') . '.'; 
+								else{
                                     if(!preg_match('/^(\s*|[0-9]+)$/', $this->Mcharacter->vars['ene_stat']))
-                                        $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Energy') . '.'; else{
+                                        $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Energy') . '.'; 
+									else{
                                         if(!preg_match('/^(\s*|[0-9]+)$/', $this->Mcharacter->vars['vit_stat']))
-                                            $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Vitality') . '.'; else{
+                                            $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Vitality') . '.'; 
+										else{
                                             if(!preg_match('/^(\s*|[0-9]+)$/', $this->Mcharacter->vars['com_stat']))
-                                                $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Command') . '.'; else{
+                                                $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Command') . '.'; 
+											else{
                                                 $this->Mcharacter->set_new_stats();
                                                 if(!$this->Mcharacter->check_max_stat_limit($this->session->userdata(['user' => 'server'])))
-                                                    $this->vars['error'] = $this->Mcharacter->vars['error']; else{
+                                                    $this->vars['error'] = $this->Mcharacter->vars['error']; 
+												else{
                                                     if($this->Mcharacter->vars['new_lvlup'] < 0)
-                                                        $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Level Up Points') . '.'; else{
+                                                        $this->vars['error'] = __('Only positive values allowed in') . ' ' . __('Level Up Points') . '.'; 
+													else{
                                                         $this->Mcharacter->add_stats($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->website->hex2bin($char));
                                                         $this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->website->hex2bin($char));
                                                         $this->vars['success'] = __('Stats Have Been Successfully Added.');
@@ -747,15 +754,6 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.clear_inventory', $this->vars);
-            } else{
-                $this->login();
-            }
-        }
-
-        public function buy_zen(){
-            if($this->session->userdata(['user' => 'logged_in'])){
-                $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.buy_zen', $this->vars);
             } else{
                 $this->login();
             }
@@ -807,47 +805,6 @@
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.warp_char', $this->vars);
             } else{
                 $this->login();
-            }
-        }
-
-		public function recover_master(){
-            if(defined('RES_CUSTOM_BACKUP_MASTER') && RES_CUSTOM_BACKUP_MASTER == true){
-                if($this->session->userdata(['user' => 'logged_in'])){
-                    $this->load->model('account');
-                    $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                    if(isset($_POST['character'])){
-                        foreach($_POST as $key => $value){
-                            $this->Mcharacter->$key = trim($value);
-                        }
-                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            $this->vars['error'] = __('Please logout from game.'); 
-						else{
-                            if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), '', ', Master'))
-                                $this->vars['error'] = __('Character not found.'); 
-							else{
-                                if(!in_array($this->Mcharacter->char_info['Class'], [2, 3, 7, 18, 19, 23, 34, 35, 39, 49, 50, 54, 65, 66, 70, 82, 83, 87, 97, 98, 102, 114, 118])){
-                                    if($this->Mcharacter->char_info['cLevel'] < 400 && $this->Mcharacter->char_info[$this->config->values('table_config', [$this->session->userdata(['user' => 'server']), 'resets', 'column'])] == 0){
-                                        $this->vars['error'] = __('Your lvl, or grand resets are too low.');
-                                    } else{
-                                        if($this->Mcharacter->char_info['Master'] >= 1){
-                                            $this->Mcharacter->restore_master_level($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                            $this->vars['success'] = __('Your master level and master class have been restored.');
-                                        } else{
-                                            $this->vars['error'] = __('You don\'t have master level points');
-                                        }
-                                    }
-                                } else{
-                                    $this->vars['error'] = __('You are not allowed to recover master level.');
-                                }
-                            }
-                        }
-                    }
-                    $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.recover_char', $this->vars);
-                } else{
-                    $this->login();
-                }
-            } else{
-                $this->disabled();
             }
         }
 
@@ -944,24 +901,26 @@
 				
 				$this->load->model('account');
 				
-                if(isset($_POST['recover_master_key'])){
-                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                        $this->vars['error'] = __('Please logout from game.');
-                    } 
-					else{
-                        if(!$this->Maccount->recover_master_key_process($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                            $this->vars['success'] = __('Your master key has been send to your email.');
-                        } 
+				if(isset($this->vars['security_config']['allow_recover_masterkey']) && $this->vars['security_config']['allow_recover_masterkey'] == 1){
+					if(isset($_POST['recover_master_key'])){
+						if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
+							$this->vars['error'] = __('Please logout from game.');
+						} 
 						else{
-                            if(isset($this->Maccount->error)){
-                                $this->vars['error'] = $this->Maccount->error;
-                            } 
+							if(!$this->Maccount->recover_master_key_process($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
+								$this->vars['success'] = __('Your master key has been send to your email.');
+							} 
 							else{
-                                $this->vars['error'] = __('Unable to recover master key.');
-                            }
-                        }
-                    }
-                }
+								if(isset($this->Maccount->error)){
+									$this->vars['error'] = $this->Maccount->error;
+								} 
+								else{
+									$this->vars['error'] = __('Unable to recover master key.');
+								}
+							}
+						}
+					}
+				}
 				
 				if(isset($this->vars['security_config']['2fa']) && $this->vars['security_config']['2fa'] == 1){
 					$this->vars['is_auth_enabled'] = $this->Maccount->check2FA($this->session->userdata(['user' => 'username']));
@@ -1116,11 +1075,12 @@
             if($this->session->userdata(['user' => 'logged_in'])){
                 $this->load->model('account');
                 $this->load->lib("pagination");
-                $this->vars['logs'] = $this->Maccount->load_logs($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $page, $this->config->config_entry('account|account_logs_per_page'));
-                $this->pagination->initialize($page, $this->config->config_entry('account|account_logs_per_page'), $this->Maccount->count_total_logs($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])), $this->config->base_url . 'account-panel/logs/%s');
+                $this->vars['logs'] = $this->Maccount->load_logs($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $page, 30);
+                $this->pagination->initialize($page, 30, $this->Maccount->count_total_logs($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])), $this->config->base_url . 'account-panel/logs/%s');
                 $this->vars['pagination'] = $this->pagination->create_links();
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.logs', $this->vars);
-            } else{
+            } 
+			else{
                 $this->login();
             }
         }
@@ -1179,9 +1139,9 @@
                                                     $this->Mcharacter->decrease_zen($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $amount, $from);
                                                 }
                                             } else if($to == 'warehouse'){
-                                                if($amount > $this->config->config_entry('account|max_ware_zen'))
+                                                if($amount > 2000000000)
                                                     $this->vars['error'] = sprintf(__('Max zen than can be send to warehouse is %s'), $this->website->zen_format($this->config->config_entry('account|max_ware_zen'))); else{
-                                                    if(((int)$amount + $this->vars['wh_zen']) > $this->config->config_entry('account|max_ware_zen'))
+                                                    if(((int)$amount + $this->vars['wh_zen']) > 2000000000)
                                                         $this->vars['error'] = __('Your warehouse zen limit exceeded. Try to transfer lower amount.'); 
 													else{
                                                         $this->Mwarehouse->add_zen($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $amount);
@@ -1194,10 +1154,10 @@
                                                 }
                                             } 
 											else{
-                                                if($amount > $this->config->config_entry('account|max_char_zen'))
+                                                if($amount > 2000000000)
                                                     $this->vars['error'] = sprint(__('Max zen than can be send to character is %s'), $this->website->zen_format($this->config->config_entry('account|max_char_zen'))); else{
                                                     $this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $to);
-                                                    if(((int)$amount + $this->Mcharacter->char_info['Money']) > $this->config->config_entry('account|max_char_zen'))
+                                                    if(((int)$amount + $this->Mcharacter->char_info['Money']) > 2000000000)
                                                         $this->vars['error'] = __('Your character zen limit exceeded. Try to transfer lower amount.'); 
 													else{
                                                         $this->Mcharacter->add_zen($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $amount, $to);
@@ -1238,172 +1198,6 @@
                     $this->vars['ref_rewards'] = $this->Maccount->load_referral_rewards($this->session->userdata(['user' => 'server']));
                 }
                 $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.my_referral_list', $this->vars);
-            } else{
-                $this->login();
-            }
-        }
-
-		public function exchange_online(){
-            if($this->session->userdata(['user' => 'logged_in'])){
-                $this->load->model('account');
-                $this->vars['online_time'] = $this->Maccount->load_online_hours($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                if($this->vars['online_time'] == false){
-                    $this->vars['online_time'] = 0;
-                    $this->vars['minutes_left'] = 0;
-                } else{
-                    $this->vars['OnlineMinutes'] = $this->vars['online_time']['OnlineMinutes'];
-                    $this->vars['online_time'] = floor($this->vars['OnlineMinutes'] / 60);
-                    $this->vars['minutes_left'] = $this->vars['OnlineMinutes'] - (floor($this->vars['OnlineMinutes'] / 60) * 60);
-                }
-                if(isset($_POST['trade_hours'])){
-                    if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                        $this->vars['error'] = __('Please logout from game.'); 
-					else{
-                        if($this->vars['online_time'] <= 0)
-                            $this->vars['error'] = __('You don\'t have online time on this server'); 
-						else{
-                            if($this->Maccount->exchange_online_hours($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']), $this->vars['online_time'], $this->vars['minutes_left'])){
-                                $this->vars['success'] = 'Online time successfully exchanged';
-                                $this->vars['online_time'] = 0;
-                            } else{
-                                $this->vars['error'] = __('Unable to exchange online time');
-                            }
-                        }
-                    }
-                }
-                $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.exchange_online', $this->vars);
-            } else{
-                $this->login();
-            }
-        }
-
-		public function exchange_lucky_coins(){
-            if($this->session->userdata(['user' => 'logged_in'])){
-                $this->vars['coin_config'] = $this->config->values('luckycoin_config', $this->session->userdata(['user' => 'server']));
-                if($this->vars['coin_config']['active'] == 1){
-                    unset($this->vars['coin_config']['active']);
-                    $this->load->model('account');
-                    $this->load->lib('iteminfo');
-                    $this->load->model('shop');
-                    if(isset($_POST['exchange_coins'])){
-                        foreach($_POST as $key => $value){
-                            $this->Mcharacter->$key = trim($value);
-                        }
-                        if(!$this->Maccount->check_connect_stat($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                            $this->vars['error'] = __('Please logout from game.'); 
-						else{
-                            if(!isset($this->Mcharacter->vars['character']))
-                                $this->vars['error'] = __('Invalid Character'); 
-							else{
-                                if(!$this->Mcharacter->check_char($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server'])))
-                                    $this->vars['error'] = __('Character not found.'); 
-								else{
-                                    if(!isset($this->Mcharacter->vars['lucky_coin']))
-                                        $this->vars['error'] = __('Please select option for exchange.'); 
-									else{
-                                        if(!in_array($this->Mcharacter->vars['lucky_coin'], [10, 20, 30]))
-                                            $this->vars['error'] = __('Invalid exchange option selected.'); 
-										else{
-                                            $this->vars['coin_data'] = $this->Mcharacter->check_amount_of_coins($this->session->userdata(['user' => 'server']));
-                                            if(array_sum($this->vars['coin_data']) < $this->Mcharacter->vars['lucky_coin']){
-                                                $this->vars['error'] = __('You have insufficient amount of coins.');
-                                            } else{
-                                                if(array_key_exists($this->Mcharacter->vars['lucky_coin'], $this->vars['coin_config'])){
-                                                    $max_prob = $this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']]['max_probability'];
-                                                    unset($this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']]['max_probability']);
-                                                    $chance = $this->Mcharacter->draw_chance($this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']], $max_prob);
-                                                    shuffle($this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']][$chance]);
-                                                    $item_key = array_rand($this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']][$chance], 1);
-                                                    $cat = $this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']][$chance][$item_key][1];
-                                                    $id = $this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']][$chance][$item_key][0];
-                                                    $new_coins = array_sum($this->vars['coin_data']) - $this->Mcharacter->vars['lucky_coin'];
-                                                    $this->iteminfo->setItemData($id, $cat, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
-                                                    $data = $this->iteminfo->item_data;
-                                                    if($vault = $this->Mshop->get_vault_content($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                                                        $space = $this->Mshop->check_space($vault['Items'], $data['x'], $data['y'], $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_hor_size'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_ver_size'));
-                                                        if($space === null){
-                                                            $this->vars['error'] = $this->Mshop->errors[0];
-                                                        } else{
-                                                            $item_data = $this->vars['coin_config'][$this->Mcharacter->vars['lucky_coin']][$chance][$item_key];
-                                                            if(is_array($item_data[5])){
-                                                                $lvl = rand($item_data[5][0], $item_data[5][1]);
-                                                            } else{
-                                                                $lvl = $item_data[5];
-                                                            }
-                                                            if($item_data[6] == -1){
-                                                                $skill = rand(0, 1);
-                                                            } else{
-                                                                $skill = $item_data[6];
-                                                            }
-                                                            if($item_data[7] == -1){
-                                                                $luck = rand(0, 1);
-                                                            } else{
-                                                                $luck = $item_data[7];
-                                                            }
-                                                            if(is_array($item_data[8])){
-                                                                $opt = rand($item_data[8][0], $item_data[8][1]);
-                                                            } else{
-                                                                $opt = $item_data[8];
-                                                            }
-                                                            if($this->Mcharacter->remove_old_coins($this->vars['coin_data'], $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']))){
-                                                                $this->load->lib("createitem", [MU_VERSION, SOCKET_LIBRARY]);
-                                                                if($new_coins > 0){
-                                                                    if($new_coins > 255){
-                                                                        $coins_left = [];
-                                                                        while($new_coins >= 255){
-                                                                            $new_coins -= 255;
-                                                                            if($new_coins >= 255){
-                                                                                $coins_left[] = 255;
-                                                                            } else{
-                                                                                $coins_left[] = $new_coins;
-                                                                            }
-                                                                        }
-                                                                        $coins_left[] = 255;
-                                                                        $i = -1;
-                                                                        if($this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size') == 64){
-                                                                            $serial2 = true;
-                                                                        }
-                                                                        foreach($this->vars['coin_data'] AS $key => $value){
-                                                                            $i++;
-                                                                            if(array_key_exists($i, $coins_left)){
-                                                                                $this->vars['coin_data'][$key] = $this->createitem->make(100, 14, false, [], $coins_left[$i], array_values($this->Mshop->generate_serial())[0], $serial2)->to_hex();
-                                                                            } else{
-                                                                                $this->vars['coin_data'][$key] = str_pad("", $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'), "F");
-                                                                            }
-                                                                        }
-                                                                        $this->Mcharacter->add_multiple_new_coins($this->vars['coin_data']);
-                                                                    } else{
-                                                                        $new_coin_item = $this->createitem->make(100, 14, false, [], $new_coins, array_values($this->Mshop->generate_serial($this->session->userdata(['user' => 'server'])))[0], $serial2)->to_hex();
-                                                                        $this->Mcharacter->add_new_coins(array_keys($this->vars['coin_data'])[0], $new_coin_item, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                                    }
-                                                                }
-																//$this->createitem->make($id, $cat, false, [], $new_coins, array_values($this->Mshop->generate_serial($this->session->userdata(['user' => 'server'])))[0], $serial2)->to_hex()
-                                                                // $this->Mshop->generate_new_items($this->Mshop->generate_item_hex($id, $cat, $item_data[2], $item_data[3], $item_data[4], $lvl, $skill, $luck, $opt, $item_data[9], $item_data[10], $item_data[11], $item_data[12]), $space, $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'wh_multiplier'), $this->website->get_value_from_server($this->session->userdata(['user' => 'server']), 'item_size'));
-                                                                $this->Maccount->add_account_log('Exchanged ' . $this->Mcharacter->vars['lucky_coin'] . ' Lucky coins to ' . $data['name'] . '', 0, $this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                                $this->Mshop->update_warehouse($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                                                                $this->vars['success'] = sprintf(__('Coins successfully exchanged To %s.'), $data['name']);
-                                                            } else{
-                                                                $this->vars['error'] = __('Unable to remove lucky coins from inventory.');
-                                                            }
-                                                        }
-                                                    } else{
-                                                        $this->vars['error'] = __('Please open your warehouse in game first.');
-                                                    }
-                                                } else{
-                                                    $this->vars['error'] = __('Configuration element not found.');
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    $this->vars['char_list'] = $this->Mcharacter->load_char_list($this->session->userdata(['user' => 'username']), $this->session->userdata(['user' => 'server']));
-                    $this->load->view($this->config->config_entry('main|template') . DS . 'account_panel' . DS . 'view.exchnage_lucky_coin', $this->vars);
-                } else{
-                    $this->disabled();
-                }
             } else{
                 $this->login();
             }

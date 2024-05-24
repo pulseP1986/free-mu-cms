@@ -21,7 +21,6 @@
             <li class="accordion">
                 <a href="#"><i class="icon-adjust"></i><span class="hidden-tablet"> Modules Settings</span></a>
                 <ul class="nav nav-pills nav-stacked">
-                    <li><a href="<?php echo $this->config->base_url . ACPURL; ?>/manage-settings/account">Account Panel Settings</a></li>
                     <li><a href="<?php echo $this->config->base_url . ACPURL; ?>/manage-settings/buylevel">Buy Level Settings</a></li>
                     <li><a href="<?php echo $this->config->base_url . ACPURL; ?>/manage-settings/buygm">Buy GM Access Settings</a></li>
                     <li><a href="<?php echo $this->config->base_url . ACPURL; ?>/manage-settings/changeclass">Change Class Settings</a></li>

@@ -1102,6 +1102,8 @@
                         'recaptcha_pub_key' => $_POST['recaptcha_pub_key'], 
                         'recaptcha_priv_key' => $_POST['recaptcha_priv_key'], 
                         'captcha_on_login' => $_POST['captcha_on_login'],
+                        'allow_mail_change' => $_POST['allow_mail_change'],
+                        'allow_recover_masterkey' => $_POST['allow_recover_masterkey'],
                         '2fa' => $_POST['2fa']
                     ];
                     if(!$this->Madmin->save_config_data($this->vars['security_config'], 'security_config', false)){

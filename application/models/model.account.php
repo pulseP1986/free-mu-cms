@@ -1297,32 +1297,6 @@
             return ($info != false) ? $info['memb_guid'] : false;
         }
 
-        public function load_online_hours($user, $server){
-            $stmt = $this->website->db('web')->prepare('SELECT SUM(OnlineMinutes) AS OnlineMinutes FROM DmN_OnlineCheck WHERE memb___id = :acc ' . $this->website->server_code($this->website->get_servercode($server)) . '');
-            $stmt->execute([':acc' => $user]);
-            return $stmt->fetch();
-        }
-
-		public function exchange_online_hours($user, $server, $hours_to_exchange = 0, $minutes_left = 0){
-            if($hours_to_exchange > 0){
-                $reward = $this->config->config_entry('account|online_trade_reward');
-                if($this->session->userdata('vip')){
-                    $reward += $this->session->userdata(['vip' => 'online_hour_exchange_bonus']);
-                }
-                $reward = (int)($hours_to_exchange * $reward);
-                $this->website->add_credits($user, $server, $reward, $this->config->config_entry('account|online_trade_reward_type'));
-                $this->add_account_log('Exchange ' . $hours_to_exchange . ' online hours for ' . $this->website->translate_credits($this->config->config_entry('account|online_trade_reward_type'), $server) . '', $reward, $user, $server);
-                $stmt = $this->website->db('web')->prepare('UPDATE DmN_OnlineCheck SET OnlineMinutes = 0 WHERE  memb___id = :acc ' . $this->website->server_code($this->website->get_servercode($server)) . '');
-                $stmt->execute([':acc' => $user]);
-                if($minutes_left > 0){
-                    $stmt = $this->website->db('web')->prepare('UPDATE DmN_OnlineCheck SET OnlineMinutes = :minutes WHERE memb___id = :acc AND ServerName = :server_name');
-                    $stmt->execute([':minutes' => $minutes_left, ':acc' => $user, ':server_name' => $this->website->get_first_server_code($server)]);
-                }
-                return true;
-            }
-            return false;
-        }
-
         public function check_existing_email($user, $server){
             $stm = $this->website->db('account', $server)->prepare('SELECT mail_addr FROM MEMB_INFO WHERE (memb___id Collate Database_Default = :username) AND mail_addr = :email');
             $stm->execute([':username' => $user, ':email' => $this->vars['email']]);

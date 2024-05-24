@@ -274,7 +274,8 @@
 
         public function change_email(){
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->config->config_entry('account|allow_mail_change') == 1){
+				$this->vars['security_config'] = $this->config->values('security_config');
+				if(isset($this->vars['security_config']['allow_mail_change']) && $this->vars['security_config']['allow_mail_change'] == 1){
                     $this->load->model('account');
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
@@ -309,7 +310,8 @@
 
         public function set_new_email(){
             if($this->session->userdata(['user' => 'logged_in'])){
-                if($this->config->config_entry('account|allow_mail_change') == 1){
+                $this->vars['security_config'] = $this->config->values('security_config');
+				if(isset($this->vars['security_config']['allow_mail_change']) && $this->vars['security_config']['allow_mail_change'] == 1){
                     $this->load->model('account');
                     foreach($_POST as $key => $value){
                         $this->Maccount->$key = trim($value);
