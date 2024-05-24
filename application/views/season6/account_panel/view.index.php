@@ -251,21 +251,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div>
-                                        <ul>
-                                            <li>
-                                                <a href="<?php echo $this->config->base_url; ?>account-panel/exchange-online">
-                                                    <p><?php echo __('Trade Online Time'); ?></p>
-                                                </a>
-                                                <?php echo __('More online more can exchange and receive nice rewards'); ?>
-                                                <br/>&nbsp;
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
                             <?php if($this->config->values('referral_config', 'active') == 1): ?>
                                 <tr>
                                     <td colspan="2">

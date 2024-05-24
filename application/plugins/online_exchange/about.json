@@ -1,0 +1,10 @@
+{
+  "name": "Online Time Exchange",
+  "version": "1.0.0",
+  "description": "This plugin allows your players to exchange their online time for some currency.",
+  "developed_by": "pulse1986",
+  "website": "https://discord.gg/ttWvabj9TN",
+  "change_log":{
+	"1.0.0": "Initial Release"
+  }
+}
